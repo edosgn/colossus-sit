@@ -28,7 +28,7 @@
                     {% endfor %}
                     <tr>
                         <td colspan="4"><b>TOTAL INGRESOS</b></td>
-                        <td>{{ totalTramites }}</td>
+                        <td><b>{{ totalTramites }}</b></td>
                     </tr>
                 </table>
             {% endif %}
@@ -41,7 +41,7 @@
                     <td><b> Valor </b></td>
                     <td><b> Total </b></td>
                 </tr>
-                {% for sustrato in arraySustratos %}
+                {% for sustrato in sustratos %}
                     <tr>
                         <td>{{ sustrato.nombre }}</td>
                         <td>{{ sustrato.cantidad }}</td>
@@ -51,7 +51,7 @@
                 {% endfor %}
                 <tr>
                     <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
-                    <td>{{ totalSustratos }}</td>
+                    <td><b>{{ totalSustratos }}</b></td>
                 </tr>
             </table>
             <br>
@@ -60,26 +60,26 @@
                 <tr>
                     <td><b>Id</b></td>
                     <td><b>Nombre Concepto</b></td>
-                    {# <td><b>Cantidad</b></td> #}
-                    <td><b>Valor</b></td>
-                    {# <td><b>Total</b></td> #}
+                    <td><b>Cantidad</b></td>
+                    <td><b>Valor Unitario</b></td>
+                    <td><b>Total</b></td>
                 </tr>
                 {% for concepto in conceptos %}
                         <tr>
                             <td>{{ concepto.id }}</td>
                             <td>{{ concepto.nombre }}</td>
-                            {# <td>{{ concepto.cantidad}}</td> #}
+                            <td>{{ concepto.cantidad}}</td>
                             <td>{{ concepto.valor }}</td>
-                            {# <td>{{ concepto.total }}</td> #}
+                            <td>{{ concepto.total }}</td>
                         </tr>
                 {% endfor %}
-                {# <tr>
+                <tr>
                     <td colspan="4"><b>TOTAL CONCEPTOS</b></td>
-                    <td>{{ totalConceptos }}</td>
-                </tr> #}
+                    <td><b>{{ totalConceptos }}</b></td>
+                </tr>
                 <tr>
                     <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
-                    <td>{{ totalTramites - totalSustratos }}</td>
+                    <td><b>{{ totalTramites - totalSustratos }}</b></td>
                 </tr>
             </table>
             <br>

@@ -143,45 +143,6 @@ class FroReporteIngresosController extends Controller
                                     'valor' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
                                     'total2' => $total2,
                                 );
-                                
-                                
-
-                                /* if($conceptos){
-                                    $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getTotalConceptosByPrecio($tramite->getTramiteFactura()->getPrecio()->getId());
-                                    $totalPrueba[] = array(
-                                        'conceptos' => $conceptos,
-                                        'cantConceptos' => $cantConceptos['cantidad'],
-                                    );
-                                } */
-
-                                /* foreach ($cantConceptos as $key => $cantidad) {
-                                    var_dump($cantidad);
-                                }
-                                
-                                foreach ($totalPrueba as $key => $prueba) {
-                                    foreach ($prueba['conceptos'] as $key => $concepto) {
-                                        var_dump($concepto->getConcepto()->getNombre());
-                                    }
-                                } */
-                                
-                                /* foreach ($totalPrueba['cantConceptos'] as $key => $cant) {
-                                    foreach ($cant as $key => $cantidad) {
-                                        var_dump($cantidad);
-                                    }
-                                } */
-
-                                /* foreach ($conceptos as $key => $concepto) {
-                                    $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
-                                    $total = intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
-                                    $totalConceptos += intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
-                                    $arrayConceptos[] = array(
-                                        'id' => $concepto->getConcepto()->getId(),
-                                        'nombre' => $concepto->getConcepto()->getNombre(),
-                                        'cantidad' => intval(implode($cantConceptos)),
-                                        'valor' => $concepto->getConcepto()->getValor(),
-                                        'total' => $total,
-                                    );    
-                                } */
 
                                 //================================================================para sustratos ====================================================================
                                 $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratoByFactura(
@@ -189,10 +150,7 @@ class FroReporteIngresosController extends Controller
                                 );
                                 
                                 foreach ($sustratos as $key => $sustrato) {
-                                    $cantSustratos += $sustrato['total'];
-                                    $totalSustratos += $sustrato['valor'];
-                                    $nombreSustrato = $sustrato['nombre'];
-                                    $valorUnitarioSustrato = $sustrato['valorUnitario'];
+                                    $totalSustratos += $sustrato['total'];
                                 }
                                 //==================================================================================================================================================
                                 
@@ -210,18 +168,13 @@ class FroReporteIngresosController extends Controller
                             break;
                         }     
                     }
+                    
+                    // =========================================================================fin recorrido para los tramites========================================================
+                    $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos($fechaInicioDatetime, $fechaFinDatetime);
 
-                    $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptosByPrecio($fechaInicioDatetime, $fechaFinDatetime);
-
-                    var_dump($conceptos);
-                    die();
-
-                    $arraySustratos[] = array(
-                        'nombre' => $nombreSustrato,
-                        'cantidad' => $cantSustratos,
-                        'valor' => $valorUnitarioSustrato,
-                        'total' => $cantSustratos * $valorUnitarioSustrato
-                    );
+                    foreach ($conceptos as $key => $concepto) {
+                        $totalConceptos += intval($concepto['total']);
+                    }
 
                     //=========================================total de facturas por estado==========================================
                     $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(
@@ -239,11 +192,6 @@ class FroReporteIngresosController extends Controller
                     $facturas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findAll();
                     
                     //===============================================================================================================
-                    /* 'conceptos' => $conceptos,
-                    'arrayConceptos' => $arrayConceptos,
-                    'cantConceptos' => $cantConceptos,
-                    'totalConceptos' => $totalConceptos, */
-
                     $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'pagadas' => $pagadas, 
@@ -252,11 +200,12 @@ class FroReporteIngresosController extends Controller
                         'cantAnuladas' => count($anuladas), 
                         'valorTramitesPagados' => $valorTramitesPagados, 
                         'valorTramitesAnulados' => $valorTramitesAnulados, 
-                        'arraySustratos' => $arraySustratos,
+                        'sustratos' => $sustratos,
                         'totalSustratos' => $totalSustratos,
                         'arrayTramites' => $arrayTramites,
                         'totalTramites' => $totalTramites,
                         'conceptos' =>  $conceptos,
+                        'totalConceptos' =>  $totalConceptos,
                         'traspasosAnulados' => $traspasos,
                         'cantTraspasos' => count($traspasos),
                         'totalFacturasPagadas' => count($facturasPagadas),
@@ -275,14 +224,11 @@ class FroReporteIngresosController extends Controller
                         'cantAnuladas' => count($anuladas), 
                         'valorTramitesPagados' => $valorTramitesPagados, 
                         'valorTramitesAnulados' => $valorTramitesAnulados, 
-                        'conceptos' => $conceptos,
                         'arraySustratos' => $arraySustratos,
-                        /* 'cantConceptos' => $cantConceptos, */
-                        /* 'totalPrueba' => $totalPrueba, */
-                        /* 'arrayConceptos' => $arrayConceptos, */
-                        'arrayTramites' => $arrayTramites,
-                        /* 'totalConceptos' => $totalConceptos, */
                         'totalSustratos' => $totalSustratos,
+                        'conceptos' => $conceptos,
+                        'totalConceptos' => $totalConceptos,
+                        'arrayTramites' => $arrayTramites,
                         'totalTramites' => $totalTramites,
                         'traspasosAnulados' => $traspasos,
                         'cantTraspasos' => count($traspasos),
