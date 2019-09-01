@@ -65,6 +65,9 @@ class FroReporteIngresosController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            var_dump($params->filtros);
+            die();
+
             setlocale(LC_ALL,"es_ES");
             $fechaActual = strftime("%d de %B del %Y");
 

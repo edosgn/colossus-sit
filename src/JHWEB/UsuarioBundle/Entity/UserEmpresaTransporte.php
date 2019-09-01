@@ -30,9 +30,6 @@ class UserEmpresaTransporte
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="empresaTransporte") */
     private $modalidadTransporte;
     
-    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgServicio", inversedBy="empresaTransporte") */
-    private $servicio;
-    
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="empresaTransporte") */
     private $clase;
 
@@ -490,30 +487,6 @@ class UserEmpresaTransporte
     public function getModalidadTransporte()
     {
         return $this->modalidadTransporte;
-    }
-
-    /**
-     * Set servicio
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio
-     *
-     * @return UserEmpresaTransporte
-     */
-    public function setServicio(\JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio = null)
-    {
-        $this->servicio = $servicio;
-
-        return $this;
-    }
-
-    /**
-     * Get servicio
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgServicio
-     */
-    public function getServicio()
-    {
-        return $this->servicio;
     }
 
     /**

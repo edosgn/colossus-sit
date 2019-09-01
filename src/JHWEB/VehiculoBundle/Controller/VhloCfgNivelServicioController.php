@@ -63,13 +63,8 @@ class VhloCfgNivelServicioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
-                $params->idServicio
-            );
-
             $nivelServicio = new VhloCfgNivelServicio();
 
-            $nivelServicio->setServicio($servicio);
             $nivelServicio->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $nivelServicio->setGestionable(true);
             $nivelServicio->setActivo(true);
@@ -154,10 +149,6 @@ class VhloCfgNivelServicioController extends Controller
             );
 
             if ($nivelServicio) {
-
-                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
-
-                $nivelServicio->setServicio($servicio);
                 $nivelServicio->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
 
                 $em->persist($nivelServicio);

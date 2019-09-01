@@ -474,6 +474,7 @@ class ExcelTemplate {
         }
           //Otorga estilos
           $this->getStyleTramites();
+          $this->templateExcelByGeneral($params);
 
         
 
@@ -483,4 +484,161 @@ class ExcelTemplate {
 
     }
   //==============================//END TEMPLATES//==============================//
+
+  public function templateExcelByGeneral($params){
+        $em = $this->em;
+        $pages = 0;
+
+        for ($i=1; $i <= 4; $i++) { 
+          switch ($i) {
+            case 1:
+              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getPendientesByDate(
+                  $params->fechaInicial,
+                  $params->fechaFinal
+              );
+              //Asigna titulo a la pestaña
+              $title = 'PENDIENTES';
+              break;
+            
+            case 2:
+              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getVencidasByDate(
+                  $params->fechaInicial,
+                  $params->fechaFinal
+              );
+              $title = 'VENCIDAS';
+              break;
+
+            case 3:
+              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getOportunasByDate(
+                  $params->fechaInicial,
+                  $params->fechaFinal
+              );
+              //Asigna titulo a la pestaña
+              $title = 'OPORTUNAS';
+              break;
+
+            case 4:
+              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getInoportunasByDate(
+                  $params->fechaInicial,
+                  $params->fechaFinal
+              );
+              //Asigna titulo a la pestaña
+              $title = 'INOPORTUNAS';
+              break;
+          }
+          
+          if ($solicitudes) {
+            $this->index = $pages;
+            $this->row = 4;
+            $this->col = 'A';
+            
+            if ($pages > 0) {
+              $this->objPHPExcel->createSheet();
+            }
+            
+            $this->objPHPExcel->setActiveSheetIndex($pages);
+
+            //Imprime la cabecera
+            $this->getMembretes($params);
+
+            //Asigna titulo a la pestaña
+            $this->objPHPExcel->getActiveSheet()->setTitle(substr($title,0,30));
+
+            foreach ($solicitudes as $key => $trazabilidad) {
+              //Imprime los datos
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'A'.$this->row, $trazabilidad->getSolicitud()->getNumeroRadicado()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'B'.$this->row, $trazabilidad->getSolicitud()->getAcudiente()->getIdentificacion()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'C'.$this->row, $trazabilidad->getSolicitud()->getAcudiente()->getNombres().' '.$trazabilidad->getSolicitud()->getAcudiente()->getApellidos()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'D'.$this->row, $trazabilidad->getSolicitud()->getPaciente()->getIdentificacion()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'E'.$this->row, $trazabilidad->getSolicitud()->getPaciente()->getNombres().' '.$trazabilidad->getSolicitud()->getPaciente()->getApellidos()
+              );
+              $eps = 'No aplica';
+              if ($trazabilidad->getSolicitud()) {
+                $paciente = $em->getRepository('JHWEBUserBundle:Paciente')->findOneBy(
+                    array(
+                      'usuario' => $trazabilidad->getSolicitud()->getId()
+                    )
+                );
+                if ($paciente) {
+                  $eps = $paciente->getEps()->getNombre();
+                }
+              }
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'F'.$this->row, $eps
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'G'.$this->row, $trazabilidad->getFuncionario()->getServicio()->getNombre()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'H'.$this->row, $trazabilidad->getFuncionario()->getUsuario()->getNombres().' '.$trazabilidad->getFuncionario()->getUsuario()->getApellidos()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'I'.$this->row, $trazabilidad->getSolicitud()->getTipo()->getNombre()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'J'.$this->row, $trazabilidad->getEstado()->getNombre()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'K'.$this->row, $trazabilidad->getSolicitud()->getCausa()->getNombre()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'L'.$this->row, $trazabilidad->getSolicitud()->getFechaApertura()->format('d/m/Y')
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'M'.$this->row, $trazabilidad->getSolicitud()->getFechaVencimiento()->format('d/m/Y')
+              );
+              $fechaRespuesta = 'No aplica';
+              if ($trazabilidad->getSolicitud()->getFechaRespuesta()) {
+                $fechaRespuesta = $trazabilidad->getSolicitud()->getFechaRespuesta()->format('d/m/Y');
+              }
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'N'.$this->row, $fechaRespuesta
+              );
+              //Calcula dias de respuesta
+              $dias = 'No aplica';
+              if (!$trazabilidad->getSolicitud()->getActivo() && $trazabilidad->getSolicitud()->getFechaRespuesta()){
+                $dias = $trazabilidad->getSolicitud()->getFechaApertura()->diff($trazabilidad->getSolicitud()->getFechaRespuesta());
+                $dias = $dias->format('%a días');
+              }
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'O'.$this->row, $dias
+              );
+              
+              /*$this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'B'.$this->row, $trazabilidad->getEstado()->getNombre()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'C'.$this->row, $trazabilidad->getFuncionario()->getServicio()->getNombre()
+              );
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'D'.$this->row, $trazabilidad->getFuncionario()->getUsuario()->getNombres().' '.$trazabilidad->getFuncionario()->getUsuario()->getApellidos()
+              );
+              
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+                'F'.$this->row, $trazabilidad->getSolicitud()->getNumeroRadicado()
+              );*/
+              $this->row++;
+            }
+            //Otorga estilos
+            $this->getStyle();
+
+            // Aumenta en uno el numero de paginas
+            $pages++;
+          }
+        }
+
+        $this->objPHPExcel->setActiveSheetIndex(0);
+
+        return $this->objPHPExcel;
+
+    }
 }

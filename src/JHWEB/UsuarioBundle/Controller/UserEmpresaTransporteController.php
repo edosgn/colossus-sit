@@ -76,7 +76,6 @@ class UserEmpresaTransporteController extends Controller
             $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
             $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
-            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(2);
             
             if($params->idCarroceria){
                 $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
@@ -112,7 +111,6 @@ class UserEmpresaTransporteController extends Controller
                     $empresaTransporteNew->setEmpresa($empresa);
                     $empresaTransporteNew->setRadioAccion($radioAccion);
                     $empresaTransporteNew->setModalidadTransporte($modalidadTransporte);
-                    $empresaTransporteNew->setServicio($servicio);
                     $empresaTransporteNew->setClase($clase);
                     $empresaTransporteNew->setNumeroActo($params->numeroActo);
                     $empresaTransporteNew->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
@@ -203,7 +201,6 @@ class UserEmpresaTransporteController extends Controller
             $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
             $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
-            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
             
             $idCarroceria = (isset($params->idCarroceria)) ? $params->idCarroceria : null;
             if($idCarroceria){
@@ -221,7 +218,6 @@ class UserEmpresaTransporteController extends Controller
             } else {
                 $empresaTransporte->setRadioAccion($radioAccion);
                 $empresaTransporte->setModalidadTransporte($modalidadTransporte);
-                $empresaTransporte->setServicio($servicio);
                 $empresaTransporte->setClase($clase);
                 $empresaTransporte->setNumeroActo($params->numeroActo);
                 $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));

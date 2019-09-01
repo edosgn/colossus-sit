@@ -43,10 +43,6 @@ class VhloCfgNivelServicio
      */
     private $activo;
 
-    
-    /** @ORM\ManyToOne(targetEntity="VhloCfgServicio", inversedBy="niveles") */
-    private $servicio;
-
     /**
      * Get id
      *
@@ -127,29 +123,5 @@ class VhloCfgNivelServicio
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set servicio
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio
-     *
-     * @return VhloCfgNivelServicio
-     */
-    public function setServicio(\JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio = null)
-    {
-        $this->servicio = $servicio;
-
-        return $this;
-    }
-
-    /**
-     * Get servicio
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgServicio
-     */
-    public function getServicio()
-    {
-        return $this->servicio;
     }
 }
