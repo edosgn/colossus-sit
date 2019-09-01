@@ -62,46 +62,66 @@ class BpOrdenPagoController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $ordenPago = new BpOrdenPago();
-
-            $fecha = new \Datetime($params->fecha);
-
-            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getMaximo(
-                $fecha->format('Y')
-            );
-            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-            
-            $ordenPago->setConsecutivo($consecutivo);
-
-            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fecha->format('mY');
-
-            $ordenPago->setNumero($numero);
-            $ordenPago->setFecha($fecha);
-            $ordenPago->setTipo($params->tipo);
-            $ordenPago->setConcepto($params->concepto);
-            $ordenPago->setValor($params->valor);
-            $ordenPago->setActivo(true);
-
             if ($params->idRegistroCompromiso) {
                 $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
                     $params->idRegistroCompromiso
                 );
-                $ordenPago->setRegistroCompromiso($registro);
-                $registro->setSaldo($registro->getSaldo() - $params->valor);
-                $proyecto = $registro->getCdp()->getActividad()->getCuenta()->getProyecto();
-                $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valor);
-            }
-            
-            $em->flush();
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-                'data' => $registro
-            );
+                if ($params->valor <= $registro->getSaldo()) {
+                        $ordenPago = new BpOrdenPago();
+
+                    $fecha = new \Datetime($params->fecha);
+
+                    $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getMaximo(
+                        $fecha->format('Y')
+                    );
+                    $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+                    
+                    $ordenPago->setConsecutivo($consecutivo);
+
+                    $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fecha->format('mY');
+
+                    $ordenPago->setNumero($numero);
+                    $ordenPago->setFecha($fecha);
+                    $ordenPago->setTipo($params->tipo);
+                    $ordenPago->setConcepto($params->concepto);
+                    $ordenPago->setValor($params->valor);
+                    $ordenPago->setActivo(true);
+
+                    $ordenPago->setRegistroCompromiso($registro);
+                    $registro->setSaldo($registro->getSaldo() - $params->valor);
+                    $proyecto = $registro->getCdp()->getActividad()->getCuenta()->getProyecto();
+                    $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valor);
+                    
+                    $em->persist($ordenPago);
+                    $em->flush();
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con exito.",
+                        'data' => $registro
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => "El valor no puede ser mayor al saldo del registro de compromiso.", 
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No se encuenta registro de compromiso.", 
+                );
+            }
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 

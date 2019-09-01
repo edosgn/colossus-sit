@@ -5,12 +5,12 @@ namespace JHWEB\BancoProyectoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BpReduccion
+ * BpReduccionCdp
  *
- * @ORM\Table(name="bp_reduccion")
- * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpReduccionRepository")
+ * @ORM\Table(name="bp_reduccion_cdp")
+ * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpReduccionCdpRepository")
  */
-class BpReduccion
+class BpReduccionCdp
 {
     /**
      * @var int
@@ -73,7 +73,7 @@ class BpReduccion
      *
      * @param \DateTime $fecha
      *
-     * @return BpReduccion
+     * @return BpReduccionCdp
      */
     public function setFecha($fecha)
     {
@@ -97,7 +97,7 @@ class BpReduccion
      *
      * @param integer $valor
      *
-     * @return BpReduccion
+     * @return BpReduccionCdp
      */
     public function setValor($valor)
     {
@@ -109,7 +109,7 @@ class BpReduccion
     /**
      * Get valor
      *
-     * @return int
+     * @return integer
      */
     public function getValor()
     {
@@ -121,7 +121,7 @@ class BpReduccion
      *
      * @param string $justificacion
      *
-     * @return BpReduccion
+     * @return BpReduccionCdp
      */
     public function setJustificacion($justificacion)
     {
@@ -145,7 +145,7 @@ class BpReduccion
      *
      * @param boolean $activo
      *
-     * @return BpReduccion
+     * @return BpReduccionCdp
      */
     public function setActivo($activo)
     {
@@ -157,7 +157,7 @@ class BpReduccion
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -169,7 +169,7 @@ class BpReduccion
      *
      * @param \JHWEB\BancoProyectoBundle\Entity\BpCdp $cdp
      *
-     * @return BpReduccion
+     * @return BpReduccionCdp
      */
     public function setCdp(\JHWEB\BancoProyectoBundle\Entity\BpCdp $cdp = null)
     {
@@ -193,7 +193,7 @@ class BpReduccion
      *
      * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $solicita
      *
-     * @return BpReduccion
+     * @return BpReduccionCdp
      */
     public function setSolicita(\JHWEB\PersonalBundle\Entity\PnalFuncionario $solicita = null)
     {

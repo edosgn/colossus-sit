@@ -65,40 +65,67 @@ class BpRegistroCompromisoController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
-                $params->id
+            $registroOld = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findOneBy(
+                array(
+                    'numero' => $params->numero,
+                )
             );
 
-            $registro->setNumero($params->numero);
-            $registro->setFechaRegistro(new \Datetime(date('Y-m-d')));
-            $registro->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-            $registro->setContratoNumero($params->contratoNumero);
-            $registro->setContratoTipo($params->contratoTipo);
-            $registro->setContratoEstado($params->contratoEstado);
-            $registro->setValorApropiado($params->valorApropiado);
-            $registro->setEstado('REGISTRADO');
+            if (!$registroOld) {
+                $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
+                    $params->id
+                );
 
-            if ($registro->getCdp()) {
-                //Consulta cdp
-                $cdp = $registro->getCdp();
-                //Actualiza saldo del cdp
-                $cdp->setSaldo($cdp->getSaldo() - $params->valorApropiado);
-                //Consulta proyecto
-                $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
-                //Actualiza saldo del proyecto
-                $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valorApropiado);
+                if ($params->valorApropiado <= $registro->getCdp()->getSaldo()) {
+                        $registro->setNumero($params->numero);
+                    $registro->setFechaRegistro(new \Datetime(date('Y-m-d')));
+                    $registro->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+                    $registro->setContratoNumero($params->contratoNumero);
+                    $registro->setContratoTipo($params->contratoTipo);
+                    $registro->setContratoEstado($params->contratoEstado);
+                    $registro->setValorApropiado($params->valorApropiado);
+                    $registro->setSaldo($params->valorApropiado);
+                    $registro->setEstado('REGISTRADO');
+
+                    if ($registro->getCdp()) {
+                        //Consulta cdp
+                        $cdp = $registro->getCdp();
+                        //Actualiza saldo del cdp
+                        $cdp->setSaldo($cdp->getSaldo() - $params->valorApropiado);
+                        //Consulta proyecto
+                        $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
+                        //Actualiza saldo del proyecto
+                        $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valorApropiado);
+                    }
+                    
+                    $em->flush();
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito.",
+                        'data' => $registro
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => "El valor a apropiar no puede superar el saldo disponible del CDP.",
+                    );
+                }                
+            } else {
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ya existe un registro de compromismo con el mismo número.",
+                );
             }
-            
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-                'data' => $registro
-            );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -256,7 +283,6 @@ class BpRegistroCompromisoController extends Controller
             $registro->setCuentaTipo($params->cuentaTipo);
             $registro->setBancoNombre(mb_strtoupper($params->bancoNombre));
             $registro->setValor($params->valor);
-            $registro->setSaldo($params->valor);
             $registro->setConcepto($params->concepto);
             $registro->setEstado('SOLICITUD');
 
