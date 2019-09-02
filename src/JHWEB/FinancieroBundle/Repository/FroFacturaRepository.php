@@ -112,7 +112,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     public function getSustratos($fechaInicio, $fechaFin) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(fi.id) AS cantidad
+        /* $dql = "SELECT COUNT(fi.id) AS cantidad
             FROM JHWEBFinancieroBundle:FroFacInsumo fi,
             JHWEBInsumoBundle:ImoInsumo i,
             JHWEBInsumoBundle:ImoCfgTipo t,
@@ -122,7 +122,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND i.tipo = t.id
             AND t.categoria = 'SUSTRATO'
             AND iv.tipo = t.id";
-            
+             */
             $dql = "SELECT COUNT(fi.id) AS cantidad, t.id, t.nombre, iv.valor, COUNT(fi.id) * iv.valor AS total
             FROM JHWEBFinancieroBundle:FroFacInsumo fi, JHWEBInsumoBundle:ImoInsumo i,
                 JHWEBInsumoBundle:ImoCfgTipo t, JHWEBInsumoBundle:ImoCfgValor iv,
