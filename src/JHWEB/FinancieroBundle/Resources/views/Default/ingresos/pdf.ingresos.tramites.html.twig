@@ -6,7 +6,11 @@
         <br>
         {% if reporteMensual == false %}
             {% if pagadas %}
-                <h3 style="text-align:center"> INFORME INGRESOS DIARIO {{ organismoTransito.nombre }}</h3>
+                {% if organismoTransito == null %}
+                    <h3 style="text-align:center"> REPORTE INGRESOS POR SEDES OPERATIVAS</h3>
+                {% else %}
+                    <h3 style="text-align:center"> REPORTE INGRESOS DE {{ organismoTransito.nombre }}</h3>
+                {% endif %}
                 <h5 style="text-align:center;">General</h5>
                 <br>
                 <table border="1" style="text-align:center;">

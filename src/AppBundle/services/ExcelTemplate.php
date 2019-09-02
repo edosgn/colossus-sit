@@ -106,7 +106,8 @@ class ExcelTemplate {
         $this->objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
         $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $this->objPHPExcel->setActiveSheetIndex($this->index)
-                    ->setCellValue('A1', 'INFORME INGRESOS ' . $params->organismoTransito->getNombre())
+                    /* ->setCellValue('A1', 'INFORME INGRESOS ' . $params->organismoTransito->getNombre()) */
+                    ->setCellValue('A1', 'INFORME INGRESOS')
                     ->setCellValue('A2', 'General')
                     ->setCellValue('A3', 'CÓDIGO')
                     ->setCellValue('B3', 'TRAMITES')
@@ -118,7 +119,8 @@ class ExcelTemplate {
         $this->objPHPExcel->getActiveSheet()->mergeCells('A2:H2');
         $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $this->objPHPExcel->setActiveSheetIndex($this->index)
-                    ->setCellValue('A1', 'INFORME INGRESOS ' . $params->organismoTransito->getNombre())
+                    /* ->setCellValue('A1', 'INFORME INGRESOS ' . $params->organismoTransito->getNombre()) */
+                    ->setCellValue('A1', 'INFORME INGRESOS')
                     ->setCellValue('A2', 'Detallado')
                     ->setCellValue('A3', 'NRO. FACTURA')
                     ->setCellValue('B3', 'FECHA PAGO')
@@ -474,7 +476,7 @@ class ExcelTemplate {
         }
           //Otorga estilos
           $this->getStyleTramites();
-          $this->templateExcelByGeneral($params);
+          /* $this->templateExcelByGeneral($params); */
 
         
 

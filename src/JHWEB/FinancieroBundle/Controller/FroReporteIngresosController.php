@@ -65,16 +65,17 @@ class FroReporteIngresosController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            var_dump($params->filtros);
-            die();
-
             setlocale(LC_ALL,"es_ES");
             $fechaActual = strftime("%d de %B del %Y");
 
             $fechaInicioDatetime = new \Datetime($params->filtros->fechaDesde);
             $fechaFinDatetime = new \Datetime($params->filtros->fechaHasta);
             
-            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->filtros->idOrganismoTransito);
+            $organismoTransito = null;
+
+            if(count($params->filtros->arrayOrganismosTransito) == 1){
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->filtros->arrayOrganismosTransito[0]);
+            }
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                 array(
@@ -93,7 +94,7 @@ class FroReporteIngresosController extends Controller
             if(intval($params->tipoArchivoTramite) == 1) {
                 $tramites = null;
 
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
 
                 $pagadas = [];
                 $finalizadas = [];
@@ -195,7 +196,7 @@ class FroReporteIngresosController extends Controller
                     
                     //===============================================================================================================
                     $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
-                        'organismoTransito' => $organismoTransito, 
+                        'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null,
                         'pagadas' => $pagadas, 
                         'anuladas' => $anuladas, 
                         'cantPagadas' => count($pagadas), 
@@ -219,7 +220,7 @@ class FroReporteIngresosController extends Controller
                     $data = (object)
                         array(
                         'template' => 'templateExcelByTramites',
-                        'organismoTransito' => $organismoTransito, 
+                        /* 'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, */ 
                         'pagadas' => $pagadas, 
                         'anuladas' => $anuladas, 
                         'cantPagadas' => count($pagadas), 
@@ -264,7 +265,7 @@ class FroReporteIngresosController extends Controller
                 $arrayReporteMensual = [];
                 $totalReporteMensual = 0;
                 
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
                 if($tramites){
                     $reporteMensual = true;
                     foreach ($tramites as $key => $tramite) {
@@ -313,7 +314,7 @@ class FroReporteIngresosController extends Controller
                 );
                 
                 $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
-                    'organismoTransito' => $organismoTransito, 
+                    /* 'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, */ 
                     'arrayReporteMensual' => $arrayReporteMensual,
                     'reporteMensual' => $reporteMensual,
                     'funcionario' => $funcionario,
@@ -321,12 +322,11 @@ class FroReporteIngresosController extends Controller
                     'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
                     'fechaActual' => $fechaActual,
                     'totalReporteMensual' => $totalReporteMensual,
-                    /* 'totalSustratos' => $totalSustratos, */
                 )); 
 
                 $data = (object) array(
                     'template' => 'templateExcelByTramites',
-                    'organismoTransito' => $organismoTransito, 
+                    /* 'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, */ 
                     'arrayReporteMensual' => $arrayReporteMensual,
                     'reporteMensual' => $reporteMensual,
                     'funcionario' => $funcionario,
@@ -334,14 +334,13 @@ class FroReporteIngresosController extends Controller
                     'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
                     'fechaActual' => $fechaActual,
                     'totalReporteMensual' => $totalReporteMensual,
-                    /* 'totalSustratos' => $totalSustratos, */
                 ); 
 
                 if($params->exportarEn == 1) {
                     return $this->get('app.excel')->newExcel($data);
                 } else if($params->exportarEn == 2) {
                     return new Response(
-                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        $this->get('app.pdf')->templateIngresos($html),
                         200,
                         array(
                             'Content-Type'        => 'application/pdf',
@@ -394,19 +393,6 @@ class FroReporteIngresosController extends Controller
             
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
 
-            /* $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
-                array(
-                    'identificacion' => $params->identificacion,
-                    )
-                );
-                
-            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
-                array(
-                    'ciudadano' => $ciudadano,
-                    )
-                );
-        
-            $totalReporteMensual = 0; */
             $arrayInfracciones = []; 
             $totalInfracciones = 0;
 
@@ -613,13 +599,13 @@ class FroReporteIngresosController extends Controller
 
                     $arrayInmovilizaciones[] = array(
                         'numeroRecibo' => $inmovilizacion->getInmovilizacion()->getNumeroRecibo(),
-                        'placa' => $inmovilizacion->getPlaca(),
+                        'placa' => $inmovilizacion->getInmovilizacion()->getPlaca(),
                         'fechaIngreso' => $inmovilizacion->getInmovilizacion()->getFechaIngreso(),
                         'fechaSalida' => $inmovilizacion->getInmovilizacion()->getFechaSalida(),
                         'horaSalida' => $inmovilizacion->getInmovilizacion()->getHoraSalida(),
-                        'horas' => $inmovilizacion->getHoras(),
-                        'valorHora' => $inmovilizacion->getValorHora(),
-                        'costoGrua' => $inmovilizacion->getInmovilizacion()->getCostoGrua(),
+                        'horas' => $inmovilizacion->getMinutos(),
+                        'valorHora' => $inmovilizacion->getValorParqueadero(),
+                        'costoGrua' => $inmovilizacion->getValorGrua(),
                         'valor' => $factura->getFactura()->getValorNeto(),
                     );
                 }

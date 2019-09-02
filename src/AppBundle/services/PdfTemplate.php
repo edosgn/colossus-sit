@@ -595,14 +595,14 @@ class PdfTemplate extends TCPDF{
         $pdf->Output('certificado_tradicion.pdf', 'I');
     }
 
-    public function templateIngresos($html, $organismoTransito){
+    public function templateIngresos($html){
         // create new PDF document
         $pdf = new PdfTemplate('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('JHWEB PASTO SAS');
-        $pdf->SetTitle('Reporte Ingresos a '. $organismoTransito->getNombre());
+        $pdf->SetTitle('Reporte Ingresos');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 

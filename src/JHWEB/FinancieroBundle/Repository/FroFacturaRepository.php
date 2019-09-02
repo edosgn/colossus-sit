@@ -50,23 +50,23 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     } */
     
     //Obtiene trámites solicitud según el filtro de búsqueda mensual
-    public function findTramites($fechaInicio, $fechaFin, $idOrganismoTransito) {
+    public function findTramites($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
         $em = $this->getEntityManager();
+
+        $condicion = null; 
         
         $dql = "SELECT fts
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
             JHWEBFinancieroBundle:FroFactura ff,
             JHWEBFinancieroBundle:FroFacTramite fft, 
             JHWEBFinancieroBundle:FroTrtePrecio ftp
-            WHERE fts.organismoTransito = :idOrganismoTransito 
-            AND fts.tramiteFactura = fft.id
+            WHERE fts.tramiteFactura = fft.id
             AND fft.factura = ff.id
             AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
-            AND fft.precio = ftp.id
-            GROUP BY ftp.tramite";
+            AND fft.precio = ftp.id";
 
-        if ($params->arrayOrganismosTransito) {
-            foreach ($params->arrayOragnismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+        if ($arrayOrganismosTransito) {
+            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
                 if($keyOrganismoTransito == 0) {
                     $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito . "'";
                 } else {
@@ -75,16 +75,15 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
+        $condicion .=  " GROUP BY ftp.tramite";
+
         if ($condicion) {
             $dql .= $condicion;
         }
 
         $consulta = $em->createQuery($dql);
 
-        var_dump($dql);
-        
         $consulta->setParameters(array(
-            'idOrganismoTransito' => $idOrganismoTransito, 
             'fechaInicio' => $fechaInicio,
             'fechaFin' => $fechaFin,
         ));
