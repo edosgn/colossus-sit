@@ -5,12 +5,12 @@ namespace JHWEB\BancoProyectoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BpReduccionCdp
+ * BpReduccion
  *
- * @ORM\Table(name="bp_reduccion_cdp")
- * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpReduccionCdpRepository")
+ * @ORM\Table(name="bp_reduccion")
+ * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpReduccionRepository")
  */
-class BpReduccionCdp
+class BpReduccion
 {
     /**
      * @var int
@@ -43,6 +43,13 @@ class BpReduccionCdp
     private $justificacion;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=255)
+     */
+    private $tipo;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -53,6 +60,11 @@ class BpReduccionCdp
      * @ORM\ManyToOne(targetEntity="BpCdp")
      **/
     protected $cdp;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="BpRegistroCompromiso")
+     **/
+    protected $registroCompromiso;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="reducciones") */
     private $solicita;
@@ -73,7 +85,7 @@ class BpReduccionCdp
      *
      * @param \DateTime $fecha
      *
-     * @return BpReduccionCdp
+     * @return BpReduccion
      */
     public function setFecha($fecha)
     {
@@ -97,7 +109,7 @@ class BpReduccionCdp
      *
      * @param integer $valor
      *
-     * @return BpReduccionCdp
+     * @return BpReduccion
      */
     public function setValor($valor)
     {
@@ -121,7 +133,7 @@ class BpReduccionCdp
      *
      * @param string $justificacion
      *
-     * @return BpReduccionCdp
+     * @return BpReduccion
      */
     public function setJustificacion($justificacion)
     {
@@ -141,11 +153,35 @@ class BpReduccionCdp
     }
 
     /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return BpReduccion
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return BpReduccionCdp
+     * @return BpReduccion
      */
     public function setActivo($activo)
     {
@@ -169,7 +205,7 @@ class BpReduccionCdp
      *
      * @param \JHWEB\BancoProyectoBundle\Entity\BpCdp $cdp
      *
-     * @return BpReduccionCdp
+     * @return BpReduccion
      */
     public function setCdp(\JHWEB\BancoProyectoBundle\Entity\BpCdp $cdp = null)
     {
@@ -189,11 +225,35 @@ class BpReduccionCdp
     }
 
     /**
+     * Set registroCompromiso
+     *
+     * @param \JHWEB\BancoProyectoBundle\Entity\BpRegistroCompromiso $registroCompromiso
+     *
+     * @return BpReduccion
+     */
+    public function setRegistroCompromiso(\JHWEB\BancoProyectoBundle\Entity\BpRegistroCompromiso $registroCompromiso = null)
+    {
+        $this->registroCompromiso = $registroCompromiso;
+
+        return $this;
+    }
+
+    /**
+     * Get registroCompromiso
+     *
+     * @return \JHWEB\BancoProyectoBundle\Entity\BpRegistroCompromiso
+     */
+    public function getRegistroCompromiso()
+    {
+        return $this->registroCompromiso;
+    }
+
+    /**
      * Set solicita
      *
      * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $solicita
      *
-     * @return BpReduccionCdp
+     * @return BpReduccion
      */
     public function setSolicita(\JHWEB\PersonalBundle\Entity\PnalFuncionario $solicita = null)
     {
