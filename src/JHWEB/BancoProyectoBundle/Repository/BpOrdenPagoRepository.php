@@ -21,4 +21,41 @@ class BpOrdenPagoRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameter('ANIO', $anio);
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene la suma de los costos de actividades por proyecto
+    public function getByBeneficiario($params)
+    {
+        $em = $this->getEntityManager();
+
+        if ($params->idTipoIdentificacion != 4) {
+            
+            $dql = "SELECT o
+            FROM JHWEBBancoProyectoBundle:BpOrdenPago o,
+            JHWEBBancoProyectoBundle:BpRegistroCompromiso r,
+            JHWEBUsuarioBundle:UserCiudadano c
+            WHERE o.registroCompromiso = r.id
+            AND r.ciudadano = c.id
+            AND c.tipoIdentificacion = :idTipoIdentificacion
+            AND c.identificacion = :identificacion
+            AND o.activo = true";
+        }else{
+            $dql = "SELECT o
+            FROM JHWEBBancoProyectoBundle:BpOrdenPago o,
+            JHWEBBancoProyectoBundle:BpRegistroCompromiso r,
+            JHWEBUsuarioBundle:UserEmpresa e
+            WHERE o.registroCompromiso = r.id
+            AND r.empresa = e.id
+            AND e.tipoIdentificacion = :idTipoIdentificacion
+            AND e.nit = :identificacion
+            AND o.activo = true";
+                
+        }
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameter('idTipoIdentificacion', $params->idTipoIdentificacion);
+        $consulta->setParameter('identificacion', $params->identificacion);
+
+        return $consulta->getResult();
+    }
 }

@@ -248,7 +248,7 @@ class BpRegistroCompromisoController extends Controller
     }
 
     /**
-     * Creates a request bpCdp entity.
+     * Crea la solicitud de registro de compromiso.
      *
      * @Route("/request", name="bpregistrocompromiso_request")
      * @Method({"GET", "POST"})
@@ -329,7 +329,7 @@ class BpRegistroCompromisoController extends Controller
     }
 
     /**
-     * Busca la solicitud de CDP 
+     * Busca la solicitud de registro de compromiso 
      *
      * @Route("/search/solicitud/numero", name="bpregistrocompromiso_search_solicitud_numero")
      * @Method({"GET", "POST"})
@@ -357,7 +357,7 @@ class BpRegistroCompromisoController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro creado con éxito.",
+                    'message' => "Solicitud encontrada con éxito.",
                     'data' => $solicitud,
                 );
             }else{
@@ -381,7 +381,7 @@ class BpRegistroCompromisoController extends Controller
     }
 
     /**
-     * Busca el CDP por numero
+     * Busca el registro de compromiso por numero
      *
      * @Route("/search/numero", name="bpregistrocompromiso_search_numero")
      * @Method({"GET", "POST"})
@@ -409,7 +409,7 @@ class BpRegistroCompromisoController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro creado con éxito.",
+                    'message' => "Registro encontrado con éxito.",
                     'data' => $solicitud,
                 );
             }else{
@@ -459,5 +459,57 @@ class BpRegistroCompromisoController extends Controller
         ));
 
         $this->get('app.pdf')->templateEmpty($html, $solicitud->getNumero());
+    }
+
+    /**
+     * Busca registro de compromiso por numero de contrato
+     *
+     * @Route("/search/numero/contrato", name="bpregistrocompromiso_search_numero_contrato")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByNumeroContratoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
+
+            $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findOneBy(
+                array(
+                    'contratoNumero' => $params->numero
+                )
+            );
+
+            if ($registro) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con éxito.",
+                    'data' => $registro,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No exite registro para el numero de contrato: ".$params->numero." no encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

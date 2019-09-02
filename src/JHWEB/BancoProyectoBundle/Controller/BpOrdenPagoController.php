@@ -76,9 +76,7 @@ class BpOrdenPagoController extends Controller
                         $fecha->format('Y')
                     );
                     $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-                    
                     $ordenPago->setConsecutivo($consecutivo);
-
                     $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fecha->format('mY');
 
                     $ordenPago->setNumero($numero);
@@ -206,5 +204,57 @@ class BpOrdenPagoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ================================================== */
+
+    /**
+     * Busca la reducciones por filtros establecidos
+     *
+     * @Route("/search/beneficiario", name="bpcdp_search_beneficiario")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByBeneficiarioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
+
+            $ordenesPago = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getByBeneficiario(
+                $params
+            );
+
+            if ($ordenesPago) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($ordenesPago)." registros encontrados.",
+                    'data' => $ordenesPago,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }
