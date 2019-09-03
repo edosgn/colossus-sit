@@ -65,6 +65,7 @@ class BpReduccionController extends Controller
             $reduccion = new BpReduccion();
 
             $reduccion->setNumero($params->numero);
+            $reduccion->setFecha(new \Datetime($params->fecha));
             $reduccion->setJustificacion($params->justificacion);
             $reduccion->setValor($params->valor);
             $reduccion->setActivo(true);
@@ -254,11 +255,8 @@ class BpReduccionController extends Controller
 
             switch ($params->tipoFiltro) {
                 case 1:
-                    $reducciones = $em->getRepository('JHWEBBancoProyectoBundle:BpReduccion')->findBy(
-                        array(
-                            'tipo' => $tipo,
-                            'numero' => $params->filtro,
-                        )
+                    $reducciones = $em->getRepository('JHWEBBancoProyectoBundle:BpReduccion')->getByNumberOfRcOrCdp(
+                        $tipo, $params->filtro
                     );
                     break;
 
