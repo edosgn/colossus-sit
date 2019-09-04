@@ -4,8 +4,8 @@
     </header>
     <body>
         <br>
-        {% if reporteMensual == false %}
-            {% if pagadas %}
+        {% if reporteGeneral == true %}
+            {% if tramitesFinalizados %}
                 {% if organismoTransito == null %}
                     <h3 style="text-align:center"> REPORTE INGRESOS POR SEDES OPERATIVAS</h3>
                 {% else %}
@@ -21,18 +21,18 @@
                         <td><b>Valor</b></td>
                         <td><b>Total</b></td>
                     </tr>
-                    {% for tramite in arrayTramites %}
+                    {% for tramite in tramitesFinalizados %}
                         <tr>
-                            <td>{{ tramite.id }}</td>
+                            <td>{{ tramite.codigo }}</td>
                             <td>{{ tramite.nombre }}</td>
                             <td>{{ tramite.cantidad }}</td>
                             <td>{{ tramite.valor }}</td>
-                            <td>{{ tramite.total2 }}</td>
+                            <td>{{ tramite.total }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
                         <td colspan="4"><b>TOTAL INGRESOS</b></td>
-                        <td><b>{{ totalTramites }}</b></td>
+                        <td><b>{{ totalTramitesFinalizados }}</b></td>
                     </tr>
                 </table>
             {% endif %}
@@ -40,6 +40,7 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
+                    <td><b> Código</b></td>
                     <td><b> Sustratos CDA </b></td>
                     <td><b> Cantidad </b></td>
                     <td><b> Valor </b></td>
@@ -47,6 +48,7 @@
                 </tr>
                 {% for sustrato in sustratos %}
                     <tr>
+                        <td>{{ sustrato.id }}</td>
                         <td>{{ sustrato.nombre }}</td>
                         <td>{{ sustrato.cantidad }}</td>
                         <td>{{ sustrato.valor }}</td>
@@ -54,7 +56,7 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
+                    <td colspan="4"><b>TOTAL SUSTRATOS</b></td>
                     <td><b>{{ totalSustratos }}</b></td>
                 </tr>
             </table>
@@ -62,7 +64,7 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b>Id</b></td>
+                    <td><b>Código</b></td>
                     <td><b>Nombre Concepto</b></td>
                     <td><b>Cantidad</b></td>
                     <td><b>Valor Unitario</b></td>
@@ -83,7 +85,7 @@
                 </tr>
                 <tr>
                     <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
-                    <td><b>{{ totalTramites - totalSustratos }}</b></td>
+                    <td><b>{{ totalTramitesFinalizados - totalSustratos }}</b></td>
                 </tr>
             </table>
             <br>
@@ -91,36 +93,35 @@
             <table border="1" style="text-align:center;">
                 <tr>
                     <td><b>DEVOLUCIÓN</b></td>
-                    <td>{{ cantAnuladas }}</td>
+                    <td>{{ cantidadFacturasDevolucionadas }}</td>
                 </tr>
                 <tr>
                     <td><b>DEVOLUCIÓN RETEFUENTE</b></td>
-                    <td>{{ cantTraspasos }}</td>
+                    <td>{{ cantidadFacturasRetefuente }}</td>
                 </tr>
             </table>
             <br>
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b>TOTAL FACTURAS PAGADAS</b></td>
-                    <td>{{ totalFacturasPagadas }}</td>
+                    <td><b>CANTIDAD TOTAL FACTURAS PAGADAS</b></td>
+                    <td>{{ cantidadFacturasPagadas }}</td>
                 </tr>
                 <tr>
-                    <td><b>TOTAL FACTURAS VENCIDAS</b></td>
-                    <td>{{ totalFacturasVencidas }}</td>
+                    <td><b>CANTIDAD TOTAL FACTURAS VENCIDAS</b></td>
+                    <td>{{ cantidadFacturasVencidas }}</td>
                 </tr>
                 <tr>
-                    <td><b>TOTAL FACTURAS GENERADAS</b></td>
-                    <td>{{ totalFacturas }}</td>
+                    <td><b>CANTIDAD TOTAL FACTURAS GENERADAS</b></td>
+                    <td>{{ cantidadFacturasGeneradas }}</td>
                 </tr>
             </table>
         {% endif %}
         {# fin tramites diarios #}
-        {% if reporteMensual %}
+        {% if reporteDetallado == true %}
             <h2 style="text-align:center;">INFORME INGRESO MES DE {{ mesReporteDesde }} - {{ mesReporteHasta }} SEGÚN RECIBOS DE CAJA</h2>
             <h5 style="text-align:center;">Detallado</h5>
             <br>
-            <b>Fecha de informe: </b> {{ mesReporteDesde }}<br>
             <b>Organismo tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
             <b>Nombre del inspector: </b> {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}<br>
             <b>Fecha de expedición del informe: </b>  {{ fechaActual }}
@@ -128,32 +129,39 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b> Nro. Factura </b></td>
-                    <td><b> Fecha Pago </b></td>
-                    <td><b> Placa/Cédula </b></td>
-                    <td><b> Nro. Sustrato </b></td>
-                    <td><b> Clasificaciones </b></td>
-                    <td><b> Trámite </b></td>
-                    <td><b> Fecha Trámite </b></td>
-                    <td><b> Valor Pagado </b></td>
-                    <td><b> Número Solicitud Runt </b></td>
+                    <td><b> NRO. FACTURA</b></td>
+                    <td><b> FECHA PAGO</b></td>
+                    <td><b> PLACA/CÉDULA </b></td>
+                    <td><b> NRO. SUSTRATO </b></td>
+                    <td><b> CLASIFICACIONES </b></td>
+                    <td><b> NRO. SOLICITUD RUNT </b></td>
+                    <td><b> NOMBRE TRÁMITE </b></td>
+                    <td><b> FECHA TRÁMITE </b></td>
+                    <td><b> VALOR PAGADO </b></td>
                 </tr>
-                {% for tramite in arrayReporteMensual %}
+                {% for tramite in tramitesFinalizados %}
                     <tr>
-                        <td>{{ tramite.numeroFactura }}</td>
-                        <td>{{ tramite.fecha | date('Y-m-d') }}</td>
-                        <td>{{ tramite.placaCedula }}</td>
+                        <td>{{ tramite.numero }}</td>
+                        <td>{{ tramite.fechaPago | date('Y-m-d') }}</td>
+                        <td>
+                            {# {% if tramite.identificacion %}
+                                {{ tramite.solicitante.identificacion }}
+                            {% endif %} #}
+                            {% if tramite.placa %}
+                                {{ tramite.placa }}
+                            {% endif %}
+                        </td>
                         <td>{{ tramite.numeroSustrato }}</td>
-                        <td>{{ tramite.moduloSustrato }}</td>
-                        <td>{{ tramite.nombre }}</td>
+                        <td>{{ tramite.abreviatura }}</td>
+                        <td>{{ tramite.numeroRunt }}</td>
+                        <td>{{ tramite.nombreTramite }}</td>
                         <td>{{ tramite.fechaTramite | date('Y-m-d') }}</td>
                         <td>{{ tramite.valorPagado }}</td>
-                        <td>{{ tramite.numeroRunt }}</td>
                     </tr>
                 {% endfor %}
-                 <tr>
-                    <td colspan="7"><b>TOTAL </b></td>
-                    <td>{{ totalReporteMensual }}</td>
+                <tr>
+                    <td colspan="8"><b>TOTAL </b></td>
+                    <td><b>{{ totalTramitesFinalizados }}</b></td>
                 </tr>
             </table>
         {% endif %}

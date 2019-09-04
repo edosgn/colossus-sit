@@ -26,44 +26,97 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //=======================================para reportes de ingresos=======================================//
-    ////Obtiene trámites solicitud según el filtro de búsqueda diario
-    /* public function findTramitesGeneral($fecha, $idOrganismoTransito) {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT fts
-            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
-            JHWEBFinancieroBundle:FroFactura ff,
-            JHWEBFinancieroBundle:FroFacTramite fft
-            WHERE fts.organismoTransito = :idOrganismoTransito 
-            AND fts.tramiteFactura = fft.id
-            AND fft.factura = ff.id
-            AND ff.fechaPago = :fecha";
-
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameters(array(
-            'idOrganismoTransito' => $idOrganismoTransito, 
-            'fecha' => $fecha,
-        ));
-        
-        return $consulta->getResult();
-    } */
-    
-    //Obtiene trámites solicitud según el filtro de búsqueda mensual
-    public function findTramites($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
+    //Obtiene trámites solicitud con facturas finalizadas según el filtro de búsqueda
+    public function findTramitesFinalizados($tipoArchivoTramite, $fechaInicio, $fechaFin, $arrayOrganismosTransito) {
         $em = $this->getEntityManager();
 
         $condicion = null; 
         
-        $dql = "SELECT fts
+        if($tipoArchivoTramite == 'GENERAL') {
+            $dql = "SELECT COUNT(fts.id) as cantidad, ft.codigo, ft.nombre, ftp.valor, COUNT(fts.id) * ftp.valor as total
+                FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+                JHWEBFinancieroBundle:FroFactura ff,
+                JHWEBFinancieroBundle:FroFacTramite fft, 
+                JHWEBFinancieroBundle:FroTramite ft, 
+                JHWEBFinancieroBundle:FroTrtePrecio ftp
+                WHERE fts.tramiteFactura = fft.id
+                AND fft.factura = ff.id
+                AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+                AND ff.estado = 'FINALIZADA'
+                AND fft.precio = ftp.id
+                AND ftp.tramite = ft.id";
+        }
+        else if($tipoArchivoTramite == 'DETALLADO') {
+            $dql = "SELECT ff.numero, ff.fechaPago, vcp.numero as placa, ii.numero as numeroSustrato, m.abreviatura, ff.numeroRunt, ft.nombre as nombreTramite, fts.fecha as fechaTramite, ftp.valor as valorPagado
+                FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+                JHWEBFinancieroBundle:FroFactura ff,
+                JHWEBFinancieroBundle:FroFacTramite fft, 
+                JHWEBFinancieroBundle:FroTramite ft, 
+                JHWEBFinancieroBundle:FroTrtePrecio ftp,
+                JHWEBVehiculoBundle:VhloVehiculo vv,
+                JHWEBVehiculoBundle:VhloCfgPlaca vcp,
+                JHWEBFinancieroBundle:FroFacInsumo ffi,
+                JHWEBInsumoBundle:ImoInsumo ii,
+                JHWEBInsumoBundle:ImoCfgTipo ict,
+                JHWEBConfigBundle:CfgModulo m
+                
+                WHERE fts.tramiteFactura = fft.id
+                AND fts.vehiculo = vv.id
+                AND vv.placa = vcp.id
+                AND fft.factura = ff.id
+                AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+                AND ff.estado = 'FINALIZADA'
+                AND ff.id = ffi.factura
+                AND ffi.insumo = ii.id
+                AND ii.tipo = ict.id
+                AND ict.modulo = m.id
+                AND ict.categoria = 'SUSTRATO'
+                AND fft.precio = ftp.id
+                AND ftp.tramite = ft.id";
+        }
+
+
+        if ($arrayOrganismosTransito) {
+            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                if($keyOrganismoTransito == 0) {
+                    $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito . "'";
+                } else {
+                    $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito . "'";
+                }
+            }
+        }
+
+        if ($condicion) {
+            $dql .= $condicion;
+        }
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
+        ));
+
+        return $consulta->getResult();
+    }
+    //Obtiene trámites solicitud con facturas devolucionadas según el filtro de búsqueda
+    public function findFacturasDevolucionadas($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
+        $em = $this->getEntityManager();
+
+        $condicion = null; 
+        
+        $dql = "SELECT COUNT(fts.id) as cantidad, ft.nombre, ftp.valor, COUNT(fts.id) * ftp.valor as total
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
             JHWEBFinancieroBundle:FroFactura ff,
             JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTramite ft, 
             JHWEBFinancieroBundle:FroTrtePrecio ftp
             WHERE fts.tramiteFactura = fft.id
             AND fft.factura = ff.id
             AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
-            AND fft.precio = ftp.id";
+            AND ff.estado = 'DEVOLUCION'
+            AND fft.precio = ftp.id
+            AND ftp.tramite = ft.id";
 
         if ($arrayOrganismosTransito) {
             foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
@@ -90,22 +143,124 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
-
-    //cuenta los tramites de acuerdo al nombre
-    public function getTramiteByName($idTramite) {
+    //Obtiene trámites solicitud con facturas pagadas según el filtro de búsqueda
+    public function findFacturasPagadas($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(ftp.id)
-            FROM JHWEBFinancieroBundle:FroTrtePrecio ftp
-            WHERE ftp.tramite = :idTramite";
+        $condicion = null; 
+        
+        $dql = "SELECT COUNT(ff.id) as cantidad
+            FROM JHWEBFinancieroBundle:FroFactura ff
+            WHERE ff.estado = 'PAGADA'
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
+
+        if ($arrayOrganismosTransito) {
+            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                if($keyOrganismoTransito == 0) {
+                    $condicion .= " AND ff.organismoTransito = '" . $idOrganismoTransito . "'";
+                } else {
+                    $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito . "'";
+                }
+            }
+        }
+
+        if ($condicion) {
+            $dql .= $condicion;
+        }
 
         $consulta = $em->createQuery($dql);
-        
+
         $consulta->setParameters(array(
-            'idTramite' => $idTramite, 
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
         ));
 
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
+    }
+    //Obtiene trámites solicitud con facturas de traspaso según el filtro de búsqueda
+    public function findFacturasRetefuente($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
+        $em = $this->getEntityManager();
+
+        $condicion = null; 
+        
+        $dql = "SELECT COUNT(ff.id) as cantidad
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTramite ft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp
+            WHERE fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND ff.estado = 'FINALIZADA'
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+            AND fft.precio = ftp.id
+            AND ftp.tramite = ft.id
+            AND ft.codigo = 2";
+
+        if ($arrayOrganismosTransito) {
+            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                if($keyOrganismoTransito == 0) {
+                    $condicion .= " AND ff.organismoTransito = '" . $idOrganismoTransito . "'";
+                } else {
+                    $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito . "'";
+                }
+            }
+        }
+
+        if ($condicion) {
+            $dql .= $condicion;
+        }
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
+        ));
+
+        return $consulta->getResult();
+    }
+    //Obtiene trámites solicitud con facturas vencidas según el filtro de búsqueda
+    public function findFacturasVencidas($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
+        $em = $this->getEntityManager();
+
+        $condicion = null; 
+        
+        $dql = "SELECT COUNT(ff.id) as cantidad
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTramite ft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp
+            WHERE fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+            AND ff.estado = 'VENCIDA'
+            AND fft.precio = ftp.id
+            AND ftp.tramite = ft.id";
+
+        if ($arrayOrganismosTransito) {
+            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                if($keyOrganismoTransito == 0) {
+                    $condicion .= " AND ff.organismoTransito = '" . $idOrganismoTransito . "'";
+                } else {
+                    $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito . "'";
+                }
+            }
+        }
+
+        if ($condicion) {
+            $dql .= $condicion;
+        }
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
+        ));
+
+        return $consulta->getResult();
     }
 
     //obtiene sustratos de acuerdo al numero de factura
