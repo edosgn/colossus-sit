@@ -65,6 +65,7 @@ class BpReduccionController extends Controller
             $reduccion = new BpReduccion();
 
             $reduccion->setNumero($params->numero);
+            $reduccion->setFecha(new \Datetime($params->fecha));
             $reduccion->setJustificacion($params->justificacion);
             $reduccion->setValor($params->valor);
             $reduccion->setActivo(true);
@@ -76,7 +77,7 @@ class BpReduccionController extends Controller
                     $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($params->idCdp);
                     $reduccion->setCdp($cdp);
 
-                    if ($params->valor <= $cdp->getSaldo()) {
+                    if ($params->valor > $cdp->getSaldo()) {
                         $response = array(
                             'title' => 'Atención!',
                             'status' => 'warning',
@@ -87,8 +88,8 @@ class BpReduccionController extends Controller
                         return $helpers->json($response);
                     }else{
                         $cdp->setSaldo($cdp->getSaldo() - $params->valor);
-                        $proyecto = $cdp->getProyecto();
-                        $proyecto->setSaldo($proyecto->getSaldo() +  $params->valor);
+                        $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
+                        $proyecto->setSaldoTotal($proyecto->getSaldoTotal() +  $params->valor);
                     }
                 }
             } elseif ($params->tipoReduccion == 2) {
@@ -100,7 +101,7 @@ class BpReduccionController extends Controller
                     );
                     $reduccion->setRegistroCompromiso($registro);
 
-                    if ($params->valor <= $registro->getSaldo()) {
+                    if ($params->valor > $registro->getSaldo()) {
                         $response = array(
                             'title' => 'Atención!',
                             'status' => 'warning',
@@ -113,11 +114,10 @@ class BpReduccionController extends Controller
                         $registro->setSaldo($registro->getSaldo() - $params->valor);
                         $cdp = $registro->getCdp();
                         $cdp->setSaldo($cdp->getSaldo() + $params->valor);
-                        $proyecto = $cdp->getProyecto();
-                        $proyecto->setSaldo($proyecto->getSaldo() +  $params->valor);
+                        $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
+                        $proyecto->setSaldoTotal($proyecto->getSaldoTotal() +  $params->valor);
                     }
                 }
-
             }
             
             if ($params->idFuncionario) {
@@ -254,11 +254,8 @@ class BpReduccionController extends Controller
 
             switch ($params->tipoFiltro) {
                 case 1:
-                    $reducciones = $em->getRepository('JHWEBBancoProyectoBundle:BpReduccion')->findBy(
-                        array(
-                            'tipo' => $tipo,
-                            'numero' => $params->filtro,
-                        )
+                    $reducciones = $em->getRepository('JHWEBBancoProyectoBundle:BpReduccion')->getByNumberOfRcOrCdp(
+                        $tipo, $params->filtro
                     );
                     break;
 
@@ -266,7 +263,7 @@ class BpReduccionController extends Controller
                     $reducciones = $em->getRepository('JHWEBBancoProyectoBundle:BpReduccion')->findBy(
                         array(
                             'tipo' => $tipo,
-                            'fecha' => new \Datetime($params->fecha),
+                            'fecha' => new \Datetime($params->filtro),
                         )
                     );
                     break;

@@ -10,4 +10,34 @@ namespace JHWEB\BancoProyectoBundle\Repository;
  */
 class BpReduccionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la suma de los costos de actividades por proyecto
+    public function getByNumberOfRcOrCdp($tipo, $numero)
+    {
+        $em = $this->getEntityManager();
+
+        if ($tipo == 'CDP') {
+            $dql = "SELECT r
+            FROM JHWEBBancoProyectoBundle:BpReduccion r,
+            JHWEBBancoProyectoBundle:BpCdp c
+            WHERE r.cdp = c.id
+            AND r.tipo = :tipo
+            AND c.numero = :numero
+            AND r.activo = true";
+        }elseif ($tipo == 'RC') {
+            $dql = "SELECT r
+            FROM JHWEBBancoProyectoBundle:BpReduccion r,
+            JHWEBBancoProyectoBundle:BpRegistroCompromiso rc
+            WHERE r.registroCompromiso = rc.id
+            AND r.tipo = :tipo
+            AND rc.numero = :numero
+            AND r.activo = true";
+        }
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameter('tipo', $tipo);
+        $consulta->setParameter('numero', $numero);
+
+        return $consulta->getResult();
+    }
 }

@@ -40,7 +40,6 @@ class BpProyectoRepository extends \Doctrine\ORM\EntityRepository
                 $consulta->setParameters(array(
                     'filtro' => $params->filtro,
                 ));
-
                 
                 break;
             }

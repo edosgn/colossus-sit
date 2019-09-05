@@ -794,18 +794,12 @@ class FroFacturaController extends Controller
         $barcode->setFontSize(8);
         $imgBarcode = $barcode->generate();
 
-        $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
-        $imageContent = file_get_contents($img_base64_encoded);
-        $path = tempnam(sys_get_temp_dir(), 'prefix');
-        file_put_contents($path, $imageContent);
-
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
             'tramites'=> $tramites,
             'retenciones'=> $retenciones,
             'imgBarcode' => $imgBarcode,
-            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
@@ -882,11 +876,6 @@ class FroFacturaController extends Controller
         $barcode->setFontSize(8);
         $imgBarcode = $barcode->generate();
 
-        $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
-        $imageContent = file_get_contents($img_base64_encoded);
-        $path = tempnam(sys_get_temp_dir(), 'prefix');
-        file_put_contents($path, $imageContent);
-
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
@@ -896,7 +885,6 @@ class FroFacturaController extends Controller
                 'identificacion' => $infractorIdentificacion,
             ),
             'imgBarcode' => $imgBarcode,
-            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
@@ -945,7 +933,6 @@ class FroFacturaController extends Controller
             'factura'=>$factura,
             'amortizacion'=>$amortizacion,
             'imgBarcode' => $imgBarcode,
-            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
@@ -988,7 +975,6 @@ class FroFacturaController extends Controller
             'factura'=> $factura,
             'inmovilizacion'=> $inmovilizacion,
             'imgBarcode' => $imgBarcode,
-            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);

@@ -1,0 +1,40 @@
+        <!--Load the AJAX API-->
+        <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Pizza');
+      data.addColumn('number', 'Populartiy');
+      data.addRows([
+        ['Pepperoni', 33],
+        ['Hawaiian', 26],
+        ['Mushroom', 22],
+        ['Sausage', 10], // Below limit.
+        ['Anchovies', 9] // Below limit.
+      ]);
+
+      var options = {
+        title: 'Popularity of Types of Pizza',
+        sliceVisibilityThreshold: .2
+      };
+
+      var chart_div = document.getElementById('chart_div');
+      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+
+      google.visualization.events.addListener(chart, 'ready', function () {
+        chart_div.innerHTML = '<img src="' + chart.getImageURI() + '">';
+      });
+
+      //var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+  </script>
+
+        <!--Div that will hold the pie chart-->
+        <div id="chart_div"></div>
+
+

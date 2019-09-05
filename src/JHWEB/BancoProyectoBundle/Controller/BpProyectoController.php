@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use \DOMDocument;
+use \DOMXPath;
 
 /**
  * Bpproyecto controller.
@@ -18,7 +20,7 @@ class BpProyectoController extends Controller
     /**
      * Lists all BpProyecto entities.
      *
-     * @Route("/", name="bpProyecto_index")
+     * @Route("/", name="bpproyecto_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -48,7 +50,7 @@ class BpProyectoController extends Controller
     /**
      * Creates a new BpProyecto entity.
      *
-     * @Route("/new", name="bpProyecto_new")
+     * @Route("/new", name="bpproyecto_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -94,7 +96,7 @@ class BpProyectoController extends Controller
     /**
      * Finds and displays a BpProyecto entity.
      *
-     * @Route("/show", name="bpProyecto_show")
+     * @Route("/show", name="bpproyecto_show")
      * @Method("POST")
      */
     public function showAction(Request  $request)
@@ -131,7 +133,7 @@ class BpProyectoController extends Controller
     /**
      * Displays a form to edit an existing BpProyecto entity.
      *
-     * @Route("/edit", name="bpProyecto_edit")
+     * @Route("/edit", name="bpproyecto_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -189,7 +191,7 @@ class BpProyectoController extends Controller
     /**
      * Deletes a BpProyecto entity.
      *
-     * @Route("/delete", name="bpProyecto_delete")
+     * @Route("/delete", name="bpproyecto_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
@@ -246,7 +248,7 @@ class BpProyectoController extends Controller
     private function createDeleteForm(BpProyecto $proyecto)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('bpProyecto_delete', array('id' => $proyecto->getId())))
+            ->setAction($this->generateUrl('bpproyecto_delete', array('id' => $proyecto->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -257,7 +259,7 @@ class BpProyectoController extends Controller
     /**
      * Buscar un único proyecto por numero
      *
-     * @Route("/search/numero", name="bpProyecto_search_numero")
+     * @Route("/search/numero", name="bpproyecto_search_numero")
      * @Method({"GET", "POST"})
      */
     public function searchByNumeroAction(Request $request)
@@ -309,7 +311,7 @@ class BpProyectoController extends Controller
     /**
      * Buscar un proyecto por filtro (1-Numero, 2-Fecha)
      *
-     * @Route("/search/filter", name="bpProyecto_search_filter")
+     * @Route("/search/filter", name="bpproyecto_search_filter")
      * @Method({"GET", "POST"})
      */
     public function searchByFilterAction(Request $request)
@@ -351,5 +353,77 @@ class BpProyectoController extends Controller
         }
 
         return $helpers->json($response);
+    }
+
+    
+
+    /**
+     * Crea PDF con resumen de comparendo .
+     *
+     * @Route("/graph", name="bpproyecto_graph")
+     * @Method({"GET"})
+     */
+    public function graphAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        return $this->render('@JHWEBBancoProyecto/Default/pdf.proyecto.graph.html.twig');
+    }
+
+    /**
+     * Crea PDF con resumen de comparendo .
+     *
+     * @Route("/{id}/pdf", name="bpproyecto_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        //$url = __DIR__.$this->generateUrl('bpproyecto_graph');
+        /*$url = 'http://localhost/GitHub/colossus-sit/web/app_dev.php/bancoproyecto/bpproyecto/graph';
+        $html = file_get_contents($url);
+
+        //preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*).(jpg|png|gif)/i', $html, $matches );
+        //$imagen = $matches[1];
+        //var_dump($matches);
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+        $xpath = new DOMXPath($dom);
+        var_dump( $xpath->evaluate('string(//div[@id="chart_div"])') );
+
+        //var_dump($imagen);
+        die();*/
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find(
+            $id
+        );
+
+        $ordenesPago = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getOrdenesPagoByProyecto(
+            $proyecto->getId()
+        );
+
+        /*$html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.proyecto.graph.html.twig');
+
+        $doc=new DOMDocument();
+        $doc->loadHTML("<html><body>Test<br><img src=\"myimage.jpg\" title=\"title\" alt=\"alt\"></body></html>");
+        $xml=simplexml_import_dom($doc); // just to make xpath more simple
+        $images=$xml->xpath('//img');
+        foreach ($images as $img) {
+            echo $img['src'] . ' ' . $img['alt'] . ' ' . $img['title'];
+        }
+        die();*/
+                
+        $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.proyecto.report.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'proyecto'=> $proyecto,
+            'ordenesPago'=> $ordenesPago,
+        ));
+
+        $this->get('app.pdf')->templateProyecto($html, $proyecto);
     }
 }

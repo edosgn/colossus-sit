@@ -26,7 +26,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "firebase/php-jwt":"^3.0.0",
         "knplabs/knp-paginator-bundle":"2.5.*",
-        "whiteoctober/tcpdf-bundle": "^1.0",
+        "whiteoctober/tcpdf-bundle": "dev-master",
         "oro/doctrine-extensions": "dev-master",
         "pear/numbers_words": "^0.18.2",
         "liuggio/ExcelBundle": "^2.1",

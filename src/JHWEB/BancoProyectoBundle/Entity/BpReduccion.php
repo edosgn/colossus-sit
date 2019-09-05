@@ -22,6 +22,13 @@ class BpReduccion
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero", type="bigint")
+     */
+    private $numero;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date")
@@ -78,6 +85,30 @@ class BpReduccion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return BpReduccion
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**

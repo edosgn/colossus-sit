@@ -74,6 +74,7 @@ class BpCdpController extends Controller
             $cdp->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $cdp->setNumero($params->numero);
             $cdp->setValorAprobado($params->valorAprobado);
+            $cdp->setSaldo($params->valorAprobado);
             $valorEnLetras = Numbers_Words::toWords(
                 $params->valorAprobado, 'es'
             );
