@@ -89,6 +89,10 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         if ($condicion) {
             $dql .= $condicion;
         }
+        
+        if($tipoArchivoTramite == 'GENERAL'){ 
+            $dql .= "GROUP BY ftp.tramite";
+        }
 
         $consulta = $em->createQuery($dql);
 
