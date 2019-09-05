@@ -240,6 +240,8 @@ class ExcelTemplate {
             $this->rowSustrato = $this->row+2;
             $this->row2 = $this->row+3;
 
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->rowSustrato. ':'.'E'.$this->rowSustrato)->applyFromArray($this->styleBorder);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row2 . ':'.'E'.$this->row2)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->rowSustrato.':'.'E'.$this->rowSustrato)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->rowSustrato.':'.'E'.$this->rowSustrato)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
 
@@ -270,8 +272,8 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->mergeCells('A'.$this->row2.':'.'D'.$this->row2);
             $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             
-            $this->objPHPExcel->setActiveSheetIndex($this->index)
-              ->setCellValue('A'.$this->row2, 'TOTAL SUSTRATOS');
+            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue('A'.$this->row2, 'TOTAL SUSTRATOS');
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row2. ':'.'E'.$this->row2)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row2)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row2)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
@@ -284,6 +286,8 @@ class ExcelTemplate {
             $this->row3 = $this->row2+3;
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->rowConcepto.':'.'E'.$this->rowConcepto)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->rowConcepto . ':'.'E'.$this->rowConcepto)->applyFromArray($this->styleBorder);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row3 . ':'.'E'.$this->row3)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->rowConcepto.':'.'E'.$this->rowConcepto)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
 
             $this->objPHPExcel->setActiveSheetIndex($this->index)
@@ -323,6 +327,8 @@ class ExcelTemplate {
               ->setCellValue('A'.$this->row3, 'TOTAL SUSTRATOS')
               ->setCellValue('A'.$this->totalIngresosSubdetra, 'TOTAL INGRESOS SUBDETRA');
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row3)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row3)->applyFromArray($this->styleBorder);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalIngresosSubdetra)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalIngresosSubdetra)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row3)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalIngresosSubdetra)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
@@ -339,6 +345,7 @@ class ExcelTemplate {
             //devoluciones
             $this->totalDevoluciones = $this->totalIngresosSubdetra + 2;
             $this->objPHPExcel->getActiveSheet()->mergeCells('A'.$this->totalDevoluciones.':'.'B'.$this->totalDevoluciones);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalDevoluciones . ':'.'E'.$this->totalDevoluciones)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->mergeCells('C'.$this->totalDevoluciones.':'.'E'.$this->totalDevoluciones);
 
             $this->objPHPExcel->setActiveSheetIndex($this->index)
@@ -360,6 +367,7 @@ class ExcelTemplate {
               ->setCellValue('A'.$this->totalDevolucionesRetefuente, 'DEVOLUCIÓN RETEFUENTE');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalDevolucionesRetefuente)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalDevolucionesRetefuente . ':'.'E'.$this->totalDevolucionesRetefuente)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalDevolucionesRetefuente)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
@@ -375,6 +383,7 @@ class ExcelTemplate {
               ->setCellValue('A'.$this->totalPagadas, 'CANTIDAD TOTAL FACTURAS PAGADAS');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalPagadas)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalPagadas . ':'.'E'.$this->totalPagadas)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalPagadas)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
@@ -390,6 +399,7 @@ class ExcelTemplate {
               ->setCellValue('A'.$this->totalVencidas, 'CANTIDAD TOTAL FACTURAS VENCIDAS');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalVencidas)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalVencidas . ':'.'E'.$this->totalVencidas)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalVencidas)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
@@ -405,6 +415,7 @@ class ExcelTemplate {
               ->setCellValue('A'.$this->totalGeneradas, 'CANTIDAD TOTAL FACTURAS GENERADAS');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalGeneradas)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalGeneradas . ':'.'E'.$this->totalGeneradas)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalGeneradas)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
@@ -435,7 +446,7 @@ class ExcelTemplate {
                 'G'.$this->row, $tramite['nombreTramite']
               );
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'H'.$this->row, $tramite['fechaTramite']
+                'H'.$this->row, $tramite['fechaTramite']->format('Y/m/d')
               );
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'I'.$this->row, $tramite['valorPagado']
@@ -451,6 +462,7 @@ class ExcelTemplate {
             $this->objPHPExcel->setActiveSheetIndex($this->index)
               ->setCellValue('A'.$this->total, 'TOTAL');
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->total)->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->total . ':'.'I'.$this->total)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->total)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
