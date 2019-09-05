@@ -20,20 +20,22 @@ class BpReduccionRepository extends \Doctrine\ORM\EntityRepository
             FROM JHWEBBancoProyectoBundle:BpReduccion r,
             JHWEBBancoProyectoBundle:BpCdp c
             WHERE r.cdp = c.id
+            AND r.tipo = :tipo
             AND c.numero = :numero
             AND r.activo = true";
         }elseif ($tipo == 'RC') {
-            # code...
             $dql = "SELECT r
             FROM JHWEBBancoProyectoBundle:BpReduccion r,
             JHWEBBancoProyectoBundle:BpRegistroCompromiso rc
             WHERE r.registroCompromiso = rc.id
+            AND r.tipo = :tipo
             AND rc.numero = :numero
-            AND o.activo = true";
+            AND r.activo = true";
         }
 
         $consulta = $em->createQuery($dql);
         
+        $consulta->setParameter('tipo', $tipo);
         $consulta->setParameter('numero', $numero);
 
         return $consulta->getResult();

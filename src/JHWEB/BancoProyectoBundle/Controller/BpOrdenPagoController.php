@@ -68,7 +68,7 @@ class BpOrdenPagoController extends Controller
                 );
 
                 if ($params->valor <= $registro->getSaldo()) {
-                        $ordenPago = new BpOrdenPago();
+                    $ordenPago = new BpOrdenPago();
 
                     $fecha = new \Datetime($params->fecha);
 
@@ -88,8 +88,6 @@ class BpOrdenPagoController extends Controller
 
                     $ordenPago->setRegistroCompromiso($registro);
                     $registro->setSaldo($registro->getSaldo() - $params->valor);
-                    $proyecto = $registro->getCdp()->getActividad()->getCuenta()->getProyecto();
-                    $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valor);
                     
                     $em->persist($ordenPago);
                     $em->flush();
@@ -228,6 +226,56 @@ class BpOrdenPagoController extends Controller
 
             $ordenesPago = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getByBeneficiario(
                 $params
+            );
+
+            if ($ordenesPago) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($ordenesPago)." registros encontrados.",
+                    'data' => $ordenesPago,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca la reducciones por proyecto
+     *
+     * @Route("/search/proyecto", name="bpcdp_search_proyecto")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByProyectoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
+
+            $ordenesPago = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getOrdenesPagoByProyecto(
+                $params->idProyecto
             );
 
             if ($ordenesPago) {

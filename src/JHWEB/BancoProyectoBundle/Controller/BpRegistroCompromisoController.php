@@ -77,7 +77,7 @@ class BpRegistroCompromisoController extends Controller
                 );
 
                 if ($params->valorApropiado <= $registro->getCdp()->getSaldo()) {
-                        $registro->setNumero($params->numero);
+                    $registro->setNumero($params->numero);
                     $registro->setFechaRegistro(new \Datetime(date('Y-m-d')));
                     $registro->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
                     $registro->setContratoNumero($params->contratoNumero);

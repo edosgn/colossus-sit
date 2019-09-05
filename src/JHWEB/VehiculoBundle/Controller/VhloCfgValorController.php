@@ -284,7 +284,8 @@ class VhloCfgValorController extends Controller
                     );
 
                     for ($i=0; $i < $cols; $i++) {
-                        array_push($valoresArray[$count]['valores'], array($anios[$i] => $datos[$j]));
+                        $valorUnitario = str_pad($datos[$j], 3, '0', STR_PAD_RIGHT);
+                        array_push($valoresArray[$count]['valores'], array($anios[$i] => $valorUnitario ));
         
                         $j++;
                     }

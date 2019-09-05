@@ -1,0 +1,69 @@
+<html>
+  <head>
+  </head>
+  <body>
+
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>REPORTE DE ESTADO DE PROYECTO</b>
+    </p>
+    <br>
+    <br>
+    <table cellpadding="6" border="1" width="100%">
+        <thead>
+            <tr align="center">
+                <th><b>Numero</b></th>
+                <th><b>Nombre</b></th>
+                <th><b>Fecha</b></th>
+                <th><b>Costo total</b></th>
+                <th><b>Saldo total</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ proyecto.numero }}</td>
+                <td>{{ proyecto.nombre }}</td>
+                <td>{{ proyecto.fecha|date('d/m/Y') }}</td>
+                <td>{{ proyecto.costoTotal|number_format(0, ',', '.') }}</td>
+                <td>{{ proyecto.saldoTotal|number_format(0, ',', '.') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+    <br>
+
+    <table cellpadding="6" border="1">
+        <thead>
+            <tr>
+                <th align="center" colspan="2" style="background-color:#cccccc;"><b>ORDENES DE PAGO</b></th>
+            </tr>
+            <tr>
+                <th align="center">
+                    <b>Fecha</b>
+                </th>
+                <th align="center">
+                    <b>Valor</b>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ordenPago in ordenesPago %}
+                <tr>
+                    <td>{{ ordenPago.fecha|date('d/m/Y') }}</td>
+                    <td>{{ ordenPago.valor|number_format(0, ',', '.') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{{ render(url('bpproyecto_graph')) }}
+
+
+  </body>
+</html>

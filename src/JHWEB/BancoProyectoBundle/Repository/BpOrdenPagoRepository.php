@@ -22,13 +22,12 @@ class BpOrdenPagoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    //Obtiene la suma de los costos de actividades por proyecto
+    //Obtiene ordenes de pago por beneficiario
     public function getByBeneficiario($params)
     {
         $em = $this->getEntityManager();
 
         if ($params->idTipoIdentificacion != 4) {
-            
             $dql = "SELECT o
             FROM JHWEBBancoProyectoBundle:BpOrdenPago o,
             JHWEBBancoProyectoBundle:BpRegistroCompromiso r,
@@ -55,6 +54,33 @@ class BpOrdenPagoRepository extends \Doctrine\ORM\EntityRepository
         
         $consulta->setParameter('idTipoIdentificacion', $params->idTipoIdentificacion);
         $consulta->setParameter('identificacion', $params->identificacion);
+
+        return $consulta->getResult();
+    }
+
+    //Obtiene las ordenes de pago por proyecto
+    public function getOrdenesPagoByProyecto($idProyecto)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT o
+        FROM JHWEBBancoProyectoBundle:BpOrdenPago o,
+        JHWEBBancoProyectoBundle:BpRegistroCompromiso r,
+        JHWEBBancoProyectoBundle:BpCdp cdp,
+        JHWEBBancoProyectoBundle:BpActividad a,
+        JHWEBBancoProyectoBundle:BpCuenta c,
+        JHWEBBancoProyectoBundle:BpProyecto p
+        WHERE o.registroCompromiso = r.id
+        AND r.cdp = cdp.id
+        AND cdp.actividad = a.id
+        AND a.cuenta = c.id
+        AND c.proyecto = p.id
+        AND p.id = :idProyecto
+        AND p.activo = true";        
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameter('idProyecto', $idProyecto);
 
         return $consulta->getResult();
     }
