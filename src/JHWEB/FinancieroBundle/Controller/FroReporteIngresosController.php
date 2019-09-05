@@ -73,10 +73,13 @@ class FroReporteIngresosController extends Controller
             
             $organismoTransito = null;
 
+            $reporteGeneral = false;
+            $reporteDetallado = false;
+
             if(count($params->filtros->arrayOrganismosTransito) == 1){
                 $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->filtros->arrayOrganismosTransito[0]);
             }
-
+            
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                 array(
                     'identificacion' => $params->identificacion,
@@ -86,259 +89,146 @@ class FroReporteIngresosController extends Controller
             $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
                 array(
                     'ciudadano' => $ciudadano->getId(),
-                    )
-                );
+                )
+            );
+                    
+            if($params->tipoArchivoTramite == 'GENERAL') {
+                $reporteGeneral = true;
+                $reporteDetallado = false;
 
-            $reporteMensual = false;
-            
-            if(intval($params->tipoArchivoTramite) == 1) {
-                $tramites = null;
-
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
-
-                $pagadas = [];
-                $finalizadas = [];
-                $anuladas = [];
-                $traspasos = [];
-                $conceptos = [];
-                $numeros = [];
-                $numerosaAnulados = [];
+                $cantidadFacturasDevolucionadas = 0;
+                $cantidadFacturasPagadas = 0;
+                $cantidadFacturasRetefuente = 0;
+                $cantidadFacturasVencidas = 0;
                 
-                //SUSTRATO
-                $sustratos = [];
-
-                $valorTramitesPagados = 0;
-                $valorTramitesVencidos = 0;
-                $valorTramitesAnulados = 0;
-                
-                $totalSustratos = 0;
-                $cantSustratos = 0;
-                $nombreSustrato;
-                $valorUnitarioSustrato = 0;
-                
-                $idConcepto;
-                $cantConceptos = 0;
-                $valorUnitarioConcepto = 0;
-                $valorConceptos = 0;
+                $totalTramitesFinalizados = 0;
                 $totalConceptos = 0;
-                $totalTramites = 0;
+                $totalSustratos = 0;
 
-                $arrayConceptos = [];
-                $arrayTramites = [];
-                $arraySustratos = [];
-                $numerosAnulados[] = null;
+                $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados($params->tipoArchivoTramite, $fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
+                $facturasDevolucionadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasDevolucionadas($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
+                $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasPagadas($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
+                $facturasVencidas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasVencidas($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
+                $facturasRetefuente = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasRetefuente($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
+
+                foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
+                    $totalTramitesFinalizados += intval($tramiteFinalizado['total']);
+                }
+                foreach ($facturasDevolucionadas as $key => $tramiteDevolucionada) {
+                    $cantidadFacturasDevolucionadas = intval($facturaDevolucionada['cantidad']);
+                }
+                foreach ($facturasPagadas as $key => $facturaPagada) {
+                    $cantidadFacturasPagadas = intval($facturaPagada['cantidad']);
+                }
+                foreach ($facturasRetefuente as $key => $facturaRetefuente) {
+                    $cantidadFacturasRetefuente = intval($facturaRetefuente['cantidad']);
+                }
+                foreach ($facturasVencidas as $key => $facturaVencida) {
+                    $cantidadFacturasVencidas = intval($facturaVencida['cantidad']);
+                }
+                //================================================================para sustratos ====================================================================
+                $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos($fechaInicioDatetime, $fechaFinDatetime);
                 
-                if($tramites){
-                    foreach ($tramites as $key => $tramite) {
-                        $numeros[] = $tramite->getTramiteFactura()->getFactura()->getNumero();
-                        switch ($tramite->getTramiteFactura()->getFactura()->getEstado() ) {
-                            case 'FINALIZADA':
-                                $pagadas[] = $tramite;
-                                $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
-                                
-                                //=================================================
-                                $cantTramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getTramiteByName($tramite->getTramiteFactura()->getPrecio()->getTramite()->getId());
-                                $total2 = intval(implode($cantTramites)) * $tramite->getTramiteFactura()->getPrecio()->getValor();
-                                $totalTramites += intval(implode($cantTramites)) * $tramite->getTramiteFactura()->getPrecio()->getValor();
-                                $arrayTramites[] = array(
-                                    'id' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(),
-                                    'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
-                                    'cantidad' => intval(implode($cantTramites)),
-                                    'valor' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
-                                    'total2' => $total2,
-                                );
+                foreach ($sustratos as $key => $sustrato) {
+                    $totalSustratos += intval($sustrato['total']);
+                }
 
-                                //==================================================================================================================================================
-                                
-                                break;
-                            case 'DEVOLUCION':
-                            $anuladas[] = $tramite;
-                            $numerosAnulados[] = array(
-                                $tramite->getTramiteFactura()->getFactura()->getNumero()
-                            );
-                            
-                            $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
-                            if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
-                                $traspasos[] = $tramite;
-                            }
-                            break;
-                        }     
-                    }
-                    
-                    // =========================================================================fin recorrido para los tramites========================================================
-                    //================================================================para sustratos ====================================================================
-                    $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos($fechaInicioDatetime, $fechaFinDatetime);
-                    
-                    foreach ($sustratos as $key => $sustrato) {
-                        $totalSustratos += intval($sustrato['total']);
-                    }
+                $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos($fechaInicioDatetime, $fechaFinDatetime);
 
-                    $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos($fechaInicioDatetime, $fechaFinDatetime);
+                foreach ($conceptos as $key => $concepto) {
+                    $totalConceptos += intval($concepto['total']);
+                }
+                
+                $cantidadFacturasGeneradas = 0;
+                $cantidadFacturasGeneradas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findAll();
+                
+                //===============================================================================================================
+                $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
+                    'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null,
+                    'tramitesFinalizados' => $tramitesFinalizados,
+                    'totalTramitesFinalizados' => $totalTramitesFinalizados,
+                    'sustratos' => $sustratos,
+                    'totalSustratos' => $totalSustratos,
+                    'conceptos' =>  $conceptos,
+                    'totalConceptos' =>  $totalConceptos,
+                    'cantidadFacturasDevolucionadas' => $cantidadFacturasDevolucionadas,
+                    'cantidadFacturasRetefuente' => $cantidadFacturasRetefuente,
+                    'cantidadFacturasPagadas' => $cantidadFacturasPagadas,
+                    'cantidadFacturasVencidas' => $cantidadFacturasVencidas,
+                    'cantidadFacturasGeneradas' => count($cantidadFacturasGeneradas),
+                    'reporteGeneral' =>$reporteGeneral,
+                    'reporteDetallado' =>$reporteDetallado,
+                )); 
 
-                    foreach ($conceptos as $key => $concepto) {
-                        $totalConceptos += intval($concepto['total']);
-                    }
-
-                    //=========================================total de facturas por estado==========================================
-                    $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(
+                $data = (object)
+                    array(
+                    'template' => 'templateExcelByTramites',
+                    'tramitesFinalizados' => $tramitesFinalizados,
+                    'totalTramitesFinalizados' => $totalTramitesFinalizados,
+                    'sustratos' => $sustratos,
+                    'totalSustratos' => $totalSustratos,
+                    'conceptos' =>  $conceptos,
+                    'totalConceptos' =>  $totalConceptos,
+                    'cantidadFacturasDevolucionadas' => $cantidadFacturasDevolucionadas,
+                    'cantidadFacturasRetefuente' => $cantidadFacturasRetefuente,
+                    'cantidadFacturasPagadas' => $cantidadFacturasPagadas,
+                    'cantidadFacturasVencidas' => $cantidadFacturasVencidas,
+                    'cantidadFacturasGeneradas' => count($cantidadFacturasGeneradas),
+                    'reporteGeneral' =>$reporteGeneral,
+                    'reporteDetallado' =>$reporteDetallado,
+                ); 
+    
+                if($params->exportarEn == 'EXCEL') {
+                    return $this->get('app.excel')->newExcel($data);
+                }else if($params->exportarEn == 'PDF'){
+                    return new Response(
+                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        200,
                         array(
-                            'estado' => 'PAGADA' 
+                            'Content-Type'        => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
-                    );
-
-                    $facturasVencidas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(
-                        array(
-                            'estado' => 'VENCIDA' 
-                        )
-                    );
-                        
-                    $facturas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findAll();
-                    
-                    //===============================================================================================================
-                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
-                        'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null,
-                        'pagadas' => $pagadas, 
-                        'anuladas' => $anuladas, 
-                        'cantPagadas' => count($pagadas), 
-                        'cantAnuladas' => count($anuladas), 
-                        'valorTramitesPagados' => $valorTramitesPagados, 
-                        'valorTramitesAnulados' => $valorTramitesAnulados, 
-                        'sustratos' => $sustratos,
-                        'totalSustratos' => $totalSustratos,
-                        'arrayTramites' => $arrayTramites,
-                        'totalTramites' => $totalTramites,
-                        'conceptos' =>  $conceptos,
-                        'totalConceptos' =>  $totalConceptos,
-                        'traspasosAnulados' => $traspasos,
-                        'cantTraspasos' => count($traspasos),
-                        'totalFacturasPagadas' => count($facturasPagadas),
-                        'totalFacturasVencidas' => count($facturasVencidas),
-                        'totalFacturas' => count($facturas),
-                        'reporteMensual' =>$reporteMensual,
-                    )); 
-
-                    $data = (object)
-                        array(
-                        'template' => 'templateExcelByTramites',
-                        /* 'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, */ 
-                        'pagadas' => $pagadas, 
-                        'anuladas' => $anuladas, 
-                        'cantPagadas' => count($pagadas), 
-                        'cantAnuladas' => count($anuladas), 
-                        'valorTramitesPagados' => $valorTramitesPagados, 
-                        'valorTramitesAnulados' => $valorTramitesAnulados, 
-                        'sustratos' => $sustratos,
-                        'totalSustratos' => $totalSustratos,
-                        'conceptos' => $conceptos,
-                        'totalConceptos' => $totalConceptos,
-                        'arrayTramites' => $arrayTramites,
-                        'totalTramites' => $totalTramites,
-                        'traspasosAnulados' => $traspasos,
-                        'cantTraspasos' => count($traspasos),
-                        'totalFacturasPagadas' => count($facturasPagadas),
-                        'totalFacturasVencidas' => count($facturasVencidas),
-                        'totalFacturas' => count($facturas),
-                        'reporteMensual' =>$reporteMensual,
-                    ); 
-        
-                    if($params->exportarEn == 1) {
-                        return $this->get('app.excel')->newExcel($data);
-                    }else if($params->exportarEn == 2){
-                        return new Response(
-                            $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
-                            200,
-                            array(
-                                'Content-Type'        => 'application/pdf',
-                                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
-                            )
-                        );
-                    }
-                } else {
-                    $response = array(
-                        'title' => 'Error!',
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => 'No se encontraron registros.',
                     );
                 }
-            } else if ($params->tipoArchivoTramite == 0) {
-                $arrayReporteMensual = [];
-                $totalReporteMensual = 0;
+            } else if ($params->tipoArchivoTramite == 'DETALLADO') {
+                $reporteGeneral = false;
+                $reporteDetallado = true;
+
+                $totalTramitesFinalizados = 0;
                 
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
-                if($tramites){
-                    $reporteMensual = true;
-                    foreach ($tramites as $key => $tramite) {
-                        $placaCedula;
-                        if($tramite->getVehiculo() != null) {
-                            $placaCedula = $tramite->getVehiculo()->getPlaca()->getNumero();
-                        } else if($tramite->getVehiculo() == null) {
-                            $placaCedula = $tramite->getSolicitante()->getIdentificacion();
-                        }
-
-                        $totalReporteMensual += $tramite->getTramiteFactura()->getPrecio()->getValor();
-
-                        $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFacInsumo')->findBy(
-                            array(
-                                'factura' => $tramite->getTramiteFactura()->getFactura()->getId(),
-                            )
-                        );
-                        
-                        foreach ($sustratos as $key => $sustrato) {
-                            switch ($sustrato->getInsumo()->getTipo()->getCategoria()) {
-                                case 'SUSTRATO':
-                                    $numeroSustrato = $sustrato->getInsumo()->getNumero();
-                                    $moduloSustrato = $sustrato->getInsumo()->getTipo()->getModulo()->getAbreviatura();
-                                    break;
-                            }
-                        }
-
-
-                        $arrayReporteMensual[] = array(
-                            'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
-                            'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
-                            'placaCedula' => $placaCedula,
-                            'numeroSustrato' => $numeroSustrato,
-                            'moduloSustrato' => $moduloSustrato,
-                            'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
-                            'fechaTramite' => $tramite->getFecha(),
-                            'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
-                            'numeroRunt' => $tramite->getTramiteFactura()->getFactura()->getNumeroRunt()
-                        );
-                    }
-                    
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Registros encontrados",
-                );
+                $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados($params->tipoArchivoTramite, $fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
+                
+                foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
+                    $totalTramitesFinalizados += $tramiteFinalizado['valorPagado'];
+                }
                 
                 $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
-                    /* 'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, */ 
-                    'arrayReporteMensual' => $arrayReporteMensual,
-                    'reporteMensual' => $reporteMensual,
+                    'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, 
+                    'tramitesFinalizados' => $tramitesFinalizados,
                     'funcionario' => $funcionario,
                     'mesReporteDesde' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
                     'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
                     'fechaActual' => $fechaActual,
-                    'totalReporteMensual' => $totalReporteMensual,
+                    'totalTramitesFinalizados' => $totalTramitesFinalizados,
+                    'reporteGeneral' =>$reporteGeneral,
+                    'reporteDetallado' =>$reporteDetallado,
                 )); 
 
                 $data = (object) array(
                     'template' => 'templateExcelByTramites',
-                    /* 'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, */ 
-                    'arrayReporteMensual' => $arrayReporteMensual,
-                    'reporteMensual' => $reporteMensual,
+                    'tramitesFinalizados' => $tramitesFinalizados,
                     'funcionario' => $funcionario,
                     'mesReporteDesde' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
                     'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
                     'fechaActual' => $fechaActual,
-                    'totalReporteMensual' => $totalReporteMensual,
-                ); 
+                    'totalTramitesFinalizados' => $totalTramitesFinalizados,
+                    'reporteGeneral' =>$reporteGeneral,
+                    'reporteDetallado' =>$reporteDetallado,
+                );
 
-                if($params->exportarEn == 1) {
+                if($params->exportarEn == 'EXCEL') {
                     return $this->get('app.excel')->newExcel($data);
-                } else if($params->exportarEn == 2) {
+                } else if($params->exportarEn == 'PDF') {
                     return new Response(
                         $this->get('app.pdf')->templateIngresos($html),
                         200,
@@ -348,13 +238,6 @@ class FroReporteIngresosController extends Controller
                             )
                         );
                     }
-                } else {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "No existen registros aún para la fecha estipulada.",
-                    );
-                }
             }
         } else {
             $response = array(
