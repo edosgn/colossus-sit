@@ -59,7 +59,6 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
                 JHWEBInsumoBundle:ImoInsumo ii,
                 JHWEBInsumoBundle:ImoCfgTipo ict,
                 JHWEBConfigBundle:CfgModulo m
-                
                 WHERE fts.tramiteFactura = fft.id
                 AND fts.vehiculo = vv.id
                 AND vv.placa = vcp.id
@@ -79,9 +78,9 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         if ($arrayOrganismosTransito) {
             foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
                 if($keyOrganismoTransito == 0) {
-                    $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito . "'";
+                    $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito. "'";
                 } else {
-                    $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito . "'";
+                    $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito. "'";
                 }
             }
         }
@@ -91,8 +90,11 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         }
         
         if($tipoArchivoTramite == 'GENERAL'){ 
-            $dql .= "GROUP BY ftp.tramite";
+            $dql .= " GROUP BY ftp.tramite";
         }
+
+        /* var_dump($dql);
+        die(); */
 
         $consulta = $em->createQuery($dql);
 
@@ -271,24 +273,20 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     public function getSustratos($fechaInicio, $fechaFin) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(fi.id) AS cantidad, t.id, t.nombre, iv.valor, COUNT(fi.id) * iv.valor AS total
-        FROM JHWEBFinancieroBundle:FroFacInsumo fi, JHWEBInsumoBundle:ImoInsumo i,
-            JHWEBInsumoBundle:ImoCfgTipo t, JHWEBInsumoBundle:ImoCfgValor iv,
-            JHWEBFinancieroBundle:FroFacTramite ft,
-            JHWEBFinancieroBundle:FroTrteSolicitud fts, 
-            JHWEBFinancieroBundle:FroFactura f
-        
-            WHERE fi.id = fi.insumo
-            AND fi.factura = f.id
-            AND f.id = ft.factura
-            AND fts.tramiteFactura = ft.id
-            AND f.fechaPago BETWEEN :fechaInicio AND :fechaFin
-            AND f.estado = 'FINALIZADA'
-            AND fi.insumo = i.id
-            AND i.tipo = t.id
-            AND t.categoria = 'SUSTRATO'
-            AND iv.tipo = t.id
-            GROUP BY t.nombre";
+        $dql = "SELECT COUNT(fi.id) AS cantidad, ict.id, ict.nombre, icv.valor, COUNT(fi.id) * icv.valor AS total
+            FROM JHWEBFinancieroBundle:FroFacInsumo fi, 
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBInsumoBundle:ImoInsumo ii,
+            JHWEBInsumoBundle:ImoCfgTipo ict,
+            JHWEBInsumoBundle:ImoCfgValor icv
+            WHERE fi.factura = ff.id
+            AND ff.estado = 'FINALIZADA'
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+            AND fi.insumo = ii.id
+            AND ii.tipo = ict.id
+            AND ict.categoria = 'SUSTRATO'
+            AND icv.tipo = ict.id
+            GROUP BY ict.nombre";
 
         $consulta = $em->createQuery($dql);
         
