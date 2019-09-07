@@ -109,8 +109,8 @@ class FroTrteSolicitudController extends Controller
                     )
                 );
             }else{
-                //if (isset($params->numeroRunt)) {
-                    /* Inicio validación numero RUNT
+                if (isset($params->numeroRunt)) {
+                    //Inicio validación numero RUNT
                     $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneByNumeroRunt(
                         $params->numeroRunt
                     );
@@ -122,7 +122,7 @@ class FroTrteSolicitudController extends Controller
                             'code' => 400,
                             'message' => 'El número RUNT que digito ya fue asignado.'
                         );
-                    }else{*/
+                    }else{
                         if (isset($params->numeroRunt)) {
                             $factura->setNumeroRunt($params->numeroRunt);
         
@@ -352,16 +352,16 @@ class FroTrteSolicitudController extends Controller
                                 )
                             );
                         }
-                    /*}
-                    Cierre validación numero RUNT*/
-                /*}else{
+                    }
+                    //Cierre validación numero RUNT
+                }else{
                     $response = array(
                         'title' => 'Atención!',
                         'status' => 'warning',
                         'code' => 400,
                         'message' => 'No se puede terminar el registro porque no ha digitado el número RUNT.',
                     );
-                }*/
+                }
             }
         }else{
             $response = array(

@@ -28,7 +28,6 @@ class BpRegistroCompromisoController extends Controller
         
         $registros = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findBy(
             array(
-                'estado' => 'SOLICITUD',
                 'activo' => true
             )
         );

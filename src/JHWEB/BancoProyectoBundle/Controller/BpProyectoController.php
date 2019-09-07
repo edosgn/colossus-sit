@@ -156,11 +156,6 @@ class BpProyectoController extends Controller
             if ($proyecto) {
                 $proyecto->setNumero($params->numero);
                 $proyecto->setNombre(strtoupper($params->nombre));
-                $proyecto->setFecha(new \Datetime(date('Y-m-d')));
-                $proyecto->setCuentaNumero($params->cuentaNumero);
-                $proyecto->setCuentaNombre($params->cuentaNombre);
-                $proyecto->setCostoTotal($params->costoTotal);
-                $proyecto->setSaldoTotal($params->costoTotal - $poyecto->getSaldoTotal());
 
                 $em->flush();
 
