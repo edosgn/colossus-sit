@@ -114,7 +114,7 @@ class FroReporteIngresosController extends Controller
                 foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
                     $totalTramitesFinalizados += intval($tramiteFinalizado['total']);
                 }
-                foreach ($facturasDevolucionadas as $key => $tramiteDevolucionada) {
+                foreach ($facturasDevolucionadas as $key => $facturaDevolucionada) {
                     $cantidadFacturasDevolucionadas = intval($facturaDevolucionada['cantidad']);
                 }
                 foreach ($facturasPagadas as $key => $facturaPagada) {

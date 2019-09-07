@@ -216,27 +216,46 @@ class UserEmpresaTransporteController extends Controller
                     'message' => "La capacidad miníma debe ser menor a la capacidad máxima",
                 );
             } else {
-                $empresaTransporte->setRadioAccion($radioAccion);
-                $empresaTransporte->setModalidadTransporte($modalidadTransporte);
-                $empresaTransporte->setClase($clase);
-                $empresaTransporte->setNumeroActo($params->numeroActo);
-                $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
-                $empresaTransporte->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
-                $empresaTransporte->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
-                $empresaTransporte->setColores($params->arrayColores);
-                $empresaTransporte->setMunicipios($params->arrayMunicipios);
-                $empresaTransporte->setCapacidad($params->capacidad);
-                $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
-                $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
-                
-                $em->flush();
-
-                $response = array(
-                    'title' => 'Perfecto!',
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro editado con éxito",
+                $empresaTransporteActual = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                    array(
+                        'numeroActo' => $params->numeroActo,
+                        'numeroEjecutoriaActo' => $params->numeroEjecutoriaActo,
+                        'activo' => true
+                    )
                 );
+
+                if($empresaTransporteActual){
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de acto ya se encuentra registrado.",
+                    );
+                } else {
+                    $empresaTransporte->setRadioAccion($radioAccion);
+                    $empresaTransporte->setModalidadTransporte($modalidadTransporte);
+                    $empresaTransporte->setClase($clase);
+                    $empresaTransporte->setNumeroActo($params->numeroActo);
+                    $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
+                    $empresaTransporte->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
+                    $empresaTransporte->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
+                    $empresaTransporte->setColores($params->arrayColores);
+                    $empresaTransporte->setMunicipios($params->arrayMunicipios);
+                    $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
+                    $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
+                    $empresaTransporte->setCapacidadDisponible($params->capacidadDisponible);
+                    $empresaTransporte->setCapacidadUtilizada(0);
+                    $empresaTransporte->setDobleCabina($params->dobleCabina);
+                    
+                    $em->flush();
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro editado con éxito",
+                    );
+                }
             }
         }else{
             $response = array(

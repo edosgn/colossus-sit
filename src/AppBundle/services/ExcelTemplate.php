@@ -472,7 +472,7 @@ class ExcelTemplate {
         }
           //Otorga estilos
           $this->getStyleTramites($params);
-          /* $this->templateExcelByGeneral($params); */
+          $this->templateExcelByGeneral($params);
 
         
 
@@ -490,15 +490,15 @@ class ExcelTemplate {
         for ($i=1; $i <= 4; $i++) { 
           switch ($i) {
             case 1:
-              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getPendientesByDate(
+              /* $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getPendientesByDate(
                   $params->fechaInicial,
                   $params->fechaFinal
-              );
+              ); */
               //Asigna titulo a la pestaña
               $title = 'PENDIENTES';
               break;
             
-            case 2:
+            /* case 2:
               $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getVencidasByDate(
                   $params->fechaInicial,
                   $params->fechaFinal
@@ -522,10 +522,10 @@ class ExcelTemplate {
               );
               //Asigna titulo a la pestaña
               $title = 'INOPORTUNAS';
-              break;
+              break; */
           }
           
-          if ($solicitudes) {
+          /* if ($solicitudes) {
             $this->index = $pages;
             $this->row = 4;
             $this->col = 'A';
@@ -610,8 +610,8 @@ class ExcelTemplate {
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'O'.$this->row, $dias
               );
-              
-              /*$this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+              //======
+              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'B'.$this->row, $trazabilidad->getEstado()->getNombre()
               );
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
@@ -623,16 +623,17 @@ class ExcelTemplate {
               
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'F'.$this->row, $trazabilidad->getSolicitud()->getNumeroRadicado()
-              );*/
+              );
               $this->row++;
             }
+            //=========
             //Otorga estilos
             $this->getStyle();
 
             // Aumenta en uno el numero de paginas
             $pages++;
-          }
-        }
+          } */
+        } 
 
         $this->objPHPExcel->setActiveSheetIndex(0);
 
