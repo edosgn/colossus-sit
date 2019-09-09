@@ -227,6 +227,8 @@ class UserLcCfgCategoriaController extends Controller
         return $helpers->json($response);
     }
 
+    /* ========================================= */
+
     /**
      * Listado de todas las categorias para selección con búsqueda
      *
@@ -236,7 +238,9 @@ class UserLcCfgCategoriaController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $categorias = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->findBy(
             array('activo' => true)
         );
@@ -255,16 +259,21 @@ class UserLcCfgCategoriaController extends Controller
     /**
      * Listado de todas las categorias según el tipo de vehiculo para selección con búsqueda
      *
-     * @Route("/select/tipovehiculo", name="userlccfgcategoria_select_tipovehiculo")
+     * @Route("/servicio/tipovehiculo/select", name="userlccfgcategoria_servicio_tipovehiculo_select")
      * @Method({"GET", "POST"})
      */
-    public function selectByTipoVehiculoAction(Request $request)
+    public function selectByServicioAndTipoVehiculoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            
             $categorias = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->findBy(
                 array('activo' => true)
             );

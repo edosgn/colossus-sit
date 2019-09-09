@@ -347,7 +347,7 @@ class ImoInsumoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message'=> 'Sustrato no encontrado en la base de datos.',
+                    'message'=> 'Sustrato no disponible para este módulo.',
                 );
             }
         }else{

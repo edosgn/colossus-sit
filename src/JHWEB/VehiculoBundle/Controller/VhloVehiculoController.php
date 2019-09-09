@@ -989,6 +989,7 @@ class VhloVehiculoController extends Controller
                 if (!$vehiculo->getPlaca()) {
                     $vehiculo->setPlaca($placa);
                     $vehiculo->setOrganismoTransito($organismoTransito);
+                    $vehiculo->setFechaPlaca($params->fechaAsignacion);
     
                     $placa->setEstado('PREASIGNADA');
     
