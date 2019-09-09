@@ -391,11 +391,11 @@ class VhloCfgPlacaController extends Controller
     /**
      * Datos para select 2 por modulo
      *
-     * @Route("/select/organismotransito/tipovehiculo", name="vhlocfgplaca_select_organismotransito_tipovehiculo")
+     * @Route("/select/organismotransito/tipovehiculo/servicio", name="vhlocfgplaca_select_organismotransito_tipovehiculo_servicio")
      * @Method({"GET", "POST"})
      */
 
-    public function selectByOrganismoTransitoAndTipoVehiculo(Request $request)
+    public function selectByOrganismoTransitoAndTipoVehiculoAndServicio(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $json = $request->get("data", null);
@@ -409,6 +409,7 @@ class VhloCfgPlacaController extends Controller
             array(
                 'organismoTransito' => $params->idOrganismoTransito,
                 'tipoVehiculo' => $params->idTipoVehiculo,
+                'servicio' => $params->idServicio,
                 'estado' => 'DISPONIBLE'
             )
         );

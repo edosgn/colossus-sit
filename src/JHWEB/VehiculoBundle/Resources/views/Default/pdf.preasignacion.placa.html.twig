@@ -27,6 +27,22 @@
 El vehículo con las siguientes características.
 <br>
 <br>
+{% if vehiculo.linea %}
+<b>Línea: {{ vehiculo.linea.marca.nombre }}</b>        
+<br>
+{% endif %}
+{% if vehiculo.linea %}
+<b>Línea: {{ vehiculo.linea.nombre }}</b>        
+<br>
+{% endif %}
+{% if vehiculo.clase %}
+<b>Clase: {{ vehiculo.clase.nombre }}</b>        
+<br>
+{% endif %}
+{% if vehiculo.carroceria %}
+<b>Carroceria: {{ vehiculo.carroceria.nombre }}</b>        
+<br>
+{% endif %}
 <b>Número motor:</b> {{ vehiculo.motor }}
 <br>
 <b>Numero chasis:</b> {{ vehiculo.chasis }}

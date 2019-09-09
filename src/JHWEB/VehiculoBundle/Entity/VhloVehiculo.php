@@ -210,6 +210,13 @@ class VhloVehiculo
      */
     private $numeroLicenciaRadicado;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_placa", type="date", nullable= true)
+     */
+    private $fechaPlaca;
+
     /** @ORM\ManyToOne(targetEntity="VhloCfgLinea", inversedBy="vehiculos") */
     private $linea;
 
@@ -1299,5 +1306,29 @@ class VhloVehiculo
     public function getTipoIdentificacionRadicado()
     {
         return $this->tipoIdentificacionRadicado;
+    }
+
+    /**
+     * Set fechaPlaca
+     *
+     * @param \DateTime $fechaPlaca
+     *
+     * @return VhloVehiculo
+     */
+    public function setFechaPlaca($fechaPlaca)
+    {
+        $this->fechaPlaca = $fechaPlaca;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPlaca
+     *
+     * @return \DateTime
+     */
+    public function getFechaPlaca()
+    {
+        return $this->fechaPlaca;
     }
 }
