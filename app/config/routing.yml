@@ -1,3 +1,7 @@
+jhweb_usuario_user_lc_cfg_restriccion:
+    resource: "@JHWEBUsuarioBundle/Controller/UserLcCfgRestriccionController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

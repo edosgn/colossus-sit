@@ -76,6 +76,11 @@ class VhloCfgPlacaController extends Controller
                 );
                 $placa->setTipoVehiculo($tipoVehiculo);
 
+                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                    $params->idServicio
+                );
+                $placa->setServicio($servicio);
+
                 $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                     $params->idOrganismoTransito
                 );

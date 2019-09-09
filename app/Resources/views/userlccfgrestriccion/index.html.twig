@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlccfgrestriccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userLcCfgRestriccion in userLcCfgRestriccions %}
+            <tr>
+                <td><a href="{{ path('userlccfgrestriccion_show', { 'id': userLcCfgRestriccion.id }) }}">{{ userLcCfgRestriccion.id }}</a></td>
+                <td>{{ userLcCfgRestriccion.nombre }}</td>
+                <td>{{ userLcCfgRestriccion.codigo }}</td>
+                <td>{% if userLcCfgRestriccion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('userlccfgrestriccion_show', { 'id': userLcCfgRestriccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('userlccfgrestriccion_edit', { 'id': userLcCfgRestriccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userlccfgrestriccion_new') }}">Create a new userLcCfgRestriccion</a>
+        </li>
+    </ul>
+{% endblock %}

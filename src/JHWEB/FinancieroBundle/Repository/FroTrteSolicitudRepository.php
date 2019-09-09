@@ -332,7 +332,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-        //Obtiene trámites solicitud según el filtro de búsqueda
+    //Obtiene trámites solicitud según el filtro de búsqueda
     public function getByPrendas($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
     {
         $em = $this->getEntityManager();
@@ -359,7 +359,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-        //Obtiene trámites solicitud según el filtro de búsqueda
+    //Obtiene trámites solicitud según el filtro de búsqueda
     public function getByRadicadosCuenta($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
     {
         $em = $this->getEntityManager();
@@ -381,6 +381,31 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             'idModulo' => $idModulo,
             'fechaDesde' => $fechaDesde,
             'fechaHasta' => $fechaHasta
+        ));
+        
+        return $consulta->getResult();
+    }
+
+    //Obtiene trámites solicitud de tipo radicados de cuenta para creación de placas solicitadas
+    public function getRadicadosCuentaForPlacas($idOrganismoTransito)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, 
+            JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp,
+            JHWEBFinancieroBundle:FroTramite ft
+            WHERE  fts.organismoTransito = :idOrganismoTransito
+            AND fts.tramiteFactura = fft.id
+            AND fft.precio = ftp.id
+            AND ftp.tramite = ft.id
+            AND fts.activo = true
+            AND ft.codigo = 4
+            AND (SELECT FIND_IN_SET('SOLICITADA', fts.foraneas) ) > 0";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
         ));
         
         return $consulta->getResult();

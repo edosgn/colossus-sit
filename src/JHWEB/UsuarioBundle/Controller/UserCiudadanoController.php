@@ -236,17 +236,27 @@ class UserCiudadanoController extends Controller
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
 
-            $em->persist($ciudadano);
             $em->flush();
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro encontrado con exito",
-                'data' => $ciudadano
-            );
+            if ($ciudadano) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito",
+                    'data' => $ciudadano
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+            }
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 

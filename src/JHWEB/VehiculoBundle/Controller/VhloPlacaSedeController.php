@@ -72,18 +72,14 @@ class VhloPlacaSedeController extends Controller
                 $params->idTipoVehiculo
             );
 
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                $params->idServicio
+            );
+
             $rangoInicial = mb_strtoupper($params->rangoInicial, 'utf-8');
             $rangoFinal = mb_strtoupper($params->rangoFinal, 'utf-8');
-            
-            //$asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->findAll();
 
             $validaAsignacion = true;
-
-            /*foreach ($asignaciones as $key => $asignacion) {
-                if ($asignacion->getLetrasPlaca() == $letrasInicio && ((intval($params->numeroInicial) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroInicial) <= intval($asignacion->getNumeroFinal())) || (intval($params->numeroFinal) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroFinal) <= intval($asignacion->getNumeroFinal())))) {
-                    $validaAsignacion = false;
-                }
-            }*/
 
             if(!$validaAsignacion){
                 $response = array(
@@ -115,6 +111,7 @@ class VhloPlacaSedeController extends Controller
                             $rangoInicial, 
                             $rangoFinal, 
                             $tipoVehiculo, 
+                            $servicio, 
                             $organismoTransito
                         );
 
@@ -122,6 +119,7 @@ class VhloPlacaSedeController extends Controller
         
                         $asignacion->setOrganismoTransito($organismoTransito);
                         $asignacion->setTipoVehiculo($tipoVehiculo);
+                        $asignacion->setServicio($servicio);
                         $asignacion->setRangoInicial($rangoInicial);
                         $asignacion->setRangoFinal($rangoFinal);
                         $asignacion->setActivo(true);
@@ -263,7 +261,7 @@ class VhloPlacaSedeController extends Controller
      * Creates a new vhloCfgPlaca entity.
      *
      */
-    public function newPlacaAction($numero, $tipoVehiculo, $organismoTransito)
+    public function newPlacaAction($numero, $tipoVehiculo, $servicio, $organismoTransito)
     {
         $helpers = $this->get("app.helpers");
 
@@ -279,6 +277,7 @@ class VhloPlacaSedeController extends Controller
             $placa->setNumero(mb_strtoupper($numero, 'utf-8'));
             $placa->setEstado('DISPONIBLE');
             $placa->setTipoVehiculo($tipoVehiculo);
+            $placa->setServicio($servicio);
             $placa->setOrganismoTransito($organismoTransito);
 
             $em->persist($placa);
@@ -327,7 +326,7 @@ class VhloPlacaSedeController extends Controller
         return $helpers->json($response);
     }
 
-    public function generatePlacas($rangoInicial, $rangoFinal, $tipoVehiculo, $organismoTransito){
+    public function generatePlacas($rangoInicial, $rangoFinal, $tipoVehiculo, $servicio, $organismoTransito){
         $helpers = $this->get("app.helpers");
 
         $longitud = strlen($rangoInicial);
@@ -382,7 +381,8 @@ class VhloPlacaSedeController extends Controller
                     
                     $this->newPlacaAction(
                         $rangoInicial, 
-                        $tipoVehiculo, 
+                        $tipoVehiculo,
+                        $servicio,
                         $organismoTransito
                     );
 
@@ -398,6 +398,7 @@ class VhloPlacaSedeController extends Controller
                     $this->newPlacaAction(
                         $rangoInicial, 
                         $tipoVehiculo, 
+                        $servicio, 
                         $organismoTransito
                     );
                     $letraInicial = $helpers->nextLetter($letraInicial);
@@ -412,7 +413,8 @@ class VhloPlacaSedeController extends Controller
 
                     $this->newPlacaAction(
                         $rangoInicial, 
-                        $tipoVehiculo, 
+                        $tipoVehiculo,
+                        $servicio,
                         $organismoTransito
                     );
 
@@ -427,7 +429,8 @@ class VhloPlacaSedeController extends Controller
             if ($rangoInicial == $rangoFinal) {
                 $this->newPlacaAction(
                     $rangoInicial, 
-                    $tipoVehiculo, 
+                    $tipoVehiculo,
+                    $servicio,
                     $organismoTransito
                 );
 
@@ -596,6 +599,56 @@ class VhloPlacaSedeController extends Controller
                     'code' => 400,
                     'message' => "Autorizacion no valida", 
                 );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca asignaciones por parametros (identificacion, No. comparendo o fecha).
+     *
+     * @Route("/search/request/organismotransito", name="vhloplacasede_search_request_organismotransito")
+     * @Method({"GET","POST"})
+     */
+    public function searchRequestByOrganismoTransito(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $solicitudes = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getRadicadosCuentaForPlacas(
+                $params->idOrganismoTransito
+            );
+
+            if ($solicitadas) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($solicitadas)." registros encontrados", 
+                    'data' => $solicitadas,
+            );
+            }else{
+                 $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No existen registros para esos filtros de búsqueda", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
         return $helpers->json($response);

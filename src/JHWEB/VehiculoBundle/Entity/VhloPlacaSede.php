@@ -67,6 +67,11 @@ class VhloPlacaSede
     protected $tipoVehiculo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="VhloCfgServicio", inversedBy="placas")
+     **/
+    protected $servicio;
+
+    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="placas")
      **/
     protected $organismoTransito;
@@ -208,6 +213,30 @@ class VhloPlacaSede
     public function getTipoVehiculo()
     {
         return $this->tipoVehiculo;
+    }
+
+    /**
+     * Set servicio
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio
+     *
+     * @return VhloPlacaSede
+     */
+    public function setServicio(\JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio = null)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgServicio
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
     }
 
     /**
