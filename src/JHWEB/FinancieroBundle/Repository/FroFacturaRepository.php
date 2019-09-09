@@ -76,17 +76,21 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
 
         if ($arrayOrganismosTransito) {
-            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                if($keyOrganismoTransito == 0) {
-                    $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito. "'";
-                } else {
-                    $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito. "'";
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
                 }
+            } else {
+                $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
             }
         }
 
         if ($condicion) {
-            $dql .= $condicion;
+            $dql .=  ' AND (' . $condicion . ')';
         }
         
         if($tipoArchivoTramite == 'GENERAL'){ 

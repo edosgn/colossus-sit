@@ -185,10 +185,6 @@ class VhloTpConvenioController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
-            $fechaConvenio = new \DateTime($params->fechaConvenio);
-            $fechaActaInicio = new \DateTime($params->fechaActaInicio);
-            $fechaActaFin = new \DateTime($params->fechaActaFin);
-            
             $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->find($params->id);
 
             if($convenio) {
@@ -201,46 +197,22 @@ class VhloTpConvenioController extends Controller
                     );
                 } else {
                     $convenio->setNumeroConvenio($params->numeroConvenio);
-                    $convenio->setFechaConvenio($fechaConvenio);
-                    $convenio->setFechaActaInicio($fechaActaInicio);
-                    $convenio->setFechaActaFin($fechaActaFin);
+                    $convenio->setFechaConvenio(new \DateTime($params->fechaConvenio));
+                    $convenio->setFechaActaInicio(new \DateTime($params->fechaActaInicio));
+                    $convenio->setFechaActaFin(new \DateTime($params->fechaActaFin));
                     $convenio->setNumeroCupos($params->numeroCupos);
                     $convenio->setObservacion($params->observacion);
 
                     $em->persist($convenio);
+                    $em->flush();
 
-                    $empresasAnteriores = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenioEmpresa')->findBy(
-                        array(
-                            'vhloTpConvenio' => $convenio->getId(),
-                            'activo' => true
-                        )
-                    );
-
-                    foreach ($empresasAnteriores as $key => $empresaAnterior) {
-                        $empresaAnterior->setActivo(false);
-                        $em->persist($empresaAnterior);
-                    }
-
-                    foreach ($params->empresas as $key => $empresaNueva) {
-                        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresaNueva);
-                        
-                        $convenioEmpresa = new VhloTpConvenioEmpresa();
-                        
-                        $convenioEmpresa->setEmpresa($empresa);
-                        $convenioEmpresa->setVhloTpConvenio($convenio);
-                        $convenioEmpresa->setActivo(true);
-
-                        $em->persist($convenioEmpresa);
-                        $em->flush();
-                    }
-                    
                     $response = [];
 
                     $response = array(
                         'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Registro creado con éxito",
+                        'message' => "Registro editado con éxito",
                     );
                 }
             } else {
