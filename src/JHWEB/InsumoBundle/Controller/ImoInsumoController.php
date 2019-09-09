@@ -329,7 +329,6 @@ class ImoInsumoController extends Controller
                 $params->idOrganismoTransito
             );
 
-
             if ($sustrato) {
                 if ($sustrato['estado'] == 'DISPONIBLE') {
                     $response = array(

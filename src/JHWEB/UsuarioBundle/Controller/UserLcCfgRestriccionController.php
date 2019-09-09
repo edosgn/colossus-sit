@@ -22,13 +22,26 @@ class UserLcCfgRestriccionController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $restricciones = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgRestriccion')->findBy(
+            array('activo' => true)
+        );
 
-        $userLcCfgRestriccions = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgRestriccion')->findAll();
+        $response['data'] = array();
 
-        return $this->render('userlccfgrestriccion/index.html.twig', array(
-            'userLcCfgRestriccions' => $userLcCfgRestriccions,
-        ));
+        if ($restricciones) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($restricciones)." Registros encontrados", 
+                'data'=> $restricciones,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,63 +52,137 @@ class UserLcCfgRestriccionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $userLcCfgRestriccion = new Userlccfgrestriccion();
-        $form = $this->createForm('JHWEB\UsuarioBundle\Form\UserLcCfgRestriccionType', $userLcCfgRestriccion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($userLcCfgRestriccion);
+            
+            $restriccion = new UserLcCfgRestriccion();
+
+            $restriccion->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            if ($params->codigo) {
+                $restriccion->setCodigo($params->codigo);
+            }
+            $restriccion->setActivo(true);
+
+            $em->persist($restriccion);
             $em->flush();
 
-            return $this->redirectToRoute('userlccfgrestriccion_show', array('id' => $userLcCfgRestriccion->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
         }
-
-        return $this->render('userlccfgrestriccion/new.html.twig', array(
-            'userLcCfgRestriccion' => $userLcCfgRestriccion,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a userLcCfgRestriccion entity.
      *
-     * @Route("/{id}", name="userlccfgrestriccion_show")
-     * @Method("GET")
+     * @Route("/show", name="userlccfgrestriccion_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(UserLcCfgRestriccion $userLcCfgRestriccion)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($userLcCfgRestriccion);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('userlccfgrestriccion/show.html.twig', array(
-            'userLcCfgRestriccion' => $userLcCfgRestriccion,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $restriccion = $em->getRepository('JHWEBUsuarioBundle:UsercLcCfgRestriccion')->find(
+                $params->id
+            );
+
+            $em->persist($restriccion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado con exito",
+                'data' => $restriccion,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
      * Displays a form to edit an existing userLcCfgRestriccion entity.
      *
-     * @Route("/{id}/edit", name="userlccfgrestriccion_edit")
+     * @Route("/edit", name="userlccfgrestriccion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, UserLcCfgRestriccion $userLcCfgRestriccion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($userLcCfgRestriccion);
-        $editForm = $this->createForm('JHWEB\UsuarioBundle\Form\UserLcCfgRestriccionType', $userLcCfgRestriccion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('userlccfgrestriccion_edit', array('id' => $userLcCfgRestriccion->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $restriccion = $em->getRepository("JHWEBUsuarioBundle:UserLcCfgRestriccion")->find(
+                $params->id
+            );
+
+            if ($restriccion!=null) {
+                $restriccion->setNombre($params->nombre);
+
+                if ($params->codigo) {
+                    $restriccion->setCodigo($params->codigo);
+                }
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $restriccion,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no valida", 
+                );
         }
 
-        return $this->render('userlccfgrestriccion/edit.html.twig', array(
-            'userLcCfgRestriccion' => $userLcCfgRestriccion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -132,5 +219,33 @@ class UserLcCfgRestriccionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Listado de todas las restriccions para selección con búsqueda
+     *
+     * @Route("/select", name="userlccfgrestriccion_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $restricciones = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgRestriccion')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($restricciones as $key => $restriccion) {
+            $response[$key] = array(
+                'value' => $restriccion->getId(),
+                'label' => $restriccion->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

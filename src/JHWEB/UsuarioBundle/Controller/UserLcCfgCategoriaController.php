@@ -24,7 +24,9 @@ class UserLcCfgCategoriaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $categorias = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->findBy(
             array('activo' => true)
         );
@@ -54,6 +56,7 @@ class UserLcCfgCategoriaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
+
         if($authCheck == true){
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -93,7 +96,6 @@ class UserLcCfgCategoriaController extends Controller
      */
     public function showAction(Request $request)
     {
-
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -124,6 +126,7 @@ class UserLcCfgCategoriaController extends Controller
                 'message' => "Autorizacion no valida",
             );
         }
+        
         return $helpers->json($response);
     }
 
@@ -269,18 +272,31 @@ class UserLcCfgCategoriaController extends Controller
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
                 $params->idTipoVehiculo
             );
-            
-            $response = null;
+
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                $params->idServicio
+            );
+
+            $arrayCategorias = null;
 
             if ($categorias) {
                 foreach ($categorias as $key => $categoria) {
-                    /*if ($tipoVehiculo->getId() == 1 && $categoria->getId() == 1) {
-                        # code...
-                    }*/
-                    $response[$key] = array(
-                        'value' => $categoria->getId(),
-                        'label' => $categoria->getNombre(),
-                    );
+                    if ($tipoVehiculo->getId() == 1 && ($categoria->getId() == 1 || $categoria->getId() == 1)) {
+                        $arrayCategorias[$key] = array(
+                            'value' => $categoria->getId(),
+                            'label' => $categoria->getNombre(),
+                        );
+                    }elseif ($tipoVehiculo->getId() == 2 && $servicio->getId() == 1 && ($categoria->getId() == 3 || $categoria->getId() == 4 || $categoria->getId() == 5)) {
+                        $arrayCategorias[$key] = array(
+                            'value' => $categoria->getId(),
+                            'label' => $categoria->getNombre(),
+                        );
+                    }elseif ($tipoVehiculo->getId() == 2 && $servicio->getId() == 2 && ($categoria->getId() == 6 || $categoria->getId() == 7 || $categoria->getId() == 8)) {
+                        $arrayCategorias[$key] = array(
+                            'value' => $categoria->getId(),
+                            'label' => $categoria->getNombre(),
+                        );
+                    }
                 }
 
                 $response = array(
@@ -288,6 +304,7 @@ class UserLcCfgCategoriaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Categorias encontradas.',
+                    'data' => $arrayCategorias,
                 );
             }else{
                 $response = array(

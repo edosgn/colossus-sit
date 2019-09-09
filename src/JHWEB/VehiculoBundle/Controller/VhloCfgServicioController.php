@@ -237,9 +237,10 @@ class VhloCfgServicioController extends Controller
         ;
     }
 
+    /* ================================================ */
 
     /**
-     * datos para select 2
+     * Lista de servicios para selección con búsqueda
      *
      * @Route("/select", name="vhlocfgservicio_select")
      * @Method({"GET", "POST"})
@@ -261,5 +262,66 @@ class VhloCfgServicioController extends Controller
             );
       }
        return $helpers->json($response);
+    }
+
+    /**
+     * Listado de todas las categorias según el tipo de vehiculo para selección con búsqueda
+     *
+     * @Route("/select/servicio/tipovehiculo", name="userlccfgcategoria_select_servicio_tipovehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByCategoriaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $servicios = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->findBy(
+                array('activo' => true)
+            );
+
+            $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find(
+                $params->idCategoria
+            );
+            
+            $response = null;
+
+            if ($servicios) {
+                foreach ($categorias as $key => $categoria) {
+                    if ($tipoVehiculo->getId() == 1 && $servicio->getId() == 1) {
+                        # code...
+                    }
+
+                    $response[$key] = array(
+                        'value' => $categoria->getId(),
+                        'label' => $categoria->getNombre(),
+                    );
+                }
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Categorias encontradas.',
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'No existen categorias activas en el sistema.',
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }
