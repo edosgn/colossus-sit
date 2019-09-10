@@ -110,11 +110,16 @@ class FroTrteSolicitudController extends Controller
                 );
             }else{
                 if (isset($params->numeroRunt) || (isset($params->idModulo) && $params->idModulo == 6)) {
-                    //Inicio validación numero RUNT
-                    $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneByNumeroRunt(
-                        $params->numeroRunt
-                    );
+                    if(isset($params->idModulo) && $params->idModulo == 6){
+                        $numeroRuntOld = false;
+                    } else {
+                        //Inicio validación numero RUNT
+                        $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneByNumeroRunt(
+                            $params->numeroRunt
+                        );
 
+                    }
+                    
                     if ($numeroRuntOld) {
                         $response = array(
                             'title' => 'Atención!',
@@ -125,7 +130,6 @@ class FroTrteSolicitudController extends Controller
                     }else{
                         if (isset($params->numeroRunt)) {
                             $factura->setNumeroRunt($params->numeroRunt);
-        
                             $em->flush();
                         }
 

@@ -174,8 +174,14 @@ class FroReporteIngresosController extends Controller
                     'cantidadFacturasPagadas' => $cantidadFacturasPagadas,
                     'cantidadFacturasVencidas' => $cantidadFacturasVencidas,
                     'cantidadFacturasGeneradas' => count($cantidadFacturasGeneradas),
-                    'reporteGeneral' =>$reporteGeneral,
-                    'reporteDetallado' =>$reporteDetallado,
+                    'reporteGeneral' => $reporteGeneral,
+                    'reporteDetallado' => $reporteDetallado,
+                    'filtros' => array(
+                        'tipoArchivoTramite' => $params->tipoArchivoTramite, 
+                        'fechaInicio' => $fechaInicioDatetime,
+                        'fechaFin' => $fechaFinDatetime,
+                        'organismosTransito' => $params->filtros->arrayOrganismosTransito
+                    )
                 ); 
     
                 if($params->exportarEn == 'EXCEL') {
