@@ -274,8 +274,10 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //obtiene sustratos de acuerdo al numero de factura
-    public function getSustratos($fechaInicio, $fechaFin) {
+    public function getSustratos($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
         $em = $this->getEntityManager();
+
+        $condicion = null; 
 
         $dql = "SELECT COUNT(fi.id) AS cantidad, ict.id, ict.nombre, icv.valor, COUNT(fi.id) * icv.valor AS total
             FROM JHWEBFinancieroBundle:FroFacInsumo fi, 
@@ -289,22 +291,43 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND fi.insumo = ii.id
             AND ii.tipo = ict.id
             AND ict.categoria = 'SUSTRATO'
-            AND icv.tipo = ict.id
-            GROUP BY ict.nombre";
+            AND icv.tipo = ict.id";
+
+        if ($arrayOrganismosTransito) {
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
+                }
+            } else {
+                $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+            }
+        }
+
+        if ($condicion) {
+            $dql .=  ' AND (' . $condicion . ')';
+        }
+
+        $condicion .=  " GROUP BY ict.nombre";
 
         $consulta = $em->createQuery($dql);
         
         $consulta->setParameters(array(
             'fechaInicio' => $fechaInicio, 
-            'fechaFin' => $fechaFin
+            'fechaFin' => $fechaFin,
         ));
 
         return $consulta->getResult();
     }
 
     //obtiene los conceptos en un rango de fechas especifico
-    public function getConceptos($fechaInicio, $fechaFin) {
+    public function getConceptos($fechaInicio, $fechaFin, $arrayOrganismosTransito) {
         $em = $this->getEntityManager();
+
+        $condicion = null; 
         
         $dql = "SELECT COUNT(ftcc.id) AS cantidad ,ftcc.id, ftcc.nombre, ftcc.valor, COUNT(ftcc.id) * ftcc.valor AS total
         FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
@@ -323,9 +346,28 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND ft.precio = ftp.id
             AND f.fechaPago BETWEEN :fechaInicio AND :fechaFin
             AND f.estado = 'FINALIZADA'
-            AND ftc.activo = 1 
-            GROUP BY ftcc.id";
+            AND ftc.activo = 1";
+
+        if ($arrayOrganismosTransito) {
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
+                }
+            } else {
+                $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
+            }
+        }
+
+        if ($condicion) {
+            $dql .=  ' AND (' . $condicion . ')';
+        }
         
+        $condicion .=  " GROUP BY ftcc.id";
+
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
