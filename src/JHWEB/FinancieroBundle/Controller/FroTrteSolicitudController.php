@@ -591,6 +591,8 @@ class FroTrteSolicitudController extends Controller
                             break;
 
                         case 'radicado':
+                            $placa = $vehiculo->getPlaca();
+                            $placa->setEstado('SOLICITADA');
                             $vehiculo->setActivo(true);
                             break;
 
