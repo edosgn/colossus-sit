@@ -626,14 +626,14 @@ class VhloPlacaSedeController extends Controller
                 $params->idOrganismoTransito
             );
 
-            if ($solicitadas) {
+            if ($solicitudes) {
                 $response = array(
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($solicitadas)." registros encontrados", 
-                    'data' => $solicitadas,
-            );
+                    'message' => count($solicitudes)." registros encontrados", 
+                    'data' => $solicitudes,
+                );
             }else{
                  $response = array(
                     'title' => 'Atención!',

@@ -364,10 +364,10 @@ class VhloCfgPlacaController extends Controller
                 $em->flush();
     
                 $response = array(
-                        'title' => 'Perfecto!',
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Placa ha sido configurada en estado ".$params->estado." con éxito.",
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Placa ha sido configurada en estado ".$params->estado." con éxito.",
                 );
             }else{
                 $reponse = array(
@@ -452,6 +452,71 @@ class VhloCfgPlacaController extends Controller
             $response[$key] = array(
                 'value' => $placa->getId(),
                 'label' => $placa->getNumero(),
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new vhloCfgPlaca entity.
+     *
+     * @Route("/make", name="vhlocfgplaca_make")
+     * @Method({"GET", "POST"})
+     */
+    public function makeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneByNumero(
+                $params->numero
+            );
+
+            if (!$placa) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                    $params->idVehiculo
+                );
+
+                $placa = new VhloCfgPlaca();
+
+                $placa->setNumero(mb_strtoupper($params->numero, 'utf-8'));
+                $placa->setEstado('FABRICADA');
+
+                $placa->setTipoVehiculo($vehiculo->getTipoVehiculo());
+                $placa->setServicio($vehiculo->getServicio());
+                $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
+
+                $em->persist($placa);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito",
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'La placa ya existe', 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
             );
         }
         
