@@ -290,7 +290,7 @@ class UserLcCfgCategoriaController extends Controller
 
             if ($categorias) {
                 foreach ($categorias as $key => $categoria) {
-                    if ($tipoVehiculo->getId() == 1 && ($categoria->getId() == 1 || $categoria->getId() == 1)) {
+                    if ($tipoVehiculo->getId() == 1 && ($categoria->getId() == 1 || $categoria->getId() == 2)) {
                         $arrayCategorias[$key] = array(
                             'value' => $categoria->getId(),
                             'label' => $categoria->getNombre(),

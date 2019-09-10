@@ -2000,15 +2000,19 @@ class FroTrteSolicitudController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/{idVehiculo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
+     * @Route("/{idFuncionario}/{idVehiculo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
      * @Method({"GET", "POST"})
      */
-    public function pdfCertificadoTradicionAction(Request $request, $idVehiculo)
+    public function pdfCertificadoTradicionAction(Request $request, $idFuncionario, $idVehiculo)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
 
         $em = $this->getDoctrine()->getManager();
+
+        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+            $idFuncionario
+        );
 
         $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
             $idVehiculo
@@ -2047,6 +2051,7 @@ class FroTrteSolicitudController extends Controller
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.certificadotradicion.html.twig', array(
             'fechaActual' => $fechaActual,
+            'funcionario'=>$funcionario,
             'vehiculo'=>$vehiculo,
             'propietarios' => $propietarios,
             'limitaciones' => $limitaciones,
