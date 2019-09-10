@@ -78,7 +78,6 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         if ($arrayOrganismosTransito) {
             if(count($arrayOrganismosTransito) > 0) {
                 foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                    var_dump($idOrganismoTransito);
                     if($keyOrganismoTransito == 0) {
                         $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
                     } else {

@@ -91,7 +91,7 @@ class FroReporteIngresosController extends Controller
                     'ciudadano' => $ciudadano->getId(),
                 )
             );
-                    
+            
             if($params->tipoArchivoTramite == 'GENERAL') {
                 $reporteGeneral = true;
                 $reporteDetallado = false;
@@ -196,54 +196,6 @@ class FroReporteIngresosController extends Controller
                         )
                     );
                 }
-            } else if ($params->tipoArchivoTramite == 'DETALLADO') {
-                $reporteGeneral = false;
-                $reporteDetallado = true;
-
-                $totalTramitesFinalizados = 0;
-                
-                $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados($params->tipoArchivoTramite, $fechaInicioDatetime,$fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
-                
-                foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
-                    $totalTramitesFinalizados += $tramiteFinalizado['valorPagado'];
-                }
-                
-                $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
-                    'organismoTransito' => !empty($organismoTransito) ? $organismoTransito: null, 
-                    'tramitesFinalizados' => $tramitesFinalizados,
-                    'funcionario' => $funcionario,
-                    'mesReporteDesde' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
-                    'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
-                    'fechaActual' => $fechaActual,
-                    'totalTramitesFinalizados' => $totalTramitesFinalizados,
-                    'reporteGeneral' =>$reporteGeneral,
-                    'reporteDetallado' =>$reporteDetallado,
-                )); 
-
-                $data = (object) array(
-                    'template' => 'templateExcelByTramites',
-                    'tramitesFinalizados' => $tramitesFinalizados,
-                    'funcionario' => $funcionario,
-                    'mesReporteDesde' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
-                    'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
-                    'fechaActual' => $fechaActual,
-                    'totalTramitesFinalizados' => $totalTramitesFinalizados,
-                    'reporteGeneral' =>$reporteGeneral,
-                    'reporteDetallado' =>$reporteDetallado,
-                );
-
-                if($params->exportarEn == 'EXCEL') {
-                    return $this->get('app.excel')->newExcel($data);
-                } else if($params->exportarEn == 'PDF') {
-                    return new Response(
-                        $this->get('app.pdf')->templateIngresos($html),
-                        200,
-                        array(
-                            'Content-Type'        => 'application/pdf',
-                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
-                            )
-                        );
-                    }
             }
         } else {
             $response = array(

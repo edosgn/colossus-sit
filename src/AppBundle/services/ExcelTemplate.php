@@ -196,6 +196,12 @@ class ExcelTemplate {
             $params->filtros['fechaFin'],
             [$idOrganismoTransito]
           );
+
+          $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos(
+            $params->filtros['fechaInicio'],
+            $params->filtros['fechaFin'],
+            [$idOrganismoTransito]
+          );
           
           $this->index = $pages;
           $this->row = 4;
@@ -221,7 +227,7 @@ class ExcelTemplate {
           
           /* $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES'); */
           if($params->reporteGeneral == true) {
-            foreach ($params->tramitesFinalizados as $key => $tramite) {
+            foreach ($tramitesFinalizados as $key => $tramite) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'A'.$this->row, $tramite['codigo']
