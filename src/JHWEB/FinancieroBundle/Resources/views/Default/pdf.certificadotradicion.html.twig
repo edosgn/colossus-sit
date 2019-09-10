@@ -24,13 +24,15 @@
     <p style="font-size:11px;">Vehículo con número de placa: <b>{{ vehiculo.placa.numero }}, </b> {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, {% endif  %}
     <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
     <b>Linea: </b>{{ vehiculo.linea.nombre }},
+    {% if vehiculo.clase  %}<b>Servicio: </b> {{ vehiculo.clase.nombre }}, 
+    {% if vehiculo.carroceria  %}<b>Servicio: </b> {{ vehiculo.carroceria.nombre }}, 
+    {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }}, 
     <b>No.serie: </b> {{ vehiculo.serie }},
     <b>No.Chasis: </b> {{ vehiculo.chasis }},
     <b>Carrocería: </b> {{ vehiculo.carroceria.nombre }}.
     <b>Cilindraje: </b> {{ vehiculo.cilindraje }},
     <b>Pasajeros: </b> {{ vehiculo.numeroPasajeros }},
     {% if vehiculo.color  %}<b>Color: </b> {{ vehiculo.color.nombre }}, {% endif  %}            
-    {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }}, 
     {% endif  %} <b>Modelo: <b> {{ vehiculo.modelo }}, <b>No.motor: <b> {{ vehiculo.motor }}
     </p>
 
@@ -44,19 +46,31 @@
             </th>
         </tr>
         <tr align="center">
-            <td><b>Identificacion</b></td>
+            <td><b>Tipo identificación</b></td>
+            <td><b>Identificación</b></td>
             <td><b>Apellidos y apellidos</b></td>
-            <td><b>Direccion</b></td>
+            <td><b>Fechas</b></td>
         </tr>
         {% for propietario in propietarios %}
             {% if propietario.ciudadano %}
                 <tr>
+                    <td>
+                        {% if propietario.ciudadano.tipoIdentificacion %}
+                        {{ propietario.ciudadano.tipoIdentificacion.nombre }}
+                        {% endif %}
+                    </td>
                     <td>{{ propietario.ciudadano.identificacion }}</td>
                     <td>
                         {{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }} {{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}
                     </td>
                     <td>
-                        {{ propietario.ciudadano.direccionPersonal }}
+                        <b>Fecha inicial:<b>
+                        {{ propietario.fechaInicial|date('d/m/Y') }}
+                        {% if propietario.fechaFinal %}
+                        <br>
+                        <b>Fecha final:<b>
+                        {{ propietario.fechaFinal|date('d/m/Y') }}
+                        {% endif %}
                     </td>
                 </tr>
             {% endif %}
@@ -131,5 +145,14 @@
         {% endfor %}
     </table>
     {% endif %}
+    <br>
+    <br>
+    <p style="text-align: center;">
+        Generó: {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}
+        <br>
+        {{ funcionario.cargo.nombre }}
+        <br>
+        {{ funcionario.organismoTransito.nombre }}
+    </p>
   </body>
 </html>

@@ -92,6 +92,11 @@ class ImoLote
     private $recibido;
 
     /**
+     * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
+     **/
+    protected $tipoInsumo;  
+
+    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      **/
     protected $empresa;
@@ -99,13 +104,12 @@ class ImoLote
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito")
      **/
-    protected $sedeOperativa;
+    protected $sedeOperativa; 
 
     /**
-     * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario")
      **/
-    protected $tipoInsumo;   
-
+    protected $funcionario;
 
     /**
      * Get id
@@ -358,6 +362,30 @@ class ImoLote
     }
 
     /**
+     * Set tipoInsumo
+     *
+     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo
+     *
+     * @return ImoLote
+     */
+    public function setTipoInsumo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo = null)
+    {
+        $this->tipoInsumo = $tipoInsumo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoInsumo
+     *
+     * @return \JHWEB\InsumoBundle\Entity\ImoCfgTipo
+     */
+    public function getTipoInsumo()
+    {
+        return $this->tipoInsumo;
+    }
+
+    /**
      * Set empresa
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
@@ -406,26 +434,26 @@ class ImoLote
     }
 
     /**
-     * Set tipoInsumo
+     * Set funcionario
      *
-     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
      *
      * @return ImoLote
      */
-    public function setTipoInsumo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo = null)
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
     {
-        $this->tipoInsumo = $tipoInsumo;
+        $this->funcionario = $funcionario;
 
         return $this;
     }
 
     /**
-     * Get tipoInsumo
+     * Get funcionario
      *
-     * @return \JHWEB\InsumoBundle\Entity\ImoCfgTipo
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
-    public function getTipoInsumo()
+    public function getFuncionario()
     {
-        return $this->tipoInsumo;
+        return $this->funcionario;
     }
 }

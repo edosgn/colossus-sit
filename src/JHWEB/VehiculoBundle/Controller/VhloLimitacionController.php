@@ -293,10 +293,10 @@ class VhloLimitacionController extends Controller
     /**
      * Busca las limitaciones activas por numero de placa.
      *
-     * @Route("/search/placa", name="vhlolimitacion_search_placa")
+     * @Route("/search/placa/identificacion", name="vhlolimitacion_search_placa_identificacion")
      * @Method({"GET", "POST"})
      */
-    public function searchByPlacaAction(Request $request)
+    public function searchByPlacaOrIdentificacionAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -354,12 +354,44 @@ class VhloLimitacionController extends Controller
                     );
                 }
             }else{
-                $response = array(
-                    'title' => 'Error!',
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'No existe ningún registro con el número de placa digitado.',
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                    array(
+                        'identificacion' => $params->numero
+                    )
                 );
+
+                if ($ciudadano) {
+                    $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                        array(
+                            'demandado' => $ciudadano->getId(),
+                            'activo' => true,
+                        )
+                    );
+
+                    if ($limitaciones) {
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => count($limitaciones).' limitaciones encontradas.',
+                            'data' => $limitaciones,
+                        );
+                    }else{
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => 'Ningún registro encontrado.',
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'No se encuentra ningún demandado con el número de identificación digitada.',
+                    );
+                }
             }
         } else {
             $response = array(
