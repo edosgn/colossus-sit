@@ -109,7 +109,7 @@ class FroTrteSolicitudController extends Controller
                     )
                 );
             }else{
-                if (isset($params->numeroRunt)) {
+                if (isset($params->numeroRunt) || (isset($params->idModulo) && $params->idModulo == 6)) {
                     //Inicio validación numero RUNT
                     $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneByNumeroRunt(
                         $params->numeroRunt
