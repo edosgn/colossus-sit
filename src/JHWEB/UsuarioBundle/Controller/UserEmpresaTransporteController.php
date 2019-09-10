@@ -216,7 +216,7 @@ class UserEmpresaTransporteController extends Controller
                     'message' => "La capacidad miníma debe ser menor a la capacidad máxima",
                 );
             } else {
-                $empresaTransporteActual = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                /* $empresaTransporteActual = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
                     array(
                         'numeroActo' => $params->numeroActo,
                         'numeroEjecutoriaActo' => $params->numeroEjecutoriaActo,
@@ -231,7 +231,7 @@ class UserEmpresaTransporteController extends Controller
                         'code' => 400,
                         'message' => "El número de acto ya se encuentra registrado.",
                     );
-                } else {
+                } else { */
                     $empresaTransporte->setRadioAccion($radioAccion);
                     $empresaTransporte->setModalidadTransporte($modalidadTransporte);
                     $empresaTransporte->setClase($clase);
@@ -255,7 +255,7 @@ class UserEmpresaTransporteController extends Controller
                         'code' => 200,
                         'message' => "Registro editado con éxito",
                     );
-                }
+                /* } */
             }
         }else{
             $response = array(

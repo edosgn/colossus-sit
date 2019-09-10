@@ -206,6 +206,69 @@ class VhloTpAsignacionController extends Controller
         }
         return $helpers->json($response);
     }
+    
+    /**
+     * Finds and edit a vhloTpAsignacion entity.
+     *
+     * @Route("/edit", name="vhlotpasignacion_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->find($params->asignacion->id);
+            $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($params->idCupoAnterior);
+            
+            $cupoNew = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($params->asignacion->idCupo);
+
+            if($asignacion) {
+                if($cupo && $cupoNew) {
+                    $cupo->setEstado('DISPONIBLE');
+                    $cupoNew->setEstado('UTILIZADO');
+                }
+
+                $asignacion->setCupo($cupoNew);
+    
+                $em->persist($asignacion);
+                $em->persist($cupo);
+                $em->persist($cupoNew);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro editado con éxito.", 
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado.", 
+                );
+            }
+
+        } else {
+            $response = array(
+                'title' => 'Error',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
+        }
+        return $helpers->json($response);
+    }
+
     /**
      * Finds and delete a vhloTpAsignacion entity.
      *
