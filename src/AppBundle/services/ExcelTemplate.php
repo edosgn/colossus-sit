@@ -187,10 +187,23 @@ class ExcelTemplate {
         $em = $this->em;
         $pages = 0;
 
-        if ($params) {
+        foreach ($params->filtros['organismosTransito'] as $key => $idOrganismoTransito) {
+          # code...
+          $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
+          $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
+            $params->filtros['tipoArchivoTramite'],
+            $params->filtros['fechaInicio'],
+            $params->filtros['fechaFin'],
+            [$idOrganismoTransito]
+          );
+          
           $this->index = $pages;
           $this->row = 4;
           $this->col = 'A';
+          
+          if ($pages > 0) {
+            $this->objPHPExcel->createSheet();
+          }
           
           $this->objPHPExcel->setActiveSheetIndex($pages);
 
@@ -198,9 +211,15 @@ class ExcelTemplate {
           $this->getMembretesTramites($params);
 
           //Asigna titulo a la pestaña
-          $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES');
+          $title = $organismoTransito->getMunicipio();
+
+          $this->objPHPExcel->getActiveSheet()->setTitle(substr($title, 0, 100));
 
 
+
+          $this->objPHPExcel->setActiveSheetIndex($pages);
+          
+          /* $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES'); */
           if($params->reporteGeneral == true) {
             foreach ($params->tramitesFinalizados as $key => $tramite) {
               //Imprime los datos
@@ -223,7 +242,6 @@ class ExcelTemplate {
               $this->row++;
             }
 
-            
             $this->objPHPExcel->getActiveSheet()->mergeCells('A'.$this->row.':'.'D'.$this->row);
             $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             
@@ -469,12 +487,12 @@ class ExcelTemplate {
               'I'.$this->total, $params->totalTramitesFinalizados
             );
           }
-        }
+          
           //Otorga estilos
           $this->getStyleTramites($params);
-          $this->templateExcelByGeneral($params);
-
-        
+          
+          $pages ++;
+        }
 
         $this->objPHPExcel->setActiveSheetIndex(0);
 
@@ -483,22 +501,22 @@ class ExcelTemplate {
     }
   //==============================//END TEMPLATES//==============================//
 
-  public function templateExcelByGeneral($params){
+  /* public function templateExcelByGeneral($params){
         $em = $this->em;
         $pages = 0;
 
         for ($i=1; $i <= 4; $i++) { 
           switch ($i) {
             case 1:
-              /* $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getPendientesByDate(
+              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getPendientesByDate(
                   $params->fechaInicial,
                   $params->fechaFinal
-              ); */
+              );
               //Asigna titulo a la pestaña
               $title = 'PENDIENTES';
               break;
             
-            /* case 2:
+            case 2:
               $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getVencidasByDate(
                   $params->fechaInicial,
                   $params->fechaFinal
@@ -522,10 +540,10 @@ class ExcelTemplate {
               );
               //Asigna titulo a la pestaña
               $title = 'INOPORTUNAS';
-              break; */
+              break;
           }
           
-          /* if ($solicitudes) {
+          if ($solicitudes) {
             $this->index = $pages;
             $this->row = 4;
             $this->col = 'A';
@@ -632,12 +650,12 @@ class ExcelTemplate {
 
             // Aumenta en uno el numero de paginas
             $pages++;
-          } */
+          }
         } 
 
         $this->objPHPExcel->setActiveSheetIndex(0);
 
         return $this->objPHPExcel;
 
-    }
+    } */
 }
