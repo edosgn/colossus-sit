@@ -171,6 +171,124 @@ class UserUsuarioMenuController extends Controller
     }
 
     /**
+     * Deletes a userUsuarioMenu entity.
+     *
+     * @Route("/delete/all", name="userusuariomenu_delete_all")
+     * @Method("POST")
+     */
+    public function deleteAllAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+
+        
+
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion
+                )
+            );
+
+            if ($ciudadano) {
+                $usuario = $ciudadano->getUsuario();
+
+                if ($usuario) {
+                    $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
+                }
+            }
+
+            if($menus){
+                foreach ($menus as $key => $usuarioMenu) {
+                    
+                    $usuarioMenu->setActivo(false);
+    
+                    $em->flush();
+                }
+            }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registros eliminados con exito."
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Deletes a userUsuarioMenu entity.
+     *
+     * @Route("/delete/usuario/inhabilitar", name="userusuariomenu_delete_all_usuario_inhabilitar")
+     * @Method("POST")
+     */
+    public function deleteUsuarioInhabilitarAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if($authCheck == true)
+        {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion
+                )
+            );
+            if ($ciudadano) {
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneByCiudadano($ciudadano->getId());
+                if($funcionario){
+                    if($funcionario->getActivo()){
+                        $funcionario->setActivo(0);
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro Inhabilitado con exito."
+                        );
+                    }else{
+                        $funcionario->setActivo(1);
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro Habilitado con exito."
+                        );
+                    }
+                    $em->flush();
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No se encontró funcionario."
+                    );
+                }
+            }
+
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);    
+    }
+
+    /**
      * Creates a form to delete a userUsuarioMenu entity.
      *
      * @param UserUsuarioMenu $userUsuarioMenu The userUsuarioMenu entity
@@ -214,10 +332,11 @@ class UserUsuarioMenuController extends Controller
 
             if ($ciudadano) {
                 $usuario = $ciudadano->getUsuario();
-
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneByCiudadano($ciudadano->getId());
                 if ($usuario) {
                     $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
-
+                    // var_dump($funcionario->getId());
+                    // die(); 
                     if ($menus) {
                         $response = array(
                             'status' => 'success',
@@ -226,6 +345,7 @@ class UserUsuarioMenuController extends Controller
                             'data'=> array(
                                 'usuarioMenus' => $menus,
                                 'usuario' => $usuario,
+                                'activo' => $funcionario->getActivo(),
                             )
                         );
                     }else{
@@ -235,6 +355,7 @@ class UserUsuarioMenuController extends Controller
                             'message' => "No existen menus registrados para este usuario.",
                             'data'=> array(
                                 'usuario' => $usuario,
+                                'activo' => $funcionario->getActivo(),
                             )
                         );
                     }

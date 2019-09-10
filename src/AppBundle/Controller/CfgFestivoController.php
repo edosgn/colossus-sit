@@ -26,7 +26,7 @@ class CfgFestivoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgFestivos = $em->getRepository('AppBundle:CfgFestivo')->findBy( array('estado' => 1));
+        $cfgFestivos = $em->getRepository('AppBundle:CfgFestivo')->findBy( array('activo' => 1));
 
         $response = array(
                     'status' => 'succes',
@@ -58,7 +58,7 @@ class CfgFestivoController extends Controller
                 $festivo = new Cfgfestivo();
                 $festivo->setFecha(new \Datetime($params->fecha));
                 $festivo->setDescripcion($params->descripcion);
-                $festivo->setEstado(true);
+                $festivo->setActivo(true);
                 $em->persist($festivo);
                 $em->flush();
                 $response = array(
@@ -129,7 +129,7 @@ class CfgFestivoController extends Controller
            if($festivo != null){
                $festivo->setFecha(new \Datetime($params->fecha));
                $festivo->setDescripcion($params->descripcion);
-               $festivo->setEstado(true);
+               $festivo->setActivo(true);
 
                $em->persist($festivo);
                $em->flush();
@@ -174,7 +174,7 @@ class CfgFestivoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($params);
             
-            $festivo->setEstado(0);
+            $festivo->setActivo(0);
             $em->persist($festivo);
             $em->flush();
             $response = array(

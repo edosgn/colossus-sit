@@ -85,9 +85,21 @@ class VhloVehiculoController extends Controller
                     $placa->setTipoVehiculo($clase->getTipoVehiculo());
     
                     $placa->setOrganismoTransito($organismoTransito);
-                    $placa->setEstado('ASIGNADA');
-                    $em->persist($placa);
-                    $em->flush();
+
+                    $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+                    $placa->setServicio($servicio);
+
+                    if ($params->tipoMatricula == 'RADICADO') {
+                        $placa->setEstado('PREREGISTRADA');
+                        $em->persist($placa);
+
+                        $em->flush();
+                    } else {
+                        $placa->setEstado('ASIGNADA');
+                        $em->persist($placa);
+
+                        $em->flush();
+                    }
 
                     $vehiculo->setPlaca($placa);
                 }
