@@ -404,6 +404,8 @@ class GdDocumentoController extends Controller
                 );
                 $documento->setFechaVencimiento($fechaVencimiento);
                 $documento->setDiasVigencia($vigencia);
+                $documento->setNumeroCarpeta($params->documento->numeroCarpeta);
+
 
                 if ($params->documento->numeroOficio) {
                     $documento->setNumeroOficio(
@@ -606,12 +608,10 @@ class GdDocumentoController extends Controller
                     $params->idMedioCorrespondenciaEnvio
                 );
                 $documento->setMedioCorrespondenciaEnvio($medioCorrespondenciaEnvio);
-
                 $documento->setFechaEnvio(new \Datetime(date('Y-m-d h:i:s')));
                 $documento->setDetalleEnvio($params->detalleEnvio);
                 $documento->setObservaciones($params->observaciones);
-                $documento->setNumeroCarpeta($params->numeroCarpeta);
-                $documento->setEstado('FINALIZADO');
+                $documento->setEstado('ENVIADO');
 
                 $em->flush();
 

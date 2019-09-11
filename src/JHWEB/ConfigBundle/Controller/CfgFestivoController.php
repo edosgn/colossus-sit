@@ -1,18 +1,16 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\ConfigBundle\Controller;
 
-use AppBundle\Entity\CfgFestivo;
+use JHWEB\ConfigBundle\Entity\CfgFestivo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cfgfestivo controller.
  *
- * @Route("cfgFestivo")
+ * @Route("cfgfestivo")
  */
 class CfgFestivoController extends Controller
 {
@@ -26,7 +24,7 @@ class CfgFestivoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgFestivos = $em->getRepository('AppBundle:CfgFestivo')->findBy( array('activo' => 1));
+        $cfgFestivos = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->findBy( array('activo' => 1));
 
         $response = array(
                     'status' => 'succes',
@@ -57,14 +55,14 @@ class CfgFestivoController extends Controller
             
                 $festivo = new Cfgfestivo();
                 $festivo->setFecha(new \Datetime($params->fecha));
-                $festivo->setDescripcion($params->descripcion);
+                $festivo->setDescripcion(mb_strtoupper($params->descripcion,'utf-8'));
                 $festivo->setActivo(true);
                 $em->persist($festivo);
                 $em->flush();
                 $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Festivo creado con éxito",
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Festivo creado con éxito",
                 );
             
         }else{
@@ -91,7 +89,7 @@ class CfgFestivoController extends Controller
 
         if(authCheck == true ){
             $em = $this->getDoctrine()->getManager();
-            $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($id);
+            $festivo = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->find($id);
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -125,10 +123,10 @@ class CfgFestivoController extends Controller
            $params = json_decode($json);  
 
            $em = $this->getDoctrine()->getManager();
-           $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($params->id);
+           $festivo = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->find($params->id);
            if($festivo != null){
                $festivo->setFecha(new \Datetime($params->fecha));
-               $festivo->setDescripcion($params->descripcion);
+               $festivo->setDescripcion(mb_strtoupper($params->descripcion,'utf-8'));
                $festivo->setActivo(true);
 
                $em->persist($festivo);
@@ -172,7 +170,7 @@ class CfgFestivoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($params);
+            $festivo = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->find($params);
             
             $festivo->setActivo(0);
             $em->persist($festivo);
