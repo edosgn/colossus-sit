@@ -495,6 +495,70 @@ class GdDocumentoController extends Controller
     }
 
     /**
+     * Asigna el documento a un funcionario para que genere un respuesta.
+     *
+     * @Route("/finish", name="gddocumento_finish")
+     * @Method({"GET", "POST"})
+     */
+    public function finishAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->find(
+                $params->idDocumento
+            );
+            
+            if ($documento) {
+
+                $file = $request->files->get('file');
+               
+                if ($file) {
+                    $extension = $file->guessExtension();
+                    //$filename = md5(rand().time()).".".$extension;
+                    $filename = 'radicado_'.$documento->getNumeroRadicado().".".$extension;
+                    $dir=__DIR__.'/../../../../web/docs';
+
+                    $file->move($dir,$filename);
+                    $documento->setUrlFinalizado($filename);
+                    $documento->setEstado('FINALIZADO');
+                }
+
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ha Sido finalizado",
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado"
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Asigna el documento a un fiuncionario para que genere un respuesta.
      *
      * @Route("/assign", name="gddocumento_assign")
@@ -611,7 +675,7 @@ class GdDocumentoController extends Controller
                 $documento->setFechaEnvio(new \Datetime(date('Y-m-d h:i:s')));
                 $documento->setDetalleEnvio($params->detalleEnvio);
                 $documento->setObservaciones($params->observaciones);
-                $documento->setEstado('ENVIADO');
+                $documento->setEstado('ENVIADA');
 
                 $em->flush();
 
