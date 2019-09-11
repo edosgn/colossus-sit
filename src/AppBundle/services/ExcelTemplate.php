@@ -200,83 +200,6 @@ class ExcelTemplate {
 
         foreach ($params->filtros['organismosTransito'] as $key => $idOrganismoTransito) {
           $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
-
-          $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
-            $params->filtros['tipoArchivoTramite'],
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          $facturasDevolucionadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasDevolucionadas(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasPagadas(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          $facturasVencidas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasVencidas(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          $facturasRetefuente = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasRetefuente(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          $facturasGeneradas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getFacturasGeneradasByFecha(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
-            $totalTramitesFinalizados += intval($tramiteFinalizado['total']);
-          }
-          foreach ($facturasDevolucionadas as $key => $facturaDevolucionada) {
-            $cantidadFacturasDevolucionadas = intval($facturaDevolucionada['cantidad']);
-          }
-          foreach ($facturasPagadas as $key => $facturaPagada) {
-            $cantidadFacturasPagadas = intval($facturaPagada['cantidad']);
-          }
-          foreach ($facturasRetefuente as $key => $facturaRetefuente) {
-            $cantidadFacturasRetefuente = intval($facturaRetefuente['cantidad']);
-          }
-          foreach ($facturasVencidas as $key => $facturaVencida) {
-            $cantidadFacturasVencidas = intval($facturaVencida['cantidad']);
-          }
-
-          foreach ($facturasGeneradas as $key => $facturaGenerada) {
-            $cantidadFacturasGeneradas = intval($facturaGenerada['cantidad']);
-          }
-
-          $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          foreach ($sustratos as $key => $sustrato) {
-            $totalSustratos += intval($sustrato['total']);
-          }
-
-          $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos(
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
-
-          foreach ($conceptos as $key => $concepto) {
-            $totalConceptos += intval($concepto['total']);
-          }
           
           $this->index = $pages;
           $this->row = 4;
@@ -302,6 +225,83 @@ class ExcelTemplate {
           
           /* $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES'); */
           if($params->reporteGeneral == true) {
+
+            $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
+              $params->filtros['tipoArchivoTramite'],
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasDevolucionadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasDevolucionadas(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasPagadas(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasVencidas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasVencidas(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasRetefuente = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasRetefuente(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasGeneradas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getFacturasGeneradasByFecha(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
+              $totalTramitesFinalizados += intval($tramiteFinalizado['total']);
+            }
+            foreach ($facturasDevolucionadas as $key => $facturaDevolucionada) {
+              $cantidadFacturasDevolucionadas = intval($facturaDevolucionada['cantidad']);
+            }
+            foreach ($facturasPagadas as $key => $facturaPagada) {
+              $cantidadFacturasPagadas = intval($facturaPagada['cantidad']);
+            }
+            foreach ($facturasRetefuente as $key => $facturaRetefuente) {
+              $cantidadFacturasRetefuente = intval($facturaRetefuente['cantidad']);
+            }
+            foreach ($facturasVencidas as $key => $facturaVencida) {
+              $cantidadFacturasVencidas = intval($facturaVencida['cantidad']);
+            }
+
+            foreach ($facturasGeneradas as $key => $facturaGenerada) {
+              $cantidadFacturasGeneradas = intval($facturaGenerada['cantidad']);
+            }
+
+            $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            foreach ($sustratos as $key => $sustrato) {
+              $totalSustratos += intval($sustrato['total']);
+            }
+
+            $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            foreach ($conceptos as $key => $concepto) {
+              $totalConceptos += intval($concepto['total']);
+            }
             foreach ($tramitesFinalizados as $key => $tramite) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
@@ -522,7 +522,21 @@ class ExcelTemplate {
             );
           }
           else if($params->reporteDetallado == true) {
-            foreach ($params->tramitesFinalizados as $key => $tramite) {
+
+            $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
+              $params->filtros['tipoArchivoTramite'],
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $totalTramitesFinalizados = 0;
+
+            foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
+              $totalTramitesFinalizados += $tramiteFinalizado['valorPagado'];
+            }
+
+            foreach ($tramitesFinalizados as $key => $tramite) {
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'A'.$this->row, $tramite['numero']
               );
@@ -565,7 +579,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->total)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'I'.$this->total, $params->totalTramitesFinalizados
+              'I'.$this->total, $totalTramitesFinalizados
             );
           }
           

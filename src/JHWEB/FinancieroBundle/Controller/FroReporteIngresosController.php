@@ -230,6 +230,12 @@ class FroReporteIngresosController extends Controller
                     'totalTramitesFinalizados' => $totalTramitesFinalizados,
                     'reporteGeneral' =>$reporteGeneral,
                     'reporteDetallado' =>$reporteDetallado,
+                    'filtros' => array(
+                        'tipoArchivoTramite' => $params->tipoArchivoTramite, 
+                        'fechaInicio' => $fechaInicioDatetime,
+                        'fechaFin' => $fechaFinDatetime,
+                        'organismosTransito' => $params->filtros->arrayOrganismosTransito
+                    )
                 );
 
                 if($params->exportarEn == 'EXCEL') {
