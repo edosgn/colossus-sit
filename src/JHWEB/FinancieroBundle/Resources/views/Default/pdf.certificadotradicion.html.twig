@@ -24,8 +24,8 @@
     <p style="font-size:11px;">Vehículo con número de placa: <b>{{ vehiculo.placa.numero }}, </b> {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, {% endif  %}
     <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
     <b>Linea: </b>{{ vehiculo.linea.nombre }},
-    {% if vehiculo.clase  %}<b>Servicio: </b> {{ vehiculo.clase.nombre }}, 
-    {% if vehiculo.carroceria  %}<b>Servicio: </b> {{ vehiculo.carroceria.nombre }}, 
+    {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, 
+    {% if vehiculo.carroceria  %}<b>Carroceria: </b> {{ vehiculo.carroceria.nombre }}, 
     {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }}, 
     <b>No.serie: </b> {{ vehiculo.serie }},
     <b>No.Chasis: </b> {{ vehiculo.chasis }},
