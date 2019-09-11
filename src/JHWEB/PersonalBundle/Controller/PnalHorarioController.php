@@ -265,4 +265,56 @@ class PnalHorarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /* ==================================== */
+
+    /**
+     * Lists all pnalFuncionario entities.
+     *
+     * @Route("/search/fechas", name="pnalhorario_search_fechas")
+     * @Method({"GET", "POST"})
+     */
+    public function recordTimesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $horarios = $em->getRepository('JHWEBPersonalBundle:PnalHorario')->getByFechas(
+                $params->fechaInicial, $params->fechaFinal
+            );
+
+            if ($horarios) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados",
+                    'data' => $horarios,
+                );
+            } else {
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
