@@ -10,6 +10,7 @@ use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
 use JHWEB\VehiculoBundle\Entity\VhloPropietario;
 use JHWEB\VehiculoBundle\Entity\VhloTpTarjetaOperacion;
 use JHWEB\VehiculoBundle\Entity\VhloTpAsignacion;
+use JHWEB\VehiculoBundle\Entity\VhloRestriccion;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion;
@@ -598,7 +599,7 @@ class FroTrteSolicitudController extends Controller
                             break;
     
                         case 'conjunto':
-                            $vehiculo->setModelo($params->nuevoModelo);
+                            //$vehiculo->setModelo($params->nuevoModelo);
                             break;
     
                         case 'repotenciacion':
@@ -835,6 +836,21 @@ class FroTrteSolicitudController extends Controller
                 $vehiculo->setPignorado(true);
 
                 $em->persist($acreedor);
+                $em->flush();
+
+                $restriccion = new VhloRestriccion();
+
+                $fechaRegistro = new \Datetime(date('Y-m-d'));
+                //$fechaVencimiento = $helpers->getFechaVencimiento($fechaRegistro, 1);
+                
+                $restriccion->setTipo('PRENDA');
+                $restriccion->setForanea($limitacion->getId());
+                $restriccion->setFechaRegistro($fechaRegistro);
+                $restriccion->setActivo(true);
+
+                $restriccion->setVehiculo($vehiculo);
+
+                $em->persist($restriccion);
                 $em->flush();
                 
                 $response = array(
