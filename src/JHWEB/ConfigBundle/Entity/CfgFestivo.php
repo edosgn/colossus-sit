@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\ConfigBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CfgFestivo
  *
  * @ORM\Table(name="cfg_festivo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgFestivoRepository")
+ * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgFestivoRepository")
  */
 class CfgFestivo
 {
@@ -73,7 +73,7 @@ class CfgFestivo
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        return $this->fecha;
     }
 
     /**

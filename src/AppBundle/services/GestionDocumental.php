@@ -67,8 +67,8 @@ class GestionDocumental
   {
     $em = $this->em;
 
-    $festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
-    $diasHabiles = 0;
+    $festivos = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->findByActivo(true);
+    $diasHabiles = 0; 
 
     if ($festivos) {
       foreach ($festivos as $key => $value) {
