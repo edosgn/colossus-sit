@@ -142,7 +142,7 @@ class VhloRestriccionController extends Controller
      * @Route("/search/vehiculo", name="vhlolimitacion_search_vehiculo")
      * @Method({"GET", "POST"})
      */
-    public function searchByPlacaAction(Request $request)
+    public function searchByVehiculoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -162,6 +162,72 @@ class VhloRestriccionController extends Controller
                 $restricciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                     array(
                         'vehiculo' => $vehiculo->getId(),
+                        'activo' => true,
+                    )
+                );
+
+                if ($restricciones) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($restricciones).' restricciones encontradas.',
+                        'data' => $restricciones,
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 401,
+                        'message' => 'El vehiculo no presenta restricciones vigentes.',
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No se encuentra ningún vehiculo con el número de placa digitada.',
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca las restricciones activas por vehiculo.
+     *
+     * @Route("/search/vehiculo/tipo", name="vhlolimitacion_search_vehiculo_tipo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByVehiculoAndTipoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                $params->idVehiculo
+            );
+
+            if ($vehiculo) {
+                $restricciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                        'tipo' => $params->tipo,
                         'activo' => true,
                     )
                 );

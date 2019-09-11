@@ -535,14 +535,14 @@ class FroTrteSolicitudController extends Controller
     
                         case 'placa':
                             $placa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgPlaca")->findOneByNumero(
-                                $params->nuevaPlaca
+                                $params->placaNueva
                             );
     
                             if (!$placa) {
                                 $placa = new VhloCfgPlaca();
     
                                 $placa->setNumero(
-                                    strtoupper($params->nuevaPlaca)
+                                    strtoupper($params->placaNueva)
                                 );
 
                                 if ($vehiculo->getPlaca()) {
@@ -550,7 +550,7 @@ class FroTrteSolicitudController extends Controller
                                 }elseif ($vehiculo->getClase()) {
                                     $placa->setTipoVehiculo($vehiculo->getClase()->getTipoVehiculo());
                                 }
-                                $placa->setEstado('ASIGNADA');
+                                $placa->setEstado('UTILIZADA');
                                 $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
     
                                 $em->persist($placa);
