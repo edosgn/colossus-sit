@@ -13,6 +13,7 @@ class PnalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
     //Obtiene la lista de documentos por peticionario
     public function getSearch($params){ 
         $em = $this->getEntityManager();
+        
         if (isset($params->nombre)) { 
         	$dql = "SELECT f
             FROM JHWEBPersonalBundle:PnalFuncionario f, JHWEBUsuarioBundle:UserCiudadano c

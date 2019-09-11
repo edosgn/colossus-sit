@@ -109,15 +109,30 @@ class FroTrteSolicitudController extends Controller
                     )
                 );
             }else{
-                if (isset($params->numeroRunt) || (isset($params->idModulo) && $params->idModulo == 6)) {
+                if (isset($params->numeroRunt) || (isset($params->idModulo) && $params->idModulo == 6) || (count($params->tramitesRealizados) == 1)) {
                     if(isset($params->idModulo) && $params->idModulo == 6){
                         $numeroRuntOld = false;
-                    } else {
-                        //Inicio validación numero RUNT
+                    } elseif (isset($params->numeroRunt)) {
                         $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneByNumeroRunt(
                             $params->numeroRunt
                         );
+                    } else {
+                        $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                            $params->tramitesRealizados[0]->idTramiteFactura
+                        );
 
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                            $numeroRuntOld = false;
+                        } else {
+                            $response = array(
+                                'title' => 'Atención!',
+                                'status' => 'warning',
+                                'code' => 400,
+                                'message' => 'No se puede terminar el registro porque no ha digitado el número RUNT.',
+                            );
+
+                            return $helpers->json($response);
+                        }
                     }
                     
                     if ($numeroRuntOld) {

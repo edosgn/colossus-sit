@@ -400,7 +400,7 @@ class GdDocumentoController extends Controller
 
                 $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
                     new \Datetime($params->documento->fechaLlegada),
-                    $vigencia
+                    $vigencia + 1
                 );
                 $documento->setFechaVencimiento($fechaVencimiento);
                 $documento->setDiasVigencia($vigencia);

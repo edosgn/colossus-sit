@@ -187,15 +187,19 @@ class ExcelTemplate {
         $em = $this->em;
         $pages = 0;
 
+        $cantidadFacturasDevolucionadas = 0;
+        $cantidadFacturasPagadas = 0;
+        $cantidadFacturasRetefuente = 0;
+        $cantidadFacturasVencidas = 0;
+        
+        $totalTramitesFinalizados = 0;
+        $totalConceptos = 0;
+        $totalSustratos = 0;
+
+        $cantidadFacturasGeneradas = 0;
+
         foreach ($params->filtros['organismosTransito'] as $key => $idOrganismoTransito) {
-          # code...
           $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
-          $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
-            $params->filtros['tipoArchivoTramite'],
-            $params->filtros['fechaInicio'],
-            $params->filtros['fechaFin'],
-            [$idOrganismoTransito]
-          );
           
           $this->index = $pages;
           $this->row = 4;
@@ -221,7 +225,84 @@ class ExcelTemplate {
           
           /* $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES'); */
           if($params->reporteGeneral == true) {
-            foreach ($params->tramitesFinalizados as $key => $tramite) {
+
+            $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
+              $params->filtros['tipoArchivoTramite'],
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasDevolucionadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasDevolucionadas(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasPagadas(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasVencidas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasVencidas(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasRetefuente = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findFacturasRetefuente(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $facturasGeneradas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getFacturasGeneradasByFecha(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
+              $totalTramitesFinalizados += intval($tramiteFinalizado['total']);
+            }
+            foreach ($facturasDevolucionadas as $key => $facturaDevolucionada) {
+              $cantidadFacturasDevolucionadas = intval($facturaDevolucionada['cantidad']);
+            }
+            foreach ($facturasPagadas as $key => $facturaPagada) {
+              $cantidadFacturasPagadas = intval($facturaPagada['cantidad']);
+            }
+            foreach ($facturasRetefuente as $key => $facturaRetefuente) {
+              $cantidadFacturasRetefuente = intval($facturaRetefuente['cantidad']);
+            }
+            foreach ($facturasVencidas as $key => $facturaVencida) {
+              $cantidadFacturasVencidas = intval($facturaVencida['cantidad']);
+            }
+
+            foreach ($facturasGeneradas as $key => $facturaGenerada) {
+              $cantidadFacturasGeneradas = intval($facturaGenerada['cantidad']);
+            }
+
+            $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            foreach ($sustratos as $key => $sustrato) {
+              $totalSustratos += intval($sustrato['total']);
+            }
+
+            $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos(
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            foreach ($conceptos as $key => $concepto) {
+              $totalConceptos += intval($concepto['total']);
+            }
+            foreach ($tramitesFinalizados as $key => $tramite) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'A'.$this->row, $tramite['codigo']
@@ -251,7 +332,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'E'.$this->row, $params->totalTramitesFinalizados
+              'E'.$this->row, $totalTramitesFinalizados
             );
             
             //para los sustratos
@@ -269,7 +350,7 @@ class ExcelTemplate {
                     ->setCellValue('D'.$this->rowSustrato, 'VALOR')
                     ->setCellValue('E'.$this->rowSustrato, 'TOTAL');
 
-            foreach ($params->sustratos as $key => $sustrato) {
+            foreach ($sustratos as $key => $sustrato) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'B'.$this->row2,  $sustrato['nombre']
@@ -296,7 +377,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row2)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'E'.$this->row2, $params->totalSustratos
+              'E'.$this->row2, $totalSustratos
             );
               
             //para los conceptos
@@ -315,7 +396,7 @@ class ExcelTemplate {
                     ->setCellValue('D'.$this->rowConcepto, 'VALOR')
                     ->setCellValue('E'.$this->rowConcepto, 'TOTAL');
 
-            foreach ($params->conceptos as $key => $concepto) {
+            foreach ($conceptos as $key => $concepto) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'A'.$this->row3,  $concepto['id']
@@ -342,7 +423,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->mergeCells('A'.$this->totalIngresosSubdetra . ':'.'D'. $this->totalIngresosSubdetra);
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)
-              ->setCellValue('A'.$this->row3, 'TOTAL SUSTRATOS')
+              ->setCellValue('A'.$this->row3, 'TOTAL CONCEPTOS')
               ->setCellValue('A'.$this->totalIngresosSubdetra, 'TOTAL INGRESOS SUBDETRA');
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row3)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->row3)->applyFromArray($this->styleBorder);
@@ -352,11 +433,11 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalIngresosSubdetra)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'E'.$this->row3, $params->totalConceptos
+              'E'.$this->row3, $totalConceptos
             );
 
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'E'.$this->totalIngresosSubdetra, $params->totalTramitesFinalizados - $params->totalSustratos
+              'E'.$this->totalIngresosSubdetra, $totalTramitesFinalizados - $totalSustratos
             );
 
             //para contadores totales
@@ -373,7 +454,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalDevoluciones)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'C'.$this->totalDevoluciones, $params->cantidadFacturasDevolucionadas
+              'C'.$this->totalDevoluciones, $cantidadFacturasDevolucionadas
             );
 
             //devoluciones retefuente
@@ -389,7 +470,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalDevolucionesRetefuente)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'C'.$this->totalDevolucionesRetefuente, $params->cantidadFacturasRetefuente
+              'C'.$this->totalDevolucionesRetefuente, $cantidadFacturasRetefuente
             );
 
             //total pagadas
@@ -398,14 +479,14 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->mergeCells('C'.$this->totalPagadas.':'.'E'.$this->totalPagadas);
 
             $this->objPHPExcel->setActiveSheetIndex($this->index)
-              ->setCellValue('A'.$this->totalPagadas, 'CANTIDAD TOTAL FACTURAS PAGADAS');
+              ->setCellValue('A'.$this->totalPagadas, 'CANTIDAD FACTURAS PAGADAS');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalPagadas)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalPagadas . ':'.'E'.$this->totalPagadas)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalPagadas)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'C'.$this->totalPagadas, $params->cantidadFacturasPagadas
+              'C'.$this->totalPagadas, $cantidadFacturasPagadas
             );
 
             //total vencidas
@@ -414,14 +495,14 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->mergeCells('C'.$this->totalVencidas.':'.'E'.$this->totalVencidas);
 
             $this->objPHPExcel->setActiveSheetIndex($this->index)
-              ->setCellValue('A'.$this->totalVencidas, 'CANTIDAD TOTAL FACTURAS VENCIDAS');
+              ->setCellValue('A'.$this->totalVencidas, 'CANTIDAD FACTURAS VENCIDAS');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalVencidas)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalVencidas . ':'.'E'.$this->totalVencidas)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalVencidas)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'C'.$this->totalVencidas, $params->cantidadFacturasVencidas
+              'C'.$this->totalVencidas, $cantidadFacturasVencidas
             );
 
             //total generadas
@@ -430,18 +511,32 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->mergeCells('C'.$this->totalGeneradas.':'.'E'.$this->totalGeneradas);
 
             $this->objPHPExcel->setActiveSheetIndex($this->index)
-              ->setCellValue('A'.$this->totalGeneradas, 'CANTIDAD TOTAL FACTURAS GENERADAS');
+              ->setCellValue('A'.$this->totalGeneradas, 'CANTIDAD FACTURAS GENERADAS');
 
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalGeneradas)->getFont()->setBold(true);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalGeneradas . ':'.'E'.$this->totalGeneradas)->applyFromArray($this->styleBorder);
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->totalGeneradas)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'C'.$this->totalGeneradas, $params->cantidadFacturasGeneradas
+              'C'.$this->totalGeneradas, $cantidadFacturasGeneradas
             );
           }
           else if($params->reporteDetallado == true) {
-            foreach ($params->tramitesFinalizados as $key => $tramite) {
+
+            $tramitesFinalizados = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesFinalizados(
+              $params->filtros['tipoArchivoTramite'],
+              $params->filtros['fechaInicio'],
+              $params->filtros['fechaFin'],
+              [$idOrganismoTransito]
+            );
+
+            $totalTramitesFinalizados = 0;
+
+            foreach ($tramitesFinalizados as $key => $tramiteFinalizado) {
+              $totalTramitesFinalizados += $tramiteFinalizado['valorPagado'];
+            }
+
+            foreach ($tramitesFinalizados as $key => $tramite) {
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'A'.$this->row, $tramite['numero']
               );
@@ -484,7 +579,7 @@ class ExcelTemplate {
             $this->objPHPExcel->getActiveSheet()->getStyle('A'.$this->total)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'I'.$this->total, $params->totalTramitesFinalizados
+              'I'.$this->total, $totalTramitesFinalizados
             );
           }
           

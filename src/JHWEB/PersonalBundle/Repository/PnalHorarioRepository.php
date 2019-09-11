@@ -10,4 +10,23 @@ namespace JHWEB\PersonalBundle\Repository;
  */
 class PnalHorarioRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la lista de funcionarios asignados por cargo
+    public function getByFechas($fechaInicial, $fechaFinal){   
+        $em = $this->getEntityManager();
+
+    	$dql = "SELECT h
+        FROM JHWEBPersonalBundle:PnalFuncionario f, 
+        JHWEBPersonalBundle:PnalHorario h
+        WHERE h.funcionario = f.id
+        AND h.fecha BETWEEN :fechaInicial AND :fechaFinal
+        AND f.activo = true";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaInicial' => new \Datetime($fechaInicial),
+            'fechaFinal' => new \Datetime($fechaFinal),
+        ));
+
+        return $consulta->getResult();
+    }
 }

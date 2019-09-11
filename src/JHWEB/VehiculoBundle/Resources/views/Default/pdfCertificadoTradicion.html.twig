@@ -15,9 +15,9 @@
     <p style="font-size:11px;">Vehículo con número de placa: <b>{{ vehiculo.placa.numero }}, </b> {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, {% endif  %}
     <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
     <b>Linea: </b>{{ vehiculo.linea.nombre }},
+    <b>Carrocería: </b> {{ vehiculo.carroceria.nombre }},
     <b>No.serie: </b> {{ vehiculo.serie }},
     <b>No.Chasis: </b> {{ vehiculo.chasis }},
-    <b>Carrocería: </b> {{ vehiculo.carroceria.nombre }}.
     <b>Cilindraje: </b> {{ vehiculo.cilindraje }},
     <b>Pasajeros: </b> {{ vehiculo.numeroPasajeros }},
     {% if vehiculo.color  %}<b>Color: </b> {{ vehiculo.color.nombre }}, {% endif  %}            

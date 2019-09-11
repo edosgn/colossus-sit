@@ -227,12 +227,6 @@ class UserEmpresaTransporteController extends Controller
                 $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
                 $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
                 $empresaTransporte->setCapacidadDisponible($params->capacidadDisponible);
-
-                var_dump($params->capacidadMinima);
-                var_dump($params->capacidadMaxima);
-                var_dump($params->capacidadDisponible);
-                var_dump($params->capacidadUtilizada);
-                die();
                 $empresaTransporte->setDobleCabina($params->dobleCabina);
                 
                 $em->flush();

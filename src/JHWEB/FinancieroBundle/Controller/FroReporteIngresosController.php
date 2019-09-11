@@ -91,7 +91,7 @@ class FroReporteIngresosController extends Controller
                     'ciudadano' => $ciudadano->getId(),
                 )
             );
-                    
+            
             if($params->tipoArchivoTramite == 'GENERAL') {
                 $reporteGeneral = true;
                 $reporteDetallado = false;
@@ -127,13 +127,13 @@ class FroReporteIngresosController extends Controller
                     $cantidadFacturasVencidas = intval($facturaVencida['cantidad']);
                 }
                 //================================================================para sustratos ====================================================================
-                $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos($fechaInicioDatetime, $fechaFinDatetime);
+                $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos($fechaInicioDatetime, $fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
                 
                 foreach ($sustratos as $key => $sustrato) {
                     $totalSustratos += intval($sustrato['total']);
                 }
 
-                $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos($fechaInicioDatetime, $fechaFinDatetime);
+                $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos($fechaInicioDatetime, $fechaFinDatetime, $params->filtros->arrayOrganismosTransito);
 
                 foreach ($conceptos as $key => $concepto) {
                     $totalConceptos += intval($concepto['total']);
@@ -230,6 +230,12 @@ class FroReporteIngresosController extends Controller
                     'totalTramitesFinalizados' => $totalTramitesFinalizados,
                     'reporteGeneral' =>$reporteGeneral,
                     'reporteDetallado' =>$reporteDetallado,
+                    'filtros' => array(
+                        'tipoArchivoTramite' => $params->tipoArchivoTramite, 
+                        'fechaInicio' => $fechaInicioDatetime,
+                        'fechaFin' => $fechaFinDatetime,
+                        'organismosTransito' => $params->filtros->arrayOrganismosTransito
+                    )
                 );
 
                 if($params->exportarEn == 'EXCEL') {
@@ -244,7 +250,7 @@ class FroReporteIngresosController extends Controller
                             )
                         );
                     }
-            }
+                }
         } else {
             $response = array(
                 'status' => 'error',
