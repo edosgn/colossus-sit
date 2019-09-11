@@ -97,9 +97,6 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             $dql .= " GROUP BY ftp.tramite";
         }
 
-        /* var_dump($dql);
-        die(); */
-
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
@@ -129,20 +126,24 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND ftp.tramite = ft.id";
 
         if ($arrayOrganismosTransito) {
-            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                if($keyOrganismoTransito == 0) {
-                    $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito . "'";
-                } else {
-                    $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito . "'";
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
                 }
+            } else {
+                $condicion .= " fts.organismoTransito = '" . $idOrganismoTransito. "'";
             }
         }
 
-        $condicion .=  " GROUP BY ftp.tramite";
-
         if ($condicion) {
-            $dql .= $condicion;
+            $dql .=  ' AND (' . $condicion . ')';
         }
+
+        $condicion .=  " GROUP BY ftp.tramite";
 
         $consulta = $em->createQuery($dql);
 
@@ -165,17 +166,21 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
 
         if ($arrayOrganismosTransito) {
-            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                if($keyOrganismoTransito == 0) {
-                    $condicion .= " AND ff.organismoTransito = '" . $idOrganismoTransito . "'";
-                } else {
-                    $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito . "'";
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
                 }
+            } else {
+                $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
             }
         }
 
         if ($condicion) {
-            $dql .= $condicion;
+            $dql .=  ' AND (' . $condicion . ')';
         }
 
         $consulta = $em->createQuery($dql);
@@ -208,17 +213,21 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND ft.codigo = 2";
 
         if ($arrayOrganismosTransito) {
-            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                if($keyOrganismoTransito == 0) {
-                    $condicion .= " AND ff.organismoTransito = '" . $idOrganismoTransito . "'";
-                } else {
-                    $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito . "'";
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
                 }
+            } else {
+                $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
             }
         }
 
         if ($condicion) {
-            $dql .= $condicion;
+            $dql .=  ' AND (' . $condicion . ')';
         }
 
         $consulta = $em->createQuery($dql);
@@ -250,17 +259,21 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND ftp.tramite = ft.id";
 
         if ($arrayOrganismosTransito) {
-            foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                if($keyOrganismoTransito == 0) {
-                    $condicion .= " AND ff.organismoTransito = '" . $idOrganismoTransito . "'";
-                } else {
-                    $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito . "'";
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
                 }
+            } else {
+                $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
             }
         }
 
         if ($condicion) {
-            $dql .= $condicion;
+            $dql .=  ' AND (' . $condicion . ')';
         }
 
         $consulta = $em->createQuery($dql);
@@ -373,6 +386,43 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'fechaInicio' => $fechaInicio,
             'fechaFin' => $fechaFin,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    public function getFacturasGeneradasByFecha($fechaInicioDatetime, $fechaFinDatetime, $arrayOrganismosTransito) {
+        $em = $this->getEntityManager();
+
+        $condicion = null; 
+
+        $dql = "SELECT COUNT(ff.id) as cantidad
+            FROM JHWEBFinancieroBundle:FroFactura ff
+            WHERE ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
+
+        if ($arrayOrganismosTransito) {
+            if(count($arrayOrganismosTransito) > 0) {
+                foreach ($arrayOrganismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
+                    if($keyOrganismoTransito == 0) {
+                        $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    } else {
+                        $condicion .= " OR ff.organismoTransito = '" . $idOrganismoTransito. "'";
+                    }
+                }
+            } else {
+                $condicion .= " ff.organismoTransito = '" . $idOrganismoTransito. "'";
+            }
+        }
+
+        if ($condicion) {
+            $dql .=  ' AND (' . $condicion . ')';
+        }
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
         ));
 
         return $consulta->getResult();
