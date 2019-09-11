@@ -99,6 +99,13 @@ class GdDocumento
     private $url;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="url_finalizado", type="string", length=255, nullable=true)
+     */
+    private $urlFinalizado;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_llegada", type="datetime", nullable=true)
@@ -236,7 +243,7 @@ class GdDocumento
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -264,9 +271,6 @@ class GdDocumento
      */
     public function getFechaRegistro()
     {
-        if ($this->fechaRegistro) {
-            return $this->fechaRegistro->format('d/m/Y');
-        }
         return $this->fechaRegistro;
     }
 
@@ -435,9 +439,6 @@ class GdDocumento
      */
     public function getFechaVencimiento()
     {
-        if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('d/m/Y');
-        }
         return $this->fechaVencimiento;
     }
 
@@ -511,6 +512,30 @@ class GdDocumento
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set urlFinalizado
+     *
+     * @param string $urlFinalizado
+     *
+     * @return GdDocumento
+     */
+    public function setUrlFinalizado($urlFinalizado)
+    {
+        $this->urlFinalizado = $urlFinalizado;
+
+        return $this;
+    }
+
+    /**
+     * Get urlFinalizado
+     *
+     * @return string
+     */
+    public function getUrlFinalizado()
+    {
+        return $this->urlFinalizado;
     }
 
     /**
