@@ -195,4 +195,24 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getByFechasForFile($fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, 
+            JHWEBVehiculoBundle:VhloPropietario vp,
+            WHERE vp.vehiculo = v.id
+            AND v.activo = true
+            AND vp.activo = true";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+        
+        return $consulta->getResult();
+    }
 }

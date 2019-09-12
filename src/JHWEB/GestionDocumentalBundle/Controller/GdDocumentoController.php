@@ -392,20 +392,6 @@ class GdDocumentoController extends Controller
                 }
 
                 $fechaActual = new \Datetime(date('Y-m-d'));
-                if ($params->documento->vigencia) {
-                    $vigencia = $params->documento->vigencia;
-                }else{
-                    $vigencia = $tipoCorrespondencia->getDiasVigencia();
-                }
-
-                $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
-                    new \Datetime($params->documento->fechaLlegada),
-                    $vigencia + 1
-                );
-                $documento->setFechaVencimiento($fechaVencimiento);
-                $documento->setDiasVigencia($vigencia);
-                $documento->setNumeroCarpeta($params->documento->numeroCarpeta);
-
 
                 if ($params->documento->numeroOficio) {
                     $documento->setNumeroOficio(
@@ -449,6 +435,20 @@ class GdDocumentoController extends Controller
                     );
                     $documento->setTipoCorrespondencia($tipoCorrespondencia);
                 }
+
+                if ($params->documento->vigencia) {
+                    $vigencia = $params->documento->vigencia;
+                }else{
+                    $vigencia = $tipoCorrespondencia->getDiasVigencia();
+                }
+
+                $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
+                    new \Datetime($params->documento->fechaLlegada),
+                    $vigencia + 1
+                );
+                $documento->setFechaVencimiento($fechaVencimiento);
+                $documento->setDiasVigencia($vigencia);
+                $documento->setNumeroCarpeta($params->documento->numeroCarpeta);
 
                 $file = $request->files->get('file');
                

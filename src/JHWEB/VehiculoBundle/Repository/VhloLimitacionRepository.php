@@ -55,7 +55,7 @@ class VhloLimitacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-        //Obtiene el vehículo según un numero de placa y módulo
+    //Obtiene el vehículo según un numero de placa y módulo
     public function getByModulo($moduloId)
     {
         $em = $this->getEntityManager();

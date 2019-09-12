@@ -15,9 +15,10 @@
                         <td>Tipo</td>
                         <td>Rango inicio</td>
                         <td>Rango fin</td>
-                        <td>Asignados</td>
+                        <td>Usados</td>
                         <td>Anulados</td>
                         <td>Disponibles</td>
+                        <td>Asignados</td>
                     </tr>
                     {% for lote in loteArray %}
                         <tr>
@@ -27,6 +28,7 @@
                             <td>{{ lote.asignadosLote }}</td>
                             <td>{{ lote.anuladosLote }}</td>
                             <td>{{ lote.disponiblesLote }}</td>
+                            <td>{{ lote.totalAsignados }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -34,6 +36,7 @@
                         <td>{{ asignadosLoteTotal }}</td>
                         <td>{{ anuladosLoteTotal }}</td>
                         <td>{{ disponiblesLoteTotal }}</td>
+                        <td>{{ totalAsignados }}</td>
                     </tr>
                 </table>
             {% endif %}     
@@ -46,7 +49,7 @@
                         <td>Disponilbes</td>
                         <td>Anulados</td>
                         <td>Valor unitario</td>
-                        <td>Utilizado</td>
+                        <td>Usados</td>
                         <td>SubTotal</td>
                     </tr>
                     {% for tipo in tiposArray %}
@@ -137,13 +140,15 @@
             <table border="1" cellpadding="5">
                 <tr>
                     <td>Nombre</td>
-                    <td>Cantidad Asignados</td> 
+                    <td>Asignados</td>
+                    <td>Usados</td> 
                     <td>Valor</td> 
                 </tr> 
                 {% for totalOrganismo in totalOrganismos %}
                     {% if totalOrganismo.sustratosCantidad != 0 %}
                         <tr>
                             <td>{{ totalOrganismo.nombreOrganismo }}</td>
+                            <td>{{ totalOrganismo.insumosTotal }}</td>
                             <td>{{ totalOrganismo.sustratosCantidad }}</td>
                             <td>{{ totalOrganismo.valorSede }}</td>
                         </tr>
@@ -151,11 +156,12 @@
                 {% endfor %}
                 <tr>
                     <td colspan="1">Total</td>
+                    <td>{{ totalAsignados }}</td>
                     <td>{{ totalSede }}</td>
                     <td>{{ valorTotalSede }}</td>
                 </tr>    
                 <tr>
-                    <td colspan="2">Total consignar</td>
+                    <td colspan="3">Total consignar</td>
                     <td>{{ totalConsignar }}</td>
                 </tr>    
             </table>

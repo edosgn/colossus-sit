@@ -252,7 +252,7 @@ class VhloCfgPlacaController extends Controller
             );
 
         }else{
-            $reponse = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Autorización no válida",
@@ -304,14 +304,14 @@ class VhloCfgPlacaController extends Controller
 
             if($placas){
                 $response = array(
-                        'title' => 'Perfecto!',
-                        'status' => 'success',
-                        'code' => 200,
-                        'data' => $placas,
-                        'message' => count($placas).' registros encontrados.',
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'data' => $placas,
+                    'message' => count($placas).' registros encontrados.',
                 );
             }else{
-                $reponse = array(
+                $response = array(
                     'title' => 'Atención!',
                     'status' => 'warning',
                     'code' => 400,
@@ -319,7 +319,7 @@ class VhloCfgPlacaController extends Controller
                 );
             }
         }else{
-            $reponse = array(
+            $response = array(
                 'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
@@ -370,7 +370,7 @@ class VhloCfgPlacaController extends Controller
                     'message' => "Placa ha sido configurada en estado ".$params->estado." con éxito.",
                 );
             }else{
-                $reponse = array(
+                $response = array(
                     'title' => 'Atención!',
                     'status' => 'warning',
                     'code' => 400,
@@ -378,7 +378,7 @@ class VhloCfgPlacaController extends Controller
                 );
             }
         }else{
-            $reponse = array(
+            $response = array(
                 'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
@@ -537,6 +537,7 @@ class VhloCfgPlacaController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+
             $json = $request->get("data", null);
             $params = json_decode($json);
 
@@ -556,7 +557,7 @@ class VhloCfgPlacaController extends Controller
                     'message' => count($placas).' registros encontrados.',
                 );
             }else{
-                $reponse = array(
+                $response = array(
                     'title' => 'Atención!',
                     'status' => 'warning',
                     'code' => 400,
@@ -564,13 +565,77 @@ class VhloCfgPlacaController extends Controller
                 );
             }
         }else{
-            $reponse = array(
+            $response = array(
                 'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
             );
         }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Reporte de placas por tramites.
+     *
+     * @Route("/report/tramites", name="vhlocfgplaca_report_tramites")
+     * @Method({"GET", "POST"})
+     */
+    public function reportByTramitesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
+
+            if ($fechaInicial <= $fechaFinal) {
+                $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->getByTramiteAndFechas(
+                    $fechaInicial,
+                    $fechaFinal
+                );
+    
+                if($placas) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($placas).' placas encomtrada(s).', 
+                        'data' => $placas, 
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'No hay registros para las fechas estipuladas.', 
+                    );
+                }            
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'La fecha inicial no puede ser mayer a que la fecha final.', 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida.', 
+            );
+        }
+
         return $helpers->json($response);
     }
 }

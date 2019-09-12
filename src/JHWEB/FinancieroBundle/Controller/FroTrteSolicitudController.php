@@ -1108,16 +1108,18 @@ class FroTrteSolicitudController extends Controller
        
         $em = $this->getDoctrine()->getManager();
 
-        foreach ($params->retenciones as $key => $retencion) {
-            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
-               $retencion->propietario->id
-            );
-
-            if ($propietario) {
-                $propietario->setFechaFinal(new \DateTime(date('Y-m-d')));
-                $propietario->setActivo(false);
-
-                $em->flush();
+        if($params->retenciones) {
+            foreach ($params->retenciones as $key => $retencion) {
+                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
+                   $retencion->propietario->id
+                );
+    
+                if ($propietario) {
+                    $propietario->setFechaFinal(new \DateTime(date('Y-m-d')));
+                    $propietario->setActivo(false);
+    
+                    $em->flush();
+                }
             }
         }
 
@@ -1151,9 +1153,13 @@ class FroTrteSolicitudController extends Controller
             }
 
             $propietarioNew->setFechaInicial(new \DateTime(date('Y-m-d')));
-            $propietarioNew->setVehiculo($propietario->getVehiculo());
             $propietarioNew->setPermiso($params->permiso);
             $propietarioNew->setActivo(true);
+            
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                $params->idVehiculo
+            );
+            $propietarioNew->setVehiculo($vehiculo);
 
             $em->persist($propietarioNew);
             $em->flush();
@@ -2569,6 +2575,7 @@ class FroTrteSolicitudController extends Controller
 
         return $helpers->json($response);
     }
+
     /**
      * Busca tramites realizados de tipo cambio de servicio en RNA.
      *
@@ -2614,5 +2621,109 @@ class FroTrteSolicitudController extends Controller
             );
         }
         return $helpers->json($response);
+    }
+
+    /**
+     * Crear archivo plano según filtros.
+     *
+     * @Route("/create/file", name="vhlovehiculo_create_file")
+     * @Method({"GET", "POST"})
+     */
+    public function createFileAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $fechaDesde = new \Datetime($params->fechaDesde);
+            $fechaHasta = new \Datetime($params->fechaHasta);
+            
+            if($params->tipoReporte == 1) {
+                $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFechasForFile(
+                    $fechaDesde,
+                    $fechaHasta
+                );
+
+                //TTAMVEHI.DAT
+
+                if ($vehiculos) {
+                    # code...
+                    /*foreach ($vehiculos as $key => $vehiculo) {
+                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                            array(
+                                'vehiculo' => $vehiculo->getVehiculo()->getId(),
+                                'activo' => true
+                            )
+                        );
+    
+                        $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                            array(
+                                'propietario' => $propietario->getId(),
+                                'activo' => true
+                            )
+                        );
+    
+                        $arrayVehiculos [] = array(
+                            'organismoTransito' => $vehiculo->getVehiculo()->getOrganismoTransito()->getNombre(),
+                            'placa' => $vehiculo->getVehiculo()->getPlaca()->getNumero(),
+                            'marca' => $vehiculo->getVehiculo()->getLinea()->getMarca()->getNombre(),
+                            'linea' => $vehiculo->getVehiculo()->getLinea()->getNombre(),
+                            'clase' => $vehiculo->getVehiculo()->getClase()->getNombre(),
+                            'color' => $vehiculo->getVehiculo()->getColor()->getNombre(),
+                            'servicio' => $vehiculo->getVehiculo()->getServicio()->getNombre(),
+                            'carroceria' => $vehiculo->getVehiculo()->getCarroceria()->getNombre(),
+                            'modalidadTransporte' => $vehiculo->getVehiculo()->getModalidadTransporte()->getNombre(),
+                            'cilindraje' => $vehiculo->getVehiculo()->getCilindraje(),
+                            'modelo' => $vehiculo->getVehiculo()->getModelo(),
+                            'motor' => $vehiculo->getVehiculo()->getMotor(),
+                            'chasis' => $vehiculo->getVehiculo()->getChasis(),
+                            'serie' => $vehiculo->getVehiculo()->getSerie(),
+                            'capacidadCarga' => $vehiculo->getVehiculo()->getCapacidadCarga(),
+                            'numeroPasajeros' => $vehiculo->getVehiculo()->getNumeroPasajeros(),
+                            'fechaMatricula' => $vehiculo->getFecha(),
+                            'licenciaTransito' => !empty($licenciaTransito) ? $licenciaTransito: null,
+                            'numeroFactura' => 'N',
+                            'combustible' => $vehiculo->getVehiculo()->getCombustible()->getCodigo(),
+                            'estado' => $vehiculo->getVehiculo()->getActivo(),
+                        );
+                    }*/
+                }
+                
+
+                return true;
+            }
+            else if($params->tipoReporte == 2){
+            }
+            else if($params->tipoReporte == 3) {
+            }
+            else if($params->tipoReporte == 4) {
+            }
+            else if($params->tipoReporte == 5) {
+            }
+            else if($params->tipoReporte == 6) {
+            }
+            else if($params->tipoReporte == 7) {
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No hay registros para los filtros estipulados.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida.', 
+            );
+        }
     }
 }
