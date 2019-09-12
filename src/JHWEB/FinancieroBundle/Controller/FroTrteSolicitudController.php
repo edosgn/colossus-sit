@@ -10,6 +10,7 @@ use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
 use JHWEB\VehiculoBundle\Entity\VhloPropietario;
 use JHWEB\VehiculoBundle\Entity\VhloTpTarjetaOperacion;
 use JHWEB\VehiculoBundle\Entity\VhloTpAsignacion;
+use JHWEB\VehiculoBundle\Entity\VhloRestriccion;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion;
@@ -535,14 +536,14 @@ class FroTrteSolicitudController extends Controller
     
                         case 'placa':
                             $placa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgPlaca")->findOneByNumero(
-                                $params->nuevaPlaca
+                                $params->placaNueva
                             );
     
                             if (!$placa) {
                                 $placa = new VhloCfgPlaca();
     
                                 $placa->setNumero(
-                                    strtoupper($params->nuevaPlaca)
+                                    strtoupper($params->placaNueva)
                                 );
 
                                 if ($vehiculo->getPlaca()) {
@@ -550,7 +551,7 @@ class FroTrteSolicitudController extends Controller
                                 }elseif ($vehiculo->getClase()) {
                                     $placa->setTipoVehiculo($vehiculo->getClase()->getTipoVehiculo());
                                 }
-                                $placa->setEstado('ASIGNADA');
+                                $placa->setEstado('UTILIZADA');
                                 $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
     
                                 $em->persist($placa);
@@ -598,7 +599,7 @@ class FroTrteSolicitudController extends Controller
                             break;
     
                         case 'conjunto':
-                            $vehiculo->setModelo($params->nuevoModelo);
+                            //$vehiculo->setModelo($params->nuevoModelo);
                             break;
     
                         case 'repotenciacion':
@@ -835,6 +836,21 @@ class FroTrteSolicitudController extends Controller
                 $vehiculo->setPignorado(true);
 
                 $em->persist($acreedor);
+                $em->flush();
+
+                $restriccion = new VhloRestriccion();
+
+                $fechaRegistro = new \Datetime(date('Y-m-d'));
+                //$fechaVencimiento = $helpers->getFechaVencimiento($fechaRegistro, 1);
+                
+                $restriccion->setTipo('PRENDA');
+                $restriccion->setForanea($limitacion->getId());
+                $restriccion->setFechaRegistro($fechaRegistro);
+                $restriccion->setActivo(true);
+
+                $restriccion->setVehiculo($vehiculo);
+
+                $em->persist($restriccion);
                 $em->flush();
                 
                 $response = array(
@@ -2551,6 +2567,50 @@ class FroTrteSolicitudController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+    /**
+     * Busca tramites realizados de tipo cambio de servicio en RNA.
+     *
+     * @Route("/search/cambio/servicio", name="frotrtesolicitud_search_cambio_servicio")
+     * @Method("POST")
+     */
+    public function searchByCambioServicioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramite = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findCambioServicioByVehiculo($params->idVehiculo);
+
+            if($tramite){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "El vehículo si realizo un cambio de servico en RNA, tiene permisos para generar la resolución por cambio de servicio.",
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehículo aún no realiza un cambio de servico en RNA, no tiene permisos para generar la resolución por cambio de servicio.",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
         return $helpers->json($response);
     }
 }

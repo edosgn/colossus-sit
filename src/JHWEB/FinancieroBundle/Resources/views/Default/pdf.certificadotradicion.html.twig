@@ -4,10 +4,6 @@
         .separator{
             margin-top: 5px;
         }
-        .table td{
-            max-height: 15px;
-            padding: 2px;
-        }
     </style>
   </header>
   <body style="font-size:12px">
@@ -21,27 +17,26 @@
         <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>    
     </h2>
 
-    <p style="font-size:11px;">Vehículo con número de placa: <b>{{ vehiculo.placa.numero }}, </b> {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, {% endif  %}
+    <p style="font-size:11px;">Vehículo con número de placa:
     <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
     <b>Linea: </b>{{ vehiculo.linea.nombre }},
-    {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, 
-    {% if vehiculo.carroceria  %}<b>Carroceria: </b> {{ vehiculo.carroceria.nombre }}, 
-    {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }}, 
+    {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }},{% endif  %}
+    {% if vehiculo.carroceria  %}<b>Carroceria: </b> {{ vehiculo.carroceria.nombre }},{% endif  %}
+    {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }},{% endif  %}
+    {% if vehiculo.placa  %}<b>Placa: {{ vehiculo.placa.numero }},</b>{% endif  %}
     <b>No.serie: </b> {{ vehiculo.serie }},
     <b>No.Chasis: </b> {{ vehiculo.chasis }},
-    <b>Carrocería: </b> {{ vehiculo.carroceria.nombre }}.
     <b>Cilindraje: </b> {{ vehiculo.cilindraje }},
     <b>Pasajeros: </b> {{ vehiculo.numeroPasajeros }},
     {% if vehiculo.color  %}<b>Color: </b> {{ vehiculo.color.nombre }}, {% endif  %}            
-    {% endif  %} <b>Modelo: <b> {{ vehiculo.modelo }}, <b>No.motor: <b> {{ vehiculo.motor }}
+    <b>Modelo: <b> {{ vehiculo.modelo }}, <b>No.motor: <b> {{ vehiculo.motor }}
     </p>
-
  
     <div class="separator"></div>
     {% if propietarios and propietarios|length > 0 %}
     <table border="1" cellpadding="3" style="font-size:11px;">
         <tr>
-            <th colspan="3" align="center">
+            <th colspan="4" align="center">
                 <b>PROPIETARIOS</b>
             </th>
         </tr>
@@ -64,13 +59,7 @@
                         {{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }} {{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}
                     </td>
                     <td>
-                        <b>Fecha inicial:<b>
-                        {{ propietario.fechaInicial|date('d/m/Y') }}
-                        {% if propietario.fechaFinal %}
-                        <br>
-                        <b>Fecha final:<b>
-                        {{ propietario.fechaFinal|date('d/m/Y') }}
-                        {% endif %}
+                        
                     </td>
                 </tr>
             {% endif %}

@@ -128,12 +128,11 @@ class VhloLimitacionController extends Controller
                         $restriccion = new VhloRestriccion();
 
                         $fechaRegistro = new \Datetime(date('Y-m-d'));
-                        $fechaVencimiento = $helpers->getFechaVencimiento($fechaRegistro, 1);
+                        //$fechaVencimiento = $helpers->getFechaVencimiento($fechaRegistro, 1);
                         
                         $restriccion->setTipo('LIMITACION');
                         $restriccion->setForanea($limitacion->getId());
                         $restriccion->setFechaRegistro($fechaRegistro);
-                        $restriccion->setFechaRegistro($fechaVencimiento);
                         $restriccion->setActivo(true);
 
                         $restriccion->setVehiculo($vehiculo);

@@ -522,4 +522,55 @@ class VhloCfgPlacaController extends Controller
         
         return $helpers->json($response);
     }
+
+    /**
+     * Buscar por organismo de transito y estado.
+     *
+     * @Route("/search/organismotransito/estado", name="vhlocfgplaca_search_organismotransito_estado")
+     * @Method("POST")
+     */
+    public function searchByOrganismoTransitoAndEstadoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findBy(
+                array(
+                    'organismoTransito' => $params->idOrganismoTransito,
+                    'estado' => $params->estado,
+                )
+            );
+
+            if($placas){
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'data' => $placas,
+                    'message' => count($placas).' registros encontrados.',
+                );
+            }else{
+                $reponse = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.",
+                );
+            }
+        }else{
+            $reponse = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

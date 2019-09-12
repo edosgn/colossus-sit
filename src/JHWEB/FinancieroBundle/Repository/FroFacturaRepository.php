@@ -567,4 +567,29 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    /*=============================== busqueda de trmite realizado cambio de servicio por id de vehiculo*/
+    public function findCambioServicioByVehiculo($idVehiculo) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite ft,
+            JHWEBFinancieroBundle:FroTrtePrecio tp,
+            JHWEBFinancieroBundle:FroTramite t,
+
+            WHERE  fts.vehiculo = :idVehiculo
+            AND fts.tramiteFactura = ft.id
+            AND ft.precio = tp.id
+            AND tp.tramite = 6";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }
