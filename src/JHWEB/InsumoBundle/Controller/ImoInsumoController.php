@@ -587,7 +587,7 @@ class ImoInsumoController extends Controller
             $valorTotalSede = 0;
             
             $organismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findBySede(1);
-            
+            $totalAsignados=0;
             foreach ($organismosTransito as $key => $organismoTransito) {
                 $valorSede = 0;
 
@@ -595,6 +595,12 @@ class ImoInsumoController extends Controller
                     array(
                         'organismoTransito' =>  $organismoTransito->getId(),
                         'estado' => 'ASIGNADO'
+                    )
+                );
+
+                $insumosTotal = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
+                    array(
+                        'organismoTransito' =>  $organismoTransito->getId(),
                     )
                 );
 
@@ -617,12 +623,14 @@ class ImoInsumoController extends Controller
                     }
                 }
 
-                $valorTotalSede += $valorSede;
+                $valorTotalSede = $valorTotalSede + $valorSede;
+                $totalAsignados = $totalAsignados + COUNT($insumosTotal);
 
                 $totalOrganismos[] = array(
                     'nombreOrganismo' => $organismoTransito->getNombre(),
                     'sustratosCantidad' => COUNT($insumos),
-                    'valorSede' => $valorTotalSede, 
+                    'insumosTotal' => COUNT($insumosTotal),
+                    'valorSede' => $valorSede, 
                 );
 
             }
@@ -636,6 +644,7 @@ class ImoInsumoController extends Controller
                 'valorTotalSede' => $valorTotalSede, 
                 'totalConsignar' => $totalConsignar,
                 'funcionario' => $funcionario,
+                'totalAsignados' => $totalAsignados,
             )); 
         }else{
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
@@ -678,6 +687,7 @@ class ImoInsumoController extends Controller
             $disponiblesLoteTotal=0;
             $anuladosLoteTotal=0;
             $asignadosLoteTotal=0;
+            $totalAsignados=0;
             
             foreach ($lotesOrganismo as $key => $loteOrganismo) {
                 foreach ($insumos as $key => $insumo) {
@@ -702,7 +712,8 @@ class ImoInsumoController extends Controller
                 $disponiblesLoteTotal=$disponiblesLoteTotal + COUNT($disponiblesLote);
                 $anuladosLoteTotal=$anuladosLoteTotal + COUNT($anuladosLote);
                 $asignadosLoteTotal=$asignadosLoteTotal + COUNT($asignadosLote);
-    
+                $totalAsignados = $totalAsignados + COUNT($asignadosLote) + COUNT($anuladosLote) + COUNT($disponiblesLote);
+                
                 if($loteOrganismo->getTipo() == 'SUSTRATO'){
                     $loteArray[] = array(
                         'id'=>$loteOrganismo->getTipoInsumo()->getNombre(), 
@@ -711,6 +722,7 @@ class ImoInsumoController extends Controller
                         'disponiblesLote'=>COUNT($disponiblesLote),
                         'anuladosLote'=>COUNT($anuladosLote),
                         'asignadosLote'=>COUNT($asignadosLote),
+                        'totalAsignados'=>COUNT($asignadosLote) + COUNT($anuladosLote) + COUNT($disponiblesLote),
                     );
                 }
                 $disponiblesLote=[];
@@ -792,6 +804,7 @@ class ImoInsumoController extends Controller
                 'ifDisponibles' => $params->disponibles, 
                 'ifAnulados' => $params->anulado, 
                 'totalValor' => $totalValor,
+                'totalAsignados' => $totalAsignados,
                 'ifAsignado' => $params->asignado, 
                 'tipoActa' => $params->tipoActa,
                 'disponiblesLoteTotal'=>$disponiblesLoteTotal,
