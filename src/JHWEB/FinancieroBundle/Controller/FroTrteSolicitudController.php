@@ -2577,6 +2577,51 @@ class FroTrteSolicitudController extends Controller
     }
 
     /**
+     * Busca tramites realizados de tipo cambio de servicio en RNA.
+     *
+     * @Route("/search/cambio/servicio", name="frotrtesolicitud_search_cambio_servicio")
+     * @Method("POST")
+     */
+    public function searchByCambioServicioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramite = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findCambioServicioByVehiculo($params->idVehiculo);
+
+            if($tramite){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "El vehículo si realizo un cambio de servico en RNA, tiene permisos para generar la resolución por cambio de servicio.",
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehículo aún no realiza un cambio de servico en RNA, no tiene permisos para generar la resolución por cambio de servicio.",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Crear archivo plano según filtros.
      *
      * @Route("/create/file", name="vhlovehiculo_create_file")
@@ -2678,50 +2723,5 @@ class FroTrteSolicitudController extends Controller
                 'message' => 'Autorización no válida.', 
             );
         }
-    }
-
-    /**
-     * Busca tramites realizados de tipo cambio de servicio en RNA.
-     *
-     * @Route("/search/cambio/servicio", name="frotrtesolicitud_search_cambio_servicio")
-     * @Method("POST")
-     */
-    public function searchByCambioServicioAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        
-        if ($authCheck == true) {
-            $json = $request->get("data", null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-
-            $tramite = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findCambioServicioByVehiculo($params->idVehiculo);
-
-            if($tramite){
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "El vehículo si realizo un cambio de servico en RNA, tiene permisos para generar la resolución por cambio de servicio.",
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "El vehículo aún no realiza un cambio de servico en RNA, no tiene permisos para generar la resolución por cambio de servicio.",
-                );
-            }
-        } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorización no válida",
-            );
-        }
-        return $helpers->json($response);
     }
 }
