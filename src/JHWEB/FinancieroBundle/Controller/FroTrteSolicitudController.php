@@ -18,6 +18,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Frotrtesolicitud controller.
@@ -2652,7 +2656,38 @@ class FroTrteSolicitudController extends Controller
                     $fechaHasta
                 );
 
-                //TTAMVEHI.DAT
+                $dir=__DIR__.'/../../../../web/docs/files/';
+                $file = $dir."TTAMVEHI.DAT"; 
+ 
+                if(file_exists($file))
+                {
+                    $mensaje = "El Archivo $file se ha modificado";
+                }
+            
+                else
+                {
+                    $mensaje = "El Archivo $file se ha creado";
+                }
+            
+                if($archivo = fopen($file, "a"))
+                {
+                    if(fwrite($archivo, date("d m Y H:m:s"). " ". $mensaje. "\n"))
+                    {
+                        echo "Se ha ejecutado correctamente";
+                    }
+                    else
+                    {
+                        echo "Ha habido un problema al crear el archivo";
+                    }
+            
+                    fclose($archivo);
+                }
+
+                $response = new BinaryFileResponse($file);
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+                return $response;
+
 
                 if ($vehiculos) {
                     # code...
