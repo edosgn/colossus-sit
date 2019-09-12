@@ -214,6 +214,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     public function getByPlaca($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
     {
         $em = $this->getEntityManager();
+        
         $dql = "SELECT fts
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
             JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
