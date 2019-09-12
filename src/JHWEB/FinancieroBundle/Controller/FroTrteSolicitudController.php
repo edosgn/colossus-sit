@@ -2593,12 +2593,14 @@ class FroTrteSolicitudController extends Controller
 
             if($tramite){
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "El vehículo si realizo un cambio de servico en RNA, tiene permisos para generar la resolución por cambio de servicio.",
                 );
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El vehículo aún no realiza un cambio de servico en RNA, no tiene permisos para generar la resolución por cambio de servicio.",
