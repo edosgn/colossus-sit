@@ -374,19 +374,14 @@ class ImoInsumoController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
 
-        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array(
-                'tipo'=>'SUSTRATO',
-                'estado' => 'disponible',
-                'tipo'=>$params->casoInsumo,
-                'organismoTransito'=>$params->sedeOrigen
-            )
-        );
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoCantidad($params->sedeOrigen,$params->casoInsumo,$params->cantidad);
 
-        if (count($insumos) >= $params->cantidad) {
+
+        if ($insumos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
+                'data' => $insumos,
                 'message' => 'Total de registros encontrados',
             );
         }else{
@@ -412,10 +407,10 @@ class ImoInsumoController extends Controller
         $em = $this->getDoctrine()->getManager(); 
         $json = $request->get("data",null);
         $params = json_decode($json);
+        var_dump($params);
+        die();
 
-        $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array('lote'=>$params->lote->id)
-        );
+        $sustratos = $params->insumos;
      
         $fecha = new \DateTime('now');
 
@@ -428,13 +423,21 @@ class ImoInsumoController extends Controller
         );
 
         $organismoTransitoOrigen = $lote->getSedeOperativa();
-        $lote->setSedeOperativa($organismoTransitoDestino); 
+
+        $loteReasignacion = new ImoLote();
+        $loteReasignacion = $lote;
+
+        $loteReasignacion->setEstado('REASIGNADO');
+
+        $em->persist($loteReasignacion);
+        $em->persist($loteReasignacion);
+        $em->flush();
 
         $imoTrazabilidad = new ImoTrazabilidad();
 
         $imoTrazabilidad->setOrganismoTransitoOrigen($organismoTransitoOrigen);
         $imoTrazabilidad->setOrganismoTransitoDestino($organismoTransitoDestino);
-        $imoTrazabilidad->setLote($lote);
+        $imoTrazabilidad->setLote($loteReasignacion);
         $imoTrazabilidad->setFecha($fecha);
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);
@@ -586,7 +589,12 @@ class ImoInsumoController extends Controller
             $totalSede = 0;
             $valorTotalSede = 0;
             
-            $organismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findBySede(1);
+            $organismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findBy(
+                array(
+                    'sede' => true,
+                    'activo' => true
+                )
+            );
             $totalAsignados=0;
             foreach ($organismosTransito as $key => $organismoTransito) {
                 $valorSede = 0;

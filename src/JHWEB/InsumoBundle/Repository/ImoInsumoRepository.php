@@ -122,4 +122,26 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         ));
         return $consulta->getResult();
     }
+
+
+    public function getInsumoCantidad($idOrganismoTransito,$tipo,$cantidad)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT i
+        FROM JHWEBInsumoBundle:ImoInsumo i
+        WHERE i.tipo = :tipo
+        AND i.organismoTransito = :idOrganismoTransito
+        AND i.estado = 'DISPONIBLE'
+        ORDER BY i.id"; 
+
+        $consulta = $em->createQuery($dql)->setMaxResults($cantidad);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'tipo' => $tipo,
+        ));
+        return $consulta->getResult();
+    }
+
 }
