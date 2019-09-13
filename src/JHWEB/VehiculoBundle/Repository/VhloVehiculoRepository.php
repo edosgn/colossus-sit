@@ -202,10 +202,11 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
-            JHWEBVehiculoBundle:VhloPropietario vp,
+            JHWEBVehiculoBundle:VhloPropietario vp
             WHERE vp.vehiculo = v.id
             AND v.activo = true
-            AND vp.activo = true";
+            AND vp.activo = true
+            AND vp.fechaInicial BETWEEN :fechaInicial AND :fechaFinal";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

@@ -577,6 +577,59 @@ class VhloCfgPlacaController extends Controller
     }
 
     /**
+     * Buscar por asignacion a sede.
+     *
+     * @Route("/search/asignacion", name="vhlocfgplaca_asignacion")
+     * @Method("POST")
+     */
+    public function searchByAsignacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findBy(
+                array(
+                    'asignacion' => $params->idAsignacion,
+                    'estado' => 'DISPONIBLE',
+                )
+            );
+
+            if($placas){
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'data' => $placas,
+                    'message' => count($placas).' registros encontrados.',
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.",
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Reporte de placas por tramites.
      *
      * @Route("/report/tramites", name="vhlocfgplaca_report_tramites")

@@ -2647,41 +2647,26 @@ class FroTrteSolicitudController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $fechaDesde = new \Datetime($params->fechaDesde);
-            $fechaHasta = new \Datetime($params->fechaHasta);
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
             
             if($params->tipoReporte == 1) {
                 $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFechasForFile(
-                    $fechaDesde,
-                    $fechaHasta
+                    $fechaInicial,
+                    $fechaFinal
                 );
 
-                $dir=__DIR__.'/../../../../web/docs/files/';
+                $dir=__DIR__.'/../../../../web/docs/';
                 $file = $dir."TTAMVEHI.DAT"; 
  
-                if(file_exists($file))
-                {
-                    $mensaje = "El Archivo $file se ha modificado";
+                $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                if( $archivo == false ){
+                    echo("Error al crear el archivo");
+                }else{
+                    echo("El archivo ha sido creado");
                 }
-            
-                else
-                {
-                    $mensaje = "El Archivo $file se ha creado";
-                }
-            
-                if($archivo = fopen($file, "a"))
-                {
-                    if(fwrite($archivo, date("d m Y H:m:s"). " ". $mensaje. "\n"))
-                    {
-                        echo "Se ha ejecutado correctamente";
-                    }
-                    else
-                    {
-                        echo "Ha habido un problema al crear el archivo";
-                    }
-            
-                    fclose($archivo);
-                }
+
+                fclose($archivo);   // Cerrar el archivo
 
                 $response = new BinaryFileResponse($file);
                 $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
