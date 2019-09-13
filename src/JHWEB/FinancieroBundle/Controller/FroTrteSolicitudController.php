@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Frotrtesolicitud controller.
@@ -2723,6 +2724,68 @@ class FroTrteSolicitudController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida.', 
+            );
+        }
+    }
+
+    /**
+     * Exporta la tarjeta de operación.
+     *
+     * @Route("/pdf/expedicion/tarjeta/operacion", name="frotrtesolicitud_expedicion_tarjeta_operacion")
+     * @Method("POST")
+     */
+    public function pdfExpedicionTarjetaOperacionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $fechaActual = new \Datetime();
+
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'numeroTarjetaOperacion' => $params->numeroTarjetaOperacion,
+                    'activo' => true
+                )
+            );
+
+            $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $tarjetaOperacion->getVehiculo(),
+                    'activo' => true
+                )
+            );
+
+            if($tarjetaOperacion) {
+                $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.expedicion.tarjetaOperacion.html.twig', array(
+                    'tarjetaOperacion' => $tarjetaOperacion, 
+                    'fechaActual' => $fechaActual,
+                    'cupo' => $cupo
+                )); 
+
+            }
+            
+            return new Response(
+                $this->get('app.pdf')->templatePreview($html, 'EXPEDICIÓN TARJETA OPERACIÓN'),
+                200,
+                array(
+                    'Content-Type'        => 'application/pdf',
+                    'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                )
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
             );
         }
     }
