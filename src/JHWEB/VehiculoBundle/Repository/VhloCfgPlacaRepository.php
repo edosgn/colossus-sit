@@ -10,4 +10,39 @@ namespace JHWEB\VehiculoBundle\Repository;
  */
 class VhloCfgPlacaRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene las placas segun el tramite realizado y las fechas requeridas
+    public function getByTramiteAndFechas($fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT p.id, p.numero, p.estado, 
+        o.nombre AS organismoTransito, 
+        tv.nombre AS tipoVehiculo,
+        t.nombre AS tramite
+        FROM JHWEBVehiculoBundle:VhloCfgPlaca p,
+        JHWEBConfigBundle:CfgOrganismoTransito o,
+        JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv,
+        JHWEBVehiculoBundle:VhloVehiculo v,
+        JHWEBFinancieroBundle:FroTrteSolicitud ts,
+        JHWEBFinancieroBundle:FroFacTramite ft,
+        JHWEBFinancieroBundle:FroTrtePrecio tp,
+        JHWEBFinancieroBundle:FroTramite t
+        WHERE v.placa = p.id
+        AND p.organismoTransito = o.id 
+        AND p.tipoVehiculo = tv.id 
+        AND ts.vehiculo = v.id 
+        AND ts.tramiteFactura = ft.id
+        AND ft.precio = tp.id
+        AND tp.tramite = t.id
+        AND ts.fecha BETWEEN :fechaInicial AND :fechaFinal
+        AND (t.id = 4 OR t.id = 6 OR t.id = 14 OR t.id = 15)
+        ORDER BY ts.fecha ASC";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+
+        return $consulta->getResult();
+    }
 }

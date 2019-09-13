@@ -577,8 +577,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             JHWEBFinancieroBundle:FroFactura ff,
             JHWEBFinancieroBundle:FroFacTramite ft,
             JHWEBFinancieroBundle:FroTrtePrecio tp,
-            JHWEBFinancieroBundle:FroTramite t,
-
+            JHWEBFinancieroBundle:FroTramite t
             WHERE  fts.vehiculo = :idVehiculo
             AND fts.tramiteFactura = ft.id
             AND ft.precio = tp.id

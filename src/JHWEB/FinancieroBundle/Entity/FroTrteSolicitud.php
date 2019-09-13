@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="fro_trte_solicitud")
  * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroTrteSolicitudRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class FroTrteSolicitud
 {
@@ -84,6 +85,24 @@ class FroTrteSolicitud
      */
     private $activo;
 
+    /** 
+    * created Time/Date 
+    * 
+    * @var \DateTime 
+    * 
+    * @ORM\Column(name="created_at", type="datetime") 
+    */  
+    protected $createdAt;  
+  
+    /** 
+     * updated Time/Date 
+     * 
+     * @var \DateTime 
+     * 
+     * @ORM\Column(name="updated_at", type="datetime") 
+     */  
+    protected $updatedAt;
+
     /**
      * @ORM\ManyToOne(targetEntity="FroFacTramite", inversedBy="tramitesSolicitud")
      **/
@@ -113,6 +132,19 @@ class FroTrteSolicitud
      * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="tramitesSolicitud")
      **/
     protected $funcionario;
+
+    /** @ORM\PrePersist */
+    public function setCreatedAt()
+    {
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+    }
+
+    /** @ORM\PreUpdate */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime('now');
+    }
 
     /**
      * Get id

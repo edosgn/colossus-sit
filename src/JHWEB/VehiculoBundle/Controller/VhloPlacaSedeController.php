@@ -107,14 +107,6 @@ class VhloPlacaSedeController extends Controller
                             'message' => "El rango incial no puede ser mayor al rango final.",
                         );
                     }else{
-                        $numeroPlacas = $this->generatePlacas(
-                            $rangoInicial, 
-                            $rangoFinal, 
-                            $tipoVehiculo, 
-                            $servicio, 
-                            $organismoTransito
-                        );
-
                         $asignacion = new VhloPlacaSede();
         
                         $asignacion->setOrganismoTransito($organismoTransito);
@@ -126,6 +118,15 @@ class VhloPlacaSedeController extends Controller
         
                         $em->persist($asignacion);
                         $em->flush();
+
+                        $numeroPlacas = $this->generatePlacas(
+                            $rangoInicial, 
+                            $rangoFinal, 
+                            $tipoVehiculo, 
+                            $servicio, 
+                            $organismoTransito,
+                            $asignacion
+                        );
 
                         $response = array(
                             'title' => 'Perfecto!',
@@ -261,7 +262,7 @@ class VhloPlacaSedeController extends Controller
      * Creates a new vhloCfgPlaca entity.
      *
      */
-    public function newPlacaAction($numero, $tipoVehiculo, $servicio, $organismoTransito)
+    public function newPlacaAction($numero, $tipoVehiculo, $servicio, $organismoTransito, $asignacion)
     {
         $helpers = $this->get("app.helpers");
 
@@ -279,6 +280,7 @@ class VhloPlacaSedeController extends Controller
             $placa->setTipoVehiculo($tipoVehiculo);
             $placa->setServicio($servicio);
             $placa->setOrganismoTransito($organismoTransito);
+            $placa->setAsignacion($asignacion);
 
             $em->persist($placa);
             $em->flush();
@@ -326,7 +328,7 @@ class VhloPlacaSedeController extends Controller
         return $helpers->json($response);
     }
 
-    public function generatePlacas($rangoInicial, $rangoFinal, $tipoVehiculo, $servicio, $organismoTransito){
+    public function generatePlacas($rangoInicial, $rangoFinal, $tipoVehiculo, $servicio, $organismoTransito, $asignacion){
         $helpers = $this->get("app.helpers");
 
         $longitud = strlen($rangoInicial);
@@ -399,7 +401,8 @@ class VhloPlacaSedeController extends Controller
                         $rangoInicial, 
                         $tipoVehiculo, 
                         $servicio, 
-                        $organismoTransito
+                        $organismoTransito,
+                        $asignacion
                     );
                     $letraInicial = $helpers->nextLetter($letraInicial);
                     $numeroInicial = str_pad($numeroInicial, $ceros, '0', STR_PAD_LEFT);
@@ -415,7 +418,8 @@ class VhloPlacaSedeController extends Controller
                         $rangoInicial, 
                         $tipoVehiculo,
                         $servicio,
-                        $organismoTransito
+                        $organismoTransito,
+                        $asignacion
                     );
 
                     if ($tipoVehiculo->getNombre() == 'MOTOCICLETA' && $longitud == 6) {
@@ -431,7 +435,8 @@ class VhloPlacaSedeController extends Controller
                     $rangoInicial, 
                     $tipoVehiculo,
                     $servicio,
-                    $organismoTransito
+                    $organismoTransito,
+                    $asignacion
                 );
 
                 break;
