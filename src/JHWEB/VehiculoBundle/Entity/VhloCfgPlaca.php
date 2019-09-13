@@ -50,6 +50,11 @@ class VhloCfgPlaca
      **/
     protected $organismoTransito;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="VhloPlacaSede", inversedBy="placas")
+     **/
+    protected $asignacion;
+
 
     /**
      * Get id
@@ -179,5 +184,29 @@ class VhloCfgPlaca
     public function getOrganismoTransito()
     {
         return $this->organismoTransito;
+    }
+
+    /**
+     * Set asignacion
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloPlacaSede $asignacion
+     *
+     * @return VhloCfgPlaca
+     */
+    public function setAsignacion(\JHWEB\VehiculoBundle\Entity\VhloPlacaSede $asignacion = null)
+    {
+        $this->asignacion = $asignacion;
+
+        return $this;
+    }
+
+    /**
+     * Get asignacion
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloPlacaSede
+     */
+    public function getAsignacion()
+    {
+        return $this->asignacion;
     }
 }

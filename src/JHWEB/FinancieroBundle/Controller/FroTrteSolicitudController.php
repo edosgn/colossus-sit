@@ -18,7 +18,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Frotrtesolicitud controller.
@@ -2644,16 +2647,32 @@ class FroTrteSolicitudController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $fechaDesde = new \Datetime($params->fechaDesde);
-            $fechaHasta = new \Datetime($params->fechaHasta);
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
             
             if($params->tipoReporte == 1) {
                 $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFechasForFile(
-                    $fechaDesde,
-                    $fechaHasta
+                    $fechaInicial,
+                    $fechaFinal
                 );
 
-                //TTAMVEHI.DAT
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTAMVEHI.DAT"; 
+ 
+                $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                if( $archivo == false ){
+                    echo("Error al crear el archivo");
+                }else{
+                    echo("El archivo ha sido creado");
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = new BinaryFileResponse($file);
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+                return $response;
+
 
                 if ($vehiculos) {
                     # code...

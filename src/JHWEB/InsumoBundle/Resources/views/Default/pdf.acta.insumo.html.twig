@@ -145,7 +145,7 @@
                     <td>Valor</td> 
                 </tr> 
                 {% for totalOrganismo in totalOrganismos %}
-                    {% if totalOrganismo.sustratosCantidad != 0 %}
+                    {% if totalOrganismo.insumosTotal != 0 %}
                         <tr>
                             <td>{{ totalOrganismo.nombreOrganismo }}</td>
                             <td>{{ totalOrganismo.insumosTotal }}</td>
