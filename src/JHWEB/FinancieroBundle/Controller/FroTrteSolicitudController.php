@@ -2792,6 +2792,20 @@ class FroTrteSolicitudController extends Controller
                 )
             );
 
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion,
+                    'activo' => true
+                )
+            );
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
+                    'activo' => true
+                )
+            );
+
             $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
                 array(
                     'vehiculo' => $tarjetaOperacion->getVehiculo(),
@@ -2803,6 +2817,7 @@ class FroTrteSolicitudController extends Controller
                 $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.expedicion.tarjetaOperacion.html.twig', array(
                     'tarjetaOperacion' => $tarjetaOperacion, 
                     'fechaActual' => $fechaActual,
+                    'organismoTransito' => $funcionario->getOrganismoTransito(),
                     'cupo' => $cupo
                 )); 
 

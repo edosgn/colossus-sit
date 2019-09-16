@@ -16,16 +16,16 @@
     <body>
         <table>
             <tr>
-                <td colspan="6" rowspan="2" width="80%"></td>
-                <td colspan="1" rowspan="2" width="20%">TARJETA DE OPERACIÓN <h2>Nro. {{ tarjetaOperacion.numeroTarjetaOperacion }}</h2></td>
+                <td colspan="6" width="80%"></td>
+                <td colspan="1" width="20%">TARJETA DE OPERACIÓN <h2 class="dato">No. {{ tarjetaOperacion.numeroTarjetaOperacion }}</h2></td>
             </tr>
-            <tr>
+            {# <tr>
                 <td></td>
-            </tr>
+            </tr> #}
             <tr>
                 <td colspan="3" width="40%">FECHA DE EXPEDICIÓN</td>
                 <td colspan="3" width="40%">FECHA VENCIMIENTO</td>
-                <td width="20%"><h4>PLACA No.</h4><h3 class="dato">{{ tarjetaOperacion.vehiculo.placa.numero }}</h3></td>
+                <td style="text-align: left" width="20%">PLACA No. <b class="dato" style="font-size: 11px;">{{ tarjetaOperacion.vehiculo.placa.numero }}</b></td>
             </tr>
             <tr>
                 <td class="dato" width="13.33%"><h3>{{ fechaActual| date('m') }}-</h3></td>
@@ -34,37 +34,40 @@
                 <td class="dato" width="13.33%"><h3>{{ tarjetaOperacion.fechaVencimiento | date ('d') }}-</h3></td>
                 <td class="dato" width="13.33%"><h3>{{ tarjetaOperacion.fechaVencimiento | date ('m') }}-</h3></td>
                 <td class="dato" width="13.33%"><h3>{{ tarjetaOperacion.fechaVencimiento | date ('Y') }}</h3></td>
-                <td width="20%"><h4>No. UNICO </h4><h3 class="dato">{{ cupo.cupo.numero }}</h3></td>
+                <td style="text-align: left" width="20%">No. UNICO <b class="dato" style="font-size: 11px">{{ cupo.cupo.numero }}</b></td>
             </tr>
             <tr>
                 <td colspan="2" width="30%">CLASE DE VEHÍCULO</td>
-                <td colspan="2" width="20%">TIPO</td>
+                <td colspan="1" width="20%">TIPO</td>
                 <td colspan="2" width="25%">MARCA</td>
                 <td colspan="2" width="25%">MODELO</td>
             </tr>
             <tr>
                 <td class="dato" colspan="2" width="30%"><h3>{{ tarjetaOperacion.vehiculo.clase.nombre }}</h3></td>
-                <td class="dato" colspan="2" width="20%"><h3>{{ tarjetaOperacion.vehiculo.linea.nombre }}</h3></td>
+                <td class="dato" colspan="1" width="20%"><h3>{{ tarjetaOperacion.vehiculo.linea.nombre }}</h3></td>
                 <td class="dato" colspan="2" width="25%"><h3>{{ tarjetaOperacion.vehiculo.linea.marca.nombre }}</h3></td>
                 <td class="dato" colspan="2" width="25%"><h3>{{ tarjetaOperacion.vehiculo.modelo }}</h3></td>
             </tr>
             <tr>
                 <td colspan="4" width="50%">MOTOR NÚMERO</td>
-                <td colspan="4" width="50%">CAPACIDAD DE TRANSPORTE AUTORIZADA</td>
+                <td colspan="3" width="50%">CAPACIDAD DE TRANSPORTE AUTORIZADA</td>
             </tr>
             <tr>
                 <td class="dato" colspan="4" width="50%"><h3>{{ tarjetaOperacion.vehiculo.motor }}</h3></td>
-                <td class="dato" colspan="4" width="50%">PASAJEROS<h3>{{ tarjetaOperacion.vehiculo.numeroPasajeros }}</h3></td>
+                <td style="text-align: left" colspan="3" width="50%">PASAJEROS <b clase="dato" style="font-size: 11px">{{ tarjetaOperacion.vehiculo.numeroPasajeros}}</b></td>
             </tr>
             <tr>
-                <td colspan="8" width="100%">EMPRESA <h3>{{ cupo.empresaTransporte.empresa.nombre }}</h3></td>
+                <td style="text-align: left" colspan="7" width="100%">EMPRESA <b class="dato" style="font-size: 11px">{{ cupo.empresaTransporte.empresa.nombre }}</b></td>
             </tr>
             <tr>
-                <td colspan="4" width="50%">SEDE <h3 class="dato">{{ cupo.empresaTransporte.empresa.nombre }}</h3></td>
-                <td colspan="4" width="50%">ZONA <h3 class="dato">{{ tarjetaOperacion.vehiculo.radioAccion.nombre }}</h3></td>
+                <td colspan="4" width="50%">SEDE <h3 class="dato">{{ organismoTransito.municipio }}</h3></td>
+                <td colspan="3" width="50%">ZONA <h3 class="dato">{{ tarjetaOperacion.vehiculo.radioAccion.nombre }}</h3></td>
             </tr>
             <tr>
-                <td colspan="8"  width="100%" height="100px">_______________________________________</td>
+                <td colspan="7" width="100%" height="100px">
+                    <p style="margin-bottom: 80%">______________________________________</p>
+                    <p>SUBSECRETARIO DE REGISTRO</p>
+                </td>
             </tr>
         </table>
     </body>
