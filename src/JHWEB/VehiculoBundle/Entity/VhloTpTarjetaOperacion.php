@@ -38,7 +38,7 @@ class VhloTpTarjetaOperacion
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_tarjeta_operacion", type="integer", length=255)
+     * @ORM\Column(name="numero_tarjeta_operacion", type="bigint", length=255)
      */
     private $numeroTarjetaOperacion;
 

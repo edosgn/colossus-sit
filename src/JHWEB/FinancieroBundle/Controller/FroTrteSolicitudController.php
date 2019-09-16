@@ -2658,20 +2658,36 @@ class FroTrteSolicitudController extends Controller
 
                 $dir=__DIR__.'/../../../../web/docs/';
                 $file = $dir."TTAMVEHI.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
  
-                $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
-                if( $archivo == false ){
+                if($archivo == false){
                     echo("Error al crear el archivo");
                 }else{
-                    echo("El archivo ha sido creado");
+                    // Escribir en el archivo:
+                    fwrite($archivo, "Estamos probando\r\n");
+                    fwrite($archivo, "el uso de archivos ");
+                    fwrite($archivo, "en PHP");
+                    // Fuerza a que se escriban los datos pendientes en el buffer:
+                    fflush($archivo);
                 }
 
                 fclose($archivo);   // Cerrar el archivo
 
-                $response = new BinaryFileResponse($file);
-                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+                # Obtener nombre sin ruta completa, únicamente para sugerirlo al guardar
+                $nombreArchivo = basename($file);
+                # Algunos encabezados que son justamente los que fuerzan la descarga
+                header('Content-Type: application/octet-stream');
+                header("Content-Transfer-Encoding: Binary");
+                header("Content-disposition: attachment; filename=$nombreArchivo");
+                # Leer el archivo y sacarlo al navegador
+                readfile($file);
 
-                return $response;
+                return $file;
 
 
                 if ($vehiculos) {
@@ -2743,6 +2759,83 @@ class FroTrteSolicitudController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida.', 
+            );
+        }
+    }
+
+    /**
+     * Exporta la tarjeta de operación.
+     *
+     * @Route("/pdf/expedicion/tarjeta/operacion", name="frotrtesolicitud_expedicion_tarjeta_operacion")
+     * @Method("POST")
+     */
+    public function pdfExpedicionTarjetaOperacionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $fechaActual = new \Datetime();
+
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'numeroTarjetaOperacion' => $params->numeroTarjetaOperacion,
+                    'activo' => true
+                )
+            );
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion,
+                    'activo' => true
+                )
+            );
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
+                    'activo' => true
+                )
+            );
+
+            $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $tarjetaOperacion->getVehiculo(),
+                    'activo' => true
+                )
+            );
+
+            if($tarjetaOperacion) {
+                $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.expedicion.tarjetaOperacion.html.twig', array(
+                    'tarjetaOperacion' => $tarjetaOperacion, 
+                    'fechaActual' => $fechaActual,
+                    'organismoTransito' => $funcionario->getOrganismoTransito(),
+                    'cupo' => $cupo
+                )); 
+
+            }
+            
+            return new Response(
+                $this->get('app.pdf')->templatePreview($html, 'EXPEDICIÓN TARJETA OPERACIÓN'),
+                200,
+                array(
+                    'Content-Type'        => 'application/pdf',
+                    'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                )
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
             );
         }
     }
