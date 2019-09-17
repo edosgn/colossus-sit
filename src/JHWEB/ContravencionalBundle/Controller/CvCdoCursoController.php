@@ -166,42 +166,40 @@ class CvCdoCursoController extends Controller
                 $documentoName
             );
 
-            $valores = fopen($this->getParameter('data_upload').$documentoName , "r" );//leo el archivo que contiene los datos de los valores
+            $cursos = fopen($this->getParameter('data_upload').$documentoName , "r" );//leo el archivo que contiene los datos de los cursos
 
             $batchSize = 100;
-            $valoresArray = null;
+            $arrayCursos = null;
             $rows = 0;
+            
 
-            $datos = fgetcsv($valores,0,";");
-            $cols = count($datos);
-
-            if ($valores) {
+            if ($cursos) {
                 $count = 0;
                 //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
-                while (($datos = fgetcsv($valores,0,";")) !== FALSE )
+                while (($datos = fgetcsv($cursos,0,";")) !== FALSE )
                 {
-                    $j = 6;
                     $datos = array_map("utf8_encode", $datos);
+                    $cols = count($datos);
 
-                    $valoresArray[$count]=array(
+                    $arrayCursos[$count]=array(
                         'identificacion'=>$datos[13],
                         'comparendo'=>$datos[14],
                         'fecha'=>$datos[24]
                     );
 
-                    if ((count($valoresArray) % $batchSize) == 0 && $valoresArray != null) {
-                        $rowsBatch =  $this->insertBatch($empresa, $valoresArray);
+                    if ((count($arrayCursos) % $batchSize) == 0 && $arrayCursos != null) {
+                        $rowsBatch =  $this->insertBatch($empresa, $arrayCursos);
                         $rows += $rowsBatch;
-                        $valoresArray = null;
+                        $arrayCursos = null;
                     }
 
                     $count++;
                 }
 
-                //return $helpers->json($valoresArray);
+                //return $helpers->json($arrayCursos);
 
-                if ($valoresArray) {
-                    $rowsBatch = $this->insertBatch($empresa, $valoresArray);
+                if ($arrayCursos) {
+                    $rowsBatch = $this->insertBatch($empresa, $arrayCursos);
                     $rows += $rowsBatch;
                 }
 
@@ -231,12 +229,10 @@ class CvCdoCursoController extends Controller
         return $helpers->json($response);
     }
 
-    public function insertBatch($empresa, $valoresArray){
+    public function insertBatch($empresa, $arrayCursos){
         $em = $this->getDoctrine()->getManager();
 
-        $rows = 0;
-
-        foreach ($valoresArray as $key => $row) {       
+        foreach ($arrayCursos as $key => $row) {       
             $curso = new CvCdoCurso();
             
             $curso->setEmpresa($empresa);
@@ -249,8 +245,6 @@ class CvCdoCursoController extends Controller
             
 
             $em->flush();
-
-            $rows++;
         }
 
         $em->flush();

@@ -35,6 +35,11 @@ class ImoAsignacion
     private $imoTrazabilidad;
 
     /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario")
+     **/
+    protected $funcionario;
+
+    /**
      * Get id
      *
      * @return integer
@@ -114,5 +119,29 @@ class ImoAsignacion
     public function getImoTrazabilidad()
     {
         return $this->imoTrazabilidad;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return ImoAsignacion
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }

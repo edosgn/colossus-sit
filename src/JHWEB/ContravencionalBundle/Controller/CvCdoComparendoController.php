@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use JHWEB\PersonalBundle\Entity\PnalCfgCdoConsecutivo;
 
 /**
  * Cvcdocomparendo controller.
@@ -552,6 +553,7 @@ class CvCdoComparendoController extends Controller
                         $datos = array_map("utf8_encode", $datos);
     
                         $valoresArray[]=array(
+                            'consecutivo'=>$datos[1],
                             'fecha'=>$helpers->convertDateTime($datos[2]),
                             'direccion'=>$datos[4],
                             'localidad'=>$datos[6],
@@ -577,7 +579,6 @@ class CvCdoComparendoController extends Controller
                         );
                     }
                     $rows++;
-                   
                 }
 
                 if ($valoresArray) {
@@ -725,12 +726,24 @@ class CvCdoComparendoController extends Controller
 
             $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneBy(
                 array(
-                    'organismoTransito' => $valor['organismoTransito']->getId(),
+                    'numero' => $valor['consecutivo'],
                     'estado' => 'ASIGNADO'
                 )
             );
 
             if($consecutivo){
+                $comparendo->setConsecutivo($consecutivo);
+            }else{
+                $consecutivo = new PnalCfgCdoConsecutivo();
+
+                $consecutivo->setNumero($valor['consecutivo']);
+                $consecutivo->setFechaAsignacion(new \Datetime(date('Y-m-d')));
+                $consecutivo->setEstado('ASIGNADO');
+                $consecutivo->setActivo(true);
+                $consecutivo->setOrganismoTransito($valor['organismoTransito']);
+
+                $em->flush();
+
                 $comparendo->setConsecutivo($consecutivo);
             }
 
