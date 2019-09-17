@@ -434,7 +434,7 @@ class SvSenialUbicacionController extends Controller
     /**
      * Busca todos los regitros con georeferenciacion por fechas.
      *
-     * @Route("/search/fechas/municipio", name="svipatimpresobodega_search_fechas_municipio")
+     * @Route("/search/fechas/municipio", name="svsenialubicacion_search_fechas_municipio")
      * @Method({"GET", "POST"})
      */
     public function searchByFechasAndMunicipioAction(Request $request)
@@ -449,8 +449,10 @@ class SvSenialUbicacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->getByFechas(
-                $params
+            $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->getByFechasAndMunicipio(
+                new \Datetime($params->fechaInicial),
+                new \Datetime($params->fechaFinal),
+                $params->idMunicipio
             );
 
             $response = array(

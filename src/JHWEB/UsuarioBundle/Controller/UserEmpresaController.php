@@ -560,14 +560,13 @@ class UserEmpresaController extends Controller
        return $helpers->json($response);
     }
 
-    
     /**
      * Listado de empresas aseguradoras
      *
      * @Route("/select/empresas/aseguradoras", name="userempresasaseguradoras_select")
      * @Method({"GET", "POST"})
      */
-    public function selectEmpresasAseguradorasAction()
+    public function selectAseguradorasAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
@@ -575,6 +574,36 @@ class UserEmpresaController extends Controller
         $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
             array(
                 'tipoEmpresa' => 4,
+                'activo' => true
+                )
+        );
+
+        $response = null;
+
+        foreach ($empresas as $key => $empresa) {
+            $response[$key] = array(
+                'value' => $empresa->getId(),
+                'label' => $empresa->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Listado de empresas capacitadoras
+     *
+     * @Route("/select/empresas/capacitadoras", name="userempresascapacitadoras_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectCapacitadorasAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+            array(
+                'tipoEmpresa' => 5,
                 'activo' => true
                 )
         );

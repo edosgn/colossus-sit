@@ -35,23 +35,6 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    public function getTotalTipo($estado, $tipoInsumo)
-    {  
-        $em = $this->getEntityManager();
-        $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre, il.id AS idLote, it.id AS idTipoInsumo
-                FROM JHWEBInsumoBundle:ImoLote il,
-                JHWEBInsumoBundle:ImoCfgTipo it
-                WHERE il.tipoInsumo = :tipoInsumo
-                AND il.tipoInsumo = it.id
-                AND il.estado = :estado";
-                $consulta = $em->createQuery($dql);
-                $consulta->setParameters(array(
-                    'estado' => $estado, 
-                    'tipoInsumo' => $tipoInsumo,
-                ));
-                return $consulta->getOneOrNullResult();
-    }
-
     public function getByFechasAndTipo($fechaInicial, $fechaFinal, $tipo)
     {  
         $em = $this->getEntityManager();
@@ -92,6 +75,52 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         ));
 
         return $consulta->getResult();
+    }
+
+    //Obtiene todos los lotes segun el tipo de insumo por organismo de transito y modulo
+    public function getByOrganismoTransitoAndModulo($idModulo, $idOrganismoTransito, $tipoInsumo)
+    { 
+        $dql = "SELECT l
+        FROM JHWEBInsumoBundle:ImoLote l,
+        JHWEBInsumoBundle:ImoCfgTipo t
+        WHERE l.tipo = :tipoInsumo
+        AND l.tipoInsumo = t.id
+        AND t.id = :idModulo
+        AND l.sedeOperativa = :idOrganismoTransito
+        AND estado = 'REGISTRADO'";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'tipoInsumo' => $tipoInsumo,
+            'idModulo' => $idModulo,
+            'idOrganismoTransito' => $idOrganismoTransito,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    public function getTotalByTipoInsumoAndModulo($estado, $tipoInsumo, $idModulo)
+    {  
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(il.cantidad) AS cantidad, 
+        it.nombre, il.id AS idLote, it.id AS idTipoInsumo
+        FROM JHWEBInsumoBundle:ImoLote il,
+        JHWEBInsumoBundle:ImoCfgTipo it
+        WHERE il.tipoInsumo = :tipoInsumo
+        AND il.tipoInsumo = it.id
+        AND il.estado = :estado7
+        AND it.modulo = :idModulo";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'estado' => $estado, 
+            'tipoInsumo' => $tipoInsumo,
+            'idModulo' => $idModulo,
+        ));
+
+        return $consulta->getOneOrNullResult();
     }
 }
  

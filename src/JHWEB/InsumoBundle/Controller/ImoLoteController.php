@@ -254,10 +254,10 @@ class ImoLoteController extends Controller
      /**
      * Lists all loteInsumo entities.
      *
-     * @Route("/search/sedeoperativa", name="imolote_search_sedeoperativa")
+     * @Route("/search/organismotransito/modulo", name="imolote_search_organismotransito_modulo")
      * @Method({"GET", "POST"})
      */
-    public function searchBySedeAction(Request $request)
+    public function searchByOrganismoTransitoAndModuloAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -278,11 +278,17 @@ class ImoLoteController extends Controller
                 );
             }else {
                 if ($idOrganismoTransito) {
-                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                        array('estado' => 'REGISTRADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByOrganismoTransitoAndModulo(
+                        $params->idModulo,
+                        $idOrganismoTransito,
+                        $params->tipoInsumo
                     );
                 }else{
-                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalTipo('REGISTRADO',$params->tipoInsumo);
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalByTipoInsumoAndModulo(
+                        'REGISTRADO',
+                        $params->tipoInsumo,
+                        $params->idModulo
+                    );
                     $loteInsumo = array(
                         'id'=> $loteInsumo['idLote'],
                         'tipoInsumo'=>array(

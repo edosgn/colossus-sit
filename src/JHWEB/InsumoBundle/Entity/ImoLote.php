@@ -104,12 +104,7 @@ class ImoLote
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito")
      **/
-    protected $sedeOperativa; 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario")
-     **/
-    protected $funcionario;
+    protected $sedeOperativa;
 
     /**
      * Get id
@@ -431,29 +426,5 @@ class ImoLote
     public function getSedeOperativa()
     {
         return $this->sedeOperativa;
-    }
-
-    /**
-     * Set funcionario
-     *
-     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
-     *
-     * @return ImoLote
-     */
-    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
-    {
-        $this->funcionario = $funcionario;
-
-        return $this;
-    }
-
-    /**
-     * Get funcionario
-     *
-     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
-     */
-    public function getFuncionario()
-    {
-        return $this->funcionario;
     }
 }

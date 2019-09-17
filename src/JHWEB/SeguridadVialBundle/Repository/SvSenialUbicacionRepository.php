@@ -34,25 +34,48 @@ class SvSenialUbicacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getByFechas($params){
+    public function getByFechasAndMunicipio($fechaInicial, $fechaFinal, $idMunicipio = null){
         $em = $this->getEntityManager();
 
-        $dql = "SELECT u
-        FROM JHWEBSeguridadVialBundle:SvSenialUbicacion u, 
-        JHWEBSeguridadVialBundle:SvCfgSenial s,
-        JHWEBSeguridadVialBundle:SvCfgSenialTipo t
-        WHERE u.fecha BETWEEN :fechaInicial AND :fechaFinal
-        AND u.municipio = :idMunicipio
-        AND u.senial = s.id
-        AND s.tipoSenial = t.id
-        AND t.id != 1";
+        if ($idMunicipio) {
+            $dql = "SELECT u
+            FROM JHWEBSeguridadVialBundle:SvSenialUbicacion u, 
+            JHWEBSeguridadVialBundle:SvCfgSenial s,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo t
+            WHERE u.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND u.municipio = :idMunicipio
+            AND u.senial = s.id
+            AND s.tipoSenial = t.id
+            AND t.id != 1";
 
-        $consulta = $em->createQuery($dql);
-        $consulta->setParameters(array(
-            'fechaInicial' => $params->fechaInicial,
-            'fechaFinal' => $params->fechaFinal,
-            'idMunicipio' => $params->idMunicipio,
-        ));
+            $consulta = $em->createQuery($dql);
+            
+            $consulta->setParameters(array(
+                'fechaInicial' => $fechaInicial,
+                'fechaFinal' => $fechaFinal,
+                'idMunicipio' => $idMunicipio,
+            ));
+        } else {
+            $dql = "SELECT u
+            FROM JHWEBSeguridadVialBundle:SvSenialUbicacion u, 
+            JHWEBSeguridadVialBundle:SvCfgSenial s,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo t
+            WHERE u.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND u.senial = s.id
+            AND s.tipoSenial = t.id
+            AND t.id != 1";
+
+            $consulta = $em->createQuery($dql);
+
+            $consulta->setParameters(array(
+                'fechaInicial' => $fechaInicial,
+                'fechaFinal' => $fechaFinal,
+            ));
+        }
+        
+
+
+       
 
         return $consulta->getResult();
     }

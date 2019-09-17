@@ -1222,7 +1222,7 @@ class VhloVehiculoController extends Controller
             $file->move(
                 $this->getParameter('data_upload'),
                 $documentoName
-            );
+            ); 
             
             $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
                 $params->idFuncionario

@@ -3,6 +3,7 @@
 namespace JHWEB\InsumoBundle\Controller;
 
 use JHWEB\InsumoBundle\Entity\ImoInsumo;
+use JHWEB\InsumoBundle\Entity\ImoLote;
 use JHWEB\InsumoBundle\Entity\ImoTrazabilidad;
 use JHWEB\InsumoBundle\Entity\ImoAsignacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -407,10 +408,9 @@ class ImoInsumoController extends Controller
         $em = $this->getDoctrine()->getManager(); 
         $json = $request->get("data",null);
         $params = json_decode($json);
-        var_dump($params);
-        die();
-
+        
         $sustratos = $params->insumos;
+        
      
         $fecha = new \DateTime('now');
 
@@ -418,18 +418,29 @@ class ImoInsumoController extends Controller
             $params->sedeOperativaDestino
         );
 
-        $lote = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find(
-            $params->lote->id
+        
+        $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find(1);
+        // var_dump($params->tipoInsumo);
+        // die();
+
+        $organismoTransitoOrigen = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find(
+            $params->sedeOperativaOrigen
         );
 
-        $organismoTransitoOrigen = $lote->getSedeOperativa();
-
         $loteReasignacion = new ImoLote();
-        $loteReasignacion = $lote;
 
+        
+        $loteReasignacion->setNumeroActa(null);
         $loteReasignacion->setEstado('REASIGNADO');
+        $loteReasignacion->setTipoInsumo($tipoInsumo);
+        $loteReasignacion->setTipo('SUSTRATO');
+        $loteReasignacion->setRangoInicio(0);
+        $loteReasignacion->setRangoFin(0);
+        $loteReasignacion->setCantidad(count($sustratos));
+        $loteReasignacion->setRecibido(count($sustratos));
+        $loteReasignacion->setReferencia(null);
+        $loteReasignacion->setFecha($fecha);
 
-        $em->persist($loteReasignacion);
         $em->persist($loteReasignacion);
         $em->flush();
 
@@ -442,16 +453,20 @@ class ImoInsumoController extends Controller
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);
 
-        $em->persist($lote);
         $em->persist($imoTrazabilidad);
         $em->flush();
 
         foreach ($sustratos as $key => $sustrato) {
+            $sustrato = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
+                $sustrato->id
+            );
             $imoAsignacionOld = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findOneByInsumo($sustrato->getId());
             if ($imoAsignacionOld) {
                 $imoAsignacionOld->setActivo(false);
                 $em->flush();
             }
+            // var_dump($sustrato->id);
+            // die();
 
             $imoAsignacion = new ImoAsignacion();
 
@@ -468,7 +483,7 @@ class ImoInsumoController extends Controller
         
         $response = array(
             'status' => 'success',
-            'code' => 400,
+            'code' => 200,
             'message' => 'Sustratos reasignados:'.count($sustratos),
         );
         
