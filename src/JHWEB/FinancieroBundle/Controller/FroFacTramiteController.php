@@ -311,4 +311,55 @@ class FroFacTramiteController extends Controller
        
         return $helpers->json($response);
     }
+
+    /* ========================================== */
+
+    /**
+     * datos para factura
+     *
+     * @Route("/validate/tramite/vehiculo", name="frofactramite_validate_tramite_by_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function validateTramiteByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            
+            $tramite =  $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($params->idVehiculo);
+            
+            if ($tramite) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.',
+                    'data' => $tramite
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No se encontró un tramite de cambio de servicio para el vehículo.',
+                    'data' => $tramite
+                );
+            }
+
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }
