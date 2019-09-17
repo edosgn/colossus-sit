@@ -566,10 +566,12 @@ class FroTrteSolicitudController extends Controller
                             break;
                             
                         case 'servicio':
-                            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                            /* $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
                                 $params->idServicio
                             );
-                            $vehiculo->setServicio($servicio);
+                            $vehiculo->setServicio($servicio); */
+
+                            $this->vehiculoDesvinculacionCambioServicioAction($params, $vehiculo->getId());
                             break;
     
                         case 'ejes':
@@ -661,7 +663,7 @@ class FroTrteSolicitudController extends Controller
                             $this->vehiculoConceptoFavorableAction($params);
                             break;
                         case 'desvinculacionCambioServicio':
-                            $this->vehiculoDesvinculacionCambioServicioAction($params);
+                            /* $this->vehiculoDesvinculacionCambioServicioAction($params); */
                             break;
                         case 'desvinculacionComunAcuerdo':
                             $this->vehiculoDesvinculacionComunAcuerdoAction($params);
@@ -1487,21 +1489,21 @@ class FroTrteSolicitudController extends Controller
     }
 
     //desvincula un vehiculo de transporte público
-    public function vehiculoDesvinculacionCambioServicioAction($params)
+    public function vehiculoDesvinculacionCambioServicioAction($params, idVehiculo)
     {
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
 
-        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($idVehiculo);
 
-        $servicioNew = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicioNuevo);
+        $servicioNew = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
 
         $vehiculo->setServicio($servicioNew);
 
         $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
             array(
-                'vehiculo' => $params->idVehiculo,
+                'vehiculo' => $idVehiculo,
                 'activo' => true
             )
         );
@@ -1514,7 +1516,7 @@ class FroTrteSolicitudController extends Controller
             
             $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
                 array(
-                    'vehiculo' => $params->idVehiculo,
+                    'vehiculo' => $idVehiculo,
                     'activo' => true
                 )
             );
