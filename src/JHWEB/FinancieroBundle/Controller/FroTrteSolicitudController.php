@@ -1489,7 +1489,7 @@ class FroTrteSolicitudController extends Controller
     }
 
     //desvincula un vehiculo de transporte público
-    public function vehiculoDesvinculacionCambioServicioAction($params, idVehiculo)
+    public function vehiculoDesvinculacionCambioServicioAction($params, $idVehiculo)
     {
         $helpers = $this->get("app.helpers");
 
