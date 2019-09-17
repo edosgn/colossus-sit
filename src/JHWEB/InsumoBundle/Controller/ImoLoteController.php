@@ -279,9 +279,9 @@ class ImoLoteController extends Controller
             }else {
                 if ($idOrganismoTransito) {
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByOrganismoTransitoAndModulo(
-                        $params->idModulo,
                         $idOrganismoTransito,
-                        $params->tipoInsumo
+                        $params->tipoInsumo,
+                        $params->idModulo
                     );
                 }else{
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalByTipoInsumoAndModulo(

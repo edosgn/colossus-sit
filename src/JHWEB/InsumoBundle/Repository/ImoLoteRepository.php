@@ -78,24 +78,42 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //Obtiene todos los lotes segun el tipo de insumo por organismo de transito y modulo
-    public function getByOrganismoTransitoAndModulo($idModulo, $idOrganismoTransito, $tipoInsumo)
+    public function getByOrganismoTransitoAndModulo($idModulo = null, $idOrganismoTransito, $tipoInsumo)
     { 
-        $dql = "SELECT l
-        FROM JHWEBInsumoBundle:ImoLote l,
-        JHWEBInsumoBundle:ImoCfgTipo t
-        WHERE l.tipo = :tipoInsumo
-        AND l.tipoInsumo = t.id
-        AND t.id = :idModulo
-        AND l.sedeOperativa = :idOrganismoTransito
-        AND estado = 'REGISTRADO'";
+        if ($idModulo) {
+            $dql = "SELECT l
+            FROM JHWEBInsumoBundle:ImoLote l,
+            JHWEBInsumoBundle:ImoCfgTipo t
+            WHERE l.tipo = :tipoInsumo
+            AND l.tipoInsumo = t.id
+            AND l.sedeOperativa = :idOrganismoTransito
+            AND t.id = :idModulo
+            AND estado = 'REGISTRADO'";
 
-        $consulta = $em->createQuery($dql);
-        $consulta->setParameters(array(
-            'tipoInsumo' => $tipoInsumo,
-            'idModulo' => $idModulo,
-            'idOrganismoTransito' => $idOrganismoTransito,
-        ));
+            $consulta = $em->createQuery($dql);
 
+            $consulta->setParameters(array(
+                'tipoInsumo' => $tipoInsumo,
+                'idModulo' => $idModulo,
+                'idOrganismoTransito' => $idOrganismoTransito,
+            ));
+        } else {
+            $dql = "SELECT l
+            FROM JHWEBInsumoBundle:ImoLote l,
+            JHWEBInsumoBundle:ImoCfgTipo t
+            WHERE l.tipo = :tipoInsumo
+            AND l.tipoInsumo = t.id
+            AND l.sedeOperativa = :idOrganismoTransito
+            AND estado = 'REGISTRADO'";
+
+            $consulta = $em->createQuery($dql);
+
+            $consulta->setParameters(array(
+                'tipoInsumo' => $tipoInsumo,
+                'idOrganismoTransito' => $idOrganismoTransito,
+            ));
+        }
+        
         return $consulta->getResult();
     }
 
@@ -109,7 +127,7 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         JHWEBInsumoBundle:ImoCfgTipo it
         WHERE il.tipoInsumo = :tipoInsumo
         AND il.tipoInsumo = it.id
-        AND il.estado = :estado7
+        AND il.estado = :estado
         AND it.modulo = :idModulo";
 
         $consulta = $em->createQuery($dql);
