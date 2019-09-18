@@ -359,6 +359,5 @@ class UserLicenciaConduccionController extends Controller
             );
         }
         return $helpers->json($response);
-
     }
 }
