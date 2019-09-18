@@ -72,8 +72,15 @@
         <br>      
         <br>      
         <b>Recibe: ____________________________ </b>
-        <br>      
-    </p>
+        {% if funcionario %}
+        <br> 
+        {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}
+        <br>
+        {{ funcionario.cargo.nombre }}
+        <br>
+        {{ funcionario.organismoTransito.nombre }}    
+        {% endif %}
+    </p> 
 
   </body>
 </html>

@@ -64,8 +64,10 @@ class JwtAuth
 		
 					$jwt=JWT::encode($token , $key , 'HS256');
 					$decoded = JWT::decode($jwt, $key, array('HS256'));
-
-					//$user->setLogueado(true);
+					
+					if ($user->getRole() != 'ROLE_SUPERADMIN') {
+						$user->setLogueado(true);
+					}
 
 					$this->manager->flush();
 		

@@ -78,38 +78,40 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //Obtiene todos los lotes segun el tipo de insumo por organismo de transito y modulo
-    public function getByOrganismoTransitoAndModulo($idModulo = null, $idOrganismoTransito, $tipoInsumo)
+    public function getByOrganismoTransitoAndModulo($idOrganismoTransito, $idTipoInsumo, $idModulo = null)
     { 
+        $em = $this->getEntityManager();
+        
         if ($idModulo) {
             $dql = "SELECT l
             FROM JHWEBInsumoBundle:ImoLote l,
             JHWEBInsumoBundle:ImoCfgTipo t
-            WHERE l.tipo = :tipoInsumo
-            AND l.tipoInsumo = t.id
+            WHERE l.tipoInsumo = t.id
+            AND l.tipoInsumo = :idTipoInsumo
             AND l.sedeOperativa = :idOrganismoTransito
             AND t.id = :idModulo
-            AND estado = 'REGISTRADO'";
+            AND l.estado = 'REGISTRADO'";
 
             $consulta = $em->createQuery($dql);
 
             $consulta->setParameters(array(
-                'tipoInsumo' => $tipoInsumo,
-                'idModulo' => $idModulo,
+                'idTipoInsumo' => $idTipoInsumo,
                 'idOrganismoTransito' => $idOrganismoTransito,
+                'idModulo' => $idModulo,
             ));
-        } else {
+        } else {     
             $dql = "SELECT l
             FROM JHWEBInsumoBundle:ImoLote l,
             JHWEBInsumoBundle:ImoCfgTipo t
-            WHERE l.tipo = :tipoInsumo
-            AND l.tipoInsumo = t.id
+            WHERE l.tipoInsumo = t.id
+            AND l.tipoInsumo = :idTipoInsumo
             AND l.sedeOperativa = :idOrganismoTransito
-            AND estado = 'REGISTRADO'";
+            AND l.estado = 'REGISTRADO'";
 
             $consulta = $em->createQuery($dql);
 
             $consulta->setParameters(array(
-                'tipoInsumo' => $tipoInsumo,
+                'idTipoInsumo' => $idTipoInsumo,
                 'idOrganismoTransito' => $idOrganismoTransito,
             ));
         }

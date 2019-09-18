@@ -256,12 +256,13 @@ class PnalTalonarioController extends Controller
 
     /* ===============================================  */
 
+    /*
+     * Realiza el registro del talonario y la secuencia de consecutivos según el rango solicitado
+    */
     public function register($params){
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
-
-
 
         $ultimoRango = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getMaximoByOrganismoTransito(
             $params->idOrganismoTransito
@@ -304,6 +305,7 @@ class PnalTalonarioController extends Controller
             
             $consecutivo->setOrganismoTransito($organismoTransito);
             $consecutivo->setEstado('DISPONIBLE');
+            $consecutivo->setPolca(false);
             $consecutivo->setActivo(true);
 
             $em->persist($consecutivo);
