@@ -67,83 +67,96 @@ class FroTrtePrecioController extends Controller
 
             $tramitePrecio = new FroTrtePrecio();
 
-            $tramitePrecio->setFechaInicial(
-                new \Datetime($params->fechaInicial
-            ));
-            $tramitePrecio->setValor($params->valor);
-            $tramitePrecio->setValorTotal(0);
-            $tramitePrecio->setActivo(true);
+            $fechaActual = new \Datetime(date('Y-m-d'));
+            $fechaInicial = new \Datetime($params->fechaInicial);
 
-            if ($params->idTramite) {
-                $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find(
-                    $params->idTramite
+            if ($fechaInicial > $fechaActual) {
+                $tramitePrecio->setFechaInicial(
+                    $fechaInicial
                 );
-                $tramitePrecio->setTramite($tramite);
-            }
-
-            if (isset($params->idTipoVehiculo) && $params->idTipoVehiculo) {
-                $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
-                    $params->idTipoVehiculo
-                );
-                $tramitePrecio->setTipoVehiculo($tipoVehiculo);
-
-                $tramitePrecio->setNombre(
-                    mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
-                );
-            }else{
-                $tramitePrecio->setNombre(
-                    mb_strtoupper($tramite->getNombre(), 'utf-8')
-                );
-            }
-
-
-            if ($params->idModulo) {
-                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
-                    $params->idModulo
-                );
-                $tramitePrecio->setModulo($modulo);
-            }
-
-            $tramitePrecio->setActivo(true);
-
-            $em->persist($tramitePrecio);
-            $em->flush();
-
-            if ($params->conceptos) {
-                $totalConceptos = 0;
-                foreach ($params->conceptos as $key => $idConcepto) {
-                    $tramiteConcepto = new FroTrteConcepto();
-
-                    $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find(
-                        $idConcepto
+                $tramitePrecio->setValor($params->valor);
+                $tramitePrecio->setValorTotal(0);
+                $tramitePrecio->setActivo(true);
+    
+                if ($params->idTramite) {
+                    $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find(
+                        $params->idTramite
                     );
-                    $tramiteConcepto->setConcepto($concepto);
-
-                    $tramiteConcepto->setPrecio($tramitePrecio);
-
-                    $tramiteConcepto->setActivo(true);
-
-                    $em->persist($tramiteConcepto);
-                    $em->flush();
-
-                    $totalConceptos += $concepto->getValor();
+                    $tramitePrecio->setTramite($tramite);
                 }
+    
+                if (isset($params->idTipoVehiculo) && $params->idTipoVehiculo) {
+                    $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
+                        $params->idTipoVehiculo
+                    );
+                    $tramitePrecio->setTipoVehiculo($tipoVehiculo);
+    
+                    $tramitePrecio->setNombre(
+                        mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
+                    );
+                }else{
+                    $tramitePrecio->setNombre(
+                        mb_strtoupper($tramite->getNombre(), 'utf-8')
+                    );
+                }
+    
+                if ($params->idModulo) {
+                    $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
+                        $params->idModulo
+                    );
+                    $tramitePrecio->setModulo($modulo);
+                }
+    
+                $tramitePrecio->setActivo(true);
+    
+                $em->persist($tramitePrecio);
+                $em->flush();
+    
+                if ($params->conceptos) {
+                    $totalConceptos = 0;
+                    foreach ($params->conceptos as $key => $idConcepto) {
+                        $tramiteConcepto = new FroTrteConcepto();
+    
+                        $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find(
+                            $idConcepto
+                        );
+                        $tramiteConcepto->setConcepto($concepto);
+    
+                        $tramiteConcepto->setPrecio($tramitePrecio);
+    
+                        $tramiteConcepto->setActivo(true);
+    
+                        $em->persist($tramiteConcepto);
+                        $em->flush();
+    
+                        $totalConceptos += $concepto->getValor();
+                    }
+                }
+    
+                $tramitePrecio->setValorConcepto($totalConceptos);
+                $tramitePrecio->setValorTotal(
+                    $totalConceptos + $tramitePrecio->getValor()
+                );
+    
+                $em->flush();
+                
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro creado con éxito',
+                );
+            } else {
+               $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'La fecha inicial debe ser mayor a la fecha actual.',
+                );
             }
-
-            $tramitePrecio->setValorConcepto($totalConceptos);
-            $tramitePrecio->setValorTotal(
-                $totalConceptos + $tramitePrecio->getValor()
-            );
-
-            $em->flush();
-            
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Registro creado con éxito',
-            );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida', 

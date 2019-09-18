@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvcdocurso</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cvCdoCurso.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if cvCdoCurso.fecha %}{{ cvCdoCurso.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Identificacion</th>
+                <td>{{ cvCdoCurso.identificacion }}</td>
+            </tr>
+            <tr>
+                <th>Comparendo</th>
+                <td>{{ cvCdoCurso.comparendo }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if cvCdoCurso.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if cvCdoCurso.createdAt %}{{ cvCdoCurso.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{% if cvCdoCurso.updatedAt %}{{ cvCdoCurso.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvcdocurso_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cvcdocurso_edit', { 'id': cvCdoCurso.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

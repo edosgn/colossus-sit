@@ -636,6 +636,20 @@ class FroFacturaController extends Controller
                             $params->idVehiculoValor
                         );
                         $retefuente->setValorVehiculo($valorVehiculo);
+                    } else {
+                        $valorVehiculo = new VhloCfgValor();
+
+                        $valorVehiculo->setMarca($vehiculo->getLinea()->getMarca());
+                        $valorVehiculo->setLinea($vehiculo->getLinea());
+                        $valorVehiculo->setClase($vehiculo->getClase());
+                        $valorVehiculo->setCilindraje($vehiculo->getCilindraje());
+                        $valorVehiculo->setAnio($vehiculo->getModelo());
+                        $valorVehiculo->setPesaje(0);
+                        $valorVehiculo->setTonelaje(0);
+                        $valorVehiculo->setValor($params->valorVehiculo);
+                        $valorVehiculo->setActivo(true);
+                        $em->persist($valorVehiculo);
+                        $retefuente->setValorVehiculo($valorVehiculo);
                     }
                     $fechaCreacion = new \Datetime(date('Y-m-d'));
                     

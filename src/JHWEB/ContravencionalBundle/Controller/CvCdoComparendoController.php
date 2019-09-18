@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use JHWEB\PersonalBundle\Entity\PnalCfgCdoConsecutivo;
 
 /**
  * Cvcdocomparendo controller.
@@ -518,89 +519,111 @@ class CvCdoComparendoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $file = $request->files->get('file');
 
-            $documentoName = md5(uniqid()).$file->guessExtension();
-            $file->move(
-                $this->getParameter('data_upload'),
-                $documentoName
-            ); 
+            if ($file->guessExtension() == 'txt') {
+                    $documentoName = md5(uniqid()).$file->guessExtension();
+                $file->move(
+                    $this->getParameter('data_upload'),
+                    $documentoName
+                ); 
 
-            $valores = fopen($this->getParameter('data_upload').$documentoName , "r" );
+                $archivo = fopen($this->getParameter('data_upload').$documentoName , "r" );
 
-            $batchSize = 100;
-            $valoresArray = null;
-            $errores = null;
-            $rows = 0;
-            $cols = 0;
+                $batchSize = 100;
+                $arrayComparendos = null;
+                $transacciones = null;
+                $procesados = 0;
+                $errores = 0;
+                $rows = 0;
+                $cols = 0;
 
-            if ($params->tipoFuente == 1) {
-                $length = 59;
-            }elseif ($params->tipoFuente == 2) {
-                $length = 57;
-            }
+                if ($params->tipoFuente == 1) {
+                    $length = 59;
+                }elseif ($params->tipoFuente == 2) {
+                    $length = 57;
+                }
 
-            if($params->idOrganismoTransito) {
-                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
-            }
+                if($params->idOrganismoTransito) {
+                    $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+                }
 
-            if ($valores) {
-                //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
-                while (($datos = fgetcsv($valores,0,",")) !== FALSE )
-                {
-                    $cols = count($datos);
+                if ($archivo) {
+                    //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
+                    while ($datos = fgets($archivo))
+                    {
+                        $datos = explode(",",$datos);
+                        $cols = count($datos);
 
-                    if ($cols == $length) {
-                        $datos = array_map("utf8_encode", $datos);
-    
-                        $valoresArray[]=array(
-                            'fecha'=>$helpers->convertDateTime($datos[2]),
-                            'direccion'=>$datos[4],
-                            'localidad'=>$datos[6],
-                            'placa'=>$datos[7],
-                            'identificacion'=>$datos[14],
-                            'idTipoIdentificacion'=>$datos[15],
-                            'nombres'=>$datos[16],
-                            'apellidos'=>$datos[17],
-                            'codigoInfraccion' => $datos[55],
-                            'valor'=>$datos[56],
-                            'organismoTransito'=>$organismoTransito,
-                            'tipoFuente'=>$params->tipoFuente,
-                        );
-                        
-                        if ((count($valoresArray) % $batchSize) == 0 && $valoresArray != null) {
-                            $rowsBatch =  $this->insertBatch($valoresArray);
-                            $valoresArray = null;
+                        if ($cols == $length) {
+                            $datos = array_map("utf8_encode", $datos);
+        
+                            $arrayComparendos[] = array(
+                                'consecutivo'=>$datos[1],
+                                'fecha'=>$helpers->convertDateTime($datos[2]),
+                                'hora'=>$datos[3],
+                                'direccion'=>$datos[4],
+                                'localidad'=>$datos[6],
+                                'placa'=>$datos[7],
+                                'identificacion'=>$datos[14],
+                                'idTipoIdentificacion'=>$datos[15],
+                                'nombres'=>$datos[16],
+                                'apellidos'=>$datos[17],
+                                'codigoInfraccion' => $datos[55],
+                                'valor'=>$datos[56],
+                                'organismoTransito'=>$organismoTransito,
+                                'tipoFuente'=>$params->tipoFuente,
+                            );
+                            
+                            if ((count($arrayComparendos) % $batchSize) == 0 && $arrayComparendos != null) {
+                                $transacciones[] =  $this->insertBatch($arrayComparendos, $rows);
+                                $arrayComparendos = null;
+                            }
+                        }else{
+                            $fila = $rows + 1;
+                            $registros[] = array(
+                                    'title' => 'Atencion!',
+                                    'status' => 'warning',
+                                    'code' => 400,
+                                    'message' => "Error! Fila:(".$fila.") No cumple con la longitud del formato estandar.",
+                            );
+                            
+                            $transacciones[] = array(
+                                'errores' => 1,
+                                'registros' => $registros,
+                            );
                         }
-                    }else{
-                        $errores[] = array(
-                            'row' => $rows,
-                            'message' => 'No cumple con la longitud del formato estandar.'
-                        );
+
+                        $rows++;
                     }
-                    $rows++;
-                   
-                }
 
-                if ($valoresArray) {
-                    $rowsBatch = $this->insertBatch($valoresArray);
-                }
+                    fclose($archivo);
 
-                $response = array(
-                    'title' => 'Perfecto!',
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Se han procesado '.$rows.' líneas.', 
-                    'data' => array(
-                        'errores' => $errores,
-                    )
-                );
-            }else{
+                    if ($arrayComparendos) {
+                        $transacciones[] =  $this->insertBatch($arrayComparendos, $rows);
+                    }
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Se han procesado '.$rows.' líneas.', 
+                        'data' => $transacciones,
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => "No se pudo leer el archivo.", 
+                    );
+                }
+            } else {
                 $response = array(
                     'title' => 'Atención!',
                     'status' => 'warning',
                     'code' => 400,
-                    'message' => "No se pudo leer el archivo.", 
+                    'message' => "El formato del archivo no corresponde a .txt.", 
                 );
-            }
+            }            
         }else{
             $response = array(
                 'title' => 'Error!',
@@ -613,362 +636,230 @@ class CvCdoComparendoController extends Controller
         return $helpers->json($response);
     }
 
-    public function insertBatch($valoresArray){
+    public function insertBatch($arrayComparendos, $rows){
         $helpers = $this->get("app.helpers");
 
-        foreach ($valoresArray as $key => $valor) {
+        $arrayProcesos = null;
+        $procesados = 0;
+        $errores = 0;
+        $fila = 0;
+
+        foreach ($arrayComparendos as $key => $arrayComparendo) {
+            $fila = $rows - count($arrayComparendos) + $key + 1;
+
             $em = $this->getDoctrine()->getManager();
 
-            $comparendo = new CvCdoComparendo();
-
-            if (isset($valor['placa']) && $valor['placa'] != '') {
-                $comparendo->setPlaca($valor['placa']);
-            }
-
-            /*if ($params->comparendo->idOrganismoTransitoMatriculado) {
-                $organismoTransitoMatriculado = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-                    $params->comparendo->idOrganismoTransitoMatriculado
-                );
-                $comparendo->setOrganismoTransitoMatriculado(
-                    $organismoTransitoMatriculado
-                );
-            }
-
-            if (isset($params->comparendo->vehiculoClase)) {
-                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find(
-                    $params->comparendo->vehiculoClase
-                );
-                $comparendo->setClase($clase->getNombre());
-            }
-
-            if (isset($params->comparendo->vehiculoServicio)) {
-                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
-                    $params->comparendo->vehiculoServicio
-                );
-                $comparendo->setServicio($servicio->getNombre());
-            }
-
-            if (isset($params->comparendo->vehiculoRadioAccion)) {
-                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
-                    $params->comparendo->vehiculoRadioAccion
-                );
-                $comparendo->setRadioAccion($radioAccion->getNombre());
-            }
-
-            if (isset($params->comparendo->vehiculoModalidadTransporte)) {
-                $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find(
-                    $params->comparendo->vehiculoModalidadTransporte
-                );
-                $comparendo->setModalidadTransporte(
-                    $modalidadTransporte->getNombre()
-                );
-            }
-
-            if (isset($params->comparendo->vehiculoTransportePasajero)) {
-                $transportePasajero = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTransportePasajero')->find(
-                    $params->comparendo->vehiculoTransportePasajero
-                );
-                $comparendo->setTransportePasajero(
-                    $transportePasajero->getNombre()
-                );
-            }
-
-            if (isset($params->comparendo->vehiculoTransporteEspecial)) {
-                $transporteEspecial = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTransporteEspecial')->find(
-                    $params->comparendo->vehiculoTransporteEspecial
-                );
-                $comparendo->setTransporteEspecial(
-                    $transporteEspecial->getNombre()
-                );
-            }*/
-
-            $comparendo->setFecha($valor['fecha']);
-            $comparendo->setHora(new \DateTime(date('h:i:s')));
-
-            /*$hora = $params->comparendo->hora;
-            $minutos = $params->comparendo->minutos;
-            
-            $comparendo->setHora(new \DateTime($hora.':'.$minutos.':00'));*/
-            
-            $comparendo->setDireccion($valor['direccion']);
-            $comparendo->setLocalidad($valor['localidad']);
-
-            /*$comparendo->setFuga($params->comparendo->fuga);
-            $comparendo->setAccidente($params->comparendo->accidente);
-            $comparendo->setRetencionLicencia(
-                $params->comparendo->retencionLicencia
-            );*/
-
-            //$comparendo->setFotomulta(false);
-            //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
-            
-            /*$comparendo->setObservacionesDigitador(
-                $params->comparendo->observacionesDigitador
-            );
-
-            $comparendo->setObservacionesAgente(
-                $params->comparendo->observacionesAgente
-            );*/
-            //$comparendo->setValorAdicional(0);
-
-            /*if (isset($params->fechaNotificacion)) {
-                $comparendo->setFechaNotificacion(
-                    new \DateTime($params->fechaNotificacion)
-                );
-            }
-
-            $agenteTransito = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                $params->comparendo->idFuncionario
-            );
-            $comparendo->setAgenteTransito($agenteTransito);
-            $comparendo->setOrganismoTransito($agenteTransito->getOrganismoTransito());*/
-
+            //Busca si ya existe el numero consecutivo
             $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneBy(
                 array(
-                    'organismoTransito' => $valor['organismoTransito']->getId(),
-                    'estado' => 'ASIGNADO'
+                    'numero' => $arrayComparendo['consecutivo'],
                 )
             );
 
-            if($consecutivo){
-                $comparendo->setConsecutivo($consecutivo);
+            //Analiza el tipo de fuente que desea cargar 1 = STTDN o 2 = POLCA
+            if ($arrayComparendo['tipoFuente'] == 1) {
+                //Si la fuente es STTDN el consecutivo debe estar previamente asignado a la sede
+                if($consecutivo){
+                    if ($consecutivo->getEstado() == 'ASIGNADO') {
+                        $comparendo->setConsecutivo($consecutivo);
+                        $consecutivo->setEstado('UTILIZADO');
+                        $consecutivo->setActivo(false);
+                        $em->flush();
+
+                        $response = $this->register($arrayComparedndo, $consecutivo);
+                    } else {
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => "Error! Fila:(".$fila.") El consecutivo se encuentra en estado ".$consecutivo->getEstado()." y no puede ser utilizado para este registro.",
+                        );    
+                    }
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => "Error! Fila:(".$fila.") El número consecutivo aún no se encuentra registrado en el sistema.",
+                    ); 
+                }
+            }elseif ($arrayComparendo['tipoFuente'] == 2) {
+                if($consecutivo){
+                    if ($consecutivo->getEstado() == 'ASIGNADO') {
+                        $comparendo->setConsecutivo($consecutivo);
+                        $consecutivo->setEstado('UTILIZADO');
+                        $consecutivo->setActivo(false);
+                        $em->flush();
+
+                        $response = $this->register($arrayComparendo, $consecutivo);
+                    } else {
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => "Error! Fila:(".$fila.") El consecutivo se encuentra en estado ".$consecutivo->getEstado()." y no puede ser utilizado para este registro.",
+                        );    
+                    }
+                }else{
+                    $consecutivo = new PnalCfgCdoConsecutivo();
+
+                    $consecutivo->setNumero($arrayComparendo['consecutivo']);
+                    $consecutivo->setFechaAsignacion(new \Datetime(date('Y-m-d')));
+                    $consecutivo->setEstado('UTILIZADO');
+                    $consecutivo->setActivo(false);
+                    $consecutivo->setOrganismoTransito($arrayComparendo['organismoTransito']);
+
+                    $em->persist($consecutivo);
+                    $em->flush();
+
+                    $response = $this->register($arrayComparendo, $consecutivo);
+                }
             }
 
-            /*$municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                $params->comparendo->idMunicipioLugar
-            );
-            $comparendo->setMunicipio($municipio);
-
-            if (isset( $params->infractor->idTipoInfractor)) {
-                $tipoInfractor = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgTipoInfractor')->find(
-                    $params->infractor->idTipoInfractor
-                );
-                $comparendo->setTipoInfractor($tipoInfractor);
-            }*/
-
-            /* INFRACTOR */
-            if ($valor['idTipoIdentificacion']) {
-                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
-                    $valor['idTipoIdentificacion']
-                );
-                $comparendo->setInfractorTipoIdentificacion(
-                    $tipoIdentificacion
-                );
-            }
-
-            /*if ($params->infractor->idCategoriaLicenciaConduccion) {
-                $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find(
-                    $params->infractor->idCategoriaLicenciaConduccion
-                );
-                $comparendo->setCategoria($categoria->getNombre());
-            }*/
-
-            $comparendo->setInfractorIdentificacion(
-                $valor['identificacion']
-            );
-
-            /*$comparendo->setFechaExpedicion(
-                new \Datetime($params->infractor->fechaExpedicion)
-            );
-
-            $comparendo->setFechaVencimiento(
-                new \Datetime($params->infractor->fechaVencimiento)
-            );*/
-
-            $comparendo->setInfractorNombres(
-                $valor['nombres'].' '.$valor['apellidos']
-            );
-
-            /*if ($params->infractor->direccion) {
-                $comparendo->setInfractorDireccion(
-                    $params->infractor->direccion
-                );
-            }
-
-            if ($params->infractor->telefono) {
-                $comparendo->setInfractorTelefono(
-                    $params->infractor->telefono
-                );
-            }
-
-            if ($params->infractor->correo) {
-                $comparendo->setInfractorEmail(
-                    $params->infractor->correo
-                );
-            }
-
-            if ($params->comparendo->idOrganismoTransitoLicencia) {
-                $organismoTransitoLicencia = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-                    $params->comparendo->idOrganismoTransitoLicencia
-                );
-                $comparendo->setOrganismoTransitoLicencia(
-                    $organismoTransitoLicencia
-                );
-            }
-
-            if ($params->comparendo->licenciaTransitoNumero) {
-                $comparendo->setNumeroLicenciaTransito(
-                    $params->comparendo->licenciaTransitoNumero
-                );
-            }*/
-
-            /* PROPIETARIO */
-            /*if ($params->propietario->idTipoIdentificacion) {
-                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
-                    $params->propietario->idTipoIdentificacion
-                );
-                $comparendo->setPropietarioTipoIdentificacion(
-                    $tipoIdentificacion
-                );
-            }
-
-            if ($params->propietario->identificacion) {
-                $comparendo->setPropietarioIdentificacion(
-                    $params->propietario->identificacion
-                );
-            }
-
-            if ($params->propietario->nombres) {
-                $comparendo->setPropietarioNombre(
-                    $params->propietario->nombres
-                );
-            }*/
-
-            /* EMPRESA */
-            /*if ($params->empresa->nombre) {
-                $comparendo->setEmpresaNombre(
-                    $params->empresa->nombre
-                );
-            }
-
-            if ($params->empresa->nit) {
-                $comparendo->setEmpresaNit(
-                    $params->empresa->nit
-                );
-            }
-
-            if ($params->empresa->tarjeta) {
-                $comparendo->setTarjetaOperacion(
-                    $params->empresa->tarjeta
-                );
-            }*/
-
-            /* TESTIGO */
-            /*if ($params->testigo->nombres) {
-                $comparendo->setTestigoNombres(
-                    $params->testigo->nombres
-                );
-            }
-
-            if ($params->testigo->identificacion) {
-                $comparendo->setTestigoIdentificacion(
-                    $params->testigo->identificacion
-                );
-            }
-
-            if ($params->testigo->direccion) {
-                $comparendo->setTestigoDireccion(
-                    $params->testigo->direccion
-                );
-            }
-
-            if ($params->testigo->telefono) {
-                $comparendo->setTestigoTelefono(
-                    $params->testigo->telefono
-                );
-            }*/
-
-            /* INFRACCION */
-            if ($valor['codigoInfraccion'] != 'F') {
-                $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->findOneByCodigo(
-                    $valor['codigoInfraccion']
-                );
+            if ($response['code'] == 200) {
+                $procesados++;
             } else {
-                $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->findOneByCategoria(
-                    5
-                );
+                $errores++;
             }
+            $arrayProcesos[] = $response;
+        }
 
-            if ($infraccion) {
-                $comparendo->setInfraccion($infraccion);
-            }else{
-                $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->find(
-                    1
-                );
-                $comparendo->setInfraccion($infraccion);
-            }
+        $em->flush();
 
+        return array(
+            'registros'=>$arrayProcesos, 
+            'procesados'=>$procesados, 
+            'errores'=>$errores
+        );
+    }
+
+    /*
+     * Realiza el registro del talonario y la secuencia de consecutivos según el rango solicitado
+    */
+    public function register($arrayComparendo, $consecutivo){
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $comparendo = new CvCdoComparendo();
+
+        $comparendo->setConsecutivo($consecutivo);
+
+        if ($arrayComparendo['tipoFuente'] == 1) {
+            $length = 59;
+            $comparendo->setPolca(false);
+        }elseif ($arrayComparendo['tipoFuente'] == 2) {
+            $length = 57;
+            $comparendo->setPolca(true);
+        }
+
+        if (isset($arrayComparendo['placa']) && $arrayComparendo['placa'] != '') {
+            $comparendo->setPlaca($arrayComparendo['placa']);
+        }
+
+        $comparendo->setFecha($arrayComparendo['fecha']);
+        $hora = substr($arrayComparendo['hora'], 0, 2).':'.substr($arrayComparendo['hora'], 2, 2).':00';
+        $comparendo->setHora(new \DateTime($hora));        
+        $comparendo->setDireccion($arrayComparendo['direccion']);
+        $comparendo->setLocalidad($arrayComparendo['localidad']);
+
+        $comparendo->setObservacionesAgente(
+            $params->comparendo->observacionesAgente
+        );
+
+        /* INFRACTOR */
+        if ($arrayComparendo['idTipoIdentificacion']) {
+            $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
+                $arrayComparendo['idTipoIdentificacion']
+            );
+            $comparendo->setInfractorTipoIdentificacion(
+                $tipoIdentificacion
+            );
+        }
+
+        $comparendo->setInfractorIdentificacion(
+            $arrayComparendo['identificacion']
+        );
+
+        $comparendo->setInfractorNombres(
+            $arrayComparendo['nombres'].' '.$arrayComparendo['apellidos']
+        );
+
+        $comparendo->setPagado(false);
+        $comparendo->setCurso(false);
+        $comparendo->setAudiencia(false);
+        $comparendo->setRecurso(false);
+        $comparendo->setNotificado(false);
+        $comparendo->setPorcentajeDescuento(0);
+
+        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+            1
+        );
+        $comparendo->setEstado($estado);
+        $comparendo->setActivo(true);
+
+        /* INFRACCION */
+        if ($arrayComparendo['codigoInfraccion'] != 'F') {
+            $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->findOneByCodigo(
+                $arrayComparendo['codigoInfraccion']
+            );
+        } else {
+            $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->findOneByCategoria(
+                5
+            );
+        }
+
+        if ($infraccion) {
+            $comparendo->setInfraccion($infraccion);
+            
             //Calcula valor de infracción
             $smlmv = $em->getRepository('JHWEBConfigBundle:CfgSmlmv')->findOneByActivo(
                 true
             );
-
+    
             if ($smlmv) {
                 $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
-
-                //Valida si hay fuga el valor de la infracción se duplica
-                /*if ($params->comparendo->fuga) {
-                    $valorInfraccion = $valorInfraccion * 2;
-                }*/
+    
                 $comparendo->setValorInfraccion($valorInfraccion);
-
-                $comparendo->setPagado(false);
-                $comparendo->setCurso(false);
-                $comparendo->setAudiencia(false);
-                $comparendo->setRecurso(false);
-                $comparendo->setNotificado(false);
-                $comparendo->setPorcentajeDescuento(0);
-
-                if ($valor['tipoFuente'] == 1) {
-                    $comparendo->setPolca(false);
-                }elseif ($valor['tipoFuente'] == 2) {
-                    $comparendo->setPolca(true);
-                }
-
-                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
-                    1
-                );
-                $comparendo->setEstado($estado);
-                $comparendo->setActivo(true);
-                
-                $em->persist($comparendo);
-                $em->flush();
-
-                $trazabilidad = new CvCdoTrazabilidad();
-
-                $trazabilidad->setFecha(
-                    $helpers->convertDateTime($comparendo->getFecha())
-                );
-                $trazabilidad->setHora(
-                    new \DateTime(date('h:i:s'))
-                );
-                $trazabilidad->setActivo(true); 
-                $trazabilidad->setComparendo($comparendo);
-                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(1);
-                $trazabilidad->setEstado($estado);
-
-                $em->persist($trazabilidad);
-                $em->flush();
-
-                if ($consecutivo) {
-                    $consecutivo->setEstado('UTILIZADO');
-                    $consecutivo->setActivo(false);
-                    $em->flush();
-                }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con exito",
-                );
             }else{
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
-                    'message' => "No se ha registrado el valor del SMLMV.",
+                    'message' => "Error! Fila:(".$key++.") No se puede registrar el valor de la infraccipon porque aún no se ha configurado el SMLMV.",
                 );
+
+                return $helpers->json($response);
             }
         }
+        
+        $em->persist($comparendo);
+
+        $trazabilidad = new CvCdoTrazabilidad();
+
+        $trazabilidad->setFecha(
+            $comparendo->getFecha()
+        );
+        $trazabilidad->setHora(
+            new \DateTime(date('h:i:s'))
+        );
+        $trazabilidad->setActivo(true); 
+        $trazabilidad->setComparendo($comparendo);
+        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(1);
+        $trazabilidad->setEstado($estado);
+
+        $em->persist($trazabilidad);
+
+        $response = array(
+            'title' => 'Perfecto!',
+            'status' => 'success',
+            'code' => 200,
+            'message' => "Perfecto! Fila:(".$key++.") Registro creado con exito.",
+        );
+
+        $em->flush();
+
+        return $response;
     }
 
     /**

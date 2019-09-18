@@ -402,6 +402,7 @@ class VhloCfgValorController extends Controller
     
             if ($valorVehiculo) {
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Valor encontrado.", 
@@ -409,15 +410,24 @@ class VhloCfgValorController extends Controller
                 );
             }else {
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
-                    'messager' => "Valor no encontrado para el vehiculo.", 
+                    'message' => "Valor no encontrado para el vehiculo.", 
                 );
             } 
+        } else {
+            $response = array(
+                'title' => 'Atención!',
+                'status' => 'warning',
+                'code' => 400,
+                'messager' => "La linea del vehículo no fue encontrada.", 
+            );
         }
 
     }else{
         $response = array(
+            'title' => 'Error!',
             'status' => 'error',
             'code' => 400,
             'messager' => "Autorizacion no valida", 

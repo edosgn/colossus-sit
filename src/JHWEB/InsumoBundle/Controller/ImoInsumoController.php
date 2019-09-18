@@ -121,6 +121,11 @@ class ImoInsumoController extends Controller
                         $em->flush();
       
                         $imoAsignacion = new ImoAsignacion();
+
+                        if ($params->idFuncionario) {
+                            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find($params->idFuncionario);
+                            $imoAsignacion->setFuncionario($funcionario);
+                        }
     
                         $imoAsignacion->setImoTrazabilidad($imoTrazabilidad);
                         $imoAsignacion->setInsumo($insumo);
@@ -171,7 +176,6 @@ class ImoInsumoController extends Controller
     
                                 $em->flush(); 
                             }else {
-                                
                                 $cantidad = $loteInsumo->getCantidad() - $lote->cantidad;
                                 $loteInsumo->setCantidad($cantidad);
                                 $loteInsumo->setEstado('REGISTRADO');

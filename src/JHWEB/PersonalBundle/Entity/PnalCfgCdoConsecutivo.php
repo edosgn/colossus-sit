@@ -45,6 +45,13 @@ class PnalCfgCdoConsecutivo
     /**
      * @var bool
      *
+     * @ORM\Column(name="polca", type="boolean", nullable=true)
+     */
+    private $polca;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -145,6 +152,30 @@ class PnalCfgCdoConsecutivo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set polca
+     *
+     * @param boolean $polca
+     *
+     * @return PnalCfgCdoConsecutivo
+     */
+    public function setPolca($polca)
+    {
+        $this->polca = $polca;
+
+        return $this;
+    }
+
+    /**
+     * Get polca
+     *
+     * @return boolean
+     */
+    public function getPolca()
+    {
+        return $this->polca;
     }
 
     /**
