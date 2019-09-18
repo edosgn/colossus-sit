@@ -530,7 +530,9 @@ class CvCdoComparendoController extends Controller
 
                 $batchSize = 100;
                 $arrayComparendos = null;
-                $errores = null;
+                $transacciones = null;
+                $procesados = 0;
+                $errores = 0;
                 $rows = 0;
                 $cols = 0;
 
@@ -572,22 +574,31 @@ class CvCdoComparendoController extends Controller
                             );
                             
                             if ((count($arrayComparendos) % $batchSize) == 0 && $arrayComparendos != null) {
-                                $rowsBatch =  $this->insertBatch($arrayComparendos);
+                                $transacciones[] =  $this->insertBatch($arrayComparendos, $rows);
                                 $arrayComparendos = null;
                             }
                         }else{
-                            $errores[] = array(
-                                'row' => $rows,
-                                'message' => 'No cumple con la longitud del formato estandar.'
+                            $fila = $rows + 1;
+                            $registros[] = array(
+                                    'title' => 'Atencion!',
+                                    'status' => 'warning',
+                                    'code' => 400,
+                                    'message' => "Error! Fila:(".$fila.") No cumple con la longitud del formato estandar.",
+                            );
+                            
+                            $transacciones[] = array(
+                                'errores' => 1,
+                                'registros' => $registros,
                             );
                         }
+
                         $rows++;
                     }
 
                     fclose($archivo);
 
                     if ($arrayComparendos) {
-                        $rowsBatch = $this->insertBatch($arrayComparendos);
+                        $transacciones[] =  $this->insertBatch($arrayComparendos, $rows);
                     }
 
                     $response = array(
@@ -595,9 +606,7 @@ class CvCdoComparendoController extends Controller
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'Se han procesado '.$rows.' líneas.', 
-                        'data' => array(
-                            'errores' => $errores,
-                        )
+                        'data' => $transacciones,
                     );
                 }else{
                     $response = array(
@@ -627,13 +636,17 @@ class CvCdoComparendoController extends Controller
         return $helpers->json($response);
     }
 
-    public function insertBatch($arrayComparendos){
+    public function insertBatch($arrayComparendos, $rows){
         $helpers = $this->get("app.helpers");
 
-        $arrayProcesos = [];
-        $arrayErrores = [];
+        $arrayProcesos = null;
+        $procesados = 0;
+        $errores = 0;
+        $fila = 0;
 
         foreach ($arrayComparendos as $key => $arrayComparendo) {
+            $fila = $rows - count($arrayComparendos) + $key + 1;
+
             $em = $this->getDoctrine()->getManager();
 
             //Busca si ya existe el numero consecutivo
@@ -659,7 +672,7 @@ class CvCdoComparendoController extends Controller
                             'title' => 'Atención!',
                             'status' => 'warning',
                             'code' => 400,
-                            'message' => "Error! Fila:(".$key++.") El consecutivo se encuentra en estado ".$consecutivo->getEstado()." y no puede ser utilizado para este registro.",
+                            'message' => "Error! Fila:(".$fila.") El consecutivo se encuentra en estado ".$consecutivo->getEstado()." y no puede ser utilizado para este registro.",
                         );    
                     }
                 }else{
@@ -667,7 +680,7 @@ class CvCdoComparendoController extends Controller
                         'title' => 'Atención!',
                         'status' => 'warning',
                         'code' => 400,
-                        'message' => "Error! Fila:(".$key++.") El número consecutivo aún no se encuentra registrado en el sistema.",
+                        'message' => "Error! Fila:(".$fila.") El número consecutivo aún no se encuentra registrado en el sistema.",
                     ); 
                 }
             }elseif ($arrayComparendo['tipoFuente'] == 2) {
@@ -684,7 +697,7 @@ class CvCdoComparendoController extends Controller
                             'title' => 'Atención!',
                             'status' => 'warning',
                             'code' => 400,
-                            'message' => "Error! Fila:(".$key++.") El consecutivo se encuentra en estado ".$consecutivo->getEstado()." y no puede ser utilizado para este registro.",
+                            'message' => "Error! Fila:(".$fila.") El consecutivo se encuentra en estado ".$consecutivo->getEstado()." y no puede ser utilizado para este registro.",
                         );    
                     }
                 }else{
@@ -704,15 +717,20 @@ class CvCdoComparendoController extends Controller
             }
 
             if ($response['code'] == 200) {
-                $arrayProcesos[] = $response;
+                $procesados++;
             } else {
-                $arrayErrores[] = $response;
+                $errores++;
             }
+            $arrayProcesos[] = $response;
         }
 
         $em->flush();
 
-        return $helpers->json(array('procesos'=>$arrayResultados, 'errores'=>$arrayErrores));
+        return array(
+            'registros'=>$arrayProcesos, 
+            'procesados'=>$procesados, 
+            'errores'=>$errores
+        );
     }
 
     /*
@@ -728,8 +746,10 @@ class CvCdoComparendoController extends Controller
         $comparendo->setConsecutivo($consecutivo);
 
         if ($arrayComparendo['tipoFuente'] == 1) {
+            $length = 59;
             $comparendo->setPolca(false);
         }elseif ($arrayComparendo['tipoFuente'] == 2) {
+            $length = 57;
             $comparendo->setPolca(true);
         }
 
