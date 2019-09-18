@@ -2670,11 +2670,44 @@ class FroTrteSolicitudController extends Controller
                 if($archivo == false){
                     echo("Error al crear el archivo");
                 }else{
-                    // Escribir en el archivo:
-                    fwrite($archivo, "Estamos probando\r\n");
-                    fwrite($archivo, "el uso de archivos ");
-                    fwrite($archivo, "en PHP");
-                    // Fuerza a que se escriban los datos pendientes en el buffer:
+                    foreach ($vehiculos as $key => $vehiculo) {
+                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                            array(
+                                'vehiculo' => $vehiculo->getId(),
+                                'activo' => true
+                            )
+                        );
+    
+                        $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                            array(
+                                'propietario' => $propietario->getId(),
+                                'activo' => true
+                            )
+                        );
+    
+                        fwrite($archivo, $vehiculo->getOrganismoTransito()->getDivipo());
+                        fwrite($archivo, $vehiculo->getPlaca()->getNumero());
+                        fwrite($archivo, $vehiculo->getLinea()->getMarca()->getNombre());
+                        fwrite($archivo, $vehiculo->getLinea()->getNombre());
+                        fwrite($archivo, $vehiculo->getClase()->getCodigo());
+                        fwrite($archivo, $vehiculo->getColor()->getNombre());
+                        fwrite($archivo, $vehiculo->getServicio()->getId());
+                        fwrite($archivo, $vehiculo->getCarroceria()->getCodigo());
+                        fwrite($archivo, $vehiculo->getModalidadTransporte()->getId());
+                        fwrite($archivo, $vehiculo->getCilindraje());
+                        fwrite($archivo, $vehiculo->getModelo());
+                        fwrite($archivo, $vehiculo->getMotor());
+                        fwrite($archivo, $vehiculo->getChasis());
+                        fwrite($archivo, $vehiculo->getSerie());
+                        fwrite($archivo, $vehiculo->getCapacidadCarga());
+                        fwrite($archivo, $vehiculo->getNumeroPasajeros());
+                        fwrite($archivo, $vehiculo->getFechaPlaca()->format('AAAAmmdd'));
+                        fwrite($archivo, $licenciaTransito->getNumero());
+                        /* fwrite($archivo, str_pad($archivo, 3, '0', STR_PAD_LEFT)); */
+                        fwrite($archivo, "N");
+                        fwrite($archivo, $vehiculo->getCombustible()->getCodigo());
+                        fwrite($archivo, $vehiculo->getActivo() . "\r\n");
+                    }
                     fflush($archivo);
                 }
 
@@ -2690,55 +2723,95 @@ class FroTrteSolicitudController extends Controller
                 readfile($file);
 
                 return $file;
-
-
-                if ($vehiculos) {
-                    # code...
-                    /*foreach ($vehiculos as $key => $vehiculo) {
-                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
-                            array(
-                                'vehiculo' => $vehiculo->getVehiculo()->getId(),
-                                'activo' => true
-                            )
-                        );
-    
-                        $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
-                            array(
-                                'propietario' => $propietario->getId(),
-                                'activo' => true
-                            )
-                        );
-    
-                        $arrayVehiculos [] = array(
-                            'organismoTransito' => $vehiculo->getVehiculo()->getOrganismoTransito()->getNombre(),
-                            'placa' => $vehiculo->getVehiculo()->getPlaca()->getNumero(),
-                            'marca' => $vehiculo->getVehiculo()->getLinea()->getMarca()->getNombre(),
-                            'linea' => $vehiculo->getVehiculo()->getLinea()->getNombre(),
-                            'clase' => $vehiculo->getVehiculo()->getClase()->getNombre(),
-                            'color' => $vehiculo->getVehiculo()->getColor()->getNombre(),
-                            'servicio' => $vehiculo->getVehiculo()->getServicio()->getNombre(),
-                            'carroceria' => $vehiculo->getVehiculo()->getCarroceria()->getNombre(),
-                            'modalidadTransporte' => $vehiculo->getVehiculo()->getModalidadTransporte()->getNombre(),
-                            'cilindraje' => $vehiculo->getVehiculo()->getCilindraje(),
-                            'modelo' => $vehiculo->getVehiculo()->getModelo(),
-                            'motor' => $vehiculo->getVehiculo()->getMotor(),
-                            'chasis' => $vehiculo->getVehiculo()->getChasis(),
-                            'serie' => $vehiculo->getVehiculo()->getSerie(),
-                            'capacidadCarga' => $vehiculo->getVehiculo()->getCapacidadCarga(),
-                            'numeroPasajeros' => $vehiculo->getVehiculo()->getNumeroPasajeros(),
-                            'fechaMatricula' => $vehiculo->getFecha(),
-                            'licenciaTransito' => !empty($licenciaTransito) ? $licenciaTransito: null,
-                            'numeroFactura' => 'N',
-                            'combustible' => $vehiculo->getVehiculo()->getCombustible()->getCodigo(),
-                            'estado' => $vehiculo->getVehiculo()->getActivo(),
-                        );
-                    }*/
-                }
-                
-
                 return true;
             }
             else if($params->tipoReporte == 2){
+                $propetariosActuales = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->getByFechasForFile(
+                    $fechaInicial,
+                    $fechaFinal
+                );
+
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTAMPROP.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                }else{
+                    foreach ($propetariosActuales as $key => $propietarioActual) {
+                        fwrite($archivo, $propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo());
+                        fwrite($archivo, $propietarioActual->getVehiculo()->getPlaca()->getNumero());
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, $propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla());
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getIdentificacion());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, $propietarioActual->getEmpresa()->getNit());
+                        }
+                        fwrite($archivo, "N");
+                        fwrite($archivo, $propietarioActual->getFechaInicial()->format('Ymd'));
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getPrimerApellido());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, "    ");
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getSegundoApellido());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, "    ");
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getPrimerNombre());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, $propietarioActual->getEmpresa()->getNombre());
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getSegundoNombre());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, "    ");
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, $propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane());
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getDireccionPersonal());
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, $propietarioActual->getEmpresa()->getDireccion());
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, $propietarioActual->getCiudadano()->getTelefonoCelular() . "\r\n");
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, $propietarioActual->getEmpresa()->getTelefono() . "\r\n");
+                        }
+
+
+                    }
+                    fflush($archivo);
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                # Obtener nombre sin ruta completa, únicamente para sugerirlo al guardar
+                $nombreArchivo = basename($file);
+                # Algunos encabezados que son justamente los que fuerzan la descarga
+                header('Content-Type: application/octet-stream');
+                header("Content-Transfer-Encoding: Binary");
+                header("Content-disposition: attachment; filename=$nombreArchivo");
+                # Leer el archivo y sacarlo al navegador
+                readfile($file);
+
+                return $file;
+                return true;
             }
             else if($params->tipoReporte == 3) {
             }

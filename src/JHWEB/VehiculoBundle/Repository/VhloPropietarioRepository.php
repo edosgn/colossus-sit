@@ -10,4 +10,25 @@ namespace JHWEB\VehiculoBundle\Repository;
  */
 class VhloPropietarioRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene todos los propietario de los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getByFechasForFile($fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT vp
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, 
+            JHWEBVehiculoBundle:VhloPropietario vp
+            WHERE vp.vehiculo = v.id
+            AND v.activo = true
+            AND vp.activo = true
+            AND vp.fechaInicial BETWEEN :fechaInicial AND :fechaFinal";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+        
+        return $consulta->getResult();
+    }
+
 }
