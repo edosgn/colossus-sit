@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlicenciaconduccionrestriccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechacancelacion</th>
+                <th>Fecharesolucion</th>
+                <th>Tipoacto</th>
+                <th>Numresolucion</th>
+                <th>Fechainicio</th>
+                <th>Fechafin</th>
+                <th>Tipo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userLicenciaConduccionRestriccion in userLicenciaConduccionRestriccions %}
+            <tr>
+                <td><a href="{{ path('userlicenciaconduccionrestriccion_show', { 'id': userLicenciaConduccionRestriccion.id }) }}">{{ userLicenciaConduccionRestriccion.id }}</a></td>
+                <td>{% if userLicenciaConduccionRestriccion.fechaCancelacion %}{{ userLicenciaConduccionRestriccion.fechaCancelacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLicenciaConduccionRestriccion.fechaResolucion %}{{ userLicenciaConduccionRestriccion.fechaResolucion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ userLicenciaConduccionRestriccion.tipoActo }}</td>
+                <td>{{ userLicenciaConduccionRestriccion.numResolucion }}</td>
+                <td>{% if userLicenciaConduccionRestriccion.fechaInicio %}{{ userLicenciaConduccionRestriccion.fechaInicio|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLicenciaConduccionRestriccion.fechaFin %}{{ userLicenciaConduccionRestriccion.fechaFin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ userLicenciaConduccionRestriccion.tipo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('userlicenciaconduccionrestriccion_show', { 'id': userLicenciaConduccionRestriccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('userlicenciaconduccionrestriccion_edit', { 'id': userLicenciaConduccionRestriccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userlicenciaconduccionrestriccion_new') }}">Create a new userLicenciaConduccionRestriccion</a>
+        </li>
+    </ul>
+{% endblock %}
