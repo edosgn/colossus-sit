@@ -337,10 +337,10 @@ class FroFacTramiteController extends Controller
             
             if ($tramite) {
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => 'Registro encontrado.',
-                    'data' => $tramite
+                    'message' => 'Se encontró un cambio de servicio realizado desde RNA.',
                 );
             } else {
                 $response = array(
@@ -348,7 +348,6 @@ class FroFacTramiteController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'No se encontró un tramite de cambio de servicio para el vehículo.',
-                    'data' => $tramite
                 );
             }
 
