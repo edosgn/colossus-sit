@@ -2876,7 +2876,7 @@ class FroTrteSolicitudController extends Controller
                         fwrite($archivo, str_pad($tramite->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($tramite->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($licenciaTransito->getNumero(), 10,' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad("N", 16,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("N", 16,' ', STR_PAD_RIGHT) . "\r\n");
                     }
                     
                     fflush($archivo);
