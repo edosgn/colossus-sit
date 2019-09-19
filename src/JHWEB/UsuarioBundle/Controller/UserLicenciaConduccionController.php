@@ -332,7 +332,6 @@ class UserLicenciaConduccionController extends Controller
             $licenciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
                 array(
                     'ciudadano' => $params->idCiudadano,
-                    'activo' => true,
                 )
             );
 
