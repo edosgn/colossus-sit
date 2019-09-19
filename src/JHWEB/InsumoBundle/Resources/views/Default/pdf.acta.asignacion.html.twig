@@ -16,54 +16,52 @@
         </tr> 
     </table>
     <h4>No.Acta {{numeroActa}}</h4>
-
-    <br>   <br>  <br>   <br>   
-{% if sustratosActa %}
-    
-    <h4>Sustratos</h4>
-    <table border="1" cellpading="5">
-        <tr>
-            <td width="40%" >Nombre sustrato</td>
-            <td width="15%">Rango inicial</td> 
-            <td width="15%">Rango final</td>
-            <td width="15%">Cantidad</td>
-            <td width="15%">Referencia</td>
-        </tr>
-        {% for sustratoActa in sustratosActa %} 
+    <br>
+    <br>
+    <br>
+    <br>   
+    {% if sustratosActa %}
+        <h4>Sustratos</h4>
+        <table border="1" cellpadding="3">
             <tr>
-                <td>{{ sustratoActa.tipoInsumo.nombre }}</td>
-                <td>{{ sustratoActa.rangoInicio}}</td>
-                <td>{{ sustratoActa.rangoFin}}</td>
-                <td>{{ sustratoActa.cantidad }}</td>
-                <td>{{ sustratoActa.referencia }}</td>
+                <td width="40%" >Nombre sustrato</td>
+                <td width="15%">Rango inicial</td> 
+                <td width="15%">Rango final</td>
+                <td width="15%">Cantidad</td>
+                <td width="15%">Referencia</td>
             </tr>
-        {% endfor %}
-    </table>
-{% endif %}
+            {% for sustratoActa in sustratosActa %} 
+                <tr>
+                    <td>{{ sustratoActa.tipoInsumo.nombre }}</td>
+                    <td>{{ sustratoActa.rangoInicio}}</td>
+                    <td>{{ sustratoActa.rangoFin}}</td>
+                    <td>{{ sustratoActa.cantidad }}</td>
+                    <td>{{ sustratoActa.referencia }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 
 
-{% if insumosActa %}
-    <h4>Insumos</h4>
-    <table border="1" cellpading="5">
-        <tr>
-            <td width="40%" >Nombre sustrato</td>
-            <td width="15%">Cantidad</td>
-            <td width="15%">Referencia</td>
-        </tr>
-        {% for insumoActa in insumosActa %}
+    {% if insumosActa %}
+        <h4>Insumos</h4>
+        <table border="1" cellpadding="5">
             <tr>
-                <td>{{ insumoActa.tipo.nombre }}</td>
-                <td>{{ insumoActa.numero }}</td>
-                <td>{{ insumoActa.tipo.referencia }}</td>
+                <td width="40%" >Nombre sustrato</td>
+                <td width="15%">Cantidad</td>
+                <td width="15%">Referencia</td>
             </tr>
-        {% endfor %}
-    </table>
-{% endif %}
-
-
-       <br>
-       <br> 
-
+            {% for insumoActa in insumosActa %}
+                <tr>
+                    <td>{{ insumoActa.tipo.nombre }}</td>
+                    <td>{{ insumoActa.numero }}</td>
+                    <td>{{ insumoActa.tipo.referencia }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <br>
+    <br> 
     <p> 
         <b>Fecha entrega: {{ fechaEntrega | date('Y-m-d') }}</b>
         <br>      
@@ -81,6 +79,5 @@
         {{ funcionario.organismoTransito.nombre }}    
         {% endif %}
     </p> 
-
   </body>
 </html>

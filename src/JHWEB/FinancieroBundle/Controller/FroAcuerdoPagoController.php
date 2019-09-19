@@ -403,7 +403,6 @@ class FroAcuerdoPagoController extends Controller
             $fecha = strtotime(date('Y-m-d'));
             $fechaFinal = date('Y-m-d', strtotime("+".$params->numeroCuotas." month", $fecha));
             
-
             $fechaFinal = $helpers->getFechaVencimiento(
                 new \Datetime($fechaFinal),
                 5

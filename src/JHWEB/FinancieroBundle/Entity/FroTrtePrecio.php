@@ -149,6 +149,19 @@ class FroTrtePrecio
     }
 
     /**
+     * Get fechaInicial
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicialString()
+    {
+        if ($this->fechaInicial) {
+            return $this->fechaInicial->format('Y-m-d');
+        }
+        return $this->fechaInicial;
+    }
+
+    /**
      * Set fechaFinal
      *
      * @param \DateTime $fechaFinal

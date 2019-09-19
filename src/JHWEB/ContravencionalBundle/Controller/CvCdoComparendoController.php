@@ -316,6 +316,10 @@ class CvCdoComparendoController extends Controller
             );
             $comparendo->setInfraccion($infraccion);
 
+            if (isset($params->comparendo->gradoAlcoholemia) && $params->comparendo->gradoAlcoholemia) {
+                $comparendo->setGradoAlcoholemia($params->comparendo->gradoAlcoholemia);
+            }
+
             //Calcula valor de infracción
             $smlmv = $em->getRepository('JHWEBConfigBundle:CfgSmlmv')->findOneByActivo(
                 true

@@ -55,15 +55,15 @@ class VhloTpRangoController extends Controller
                 array(
                     'id' => $params->idEmpresaTransporte,
                     'activo' => true
-                    )
-                );
+                )
+            );
                 
             $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
                 array(
                     'numeroConvenio' => $params->numeroConvenio,
                     'activo' => true
-                    )
-                );
+                )
+            );
                     
             if($empresaTransporte){
                 if($params->rangoInicio <= $params->rangoFin){
