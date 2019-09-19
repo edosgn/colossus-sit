@@ -198,11 +198,9 @@ class UserLicenciaConduccionRestriccionController extends Controller
         $userLicenciaConduccion->setEstado('ACTIVA');
         $userLicenciaConduccion->setActivo(1);
 
-        $em->persist($userLicenciaConduccion);
-        $em->persist($userLicenciaConduccionRestriccion);
-        $em->flush();
-        var_dump($params->horasComunitarias);
-        die();
+        // $em->persist($userLicenciaConduccion);
+        // $em->persist($userLicenciaConduccionRestriccion);
+        // $em->flush();
        
         $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array()); 
 
