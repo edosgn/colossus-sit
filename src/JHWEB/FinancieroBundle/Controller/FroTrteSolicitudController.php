@@ -2609,7 +2609,7 @@ class FroTrteSolicitudController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "El vehículo si realizo un cambio de servico en RNA, tiene permisos para generar la resolución por cambio de servicio.",
+                    'message' => "El vehículo si realizó un cambio de servico en RNA, tiene permisos para generar la resolución por cambio de servicio.",
                 );
             } else {
                 $response = array(
