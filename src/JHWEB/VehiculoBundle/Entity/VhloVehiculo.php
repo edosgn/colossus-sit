@@ -22,6 +22,13 @@ class VhloVehiculo
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_matricula", type="date", nullable= true)
+     */
+    private $fechaMatricula;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="numero_factura", type="integer", nullable= true)
@@ -274,6 +281,30 @@ class VhloVehiculo
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set fechaMatricula
+     *
+     * @param \DateTime $fechaMatricula
+     *
+     * @return VhloVehiculo
+     */
+    public function setFechaMatricula($fechaMatricula)
+    {
+        $this->fechaMatricula = $fechaMatricula;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaMatricula
+     *
+     * @return \DateTime
+     */
+    public function getFechaMatricula()
+    {
+        return $this->fechaMatricula;
     }
 
     /**

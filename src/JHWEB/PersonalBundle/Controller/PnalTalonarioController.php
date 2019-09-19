@@ -298,7 +298,8 @@ class PnalTalonarioController extends Controller
             $consecutivo = new PnalCfgCdoConsecutivo();
 
             if ($organismoTransito->getAsignacionRango()) {
-                $consecutivo->setNumero($divipo.$numero);
+                $numeroConsecutivo = str_pad($numero, 12, '0', STR_PAD_LEFT);
+                $consecutivo->setNumero($divipo.$numeroConsecutivo);
             }else{
                 $consecutivo->setNumero($numero);
             }
