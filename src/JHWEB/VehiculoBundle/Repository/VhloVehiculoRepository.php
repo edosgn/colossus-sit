@@ -197,21 +197,26 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
-    public function getByFechasForFile($fechaInicial, $fechaFinal)
+    public function getByFechasForFile($idOrganismoTransito, $idModulo, $fechaInicial, $fechaFinal)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT v
-            FROM JHWEBVehiculoBundle:VhloVehiculo v, 
-            JHWEBVehiculoBundle:VhloPropietario vp
-            WHERE vp.vehiculo = v.id
+            FROM JHWEBVehiculoBundle:VhloVehiculo v,
+            JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
+            JHWEBVehiculoBundle:VhloCfgClase vcc 
+            WHERE v.organismoTransito = :idOrganismoTransito
+            AND v.clase = vcc.id
+            AND vcc.tipoVehiculo = vctv.id
+            AND vctv.modulo = :idModulo
             AND v.activo = true
-            AND vp.activo = true
-            AND vp.fechaInicial BETWEEN :fechaInicial AND :fechaFinal";
+            AND v.fechaMatricula BETWEEN :fechaInicial AND :fechaFinal";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idModulo' => $idModulo,
             'fechaInicial' => $fechaInicial,
-            'fechaFinal' => $fechaFinal,
+            'fechaFinal' => $fechaFinal
         ));
         
         return $consulta->getResult();

@@ -2646,7 +2646,7 @@ class FroTrteSolicitudController extends Controller
         if ($authCheck==true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-
+            
             $em = $this->getDoctrine()->getManager();
             
             $fechaInicial = new \Datetime($params->fechaInicial);
@@ -2654,6 +2654,8 @@ class FroTrteSolicitudController extends Controller
             
             if($params->tipoReporte == 1) {
                 $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFechasForFile(
+                    $params->idOrganismoTransito,
+                    $params->idModulo,
                     $fechaInicial,
                     $fechaFinal
                 );
@@ -2685,35 +2687,34 @@ class FroTrteSolicitudController extends Controller
                             )
                         );
     
-                        fwrite($archivo, $vehiculo->getOrganismoTransito()->getDivipo());
-                        fwrite($archivo, $vehiculo->getPlaca()->getNumero());
-                        fwrite($archivo, $vehiculo->getLinea()->getMarca()->getNombre());
-                        fwrite($archivo, $vehiculo->getLinea()->getNombre());
-                        fwrite($archivo, $vehiculo->getClase()->getCodigo());
-                        fwrite($archivo, $vehiculo->getColor()->getNombre());
-                        fwrite($archivo, $vehiculo->getServicio()->getId());
-                        fwrite($archivo, $vehiculo->getCarroceria()->getCodigo());
-                        fwrite($archivo, $vehiculo->getModalidadTransporte()->getId());
-                        fwrite($archivo, $vehiculo->getCilindraje());
-                        fwrite($archivo, $vehiculo->getModelo());
-                        fwrite($archivo, $vehiculo->getMotor());
-                        fwrite($archivo, $vehiculo->getChasis());
-                        fwrite($archivo, $vehiculo->getSerie());
-                        fwrite($archivo, $vehiculo->getCapacidadCarga());
-                        fwrite($archivo, $vehiculo->getNumeroPasajeros());
-                        fwrite($archivo, $vehiculo->getFechaPlaca()->format('AAAAmmdd'));
-                        fwrite($archivo, $licenciaTransito->getNumero());
-                        /* fwrite($archivo, str_pad($archivo, 3, '0', STR_PAD_LEFT)); */
-                        fwrite($archivo, "N");
-                        fwrite($archivo, $vehiculo->getCombustible()->getCodigo());
-                        fwrite($archivo, $vehiculo->getActivo() . "\r\n");
+                        fwrite($archivo, str_pad($vehiculo->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getLinea()->getMarca()->getNombre(), 30, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getLinea()->getNombre(), 50, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getClase()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getColor()->getNombre(), 60, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getServicio()->getId(), 2, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getCarroceria()->getCodigo(), 3, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getModalidadTransporte()->getId(), 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getCilindraje(), 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getModelo(), 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getMotor(), 25, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getChasis(), 25, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getSerie(), 25, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getNumeroPasajeros(), 3, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('AAAAmmdd'), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($licenciaTransito->getNumero(), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("N", 16, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getCombustible()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getActivo(), 1, ' ', STR_PAD_RIGHT) . "\r\n");
                     }
                     fflush($archivo);
                 }
 
                 fclose($archivo);   // Cerrar el archivo
 
-                # Obtener nombre sin ruta completa, únicamente para sugerirlo al guardar
+                /* # Obtener nombre sin ruta completa, únicamente para sugerirlo al guardar
                 $nombreArchivo = basename($file);
                 # Algunos encabezados que son justamente los que fuerzan la descarga
                 header('Content-Type: application/octet-stream');
@@ -2723,10 +2724,18 @@ class FroTrteSolicitudController extends Controller
                 readfile($file);
 
                 return $file;
-                return true;
-            }
-            else if($params->tipoReporte == 2){
+                return true; */
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "TTAMVEHI.DAT"
+                );
+            } elseif($params->tipoReporte == 2){
                 $propetariosActuales = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->getByFechasForFile(
+                    $params->idOrganismoTransito,
+                    $params->idModulo,
                     $fechaInicial,
                     $fechaFinal
                 );
@@ -2744,54 +2753,55 @@ class FroTrteSolicitudController extends Controller
                     echo("Error al crear el archivo");
                 }else{
                     foreach ($propetariosActuales as $key => $propietarioActual) {
-                        fwrite($archivo, $propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo());
-                        fwrite($archivo, $propietarioActual->getVehiculo()->getPlaca()->getNumero());
+                        fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                        
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, $propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla());
+                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
                         }
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getIdentificacion());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, $propietarioActual->getEmpresa()->getNit());
+                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
                         }
-                        fwrite($archivo, "N");
-                        fwrite($archivo, $propietarioActual->getFechaInicial()->format('Ymd'));
+                        fwrite($archivo, str_pad("N", 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getPrimerApellido());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 25, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, "    ");
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getSegundoApellido());
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, "    ");
+                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
                         }
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getPrimerNombre());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 25, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, $propietarioActual->getEmpresa()->getNombre());
+                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
                         }
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getSegundoNombre());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 25, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, "    ");
+                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 25, ' ', STR_PAD_RIGHT));
                         }
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 25, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, $propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane());
+                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
                         }
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getDireccionPersonal());
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, $propietarioActual->getEmpresa()->getDireccion());
+                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
                         }
                         if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, $propietarioActual->getCiudadano()->getTelefonoCelular() . "\r\n");
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getDireccionPersonal(), 20, ' ', STR_PAD_RIGHT));
                         } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, $propietarioActual->getEmpresa()->getTelefono() . "\r\n");
+                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getDireccion(), 20, ' ', STR_PAD_RIGHT));
+                        }
+                        if($propietarioActual->getCiudadano()){
+                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTelefonoCelular(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
+                        } elseif ($propietarioActual->getEmpresa()) {
+                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTelefono(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
                         }
 
 
@@ -2801,19 +2811,88 @@ class FroTrteSolicitudController extends Controller
 
                 fclose($archivo);   // Cerrar el archivo
 
-                # Obtener nombre sin ruta completa, únicamente para sugerirlo al guardar
+                /* # Obtener nombre sin ruta completa, únicamente para sugerirlo al guardar
                 $nombreArchivo = basename($file);
                 # Algunos encabezados que son justamente los que fuerzan la descarga
                 header('Content-Type: application/octet-stream');
                 header("Content-Transfer-Encoding: Binary");
-                header("Content-disposition: attachment; filename=$nombreArchivo");
+                header("Content-disposition: attachment; filename=$nombreArchivo"); */
                 # Leer el archivo y sacarlo al navegador
-                readfile($file);
+                /* readfile($file); */
 
-                return $file;
-                return true;
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "TTAMPROP.DAT"
+                );
+
+                /* return new Response(
+                    $archivo, 
+                    200,
+                    array(
+                        'Content-Type'        => 'text/html; charset=utf-8',
+                        'Content-Disposition' => 'attachment; filename="TTAMPROP.DAT"'
+                    )
+                ); */
             }
+            
             else if($params->tipoReporte == 3) {
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites(
+                    $params->idOrganismoTransito,
+                    $params->idModulo,
+                    $fechaInicial,
+                    $fechaFinal
+                );
+                
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTAMTRVE.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    foreach ($tramites as $key => $tramite) {
+                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                            array(
+                                'vehiculo' => $tramite->getVehiculo()->getId()
+                                )
+                            );    
+        
+                        $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                            array(
+                                'propietario' => $propietario->getId()
+                            )
+                        );
+                        
+                        fwrite($archivo, str_pad($tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(), 2,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($tramite->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($tramite->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($tramite->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($licenciaTransito->getNumero(), 10,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("N", 16,' ', STR_PAD_RIGHT));
+                    }
+                    
+                    fflush($archivo);
+                
+
+                    fclose($archivo);   // Cerrar el archivo
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Archivo generado",
+                        'data' => "TTAMTRVE.DAT"
+                    );
+                }
+                
             }
             else if($params->tipoReporte == 4) {
             }
@@ -2831,11 +2910,13 @@ class FroTrteSolicitudController extends Controller
             }            
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida.', 
             );
         }
+        return $helpers->json($response);
     }
 
     /**
