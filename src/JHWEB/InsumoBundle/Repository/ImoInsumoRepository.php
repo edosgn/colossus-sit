@@ -12,19 +12,19 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
 {
 
     //Obtiene el minimo insumo sustrato disponible
-    public function getLastByFuncionario($idOrnganismoTransito)
+    public function getLastByFuncionario($idOrganismoTransito)
     { 
         $em = $this->getEntityManager();
 
         $dql = "SELECT MAX(i.id) AS id, i.numero
             FROM JHWEBInsumoBundle:ImoInsumo i
-            WHERE i.organismoTransito = :idOrnganismoTransito
+            WHERE i.organismoTransito = :idOrganismoTransito
             AND i.estado = :estado
             AND i.tipo = :tipo";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'idOrnganismoTransito' => $idOrnganismoTransito,
+            'idOrganismoTransito' => $idOrganismoTransito,
             'estado' => 'disponible',
             'tipo' => 'SUSTRATO',
         ));
