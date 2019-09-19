@@ -124,7 +124,7 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
-    public function getInsumoCantidad($idOrganismoTransito,$tipo,$cantidad)
+    public function getInsumoCantidad($idOrganismoTransito, $tipo, $cantidad)
     {
         $em = $this->getEntityManager();
         

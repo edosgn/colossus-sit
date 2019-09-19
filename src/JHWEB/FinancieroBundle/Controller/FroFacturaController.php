@@ -7,6 +7,7 @@ use JHWEB\FinancieroBundle\Entity\FroFacComparendo;
 use JHWEB\FinancieroBundle\Entity\FroFacTramite;
 use JHWEB\FinancieroBundle\Entity\FroFacParqueadero;
 use JHWEB\FinancieroBundle\Entity\FroFacRetefuente;
+use JHWEB\VehiculoBundle\Entity\VhloCfgValor;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -353,6 +354,131 @@ class FroFacturaController extends Controller
             }
         }else{
             $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca si la factura genera excedentes por cambio de precios en los tramites.
+     *
+     * @Route("/validate/excedente", name="frofactura_validate_excedente")
+     * @Method({"GET", "POST"})
+     */
+    public function validateExcedente(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $excedentes = null;
+
+            $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find(
+                $params->id
+            );
+
+            if ($factura) {
+                $excedentesActuales = $em->getRepository('JHWEBFinancieroBundle:FroFacExcedente')->findBy(
+                    array(
+                        'factura' => $factura->getId(),
+                        'pagado' => false,
+                    )
+                );
+
+                if ($excedentesActuales) {
+                    foreach ($excedentesActuales as $key => $excedenteActual) {
+                        $excedentes[] = array(
+                            'valor' => $excedenteActual->getValor(),  
+                            'tramiteNombre' => $excedenteActual->getTramite()->getNombre(),
+                            'facturaNumero' => $excedenteActual->getFactura()->getNunero(),
+                            'idTramite' => $excedenteActual->getTramite()->getId(),
+                            'idFactura' => $excedenteActual->getFactura()->getId(),
+                        );
+                    }
+
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 401,
+                        'message' => count($excedentesActuales).' trámites presentan valor excedente, no podra continuar hasta no realizar el pago del valor por excendentes.', 
+                        'data'=> $excedentesActuales
+                    );
+                } else {
+                    $facturaTramites = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->findBy(
+                        array(
+                            'factura' => $factura->getId()
+                        )
+                    );
+    
+                    if ($facturaTramites) {
+                        foreach ($facturaTramites as $key => $facturaTramite) {
+                            if (!$facturaTramite->getPrecio()->getActivo()) {
+                                $precioActual = $em->getRepository('JHWEBFinancieroBundle:FroFacPrecio')->findBy(
+                                    array(
+                                        'tramite' => $facturaTramite->getPrecio()->getTramite()->getId(),
+                                        'tipoVehiculo' => $facturaTramite->getPrecio()->getTipoVehiculo()->getId(),
+                                        'modulo' => $facturaTramite->getPrecio()->getModulo()->getId(),
+                                    )
+                                );
+    
+                                if ($precioActual && $precioActual->getValorTotal() > $facturaTramite->getPrecio()->getValorTotal()) {
+                                    $excedentes[] = array(
+                                        'valor' => $precioActual->getValorTotal() - $facturaTramite->getPrecio()->getValorTotal(),  
+                                        'tramiteNombre' => $precioActual->getTramite()->getNombre(),
+                                        'facturaNumero' => $factura->getNumero(),
+                                        'idTramite' => $precioActual->getTramite()->getId(),  
+                                        'idFactura' => $factura->getId(),
+                                    );
+                                }
+                            }
+                        }
+    
+                        if ($excedentes) {
+                            $response = array(
+                                'title' => 'Atención!',
+                                'status' => 'warning',
+                                'code' => 401,
+                                'message' => count($excedentes).' trámites presentan valor excedente, no podra continuar hasta no realizar el pago del valor por excendentes.', 
+                                'data'=> $excedentes
+                            );
+                        } else {
+                            $response = array(
+                                'title' => 'Prefecto!',
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Níngún trámite presenta excedente.', 
+                            );
+                        }
+                    }else{
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => 'La factura no tiene ningún trámite registrado.', 
+                        );
+                    }
+                }
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'La factura no existe.' 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -942,7 +1068,7 @@ class FroFacturaController extends Controller
 
         file_put_contents ($path, $imageContent);
 
-        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.amortizacion.html.twig', array(
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.acuerdopago.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
             'amortizacion'=>$amortizacion,
