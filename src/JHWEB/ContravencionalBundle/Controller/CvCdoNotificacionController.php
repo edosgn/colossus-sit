@@ -256,8 +256,8 @@ class CvCdoNotificacionController extends Controller
 
         if ($comparendos) {
             foreach ($comparendos as $key => $comparendo) {
-                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
-                $diasCalendario = $helpers->getDiasCalendario($comparendo->getFecha());
+                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha()->format('d/m/Y'));
+                $diasCalendario = $helpers->getDiasCalendario($comparendo->getFecha()->format('d/m/Y'));
 
                 //Valida que el comparendo este Pendiente
                 if ($comparendo->getEstado()->getId() == 1) {
@@ -300,7 +300,7 @@ class CvCdoNotificacionController extends Controller
 
                                         $helpers->generateTrazabilidad($comparendo, $estado);
                                     }elseif($diasCalendario > 912){
-                                        $caduco = $helpers->checkRangeDates($comparendo->getFecha());
+                                        $caduco = $helpers->checkRangeDates($comparendo->getFecha()->format('d/m/Y'));
 
                                         if ($caduco) {
                                             //Caducidad
