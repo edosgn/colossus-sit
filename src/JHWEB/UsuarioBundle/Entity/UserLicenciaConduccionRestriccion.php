@@ -77,8 +77,16 @@ class UserLicenciaConduccionRestriccion
      */
     private $estado;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="horas_comunitarias", type="boolean")
+     */
+    private $horasComunitarias;
+
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion", inversedBy="licenciasConduccion") */
     private $userLicenciaConduccion;
+
 
 
 
@@ -282,6 +290,30 @@ class UserLicenciaConduccionRestriccion
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set horasComunitarias
+     *
+     * @param boolean $horasComunitarias
+     *
+     * @return UserLicenciaConduccionRestriccion
+     */
+    public function setHorasComunitarias($horasComunitarias)
+    {
+        $this->horasComunitarias = $horasComunitarias;
+
+        return $this;
+    }
+
+    /**
+     * Get horasComunitarias
+     *
+     * @return boolean
+     */
+    public function getHorasComunitarias()
+    {
+        return $this->horasComunitarias;
     }
 
     /**

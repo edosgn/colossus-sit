@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Userlicenciaconduccionrestriccion controller.
@@ -66,9 +67,8 @@ class UserLicenciaConduccionRestriccionController extends Controller
                 $userLicenciaConduccionRestriccion->setFechaFin(new \Datetime($params->fechaFin));
                 $userLicenciaConduccionRestriccion->setTipo('SUSPENSION');
                 $userLicenciaConduccion->setEstado('SUSPENDIDA');
-
-
             }
+            $userLicenciaConduccion->setActivo(false);
 
             $em->persist($userLicenciaConduccionRestriccion);
             $em->persist($userLicenciaConduccion);
@@ -164,5 +164,57 @@ class UserLicenciaConduccionRestriccionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/pdf/genera/auto", name="auto_genera_pdf_acta")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager(); 
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $userLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->idLicenciaConduccion);
+        $userLicenciaConduccionRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccionRestriccion')->findOneBy(
+            array(
+                'userLicenciaConduccion' => $params->idLicenciaConduccion,
+                'estado' =>'ACTIVA',
+            )
+        );
+
+        $userLicenciaConduccionRestriccion->setHorasComunitarias($params->horasComunitarias);
+        $userLicenciaConduccionRestriccion->setEstado('DEVUELTA');
+
+        $userLicenciaConduccion->setEstado('ACTIVA');
+        $userLicenciaConduccion->setActivo(1);
+
+        $em->persist($userLicenciaConduccion);
+        $em->persist($userLicenciaConduccionRestriccion);
+        $em->flush();
+        var_dump($params->horasComunitarias);
+        die();
+       
+        $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array()); 
+
+        /* ================= */
+        return new Response(
+            $this->get('app.pdf')->templatePreview($html, 'Acta '.'Num Acta.'),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+            )
+        );
+
     }
 }
