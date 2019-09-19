@@ -241,7 +241,7 @@ class Helpers
 
 		$em = $this->em;
 
-		$festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
+		$festivos = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->findByActivo(true);
 
 		if ($festivos) {
 			foreach ($festivos as $key => $value) {
@@ -538,7 +538,7 @@ class Helpers
     public function getFechaVencimiento($fechaInicial, $diasSolicitados){
 		$em = $this->em;
 
-		$festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
+		$festivos = $em->getRepository('JHWEBConfigBundle:CfgFestivo')->findByActivo(true);
 		$diasHabiles = 0;
 
 		if ($festivos) {

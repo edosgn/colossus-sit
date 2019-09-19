@@ -120,12 +120,14 @@ class FroAcuerdoPago
      */
     private $activo;
 
-
-    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="sedesOperativas") */
-    private $ciudadano;
-
     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCfgInteres", inversedBy="acuerdosPago") */
     private $interes;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="acuerdosPago") */
+    private $ciudadano;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoComparendo", inversedBy="facturas") */
+    private $comparendo;
 
  
     /**
@@ -451,77 +453,5 @@ class FroAcuerdoPago
     public function getValorDescuento()
     {
         return $this->valorDescuento;
-    }
-
-    /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return FroAcuerdoPago
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return boolean
-     */
-    public function getActivo()
-    {
-        return $this->activo;
-    }
-
-    /**
-     * Set ciudadano
-     *
-     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
-     *
-     * @return FroAcuerdoPago
-     */
-    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
-    {
-        $this->ciudadano = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadano
-     *
-     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
-     */
-    public function getCiudadano()
-    {
-        return $this->ciudadano;
-    }
-
-    /**
-     * Set interes
-     *
-     * @param \JHWEB\ContravencionalBundle\Entity\CvCfgInteres $interes
-     *
-     * @return FroAcuerdoPago
-     */
-    public function setInteres(\JHWEB\ContravencionalBundle\Entity\CvCfgInteres $interes = null)
-    {
-        $this->interes = $interes;
-
-        return $this;
-    }
-
-    /**
-     * Get interes
-     *
-     * @return \JHWEB\ContravencionalBundle\Entity\CvCfgInteres
-     */
-    public function getInteres()
-    {
-        return $this->interes;
     }
 }

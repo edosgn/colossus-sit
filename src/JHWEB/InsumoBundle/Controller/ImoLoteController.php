@@ -275,9 +275,9 @@ class ImoLoteController extends Controller
             if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                     array(
-                        'estado' => 'REGISTRADO',
+                        'estado' => 'ASIGNADO',
                         'sedeOperativa'=> $idOrganismoTransito,
-                        'tipo'=>$tipo
+                        'tipo' => $tipo,
                     )
                 );
             }else {            
@@ -408,6 +408,8 @@ class ImoLoteController extends Controller
 
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
+
+        $funcionario = null;
         
         $sustratosActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findByNumeroActaEntrega($numeroActa);
 
@@ -420,15 +422,18 @@ class ImoLoteController extends Controller
                 $insumosActa[0]->getId()
             );
             $funcionario = $asignacion->getFuncionario();
-        } else {
-            $funcionario = null;
-        }        
+        }
 
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
 
         if ($sustratosActa) {
             $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findOneByActaEntrega($numeroActa);
             $fechaEntrega = $insumo->getFecha();
+
+            $asignacion = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findOneByInsumo(
+                $insumo->getId()
+            );
+            $funcionario = $asignacion->getFuncionario();
         }else{
             $fechaEntrega = $insumosActa[0]->getFecha();
         }

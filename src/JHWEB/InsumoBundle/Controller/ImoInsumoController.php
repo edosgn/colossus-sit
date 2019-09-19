@@ -376,11 +376,15 @@ class ImoInsumoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $json = $request->get("data",null);
         $params = json_decode($json);
 
-        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoCantidad($params->sedeOrigen,$params->casoInsumo,$params->cantidad);
-
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoCantidad(
+            $params->idOrganismoTransitoOrigen,
+            $params->casoInsumo,
+            $params->cantidad
+        );
 
         if ($insumos) {
             $response = array(
@@ -414,45 +418,39 @@ class ImoInsumoController extends Controller
         $params = json_decode($json);
         
         $sustratos = $params->insumos;
-        
      
         $fecha = new \DateTime('now');
+        
+        $organismoTransitoOrigen = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+            $params->idOrganismoTransitoOrigen
+        );
 
         $organismoTransitoDestino = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-            $params->sedeOperativaDestino
+            $params->idOrganismoTransitoDestino
         );
-
         
         $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find(1);
-        // var_dump($params->tipoInsumo);
-        // die();
 
-        $organismoTransitoOrigen = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find(
-            $params->sedeOperativaOrigen
-        );
-
-        $loteReasignacion = new ImoLote();
-
+        $lote = new ImoLote();
         
-        $loteReasignacion->setNumeroActa(null);
-        $loteReasignacion->setEstado('REASIGNADO');
-        $loteReasignacion->setTipoInsumo($tipoInsumo);
-        $loteReasignacion->setTipo('SUSTRATO');
-        $loteReasignacion->setRangoInicio(0);
-        $loteReasignacion->setRangoFin(0);
-        $loteReasignacion->setCantidad(count($sustratos));
-        $loteReasignacion->setRecibido(count($sustratos));
-        $loteReasignacion->setReferencia(null);
-        $loteReasignacion->setFecha($fecha);
+        $lote->setNumeroActa(null);
+        $lote->setEstado('REASIGNADO');
+        $lote->setTipoInsumo($tipoInsumo);
+        $lote->setTipo('SUSTRATO');
+        $lote->setRangoInicio(0);
+        $lote->setRangoFin(0);
+        $lote->setCantidad(count($sustratos));
+        $lote->setRecibido(count($sustratos));
+        $lote->setReferencia(null);
+        $lote->setFecha($fecha);
 
-        $em->persist($loteReasignacion);
-        $em->flush();
+        $em->persist($lote);
 
         $imoTrazabilidad = new ImoTrazabilidad();
 
         $imoTrazabilidad->setOrganismoTransitoOrigen($organismoTransitoOrigen);
         $imoTrazabilidad->setOrganismoTransitoDestino($organismoTransitoDestino);
-        $imoTrazabilidad->setLote($loteReasignacion);
+        $imoTrazabilidad->setLote($lote);
         $imoTrazabilidad->setFecha($fecha);
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);
@@ -469,8 +467,6 @@ class ImoInsumoController extends Controller
                 $imoAsignacionOld->setActivo(false);
                 $em->flush();
             }
-            // var_dump($sustrato->id);
-            // die();
 
             $imoAsignacion = new ImoAsignacion();
 
@@ -530,35 +526,30 @@ class ImoInsumoController extends Controller
     /**
      * Finds and displays a insumo entity.
      *
-     * @Route("/show/loteInsumo", name="imoinsumo_show_loteinsumo")
+     * @Route("/search/lote", name="imoinsumo_search_lote")
      * @Method({"GET", "POST"})
      */
-    public function showLoteAction(Request $request)
+    public function searchByLoteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         $json = $request->get("data",null);
         $params = json_decode($json);
         
-      
         if ($authCheck== true) {
             $em = $this->getDoctrine()->getManager();
-            
-            $sustratos = [];
-            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findByLote($params);
 
-            foreach ($insumos as $key => $insumo) {
-                if($insumo->getTipo()->getCategoria() == 'SUSTRATO')  {
-                    $sustratos[] = $insumo;
-                }
-            }
+            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findByLote(
+                $params->idLote
+            );
 
-            if($sustratos){
+            if($insumos){
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'data' => $sustratos,
+                    'data' => $insumos,
                     'message' => "Registros encontrados", 
                 );
             } else {

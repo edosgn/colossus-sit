@@ -291,17 +291,17 @@ class UserLcCfgCategoriaController extends Controller
             if ($categorias) {
                 foreach ($categorias as $key => $categoria) {
                     if ($tipoVehiculo->getId() == 1 && ($categoria->getId() == 1 || $categoria->getId() == 2)) {
-                        $arrayCategorias[$key] = array(
+                        $arrayCategorias[] = array(
                             'value' => $categoria->getId(),
                             'label' => $categoria->getNombre(),
                         );
                     }elseif ($tipoVehiculo->getId() == 2 && $servicio->getId() == 1 && ($categoria->getId() == 3 || $categoria->getId() == 4 || $categoria->getId() == 5)) {
-                        $arrayCategorias[$key] = array(
+                        $arrayCategorias[] = array(
                             'value' => $categoria->getId(),
                             'label' => $categoria->getNombre(),
                         );
                     }elseif ($tipoVehiculo->getId() == 2 && $servicio->getId() == 2 && ($categoria->getId() == 6 || $categoria->getId() == 7 || $categoria->getId() == 8)) {
-                        $arrayCategorias[$key] = array(
+                        $arrayCategorias[] = array(
                             'value' => $categoria->getId(),
                             'label' => $categoria->getNombre(),
                         );
