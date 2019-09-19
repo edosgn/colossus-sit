@@ -11,12 +11,22 @@ namespace JHWEB\UsuarioBundle\Repository;
 class UserMedidaCautelarRepository extends \Doctrine\ORM\EntityRepository
 {
     //Obtiene medidas cautelares según el filtro de búsqueda
-    public function getByMedidasCautelares($fechaDesde, $fechaHasta)
+    public function getByFechasForFile($fechaDesde, $fechaHasta)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT umc
-            FROM JHWEBUsuarioBundle:UserMedidaCautelar umc
-            WHERE umc.fechaRegistro BETWEEN :fechaDesde AND :fechaHasta";
+        $dql = "SELECT umc as medidaCautelar, uc.identificacion, vcp.numero as placa
+            FROM JHWEBUsuarioBundle:UserMedidaCautelar umc, 
+            JHWEBUsuarioBundle:UserCiudadano uc,
+            JHWEBVehiculoBundle:VhloPropietario vp,
+            JHWEBVehiculoBundle:VhloVehiculo v,
+            JHWEBVehiculoBundle:VhloCfgPlaca vcp
+
+            WHERE umc.fechaInicio BETWEEN :fechaDesde AND :fechaHasta
+            AND umc.ciudadano = uc.id
+            AND vp.ciudadano = uc.id
+            AND vp.vehiculo = v.id
+            AND v.placa = vcp.id
+            AND vp.activo = 1";
 
         $consulta = $em->createQuery($dql);
     
