@@ -47,21 +47,18 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
                 AND ftp.tramite = ft.id";
         }
         else if($tipoArchivoTramite == 'DETALLADO') {
-            $dql = "SELECT ff.numero, ff.fechaPago, vcp.numero as placa, ii.numero as numeroSustrato, m.abreviatura, ff.numeroRunt, ft.nombre as nombreTramite, fts.fecha as fechaTramite, ftp.valor as valorPagado
+            $dql = "SELECT fts as tramiteSolicitud , ff.numero, ff.fechaPago, ii.numero as numeroSustrato, m.abreviatura, ff.numeroRunt, ft.nombre as nombreTramite, fts.fecha as fechaTramite, ftp.valor as valorPagado
                 FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
                 JHWEBFinancieroBundle:FroFactura ff,
                 JHWEBFinancieroBundle:FroFacTramite fft, 
                 JHWEBFinancieroBundle:FroTramite ft, 
                 JHWEBFinancieroBundle:FroTrtePrecio ftp,
                 JHWEBVehiculoBundle:VhloVehiculo vv,
-                JHWEBVehiculoBundle:VhloCfgPlaca vcp,
                 JHWEBFinancieroBundle:FroFacInsumo ffi,
                 JHWEBInsumoBundle:ImoInsumo ii,
                 JHWEBInsumoBundle:ImoCfgTipo ict,
                 JHWEBConfigBundle:CfgModulo m
                 WHERE fts.tramiteFactura = fft.id
-                AND fts.vehiculo = vv.id
-                AND vv.placa = vcp.id
                 AND fft.factura = ff.id
                 AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
                 AND ff.estado = 'FINALIZADA'
@@ -292,7 +289,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         $condicion = null; 
 
-        $dql = "SELECT COUNT(fi.id) AS cantidad, ict.id, ict.nombre, icv.valor, COUNT(fi.id) * icv.valor AS total
+        $dql = "SELECT COUNT(ict.id) AS cantidad, ict.id, ict.nombre, icv.valor, COUNT(fi.id) * icv.valor AS total
             FROM JHWEBFinancieroBundle:FroFacInsumo fi, 
             JHWEBFinancieroBundle:FroFactura ff,
             JHWEBInsumoBundle:ImoInsumo ii,

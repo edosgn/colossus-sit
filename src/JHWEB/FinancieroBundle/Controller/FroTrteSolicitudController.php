@@ -2895,6 +2895,27 @@ class FroTrteSolicitudController extends Controller
                 
             }
             else if($params->tipoReporte == 4) {
+                $medidasCautelares = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites(
+                    $params->idOrganismoTransito,
+                    $params->idModulo,
+                    $fechaInicial,
+                    $fechaFinal
+                );
+                
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTAMCAUT.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                
+                }
             }
             else if($params->tipoReporte == 5) {
             }

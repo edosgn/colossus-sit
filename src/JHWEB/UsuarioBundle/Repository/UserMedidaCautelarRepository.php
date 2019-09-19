@@ -10,4 +10,21 @@ namespace JHWEB\UsuarioBundle\Repository;
  */
 class UserMedidaCautelarRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene medidas cautelares según el filtro de búsqueda
+    public function getByMedidasCautelares($fechaDesde, $fechaHasta)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT umc
+            FROM JHWEBUsuarioBundle:UserMedidaCautelar umc
+            WHERE umc.fechaRegistro BETWEEN :fechaDesde AND :fechaHasta";
+
+        $consulta = $em->createQuery($dql);
+    
+        $consulta->setParameters(array(
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta
+        ));
+        
+        return $consulta->getResult();
+    }
 }
