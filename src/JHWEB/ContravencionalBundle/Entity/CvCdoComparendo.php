@@ -362,6 +362,13 @@ class CvCdoComparendo
      */
     private $porcentajeDescuento;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="grado_alcoholemia", type="integer", nullable=true)
+     */
+    private $gradoAlcoholemia;
+
 
     /**
      * @var boolean
@@ -2016,5 +2023,29 @@ class CvCdoComparendo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set gradoAlcoholemia
+     *
+     * @param integer $gradoAlcoholemia
+     *
+     * @return CvCdoComparendo
+     */
+    public function setGradoAlcoholemia($gradoAlcoholemia)
+    {
+        $this->gradoAlcoholemia = $gradoAlcoholemia;
+
+        return $this;
+    }
+
+    /**
+     * Get gradoAlcoholemia
+     *
+     * @return integer
+     */
+    public function getGradoAlcoholemia()
+    {
+        return $this->gradoAlcoholemia;
     }
 }
