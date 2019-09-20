@@ -273,13 +273,21 @@ class ImoLoteController extends Controller
             $idModulo = (isset($params->idModulo)) ? $params->idModulo : null;
 
             if ($tipo) {
-                $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                    array(
-                        'estado' => 'ASIGNADO',
-                        'sedeOperativa'=> $idOrganismoTransito,
-                        'tipo' => $tipo,
-                    )
-                );
+                if (!$idModulo) {
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
+                        array(
+                            'estado' => 'ASIGNADO',
+                            'sedeOperativa'=> $idOrganismoTransito,
+                            'tipo' => $tipo,
+                        )
+                    );
+                } else {
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByOrganismoTransitoAndModuloAndTipo(
+                        $idOrganismoTransito,
+                        $idModulo,
+                        $tipo
+                    );
+                }
             }else {            
                 if ($idOrganismoTransito) {
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByOrganismoTransitoAndModulo(
@@ -288,11 +296,11 @@ class ImoLoteController extends Controller
                         $idModulo
                     );
                 }else{
-                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalByTipoInsumoAndModulo(
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalByTipoInsumo(
                         'REGISTRADO',
-                        $params->tipoInsumo,
-                        $idModulo
+                        $params->tipoInsumo
                     );
+                    
                     $loteInsumo = array(
                         'id'=> $loteInsumo['idLote'],
                         'tipoInsumo'=>array(

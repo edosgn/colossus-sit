@@ -31,6 +31,13 @@ class CvCdoCfgEstado
     /**
      * @var string
      *
+     * @ORM\Column(name="codigo", type="string", length=4, nullable=true)
+     */
+    private $codigo;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="sigla", type="string", length=3)
      */
     private $sigla;
@@ -338,5 +345,29 @@ class CvCdoCfgEstado
     public function getFormato()
     {
         return $this->formato;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return CvCdoCfgEstado
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 }

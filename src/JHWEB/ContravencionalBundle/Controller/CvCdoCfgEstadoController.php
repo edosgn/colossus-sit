@@ -67,6 +67,7 @@ class CvCdoCfgEstadoController extends Controller
             $estado = new CvCdoCfgEstado();
 
             $estado->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $estado->setSigla($params->codigo);
             $estado->setSigla(mb_strtoupper($params->sigla, 'utf-8'));
             $estado->setDias($params->dias);
             $estado->setHabiles($params->habiles);

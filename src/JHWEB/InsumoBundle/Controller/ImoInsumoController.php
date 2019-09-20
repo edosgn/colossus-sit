@@ -586,6 +586,7 @@ class ImoInsumoController extends Controller
 
         $fechaInicio = new \Datetime($params->fechaInicio);
         $fechaFin = new \Datetime($params->fechaFin);
+        
         $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
             $params->idFuncionario
         );
