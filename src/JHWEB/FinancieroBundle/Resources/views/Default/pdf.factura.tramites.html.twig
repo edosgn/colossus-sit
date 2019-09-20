@@ -25,7 +25,7 @@
         </table>
         <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:100%">
             <tr>
-                <td><b>Ciudad:</b><br>  {{ factura.organismoTransito.municipio }}</td> 
+                <td><b>Sede operativa:</b><br>  {{ factura.organismoTransito.nombre }}</td>
                 <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
                 <td><b>Solicitante:</b><br>  {{ factura.solicitante.primerNombre }} {{ factura.solicitante.primerApellido }}</td> 

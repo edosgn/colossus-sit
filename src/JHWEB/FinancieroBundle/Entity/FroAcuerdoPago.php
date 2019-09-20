@@ -454,4 +454,100 @@ class FroAcuerdoPago
     {
         return $this->valorDescuento;
     }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set interes
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCfgInteres $interes
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setInteres(\JHWEB\ContravencionalBundle\Entity\CvCfgInteres $interes = null)
+    {
+        $this->interes = $interes;
+
+        return $this;
+    }
+
+    /**
+     * Get interes
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCfgInteres
+     */
+    public function getInteres()
+    {
+        return $this->interes;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
+    }
+
+    /**
+     * Set comparendo
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setComparendo(\JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo = null)
+    {
+        $this->comparendo = $comparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get comparendo
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo
+     */
+    public function getComparendo()
+    {
+        return $this->comparendo;
+    }
 }

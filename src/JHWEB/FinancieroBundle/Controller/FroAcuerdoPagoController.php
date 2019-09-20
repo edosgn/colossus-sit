@@ -68,7 +68,19 @@ class FroAcuerdoPagoController extends Controller
                     $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
                         $params->acuerdoPago->idInteres
                     );
-                    $acuerdoPago->setInteres($interes);
+
+                    if ($interes) {
+                        $acuerdoPago->setInteres($interes);
+                    } else {
+                        $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneBy(
+                            array(
+                                'activo' => true
+                            )
+                        );
+                        
+                        $acuerdoPago->setInteres($interes);
+                    }
+                    
                 }
                 
                 $acuerdoPago->setActivo(true);

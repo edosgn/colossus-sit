@@ -30,7 +30,7 @@
         </table>
         <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:100%">
             <tr>
-                <td><b>Ciudad:</b><br>  {% if factura.organismoTransito %}{{ factura.organismoTransito.municipio }}{% endif %}</td> 
+                <td><b>Sede operativa:</b><br>  {% if factura.organismoTransito %}{{ factura.organismoTransito.nombre }}{% endif %}</td> 
                 <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
                 <td><b>Fec. Impresión:</b><br> {{ 'now'|date('d/m/Y') }}</td>

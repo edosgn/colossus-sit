@@ -17,10 +17,13 @@
     <table border="1" border="1" cellpadding="3" style="font-size: 10px;">
       <!-- row-1 -->
       <tr>
+
         <td colspan="3">
           <b>AGENTE DE TRANSITO</b>
-          <br>
-          {{ comparendo.agenteTransito.ciudadano.primerNombre }} {{ comparendo.agenteTransito.ciudadano.primerApellido }}
+          {% if comparendo.agenteTransito %}
+            <br>
+            {{ comparendo.agenteTransito.ciudadano.primerNombre }} {{ comparendo.agenteTransito.ciudadano.primerApellido }}
+          {% endif %}
         </td>
         <td colspan="3">
           <b>SEDE OPERATIVA</b>
@@ -35,7 +38,7 @@
         <td>
           <b>FECHA</b>
           <br>
-          {{ comparendo.fecha|date('d/m/Y' }}
+          {{ comparendo.fecha|date('d/m/Y') }}
         </td>
         <td>
           <b>HORA</b>
@@ -54,8 +57,10 @@
         </td>
         <td>
           <b>MUNICIPIO</b>
+          {% if comparendo.municipio %}
           <br>
           {{ comparendo.municipio.nombre }}
+          {% endif %}
         </td>
         <td>
           <b>LOCALIDAD</b>
@@ -175,6 +180,7 @@
         </td>
         <td colspan="2">
           <b>Número documento identidad</b>
+          <br>
           {{ comparendo.infractorIdentificacion }}
         </td>
         <td colspan="2">
@@ -217,8 +223,10 @@
       <tr>
         <td colspan="2">
           <b>Tipo de infractor</b>
+          {% if comparendo.tipoInfractor %}
           <br>
           {{ comparendo.tipoInfractor.nombre }}
+          {% endif %}
         </td>
         <td colspan="2">
             <b>Org.de T. Licencia de tránsito</b>
@@ -274,18 +282,24 @@
       <tr>
         <td colspan="2">
             <b>Apellidos y Nombres completos</b>
+            {% if comparendo.agenteTransito %}
             <br>
             {{ comparendo.agenteTransito.ciudadano.primerNombre }} {{ comparendo.agenteTransito.ciudadano.primerApellido }}
+            {% endif %}
         </td>
         <td colspan="2">
             <b>Placa</b>
+            {% if comparendo.agenteTransito %}
             <br>
             {{ comparendo.agenteTransito.numeroPlaca }}
+            {% endif %}
         </td>
         <td colspan="2">
             <b>Entidad</b>
+            {% if comparendo.agenteTransito %}
             <br>
             {{ comparendo.agenteTransito.organismoTransito.nombre }}
+            {% endif %}
         </td>
       </tr>
 
