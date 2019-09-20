@@ -2895,8 +2895,98 @@ class FroTrteSolicitudController extends Controller
                 
             }
             else if($params->tipoReporte == 4) {
+                $medidasCautelares = $em->getRepository('JHWEBUsuarioBundle:UserMedidaCautelar')->getByFechasForFile(
+                    $fechaInicial,
+                    $fechaFinal
+                );
+                
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTAMCAUT.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    foreach ($medidasCautelares as $key => $medidaCautelar) { 
+                        fwrite($archivo, str_pad($medidaCautelar['placa'], 6,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getTipoMedida()->getCodigo(), 2,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getEntidadJudicial()->getNombre(), 90,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getNumeroOficio(), 20,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getFechaRegistro()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
+                        if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() == null){
+                            fwrite($archivo, str_pad("I", 1,' ', STR_PAD_RIGHT));
+                        } else {
+                            fwrite($archivo, str_pad("L", 1,' ', STR_PAD_RIGHT));
+                        }
+                        if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() == null){
+                            fwrite($archivo, str_pad("", 20,' ', STR_PAD_RIGHT));
+                        } else if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() != null) {
+                            fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getFechaLevantamiento()->format('Ymd'), 20,' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getNumeroOficioLevantamiento(), 20,' ', STR_PAD_RIGHT));
+                        }
+                        if($medidaCautelar['medidaCautelar']->getTipoMedida()->getId() == 99){
+                            fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getObservaciones(), 90,' ', STR_PAD_RIGHT));
+                        } else if($medidaCautelar['medidaCautelar']->getTipoMedida()->getId() != 99) {
+                            fwrite($archivo, str_pad("", 90,' ', STR_PAD_RIGHT) . "\r\n");
+                        }
+                    }
+                    
+                    fflush($archivo);
+                
+
+                    fclose($archivo);   // Cerrar el archivo
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Archivo generado",
+                        'data' => "TTAMCAUT.DAT"
+                    );
+                }
             }
             else if($params->tipoReporte == 5) {
+                
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTAMCANC.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    $cancelacionesMatricula = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByCancelacionMatricula($params->idOrganismoTransito, $params->idModulo, $fechaInicial, $fechaFinal);
+
+                    foreach ($cancelacionesMatricula as $key => $cancelacionMatricula) {
+                        fwrite($archivo, str_pad($cancelacionMatricula->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($cancelacionMatricula->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
+                        foreach ($cancelacionMatricula->getForaneas() as $key => $dato) {
+                            fwrite($archivo, str_pad($dato['idMotivoCancelacion'], 2,' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($cancelacionMatricula->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
+                    }
+
+                    fflush($archivo);
+
+                    fclose($archivo);   // Cerrar el archivo
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Archivo generado",
+                        'data' => "TTAMCANC.DAT"
+                    );
+                }
             }
             else if($params->tipoReporte == 6) {
             }

@@ -150,8 +150,11 @@
                             <td>{{ tramiteFinalizado['numero'] }}</td>
                             <td>{{ tramiteFinalizado['fechaPago'] | date('Y-m-d') }}</td>
                             <td>
-                                {% if tramiteFinalizado['placa'] %}
-                                    {{ tramiteFinalizado['placa'] }}
+                                {% if tramiteFinalizado['tramiteSolicitud'].vehiculo %}
+                                    {{ tramiteFinalizado['tramiteSolicitud'].vehiculo.placa.numero }}
+                                {% endif %}
+                                {% if tramiteFinalizado['tramiteSolicitud'].ciudadano %}
+                                    {{ tramiteFinalizado['tramiteSolicitud'].ciudadano.identificacion }}
                                 {% endif %}
                             </td>
                             <td>{{ tramiteFinalizado['numeroSustrato'] }}</td>

@@ -1234,17 +1234,6 @@ class CvCdoComparendoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->findAll();
-        /*foreach ($comparendos as $key => $comparendo) {
-            $comparendoId = $comparendo->getId();
-            $vehiculoId = $comparendo->getVehiculo()->getId();
-            
-            $inmovilizacion = $em->getRepository('AppBundle:Inmovilizacion')->findOneBy(array('comparendo' => $comparendoId));      
-           $comparendo->{"inmovilizacion"}  = $inmovilizacion;
-
-            //$propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(array('vehiculo' => $vehiculoId));
-            //var_dump($comparendo);
-            //die();
-        }*/
         
         $response = array(
             'status' => 'success',
