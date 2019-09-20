@@ -161,7 +161,6 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'estado' => $estado, 
             'tipoInsumo' => $tipoInsumo,
-            'idModulo' => $idModulo,
         ));
 
         return $consulta->getOneOrNullResult();
