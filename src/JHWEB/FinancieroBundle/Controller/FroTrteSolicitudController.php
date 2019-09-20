@@ -2989,8 +2989,72 @@ class FroTrteSolicitudController extends Controller
                 }
             }
             else if($params->tipoReporte == 6) {
-            }
-            else if($params->tipoReporte == 7) {
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTARUNTPREN.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $abrir = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    $prendas = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPrendas($params->idOrganismoTransito, $params->idModulo, $fechaInicial, $fechaFinal);
+
+                    foreach ($prendas as $key => $prenda) {
+                        fwrite($archivo, str_pad($prenda['tramiteSolicitud']->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['tramiteSolicitud']->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getTipoIdentificacion()->getCodigo(), 1,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getIdentificacion(), 11,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getPrimerNombre(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getSegundoNombre(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getPrimerApellido(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getSegundoApellido(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getDireccionPersonal(), 20,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getTelefonoCelular(), 10,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getGradoAlerta(), 1,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['tramiteSolicictud']->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['acreedor']->getActivo(), 1,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['acreedor']->getTipoAlerta()->getId(), 1,' ', STR_PAD_RIGHT)); 
+
+                        $arrayPrendas [] = array(
+                            'organismoTransito' => $prenda->getOrganismoTransito()->getDivipo(),
+                            'placa' => $prenda->getVehiculo()->getPlaca()->getNumero(),
+                            'ciudadano' => !empty($vehiculoAcreedor->getCiudadano()) ? $vehiculoAcreedor->getCiudadano(): null,
+                            'empresa' => !empty($vehiculoAcreedor->getEmpresa()) ? $vehiculoAcreedor->getEmpresa(): null,
+                            'gradoAlerta' => $vehiculoAcreedor->getGradoAlerta(),
+                            'fecha' => $prenda->getFecha(),
+                            'estadoPrenda' => $vehiculoAcreedor->getActivo(),
+                            'tipoAlerta' => $vehiculoAcreedor->getTipoAlerta()->getId()
+                        );
+                    }
+                    /* $cancelacionesMatricula = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByCancelacionMatricula($params->idOrganismoTransito, $params->idModulo, $fechaInicial, $fechaFinal);
+
+                    foreach ($cancelacionesMatricula as $key => $cancelacionMatricula) {
+                        fwrite($archivo, str_pad($cancelacionMatricula->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($cancelacionMatricula->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
+                        foreach ($cancelacionMatricula->getForaneas() as $key => $dato) {
+                            fwrite($archivo, str_pad($dato['idMotivoCancelacion'], 2,' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($cancelacionMatricula->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
+                    } */
+                    
+                    fflush($archivo);
+
+                    fclose($archivo);   // Cerrar el archivo
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Archivo generado",
+                        'data' => "TTARUNTPREN.DAT"
+                    );
+                }
+            } else if($params->tipoReporte == 7) {
             }else{
                 $response = array(
                     'status' => 'error',
