@@ -2703,7 +2703,7 @@ class FroTrteSolicitudController extends Controller
                         fwrite($archivo, str_pad($vehiculo->getSerie(), 25, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getNumeroPasajeros(), 3, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('AAAAmmdd'), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($licenciaTransito->getNumero(), 10, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad("N", 16, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getCombustible()->getCodigo(), 1, ' ', STR_PAD_RIGHT));

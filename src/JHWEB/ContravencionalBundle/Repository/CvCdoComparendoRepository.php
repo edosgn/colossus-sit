@@ -279,4 +279,25 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getByFechasForFile($idOrganismoTransito, $fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT c
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c
+
+            WHERE c.organismoTransito = :idOrganismoTransito
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND c.activo = true";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
+        ));
+        
+        return $consulta->getResult();
+    }
 }
