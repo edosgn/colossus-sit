@@ -2664,9 +2664,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMVEHI.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){
@@ -2744,9 +2744,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMPROP.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
+                    $archivo = fopen($file, "w+b");    // a$archivo el archivo, creándolo si no existe
                 }else{
-                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){
@@ -2850,9 +2850,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMTRVE.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){
@@ -2904,9 +2904,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMCAUT.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){
@@ -2956,9 +2956,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMCANC.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){
@@ -2995,9 +2995,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTARUNTPREN.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){
@@ -3041,9 +3041,9 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTARUNTRADI.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
  
                 if($archivo == false){

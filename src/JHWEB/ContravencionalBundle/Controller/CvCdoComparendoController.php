@@ -1508,25 +1508,26 @@ class CvCdoComparendoController extends Controller
             $fechaFinal = new \Datetime($params->fechaFinal);
             
             if($params->tipoReporte == 1) {
-                $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getByFechasForFile(
-                    $params->idOrganismoTransito,
-                    $fechaInicial,
-                    $fechaFinal
-                );
-
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."COMPARENDOS.DAT"; 
-
+                $file = $dir."SIMITCOMP.DAT"; 
+                
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
-                }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
                 }
- 
+                
                 if($archivo == false){
                     echo("Error al crear el archivo");
                 }else{
+                    $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getByFechasForFile(
+                        $params->idOrganismoTransito,
+                        $fechaInicial,
+                        $fechaFinal
+                    );
+
                     foreach ($comparendos as $key => $comparendo) {
+                        fwrite($archivo, str_pad($key + 1, 5, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($comparendo->getConsecutivo()->getNumero(), 20, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($comparendo->getFecha()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($comparendo->getHora()->format('hhmm'), 4, ' ', STR_PAD_RIGHT));
@@ -1614,10 +1615,42 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => "COMPARENDOS.DAT"
+                    'data' => "SIMITCOMP.DAT"
                 );
             } elseif($params->tipoReporte == 2){
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."SIMITRESOL.DAT"; 
                 
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
+                }
+                
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                }else{
+                    $resoluciones = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getResolucionesByFechasForFile(
+                        $params->idOrganismoTransito,
+                        $fechaInicial,
+                        $fechaFinal
+                    );
+
+                    foreach ($resoluciones as $key => $resolucion) {
+                        fwrite($archivo, str_pad($resolucion->getConsecutivo()->getNumero(), 20, ' ', STR_PAD_RIGHT));
+                    }  
+                    fflush($archivo);
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "SIMITRESOL.DAT"
+                );  
             
             } elseif($params->tipoReporte == 3){
                 
