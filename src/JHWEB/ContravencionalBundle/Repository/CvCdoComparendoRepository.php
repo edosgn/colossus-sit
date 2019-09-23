@@ -279,4 +279,53 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getByFechasForFile($idOrganismoTransito, $fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT c
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c
+
+            WHERE c.organismoTransito = :idOrganismoTransito
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND c.activo = true";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
+        ));
+        
+        return $consulta->getResult();
+    }
+
+    //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getResolucionesByFechasForFile($idOrganismoTransito, $fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT c
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c,
+            FROM JHWEBContravencionalBundle:CvCdoCfgEstado e,
+            FROM JHWEBConfigBundle:CfgAdmFormato af
+
+            WHERE c.organismoTransito = :idOrganismoTransito
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND c.activo = true
+            AND c.estado = e.id
+            AND e.simit = true
+            AND e.activo = true
+            AND e.formato = af.id
+            AND af.activo = true";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
+        ));
+        
+        return $consulta->getResult();
+    }
 }
