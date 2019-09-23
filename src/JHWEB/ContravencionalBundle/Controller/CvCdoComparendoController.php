@@ -1662,7 +1662,7 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, str_pad($resolucion->getComparendo()->getInfraccion()->getId(), 5, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($resolucion->getComparendo()->getValorInfraccion(), 8, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($resolucion->getComparendo()->getGradoAlcoholemia(), 8, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($resolucion->getRestriccion()->getHorasComunitarias(), 1, ' ', STR_PAD_RIGHT). "\r\n");
+                        fwrite($archivo, str_pad($resolucion->getRestriccion()->getHorasComunitarias(), 1, ' ', STR_PAD_RIGHT) . "\r\n");
                     }  
                     fflush($archivo);
                 }
@@ -1704,7 +1704,17 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, str_pad("fecha real transac", 10,' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad("cod canalOrigen", 4,' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad("descrip.Origen", 40,' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($recaudo->getFactura()->getValorNeto(), 40,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getValorNeto(), 12,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad(0, 12,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getConsecutivo()->getNumero(), 20,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getPolca(), 1,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getInfractorIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getTipoRecaudo()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getTipoRecaudo()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getNumero(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas(), 2, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT) . "\r\n");
                     }
                     fflush($archivo);
                 }
