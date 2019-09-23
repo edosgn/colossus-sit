@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlcrestriccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechacancelacion</th>
+                <th>Fecharesolucion</th>
+                <th>Tipoacto</th>
+                <th>Numeroresolucion</th>
+                <th>Fechainicio</th>
+                <th>Fechafin</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Horascomunitarias</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userLcRestriccion in userLcRestriccions %}
+            <tr>
+                <td><a href="{{ path('userlcrestriccion_show', { 'id': userLcRestriccion.id }) }}">{{ userLcRestriccion.id }}</a></td>
+                <td>{% if userLcRestriccion.fechaCancelacion %}{{ userLcRestriccion.fechaCancelacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLcRestriccion.fechaResolucion %}{{ userLcRestriccion.fechaResolucion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ userLcRestriccion.tipoActo }}</td>
+                <td>{{ userLcRestriccion.numeroResolucion }}</td>
+                <td>{% if userLcRestriccion.fechaInicio %}{{ userLcRestriccion.fechaInicio|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLcRestriccion.fechaFin %}{{ userLcRestriccion.fechaFin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ userLcRestriccion.tipo }}</td>
+                <td>{{ userLcRestriccion.estado }}</td>
+                <td>{% if userLcRestriccion.horasComunitarias %}Yes{% else %}No{% endif %}</td>
+                <td>{% if userLcRestriccion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('userlcrestriccion_show', { 'id': userLcRestriccion.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

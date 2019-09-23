@@ -305,19 +305,49 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
     public function getResolucionesByFechasForFile($idOrganismoTransito, $fechaInicial, $fechaFinal)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT c
-            FROM JHWEBContravencionalBundle:CvCdoComparendo c,
-            FROM JHWEBContravencionalBundle:CvCdoCfgEstado e,
-            FROM JHWEBConfigBundle:CfgAdmFormato af
+        $dql = "SELECT ct
+            FROM JHWEBContravencionalBundle:CvCdoTrazabilidad ct,
+            JHWEBContravencionalBundle:CvCdoComparendo c,
+            JHWEBContravencionalBundle:CvCdoCfgEstado ce,
+            JHWEBConfigBundle:CfgAdmActoAdministrativo aa,
+            JHWEBConfigBundle:CfgAdmFormato af
 
-            WHERE c.organismoTransito = :idOrganismoTransito
+            WHERE ct.comparendo = c.id
+            AND c.organismoTransito = :idOrganismoTransito
             AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
             AND c.activo = true
-            AND c.estado = e.id
-            AND e.simit = true
-            AND e.activo = true
-            AND e.formato = af.id
-            AND af.activo = true";
+            AND ct.actoAdministrativo = aa.id
+            AND aa.formato = af.id
+            AND ce.activo = true
+            AND ct.estado = ce.id
+            AND ce.simit = true
+            AND ct.activo = true";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
+        ));
+        
+        return $consulta->getResult();
+    }
+
+    //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getRecaudosByFechasForFile($idOrganismoTransito, $fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fc
+            FROM JHWEBFinancieroBundle:FroFacComparendo fc,
+            JHWEBFinancieroBundle:FroFactura f,
+            JHWEBContravencionalBundle:CvCdoComparendo c
+
+            WHERE fc.factura = f.id
+            AND f.organismoTransito = :idOrganismoTransito
+            AND f.fechaPago BETWEEN :fechaInicial AND :fechaFinal
+            AND fc.comparendo = c.id";
+
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

@@ -1509,7 +1509,7 @@ class CvCdoComparendoController extends Controller
             
             if($params->tipoReporte == 1) {
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."SIMITCOMP.DAT"; 
+                $file = $dir."SIMITCOMP.txt"; 
                 
                 if( file_exists("datos.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
@@ -1615,16 +1615,16 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => "SIMITCOMP.DAT"
+                    'data' => "SIMITCOMP.txt"
                 );
             } elseif($params->tipoReporte == 2){
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."SIMITRESOL.DAT"; 
+                $file = $dir."SIMITRESOL.txt"; 
                 
                 if( file_exists("datos.txt") == false ){
-                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
-                }else{
                     $archivo = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }
                 
                 if($archivo == false){
@@ -1637,7 +1637,32 @@ class CvCdoComparendoController extends Controller
                     );
 
                     foreach ($resoluciones as $key => $resolucion) {
-                        fwrite($archivo, str_pad($resolucion->getConsecutivo()->getNumero(), 20, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($key + 1, 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getActoAdministrativo()->getNumero(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getActoAdministrativo()->getFecha()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getEstado()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getRestriccion()->getFechaFin()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getConsecutivo()->getNumero(), 20, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getFecha()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorTipoIdentificacion()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorNombres(), 18, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorApellidos(), 20, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorDireccion(), 40, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorTelefono(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorMunicipioResidencia(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getValorPagar(), 8, ' ', STR_PAD_RIGHT));
+                        /* fwrite($archivo, str_pad($resolucion->getComparendo()->getValorAdicional(), 8, ' ', STR_PAD_RIGHT)); */ //valor adicional a pagar del comparendo
+                        /* fwrite($archivo, str_pad($resolucion->getComparendo()->getFotomulta(), 1, ' ', STR_PAD_RIGHT)); */
+                        // eliminarlos luego
+                        fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        //=============================================================================
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfraccion()->getId(), 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getValorInfraccion(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getGradoAlcoholemia(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getRestriccion()->getHorasComunitarias(), 1, ' ', STR_PAD_RIGHT). "\r\n");
                     }  
                     fflush($archivo);
                 }
@@ -1649,11 +1674,50 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => "SIMITRESOL.DAT"
+                    'data' => "SIMITRESOL.txt"
                 );  
             
             } elseif($params->tipoReporte == 3){
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."SIMITRECAUD.txt"; 
                 
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+                
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                }else{
+                    $recaudos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getRecaudosByFechasForFile(
+                        $params->idOrganismoTransito,
+                        $fechaInicial,
+                        $fechaFinal
+                    );
+
+                    foreach ($recaudos as $key => $recaudo) {
+                        fwrite($archivo, str_pad(1, 1, ' ', STR_PAD_RIGHT) . "\r\n");
+                        fwrite($archivo, str_pad($key + 1, 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getFechaPago()->format('d/m/Y'), 10,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getHoraPago()->format('H:m'), 5,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("fecha real transac", 10,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("cod canalOrigen", 4,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("descrip.Origen", 40,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getFactura()->getValorNeto(), 40,' ', STR_PAD_RIGHT));
+                    }
+                    fflush($archivo);
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "SIMITRECAUD.txt"
+                );
             }
             else{
                 $response = array(

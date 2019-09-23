@@ -65,6 +65,14 @@ class CvCdoTrazabilidad
      **/
     protected $funcionario;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserLcRestriccion", inversedBy="trazabilidades")
+     **/
+    protected $restriccion;
+
+    /** @ORM\ManyToOne(targetEntity="CvCdoTrazabilidad", inversedBy="childrens") */
+    private $parent;
+
 
     /**
      * Get id
@@ -97,10 +105,31 @@ class CvCdoTrazabilidad
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-         }
         return $this->fecha;
+    }
+
+    /**
+     * Set hora
+     *
+     * @param \DateTime $hora
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setHora($hora)
+    {
+        $this->hora = $hora;
+
+        return $this;
+    }
+
+    /**
+     * Get hora
+     *
+     * @return \DateTime
+     */
+    public function getHora()
+    {
+        return $this->hora;
     }
 
     /**
@@ -149,30 +178,6 @@ class CvCdoTrazabilidad
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set hora
-     *
-     * @param \DateTime $hora
-     *
-     * @return CvCdoTrazabilidad
-     */
-    public function setHora($hora)
-    {
-        $this->hora = $hora;
-
-        return $this;
-    }
-
-    /**
-     * Get hora
-     *
-     * @return \DateTime
-     */
-    public function getHora()
-    {
-        return $this->hora;
     }
 
     /**
@@ -269,5 +274,53 @@ class CvCdoTrazabilidad
     public function getFuncionario()
     {
         return $this->funcionario;
+    }
+
+    /**
+     * Set restriccion
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserLcRestriccion $restriccion
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setRestriccion(\JHWEB\UsuarioBundle\Entity\UserLcRestriccion $restriccion = null)
+    {
+        $this->restriccion = $restriccion;
+
+        return $this;
+    }
+
+    /**
+     * Get restriccion
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserLcRestriccion
+     */
+    public function getRestriccion()
+    {
+        return $this->restriccion;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad $parent
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setParent(\JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
