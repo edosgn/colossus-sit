@@ -64,7 +64,7 @@ class VhloRestriccion
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="VhloVehiculo", inversedBy="limitaciones")
+     * @ORM\ManyToOne(targetEntity="VhloVehiculo", inversedBy="restricciones")
      **/
     protected $vehiculo;
 
