@@ -2752,61 +2752,106 @@ class FroTrteSolicitudController extends Controller
                 if($archivo == false){
                     echo("Error al crear el archivo");
                 }else{
-                    foreach ($propetariosActuales as $key => $propietarioActual) {
-                        fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
-                        
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
-                        }
-                        fwrite($archivo, str_pad("N", 1, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getDireccionPersonal(), 20, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getDireccion(), 20, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTelefonoCelular(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTelefono(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
-                        }
+                    if($params->idModulo == 2) {
+                        foreach ($propetariosActuales as $key => $propietarioActual) {
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                            
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
+                            }
+                            fwrite($archivo, str_pad("N", 1, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getDireccionPersonal(), 20, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getDireccion(), 20, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTelefonoCelular(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTelefono(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
+                            }
 
 
+                        }
+                        fflush($archivo);
+                    } else if($params->idModulo == 6) {
+                        foreach ($propetariosActuales as $key => $propietarioActual) {
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                            
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
+                            }
+                            fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietario->getEstado() == 1){
+                                fwrite($archivo, str_pad("A", 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietario->getEstado() == 0) {
+                                fwrite($archivo, str_pad("I", 1, ' ', STR_PAD_RIGHT));
+                            }
+                        }
+                        fflush($archivo);
                     }
-                    fflush($archivo);
                 }
 
                 fclose($archivo);   // Cerrar el archivo
@@ -3019,11 +3064,11 @@ class FroTrteSolicitudController extends Controller
                         fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getTelefonoCelular(), 10,' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($prenda['acreedor']->getGradoAlerta(), 1,' ', STR_PAD_RIGHT)); 
                         fwrite($archivo, str_pad($prenda['tramiteSolicictud']->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT)); 
-                        fwrite($archivo, str_pad($prenda['acreedor']->getActivo(), 1,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['acreedor']->getEstado(), 1,' ', STR_PAD_RIGHT)); 
                         fwrite($archivo, str_pad($prenda['acreedor']->getTipoAlerta()->getId(), 1,' ', STR_PAD_RIGHT) . "\r\n" ); 
 
                     }
-                    
+
                     fflush($archivo);
 
                     fclose($archivo);   // Cerrar el archivo

@@ -250,8 +250,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             AND vv.organismoTransito = :idOrganismoTransito
             AND vv.clase = vcc.id
             AND vcc.tipoVehiculo = vctv.id
-            AND vctv.modulo = :idModulo
-            AND vp.activo = 1";
+            AND vctv.modulo = :idModulo";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
