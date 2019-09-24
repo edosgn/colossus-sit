@@ -3163,4 +3163,40 @@ class FroTrteSolicitudController extends Controller
             );
         }
     }
+
+    
+    /**
+     * Creates a new Tramite entity.
+     *
+     * @Route("/calcular/fecha/vencimiento", name="frotramite_calculate_date")
+     * @Method({"GET", "POST"})
+     */
+    public function calcularFechaVencimientoAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $fechaActual = new \Datetime();
+        $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($fechaActual->format('Y-m-d')))));
+        
+        if($fechaVencimiento) {
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Se calculó la fecha de vencimiento correctamente.',
+                'data' => $fechaVencimiento, 
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "No se pudo calcular la fecha de vencimiento.", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
