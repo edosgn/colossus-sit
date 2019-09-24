@@ -2882,7 +2882,6 @@ class FroTrteSolicitudController extends Controller
                     )
                 ); */
             }
-            
             else if($params->tipoReporte == 3) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites(
                     $params->idOrganismoTransito,
