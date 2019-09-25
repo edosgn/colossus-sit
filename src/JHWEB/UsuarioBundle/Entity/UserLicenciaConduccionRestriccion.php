@@ -55,7 +55,7 @@ class UserLicenciaConduccionRestriccion
      * @ORM\Column(name="fechaInicio", type="datetime", nullable=true)
      */
     private $fechaInicio;
-
+ 
     /**
      * @var \DateTime
      *

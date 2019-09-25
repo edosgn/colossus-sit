@@ -276,9 +276,9 @@ class ImoLoteController extends Controller
                 if (!$idModulo) {
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                         array(
-                            'estado' => 'ASIGNADO',
+                            'estado' => 'REGISTRADO',
                             'sedeOperativa'=> $idOrganismoTransito,
-                            'tipo' => $tipo,
+                            'tipoInsumo' => $tipo,
                         )
                     );
                 } else {
@@ -450,7 +450,7 @@ class ImoLoteController extends Controller
             'sustratosActa' => $sustratosActa,
             'insumosActa' => $insumosActa,
             'funcionario' => $funcionario,
-            'numeroActa' => $numeroActa,
+            'numeroActa' => $numeroActa, 
             'organismoTransito' => $organismoTransito, 
             'fechaEntrega' => $fechaEntrega,
         )); 

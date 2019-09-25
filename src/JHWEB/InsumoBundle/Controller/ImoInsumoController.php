@@ -121,10 +121,13 @@ class ImoInsumoController extends Controller
                         $em->flush();
       
                         $imoAsignacion = new ImoAsignacion();
+
+                        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find($params->idFuncionario);
     
                         $imoAsignacion->setImoTrazabilidad($imoTrazabilidad);
+                        $imoAsignacion->setFuncionario($funcionario);
                         $imoAsignacion->setInsumo($insumo);
-                        $imoAsignacion->setActivo(true);
+                        $imoAsignacion->setActivo(true); 
 
                         $em->persist($imoAsignacion);
                         $em->flush();
