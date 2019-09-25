@@ -17,7 +17,15 @@
     <table border="1" border="1" cellpadding="3" style="font-size: 10px;">
       <!-- row-1 -->
       <tr>
-
+        <td colspan="6" style="text-align:right;">
+          <b>NÚMERO DE COMPARENDO</b>
+          <br>
+          {% if comparendo.consecutivo %}
+          {{ comparendo.consecutivo.numero }}
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
         <td colspan="3">
           <b>AGENTE DE TRANSITO</b>
           {% if comparendo.agenteTransito %}
@@ -349,15 +357,28 @@
         <td colspan="2">
           <b>Accidente</b>
           <br>
-          {{ comparendo.accidente }}
+          {% if comparendo.accidente %}
+            Si
+          {% else %}
+            No
+          {% endif %}
         </td>
         <td>
           <b>Fuga</b>
-          {{ comparendo.fuga }}
+          <br>
+          {% if comparendo.fuga %}
+            Si
+          {% else %}
+            No
+          {% endif %}
         </td>
         <td colspan="2">
           <b>Retención de licencia</b>
-          {{ comparendo.retencionLicencia }}
+          {% if comparendo.retencionLicencia %}
+            Si
+          {% else %}
+            No
+          {% endif %}
         </td>
         <td>
           <b>Anulado</b>
