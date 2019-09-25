@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlcprohibicion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userLcProhibicion.id }}</td>
+            </tr>
+            <tr>
+                <th>Numresolucion</th>
+                <td>{{ userLcProhibicion.numResolucion }}</td>
+            </tr>
+            <tr>
+                <th>Numproceso</th>
+                <td>{{ userLcProhibicion.numProceso }}</td>
+            </tr>
+            <tr>
+                <th>Fechaorden</th>
+                <td>{% if userLcProhibicion.fechaOrden %}{{ userLcProhibicion.fechaOrden|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecharesolucion</th>
+                <td>{% if userLcProhibicion.fechaResolucion %}{{ userLcProhibicion.fechaResolucion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechainicio</th>
+                <td>{% if userLcProhibicion.fechaInicio %}{{ userLcProhibicion.fechaInicio|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechafin</th>
+                <td>{% if userLcProhibicion.fechaFin %}{{ userLcProhibicion.fechaFin|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechaplazo</th>
+                <td>{% if userLcProhibicion.fechaPlazo %}{{ userLcProhibicion.fechaPlazo|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Tipoorden</th>
+                <td>{{ userLcProhibicion.tipoOrden }}</td>
+            </tr>
+            <tr>
+                <th>Tiponovedad</th>
+                <td>{{ userLcProhibicion.tipoNovedad }}</td>
+            </tr>
+            <tr>
+                <th>Motivo</th>
+                <td>{{ userLcProhibicion.motivo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userlcprohibicion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('userlcprohibicion_edit', { 'id': userLcProhibicion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

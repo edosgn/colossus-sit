@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlcprohibicions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numresolucion</th>
+                <th>Numproceso</th>
+                <th>Fechaorden</th>
+                <th>Fecharesolucion</th>
+                <th>Fechainicio</th>
+                <th>Fechafin</th>
+                <th>Fechaplazo</th>
+                <th>Tipoorden</th>
+                <th>Tiponovedad</th>
+                <th>Motivo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userLcProhibicion in userLcProhibicions %}
+            <tr>
+                <td><a href="{{ path('userlcprohibicion_show', { 'id': userLcProhibicion.id }) }}">{{ userLcProhibicion.id }}</a></td>
+                <td>{{ userLcProhibicion.numResolucion }}</td>
+                <td>{{ userLcProhibicion.numProceso }}</td>
+                <td>{% if userLcProhibicion.fechaOrden %}{{ userLcProhibicion.fechaOrden|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLcProhibicion.fechaResolucion %}{{ userLcProhibicion.fechaResolucion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLcProhibicion.fechaInicio %}{{ userLcProhibicion.fechaInicio|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLcProhibicion.fechaFin %}{{ userLcProhibicion.fechaFin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if userLcProhibicion.fechaPlazo %}{{ userLcProhibicion.fechaPlazo|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ userLcProhibicion.tipoOrden }}</td>
+                <td>{{ userLcProhibicion.tipoNovedad }}</td>
+                <td>{{ userLcProhibicion.motivo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('userlcprohibicion_show', { 'id': userLcProhibicion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('userlcprohibicion_edit', { 'id': userLcProhibicion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userlcprohibicion_new') }}">Create a new userLcProhibicion</a>
+        </li>
+    </ul>
+{% endblock %}
