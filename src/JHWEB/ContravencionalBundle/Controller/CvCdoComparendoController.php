@@ -1483,4 +1483,363 @@ class CvCdoComparendoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Crear archivo plano según filtros.
+     *
+     * @Route("/create/file", name="cvcdocomparendo_create_file")
+     * @Method({"GET", "POST"})
+     */
+    public function createFileAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
+            
+            if($params->tipoReporte == 1) {
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."SIMITCOMP.txt"; 
+                
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
+                }
+                
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                }else{
+                    $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getByFechasForFile(
+                        $params->idOrganismoTransito,
+                        $fechaInicial,
+                        $fechaFinal
+                    );
+
+                    foreach ($comparendos as $key => $comparendo) {
+                        fwrite($archivo, str_pad($key + 1, 5, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getConsecutivo() != null) {
+                            fwrite($archivo, str_pad($comparendo->getConsecutivo()->getNumero(), 20, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getConsecutivo() == null) {
+                            fwrite($archivo, str_pad("", 20, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getFecha()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getHora()->format('hhmm'), 4, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getDireccion(), 80, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getMunicipio() != null) {
+                            fwrite($archivo, str_pad($comparendo->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getMunicipio() == null) {
+                            fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getLocalidad(), 30, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getPlaca(), 6, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getOrganismoTransitoMatriculado() != null) {
+                            fwrite($archivo, str_pad($comparendo->getOrganismoTransitoMatriculado()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        } else if($comparendo->getOrganismoTransitoMatriculado() == null) {
+                            fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        }
+                        if($comparendo->getClase()) {
+                            fwrite($archivo, str_pad($comparendo->getClase()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        } elseif($comparendo->getClase() == null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        if($comparendo->getServicio()) {
+                            fwrite($archivo, str_pad($comparendo->getServicio()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif($comparendo->getServicio() == null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        if($comparendo->getRadioAccion()) {
+                            fwrite($archivo, str_pad($comparendo->getRadioAccion()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif($comparendo->getRadioAccion() == null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        if($comparendo->getModalidadTransporte()) {
+                            fwrite($archivo, str_pad($comparendo->getModalidadTransporte()->getId(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif($comparendo->getModalidadTransporte() == null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        if($comparendo->getTransportePasajero()) {
+                            fwrite($archivo, str_pad($comparendo->getTransportePasajero()->getId(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif($comparendo->getTransportePasajero() == null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getInfractorIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getInfractorTipoIdentificacion() != null){
+                            fwrite($archivo, str_pad($comparendo->getInfractorTipoIdentificacion()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getInfractorTipoIdentificacion() == null) {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getInfractorNombres(), 18, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getInfractorApellidos(), 20, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getInfractorDireccion(), 40, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getInfractorEmail(), 40, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getInfractorTelefono(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getInfractorMunicipioResidencia(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getInfractorNumeroLicenciaConduccion(), 14, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getCategoria(), 2, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getOrganismoTransitoMatriculado() != null) {
+                            fwrite($archivo, str_pad($comparendo->getOrganismoTransitoMatriculado()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getOrganismoTransitoMatriculado() == null) {
+                            fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getFechaVencimiento()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getTipoInfractor() != null) {
+                            fwrite($archivo, str_pad($comparendo->getTipoInfractor()->getId(), 1, ' ', STR_PAD_RIGHT));
+                        } else {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        }                        
+                        fwrite($archivo, str_pad($comparendo->getNumeroLicenciaTransito(), 16, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getOrganismoTransitoMatriculado() != null) {
+                            fwrite($archivo, str_pad($comparendo->getOrganismoTransitoMatriculado()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getOrganismoTransitoMatriculado() == null) {
+                            fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getPropietarioIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getPropietarioTipoIdentificacion() != null) {
+                            fwrite($archivo, str_pad($comparendo->getPropietarioTipoIdentificacion()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif($comparendo->getPropietarioTipoIdentificacion() == null) {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getPropietarioNombre() . " " . $comparendo->getPropietarioApellidos(), 50, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getEmpresaNombre(), 30, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getEmpresaNit(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getTarjetaOperacion(), 10, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getAgenteTransito() != null){
+                            fwrite($archivo, str_pad($comparendo->getAgenteTransito()->getNumeroPlaca(), 10, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getAgenteTransito() == null) {
+                            fwrite($archivo, str_pad("", 10, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getObservacionesAgente(), 50, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getFuga(), 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getAccidente(), 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getTestigoIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getTestigoNombres() . " " . $comparendo->getTestigoApellidos(), 50, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getTestigoDireccion(), 40, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getTestigoTelefono(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getValorPagar(), 8, ' ', STR_PAD_RIGHT));
+                        /* fwrite($archivo, str_pad($comparendo->getValorAdicional(), 8, ' ', STR_PAD_RIGHT)); */
+                        fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getOrganismoTransito() != null) {
+                            fwrite($archivo, str_pad($comparendo->getOrganismoTransito()->getDivipo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getOrganismoTransito() == null) {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        }
+                        if($comparendo->getEstado() != null) {
+                            fwrite($archivo, str_pad($comparendo->getEstado()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getEstado() == null) {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getPolca(), 1, ' ', STR_PAD_RIGHT));
+                        if($comparendo->getInfraccion() != null){
+                            fwrite($archivo, str_pad($comparendo->getInfraccion()->getId(), 5, ' ', STR_PAD_RIGHT));
+                        } elseif ($comparendo->getInfraccion() == null) {
+                            fwrite($archivo, str_pad("", 5, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($comparendo->getValorInfraccion(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("N", 1, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($comparendo->getGradoAlcoholemia(), 8, ' ', STR_PAD_RIGHT). "\r\n");
+                    }
+                    fflush($archivo);
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "SIMITCOMP.txt"
+                );
+            } elseif($params->tipoReporte == 2){
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."SIMITRESOL.txt"; 
+                
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
+                }
+                
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                }else{
+                    $resoluciones = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getResolucionesByFechasForFile(
+                        $params->idOrganismoTransito,
+                        $fechaInicial,
+                        $fechaFinal
+                    );
+
+                    foreach ($resoluciones as $key => $resolucion) {
+                        fwrite($archivo, str_pad($key + 1, 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getActoAdministrativo()->getNumero(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getActoAdministrativo()->getFecha()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getEstado()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        if($resolucion->getRestriccion() != null) {
+                            fwrite($archivo, str_pad($resolucion->getRestriccion()->getFechaFin()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        } elseif ($resolucion->getRestriccion() == null) {
+                            fwrite($archivo, str_pad("", 10, ' ', STR_PAD_RIGHT));
+                        }
+                        if($resolucion->getComparendo()->getConsecutivo() != null) {
+                            fwrite($archivo, str_pad($resolucion->getComparendo()->getConsecutivo()->getNumero(), 20, ' ', STR_PAD_RIGHT));
+                        } elseif ($resolucion->getComparendo()->getConsecutivo() == null) {
+                            fwrite($archivo, str_pad("", 20, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getFecha()->format('d/m/Y'), 10, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        if($resolucion->getComparendo()->getInfractorTipoIdentificacion() != null) {
+                            fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorTipoIdentificacion()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                        } elseif ($resolucion->getComparendo()->getInfractorTipoIdentificacion() == null) {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorNombres(), 18, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorApellidos(), 20, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorDireccion(), 40, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorTelefono(), 15, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getInfractorMunicipioResidencia(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getValorPagar(), 8, ' ', STR_PAD_RIGHT));
+                        /* fwrite($archivo, str_pad($resolucion->getComparendo()->getValorAdicional(), 8, ' ', STR_PAD_RIGHT)); */ //valor adicional a pagar del comparendo
+                        /* fwrite($archivo, str_pad($resolucion->getComparendo()->getFotomulta(), 1, ' ', STR_PAD_RIGHT)); */
+                        // eliminarlos luego
+                        fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
+                        //=============================================================================
+                        if($resolucion->getComparendo()->getInfraccion() != null) {
+                            fwrite($archivo, str_pad($resolucion->getComparendo()->getInfraccion()->getId(), 5, ' ', STR_PAD_RIGHT));
+                        } elseif ($resolucion->getComparendo()->getInfraccion() == null) {
+                            fwrite($archivo, str_pad("", 5, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getValorInfraccion(), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($resolucion->getComparendo()->getGradoAlcoholemia(), 8, ' ', STR_PAD_RIGHT));
+                        if($resolucion->getRestriccion() != null) {
+                            fwrite($archivo, str_pad($resolucion->getRestriccion()->getHorasComunitarias(), 1, ' ', STR_PAD_RIGHT) . "\r\n");
+                        } elseif ($resolucion->getRestriccion() == null) {
+                            fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT) . "\r\n");
+                        }
+                    }  
+                    fflush($archivo);
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "SIMITRESOL.txt"
+                );  
+            
+            } elseif($params->tipoReporte == 3){
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."SIMITRECAUD.txt"; 
+                
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
+                }
+                
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                }else{
+                    $recaudos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getRecaudosByFechasForFile(
+                        $params->idOrganismoTransito,
+                        $fechaInicial,
+                        $fechaFinal
+                    );
+
+                    foreach ($recaudos as $key => $recaudo) {
+                        fwrite($archivo, str_pad(1, 1, ' ', STR_PAD_RIGHT) . "\r\n");
+                        fwrite($archivo, str_pad($key + 1, 5, ' ', STR_PAD_RIGHT));
+                        if($recaudo->getFactura() != null) {
+                            fwrite($archivo, str_pad($recaudo->getFactura()->getFechaPago()->format('d/m/Y'), 10,' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($recaudo->getFactura()->getHoraPago()->format('H:m'), 5,' ', STR_PAD_RIGHT));
+                        } elseif ($recaudo->getFactura() == null) {
+                            fwrite($archivo, str_pad("", 10,' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad("", 5,' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad("fecha real transac", 10,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("cod canalOrigen", 4,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("descrip.Origen", 40,' ', STR_PAD_RIGHT));
+                        if($recaudo->getFactura() != null) {
+                            fwrite($archivo, str_pad($recaudo->getFactura()->getValorNeto(), 12,' ', STR_PAD_RIGHT));
+                        } elseif($recaudo->getFactura() == null){
+                            fwrite($archivo, str_pad("", 12,' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad(0, 12,' ', STR_PAD_RIGHT));
+                        if($recaudo->getComparendo()->getConsecutivo() != null) {
+                            fwrite($archivo, str_pad($recaudo->getComparendo()->getConsecutivo()->getNumero(), 20,' ', STR_PAD_RIGHT));
+                        } elseif ($recaudo->getComparendo()->getConsecutivo() == null) {
+                            fwrite($archivo, str_pad("", 20,' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getPolca(), 1,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($recaudo->getComparendo()->getInfractorIdentificacion(), 15, ' ', STR_PAD_RIGHT));
+                        if($recaudo->getFactura() != null) {
+                            fwrite($archivo, str_pad($recaudo->getFactura()->getTipoRecaudo()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                        } elseif ($recaudo->getFactura() != null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        if($recaudo->getComparendo()->getOrganismoTransito() != null) {
+                            fwrite($archivo, str_pad($recaudo->getComparendo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                        } elseif ($recaudo->getComparendo()->getOrganismoTransito() == null) {
+                            fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
+                        }
+                        if($recaudo->getFactura() != null) {
+                            fwrite($archivo, str_pad($recaudo->getFactura()->getNumero(), 15, ' ', STR_PAD_RIGHT));
+                        } elseif ($recaudo->getFactura() == null) {
+                            fwrite($archivo, str_pad("", 15, ' ', STR_PAD_RIGHT));
+                        }
+                        if($recaudo->getComparendo()->getAcuerdoPago() != null) {
+                            fwrite($archivo, str_pad($recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas(), 2, ' ', STR_PAD_RIGHT));
+                        } elseif($recaudo->getComparendo()->getAcuerdoPago() == null) {
+                            fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
+                        }
+                        fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT) . "\r\n");
+                    }
+                    fflush($archivo);
+                }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "SIMITRECAUD.txt"
+                );
+            }
+            else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No hay registros para los filtros estipulados.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida.', 
+            );
+        }
+        return $helpers->json($response);
+    }
 }

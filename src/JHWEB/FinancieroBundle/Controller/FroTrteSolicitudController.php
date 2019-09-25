@@ -2664,7 +2664,7 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMVEHI.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
+                    $archivo = fopen($file,"r"); 
                 }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }
@@ -2703,7 +2703,7 @@ class FroTrteSolicitudController extends Controller
                         fwrite($archivo, str_pad($vehiculo->getSerie(), 25, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getNumeroPasajeros(), 3, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('AAAAmmdd'), 8, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($licenciaTransito->getNumero(), 10, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad("N", 16, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getCombustible()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
@@ -2744,69 +2744,114 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMPROP.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
+                    $archivo = fopen($file,"r"); 
                 }else{
-                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                    $archivo = fopen($file, "w+b");    // a$archivo el archivo, creándolo si no existe
                 }
  
                 if($archivo == false){
                     echo("Error al crear el archivo");
                 }else{
-                    foreach ($propetariosActuales as $key => $propietarioActual) {
-                        fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
-                        
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
-                        }
-                        fwrite($archivo, str_pad("N", 1, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 25, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getDireccionPersonal(), 20, ' ', STR_PAD_RIGHT));
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getDireccion(), 20, ' ', STR_PAD_RIGHT));
-                        }
-                        if($propietarioActual->getCiudadano()){
-                            fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTelefonoCelular(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
-                        } elseif ($propietarioActual->getEmpresa()) {
-                            fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTelefono(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
-                        }
+                    if($params->idModulo == 2) {
+                        foreach ($propetariosActuales as $key => $propietarioActual) {
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                            
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
+                            }
+                            fwrite($archivo, str_pad("N", 1, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 25, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getDireccionPersonal(), 20, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getDireccion(), 20, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTelefonoCelular(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTelefono(), 10, ' ', STR_PAD_RIGHT) . "\r\n");
+                            }
 
 
+                        }
+                        fflush($archivo);
+                    } else if($params->idModulo == 6) {
+                        foreach ($propetariosActuales as $key => $propietarioActual) {
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($propietarioActual->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                            
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getTipoIdentificacion()->getSigla(), 1, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getIdentificacion(), 11, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNit(), 11, ' ', STR_PAD_RIGHT));
+                            }
+                            fwrite($archivo, str_pad($propietarioActual->getFechaInicial()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerNombre(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getNombre(), 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoNombre(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getPrimerApellido(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietarioActual->getCiudadano()){
+                                fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getSegundoApellido(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietarioActual->getEmpresa()) {
+                                fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
+                            }
+                            if($propietario->getEstado() == 1){
+                                fwrite($archivo, str_pad("A", 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($propietario->getEstado() == 0) {
+                                fwrite($archivo, str_pad("I", 1, ' ', STR_PAD_RIGHT));
+                            }
+                        }
+                        fflush($archivo);
                     }
-                    fflush($archivo);
                 }
 
                 fclose($archivo);   // Cerrar el archivo
@@ -2837,7 +2882,6 @@ class FroTrteSolicitudController extends Controller
                     )
                 ); */
             }
-            
             else if($params->tipoReporte == 3) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites(
                     $params->idOrganismoTransito,
@@ -2850,7 +2894,7 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMTRVE.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
+                    $archivo = fopen($file,"r"); 
                 }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }
@@ -2904,7 +2948,7 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMCAUT.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
+                    $archivo = fopen($file,"r"); 
                 }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }
@@ -2956,7 +3000,7 @@ class FroTrteSolicitudController extends Controller
                 $file = $dir."TTAMCANC.DAT"; 
 
                 if( file_exists("datos.txt") == false ){
-                    $abrir = fopen($file,"r"); 
+                    $archivo = fopen($file,"r"); 
                 }else{
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }
@@ -2969,10 +3013,12 @@ class FroTrteSolicitudController extends Controller
                     foreach ($cancelacionesMatricula as $key => $cancelacionMatricula) {
                         fwrite($archivo, str_pad($cancelacionMatricula->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($cancelacionMatricula->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
-                        foreach ($cancelacionMatricula->getForaneas() as $key => $dato) {
-                            fwrite($archivo, str_pad($dato['idMotivoCancelacion'], 2,' ', STR_PAD_RIGHT));
-                        }
-                        fwrite($archivo, str_pad($cancelacionMatricula->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
+                        
+                        $foraneas = (object)$cancelacionMatricula->getForaneas();
+                        $motivoCancelacion = $foraneas->idMotivoCancelacion;
+                        
+                        fwrite($archivo, str_pad($motivoCancelacion, 2,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($cancelacionMatricula->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT) . "\r\n");
                     }
 
                     fflush($archivo);
@@ -2989,8 +3035,84 @@ class FroTrteSolicitudController extends Controller
                 }
             }
             else if($params->tipoReporte == 6) {
-            }
-            else if($params->tipoReporte == 7) {
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTARUNTPREN.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    $prendas = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPrendas($params->idOrganismoTransito, $params->idModulo, $fechaInicial, $fechaFinal);
+
+                    foreach ($prendas as $key => $prenda) {
+                        fwrite($archivo, str_pad($prenda['tramiteSolicitud']->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['tramiteSolicitud']->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getTipoIdentificacion()->getCodigo(), 1,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getIdentificacion(), 11,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getPrimerNombre(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getSegundoNombre(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getPrimerApellido(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getSegundoApellido(), 25,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getDireccionPersonal(), 20,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getTelefonoCelular(), 10,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($prenda['acreedor']->getGradoAlerta(), 1,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['tramiteSolicictud']->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['acreedor']->getEstado(), 1,' ', STR_PAD_RIGHT)); 
+                        fwrite($archivo, str_pad($prenda['acreedor']->getTipoAlerta()->getId(), 1,' ', STR_PAD_RIGHT) . "\r\n" ); 
+
+                    }
+
+                    fflush($archivo);
+
+                    fclose($archivo);   // Cerrar el archivo
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Archivo generado",
+                        'data' => "TTARUNTPREN.DAT"
+                    );
+                }
+            } else if($params->tipoReporte == 7) {
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."TTARUNTRADI.DAT"; 
+
+                if( file_exists("datos.txt") == false ){
+                    $archivo = fopen($file,"r"); 
+                }else{
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }
+ 
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    $radicadosCuenta = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByRadicadosCuenta($params->idOrganismoTransito, $params->idModulo, $fechaInicial, $fechaFinal);
+
+                    foreach ($radicadosCuenta as $key => $radicadoCuenta) {
+                        fwrite($archivo, str_pad($radicadoCuenta->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($radicadoCuenta->getVehiculo()->getPlaca()->getNumero(), 6,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($radicadoCuenta->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($radicadoCuenta->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT));
+                    }
+                    fflush($archivo);
+
+                    fclose($archivo);   // Cerrar el archivo
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Archivo generado",
+                        'data' => "TTARUNTRADI.DAT"
+                    );
+                }
             }else{
                 $response = array(
                     'status' => 'error',
@@ -3084,5 +3206,41 @@ class FroTrteSolicitudController extends Controller
                 'message' => "Autorización no válida",
             );
         }
+    }
+
+    
+    /**
+     * Creates a new Tramite entity.
+     *
+     * @Route("/calcular/fecha/vencimiento", name="frotramite_calculate_date")
+     * @Method({"GET", "POST"})
+     */
+    public function calcularFechaVencimientoAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $fechaActual = new \Datetime();
+        $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($fechaActual->format('Y-m-d')))));
+        
+        if($fechaVencimiento) {
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Se calculó la fecha de vencimiento correctamente.',
+                'data' => $fechaVencimiento, 
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "No se pudo calcular la fecha de vencimiento.", 
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

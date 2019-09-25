@@ -29,6 +29,13 @@ class VhloAcreedor
     private $gradoAlerta;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", nullable= true)
+     */
+    private $estado;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -84,6 +91,30 @@ class VhloAcreedor
     public function getGradoAlerta()
     {
         return $this->gradoAlerta;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return VhloAcreedor
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

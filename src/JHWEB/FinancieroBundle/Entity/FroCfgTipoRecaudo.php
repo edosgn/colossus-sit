@@ -27,6 +27,12 @@ class FroCfgTipoRecaudo
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer", length=2, nullable = true)
+     */
+    private $codigo;
 
     /**
      * @var bool
@@ -71,6 +77,30 @@ class FroCfgTipoRecaudo
     }
 
     /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return FroCfgTipoRecaudo
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -87,11 +117,10 @@ class FroCfgTipoRecaudo
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-

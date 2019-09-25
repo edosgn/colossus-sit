@@ -250,8 +250,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             AND vv.organismoTransito = :idOrganismoTransito
             AND vv.clase = vcc.id
             AND vcc.tipoVehiculo = vctv.id
-            AND vctv.modulo = :idModulo
-            AND vp.activo = 1";
+            AND vctv.modulo = :idModulo";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
@@ -334,16 +333,22 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //Obtiene trámites solicitud según el filtro de búsqueda
-    public function getByPrendas($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
+    public function getByPrendas($idOrganismoTransito, $idModulo, $fechaInicial, $fechaFinal)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT fts
+        $dql = "SELECT fts as tramiteSolicitud, va as acreedor
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
             JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
-            JHWEBFinancieroBundle:FroTramite ft
+            JHWEBFinancieroBundle:FroTramite ft,
+            JHWEBVehiculoBundle:VhloAcreedor va,
+            JHWEBVehiculoBundle:VhloVehiculo v
+
             WHERE  fts.organismoTransito = :idOrganismoTransito
-            AND fts.fecha BETWEEN :fechaDesde AND :fechaHasta
+            AND fts.fecha BETWEEN :fechaInicial AND :fechaFinal
             AND fts.tramiteFactura = fft.id
+            AND fts.vehiculo = v.id
+            AND v.id = va.vehiculo
+            AND va.activo = 1
             AND fft.precio = ftp.id
             AND ftp.modulo = :idModulo
             AND ftp.tramite = ft.id
@@ -353,15 +358,15 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito,
             'idModulo' => $idModulo,
-            'fechaDesde' => $fechaDesde,
-            'fechaHasta' => $fechaHasta
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
         ));
         
         return $consulta->getResult();
     }
 
     //Obtiene trámites solicitud según el filtro de búsqueda
-    public function getByRadicadosCuenta($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
+    public function getByRadicadosCuenta($idOrganismoTransito, $idModulo, $fechaInicial, $fechaFinal)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT fts
@@ -369,7 +374,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
             JHWEBFinancieroBundle:FroTramite ft
             WHERE  fts.organismoTransito = :idOrganismoTransito
-            AND fts.fecha BETWEEN :fechaDesde AND :fechaHasta
+            AND fts.fecha BETWEEN :fechaInicial AND :fechaFinal
             AND fts.tramiteFactura = fft.id
             AND fft.precio = ftp.id
             AND ftp.modulo = :idModulo
@@ -380,8 +385,8 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito,
             'idModulo' => $idModulo,
-            'fechaDesde' => $fechaDesde,
-            'fechaHasta' => $fechaHasta
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
         ));
         
         return $consulta->getResult();

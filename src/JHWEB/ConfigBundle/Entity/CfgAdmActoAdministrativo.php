@@ -108,9 +108,6 @@ class CfgAdmActoAdministrativo
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-        }
         return $this->fecha;
     }
 
@@ -155,7 +152,7 @@ class CfgAdmActoAdministrativo
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
