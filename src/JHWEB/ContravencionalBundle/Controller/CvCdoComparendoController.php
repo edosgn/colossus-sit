@@ -1526,7 +1526,12 @@ class CvCdoComparendoController extends Controller
                         $fechaFinal
                     );
 
+                    $sumatoriaValorComparendo = 0;
+                    $cont = 0;
                     foreach ($comparendos as $key => $comparendo) {
+                        $sumatoriaValorComparendo += $comparendo->getValorPagar();
+                        $cont ++;
+
                         fwrite($archivo, $key + 1 . ',');
                         if($comparendo->getConsecutivo() != null) {
                             fwrite($archivo, $comparendo->getConsecutivo()->getNumero() . ",");
@@ -1581,6 +1586,10 @@ class CvCdoComparendoController extends Controller
                         }
                         fwrite($archivo, $comparendo->getInfractorNombres() . ",");
                         fwrite($archivo, $comparendo->getInfractorApellidos() . ",");
+
+                        $infractorEdad = $this->get("app.helpers")->calculateAge($comparendo->getInfractorFechaNacimiento()->format('Y/m/d'));
+                        fwrite($archivo, $infractorEdad . ",");
+
                         fwrite($archivo, $comparendo->getInfractorDireccion() . ",");
                         fwrite($archivo, $comparendo->getInfractorEmail() . ",");
                         fwrite($archivo, $comparendo->getInfractorTelefono() . ",");
@@ -1625,6 +1634,9 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, "" . "," );
                         fwrite($archivo, "" . "," );
                         fwrite($archivo, "" . "," );
+                        fwrite($archivo, "" . "," );
+                        fwrite($archivo, "" . "," );
+                        fwrite($archivo, "" . "," );
                         fwrite($archivo, $comparendo->getTestigoIdentificacion() . ",");
                         fwrite($archivo, $comparendo->getTestigoNombres() . " " . $comparendo->getTestigoApellidos() . ",");
                         fwrite($archivo, $comparendo->getTestigoDireccion() . ",");
@@ -1653,6 +1665,12 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, "" . ",");
                         fwrite($archivo, $comparendo->getGradoAlcoholemia() . ",". "\r\n");
                     }
+                    
+                    fwrite($archivo, $cont . ",");
+                    fwrite($archivo, $sumatoriaValorComparendo . ",");
+                    fwrite($archivo, "0" . ",");
+                    fwrite($archivo, "0" .  "\r\n");
+
                     fflush($archivo);
                 }
 
@@ -1778,8 +1796,23 @@ class CvCdoComparendoController extends Controller
                         $fechaFinal
                     );
 
+                    $fechaActual = new \Datetime();
+
+                    $sumatoriaValorComparendo = 0;
+                    $cont = 0;
+                    
                     foreach ($recaudos as $key => $recaudo) {
-                        /* fwrite($archivo, str_pad(1, 1, ' ', STR_PAD_RIGHT) . "\r\n"); */
+                        //===================encabezado =============================================
+                        fwrite($archivo, "0" . ",");
+                        fwrite($archivo, $fechaActual->format('d/m/Y') . ",");
+                        fwrite($archivo, $fechaActual->format('d/m/Y') . ",");
+                        fwrite($archivo, $recaudo->getFactura()->getOrganismoTransito()->getDivipo() . ",");
+                        fwrite($archivo, "1" . "\r\n");
+                        
+                        //============================ fin encabezado ===============================
+                        $cont ++;
+                        $sumatoriaValorComparendo += $comparendo->getValorPagar();
+    
                         fwrite($archivo, $key + 1 . ",");
                         if($recaudo->getFactura() != null) {
                             fwrite($archivo, $recaudo->getFactura()->getFechaPago()->format('d/m/Y') . ",");
@@ -1788,9 +1821,10 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "" . ",");
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, "" . ","); //fecha real transaccion
-                        fwrite($archivo, "". ","); //cod canal de origen
-                        fwrite($archivo, "" . ","); // descripcion del origen
+                        fwrite($archivo, $recaudo->getFactura()->getFechaPago()->format('d/m/Y') . ","); //fecha real transaccion
+                        fwrite($archivo, $recaudo->getFactura()->getHoraPago()->format('H:m') . ","); //hora transaccion
+                        fwrite($archivo, "0". ","); //cod canal de origen
+                        fwrite($archivo, "taquilla de transito" . ","); // descripcion del origen
                         if($recaudo->getFactura() != null) {
                             fwrite($archivo, $recaudo->getFactura()->getValorNeto() . ",");
                         } elseif($recaudo->getFactura() == null){
@@ -1830,7 +1864,15 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         fwrite($archivo, "" . "\r\n");
+
+
                     }
+
+                    fwrite($archivo, $cont . ",");
+                    fwrite($archivo, $sumatoriaValorComparendo . ",");
+                    fwrite($archivo, "0" . ",");
+                    fwrite($archivo, "0" .  "\r\n");
+                    
                     fflush($archivo);
                 }
 
