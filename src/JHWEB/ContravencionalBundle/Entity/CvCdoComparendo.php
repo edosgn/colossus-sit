@@ -454,7 +454,6 @@ class CvCdoComparendo
      **/
     protected $estado;
 
-
     /**
      * Get id
      *

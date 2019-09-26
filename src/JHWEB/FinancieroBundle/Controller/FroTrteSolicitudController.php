@@ -850,7 +850,7 @@ class FroTrteSolicitudController extends Controller
                 //$fechaVencimiento = $helpers->getFechaVencimiento($fechaRegistro, 1);
                 
                 $restriccion->setTipo('PRENDA');
-                $restriccion->setForanea($limitacion->getId());
+                $restriccion->setForanea($acreedor->getId());
                 $restriccion->setFechaRegistro($fechaRegistro);
                 $restriccion->setActivo(true);
 
