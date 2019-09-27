@@ -381,8 +381,8 @@ class ImoInsumoController extends Controller
 
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoCantidad(
             $params->idOrganismoTransitoOrigen,
-            $params->casoInsumo,
-            $params->cantidad
+            $params->casoInsumo
+            // $params->cantidad
         );
 
         if ($insumos) {
@@ -416,8 +416,9 @@ class ImoInsumoController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
         
+        // var_dump($params->insumos);
+        // die();
         $sustratos = $params->insumos;
-     
         $fecha = new \DateTime('now');
         
         $organismoTransitoOrigen = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
