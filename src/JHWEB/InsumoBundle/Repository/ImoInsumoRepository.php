@@ -124,7 +124,7 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
-    public function getInsumoCantidad($idOrganismoTransito, $tipo, $cantidad)
+    public function getInsumoCantidad($idOrganismoTransito, $tipo)
     {
         $em = $this->getEntityManager();
         
@@ -134,8 +134,9 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         AND i.organismoTransito = :idOrganismoTransito
         AND i.estado = 'DISPONIBLE'
         ORDER BY i.id"; 
-
-        $consulta = $em->createQuery($dql)->setMaxResults($cantidad);
+ 
+        // $consulta = $em->createQuery($dql)->setMaxResults($cantidad);
+        $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito,
