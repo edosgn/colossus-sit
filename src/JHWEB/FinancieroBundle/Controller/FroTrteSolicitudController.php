@@ -2705,7 +2705,11 @@ class FroTrteSolicitudController extends Controller
                             fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
                         }
                         if($vehiculo->getClase() != null) {
-                            fwrite($archivo, str_pad($vehiculo->getClase()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                            if($vehiculo->getClase()->getCodigo() < 10) {
+                                fwrite($archivo, str_pad($vehiculo->getClase()->getCodigo(), 2, '0', STR_PAD_LEFT));
+                            } elseif ($vehiculo->getClase()->getCodigo() >= 10) {
+                                fwrite($archivo, str_pad($vehiculo->getClase()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                            }
                         } elseif ($vehiculo->getClase() == null) {
                             fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
                         }
@@ -2730,11 +2734,15 @@ class FroTrteSolicitudController extends Controller
                             fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
                         }
                         fwrite($archivo, str_pad($vehiculo->getCilindraje(), 5, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($vehiculo->getModelo(), 5, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad($vehiculo->getModelo(), 4, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getMotor(), 25, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getChasis(), 25, ' ', STR_PAD_RIGHT));
                         fwrite($archivo, str_pad($vehiculo->getSerie(), 25, ' ', STR_PAD_RIGHT));
-                        fwrite($archivo, str_pad($vehiculo->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
+                        if($vehiculo->getCapacidadCarga() != null) {
+                            fwrite($archivo, str_pad($vehiculo->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
+                        } elseif ($vehiculo->getCapacidadCarga() == null) {
+                            fwrite($archivo, str_pad("0", 5, ' ', STR_PAD_RIGHT));
+                        }
                         fwrite($archivo, str_pad($vehiculo->getNumeroPasajeros(), 3, ' ', STR_PAD_RIGHT));
                         if($vehiculo->getFechaMatricula() != null){
                             fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
@@ -2746,7 +2754,7 @@ class FroTrteSolicitudController extends Controller
                         } elseif ($licenciaTransito == null) {
                             fwrite($archivo, str_pad("", 10, ' ', STR_PAD_RIGHT));
                         }
-                        fwrite($archivo, str_pad("N", 16, ' ', STR_PAD_RIGHT));
+                        fwrite($archivo, str_pad("", 16, ' ', STR_PAD_RIGHT));
                         if($vehiculo->getCombustible() != null) {
                             fwrite($archivo, str_pad($vehiculo->getCombustible()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
                         } elseif ($vehiculo->getCombustible() == null) {
@@ -2962,7 +2970,7 @@ class FroTrteSolicitudController extends Controller
                         } elseif ($licenciaTransito == null) {
                             fwrite($archivo, str_pad("", 10,' ', STR_PAD_RIGHT));
                         }
-                        fwrite($archivo, str_pad("N", 16,' ', STR_PAD_RIGHT) . "\r\n");
+                        fwrite($archivo, str_pad("", 16,' ', STR_PAD_RIGHT) . "\r\n");
                     }
                     fflush($archivo);
 
@@ -3118,6 +3126,8 @@ class FroTrteSolicitudController extends Controller
                     $prendas = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPrendas($params->idOrganismoTransito, $params->idModulo, $fechaInicial, $fechaFinal);
 
                     foreach ($prendas as $key => $prenda) {
+                        var_dump($prenda['acreedor']);
+                        die();
                         if($prenda['tramiteSolicitud']->getOrganismoTransito() != null) {
                             fwrite($archivo, str_pad($prenda['tramiteSolicitud']->getOrganismoTransito()->getDivipo(), 8,' ', STR_PAD_RIGHT));
                         } elseif ($prenda['tramiteSolicitud']->getOrganismoTransito() == null) {
@@ -3145,17 +3155,25 @@ class FroTrteSolicitudController extends Controller
                             }
                             fwrite($archivo, str_pad($prenda['acreedor']->getCiudadano()->getTelefonoCelular(), 10,' ', STR_PAD_RIGHT));
                             fwrite($archivo, str_pad($prenda['acreedor']->getGradoAlerta(), 1,' ', STR_PAD_RIGHT)); 
-                        } elseif ($prenda['acreedor']->getCiudadano() == null) {
-                            fwrite($archivo, str_pad("", 1,' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad("", 11,' ', STR_PAD_RIGHT));
+                        } elseif ($prenda['acreedor']->getEmpresa() != null) {
+                            if($prenda['acreedor']->getEmpresa()->getTipoIdentificacion() != null) {
+                                fwrite($archivo, str_pad($prenda['acreedor']->getEmpresa()->getTipoIdentificacion()->getCodigo(), 1,' ', STR_PAD_RIGHT));
+                            }
+                            fwrite($archivo, str_pad($prenda['acreedor']->getEmpresa()->getNit(), 11,' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($prenda['acreedor']->getEmpresa()->getNombre(), 25,' ', STR_PAD_RIGHT));
                             fwrite($archivo, str_pad("", 25,' ', STR_PAD_RIGHT));
                             fwrite($archivo, str_pad("", 25,' ', STR_PAD_RIGHT));
                             fwrite($archivo, str_pad("", 25,' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad("", 25,' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad("", 20,' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad("", 8,' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad("", 10,' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad("", 1,' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($prenda['acreedor']->getEmpresa()->getDireccion(), 20,' ', STR_PAD_RIGHT));
+                            if($prenda['acreedor']->getEmpresa()->getMunicipio() != null) {
+                                fwrite($archivo, str_pad($prenda['acreedor']->getEmpresa()->getMunicipio()->getCodigoDane(), 8,' ', STR_PAD_RIGHT));
+                            }
+                            if($prenda['acreedor']->getEmpresa()->getTelefono() != null) {
+                                fwrite($archivo, str_pad($prenda['acreedor']->getEmpresa()->getTelefono(), 10,' ', STR_PAD_RIGHT));
+                            } elseif ($prenda['acreedor']->getEmpresa()->getTelefono() == null) {
+                                fwrite($archivo, str_pad("", 10,' ', STR_PAD_RIGHT));
+                            }
+                            fwrite($archivo, str_pad($prenda['acreedor']->getGradoAlerta(), 1,' ', STR_PAD_RIGHT));
                         }
                         if($prenda['tramiteSolicictud']->getFecha() != null) {
                             fwrite($archivo, str_pad($prenda['tramiteSolicictud']->getFecha()->format('Ymd'), 8,' ', STR_PAD_RIGHT)); 
