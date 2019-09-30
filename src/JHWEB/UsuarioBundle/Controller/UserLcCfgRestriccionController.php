@@ -129,7 +129,7 @@ class UserLcCfgRestriccionController extends Controller
         
         return $helpers->json($response);
     }
-
+ 
     /**
      * Displays a form to edit an existing userLcCfgRestriccion entity.
      *
