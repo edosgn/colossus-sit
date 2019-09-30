@@ -47,31 +47,38 @@ class UserLcRestriccionController extends Controller
         if($authCheck == true){
             $json = $request->get("data",null);
             $params = json_decode($json);
-            $userLcRestriccion = new UserLcRestriccion();
-
+            
             $userLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->idLicenciaConduccion);
-            $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
-            $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
-            $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
-            $userLcRestriccion->setTipoActo($params->tipoActo);
-            $userLcRestriccion->setNumResolucion($params->numResolucion);
-            $userLcRestriccion->setEstado('ACTIVO');
-            if($params->tipo == 'CANCELACION'){
-                $userLcRestriccion->setFechaCancelacion(new \Datetime($params->fechaCancelacion));
-                $userLcRestriccion->setTipo('CANCELACION');
-                $userLicenciaConduccion->setEstado('CANCELADA');
-
-            }else{
-                $userLcRestriccion->setFechaInicio(new \Datetime($params->fechaFin));
-                $userLcRestriccion->setFechaFin(new \Datetime($params->fechaFin));
-                $userLcRestriccion->setTipo('SUSPENSION');
-                $userLicenciaConduccion->setEstado('SUSPENDIDA');
+            
+            $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
+            
+            foreach ($licanciasConduccion as $key => $userLicenciaConduccion) {
+                $userLcRestriccion = new UserLcRestriccion();
+                $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
+                $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
+                $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
+                $userLcRestriccion->setTipoActo($params->tipoActo);
+                $userLcRestriccion->setNumeroResolucion($params->numResolucion);
+                $userLcRestriccion->setEstado('ACTIVO');
+                $userLcRestriccion->setActivo(true);
+    
+                if($params->tipo == 'CANCELACION'){
+                    $userLcRestriccion->setFechaCancelacion(new \Datetime($params->fechaCancelacion));
+                    $userLcRestriccion->setTipo('CANCELACION');
+                    $userLicenciaConduccion->setEstado('CANCELADA');
+    
+                }else{
+                    $userLcRestriccion->setFechaInicio(new \Datetime($params->fechaFin));
+                    $userLcRestriccion->setFechaFin(new \Datetime($params->fechaFin));
+                    $userLcRestriccion->setTipo('SUSPENSION');
+                    $userLicenciaConduccion->setEstado('SUSPENDIDA');
+                }
+                $userLicenciaConduccion->setActivo(false);
+    
+                $em->persist($userLcRestriccion);
+                $em->persist($userLicenciaConduccion);
+                $em->flush();
             }
-            $userLicenciaConduccion->setActivo(false);
-
-            $em->persist($userLcRestriccion);
-            $em->persist($userLicenciaConduccion);
-            $em->flush();
 
             $response = array(
                 'status' => 'success',
@@ -91,11 +98,11 @@ class UserLcRestriccionController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/pdf/genera/auto", name="auto_genera_pdf_acta")
+     * @Route("/pdf/genera/auto", name="auto_genera_pdf_acta_restriccion")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request)
-    {
+    { 
         $em = $this->getDoctrine()->getManager();
 
         setlocale(LC_ALL,"es_ES");
@@ -107,6 +114,7 @@ class UserLcRestriccionController extends Controller
         $params = json_decode($json);
 
         $userLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->idLicenciaConduccion);
+        
         $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
             array(
                 'userLicenciaConduccion' => $params->idLicenciaConduccion,

@@ -155,9 +155,6 @@ class FroTrtePrecio
      */
     public function getFechaInicialString()
     {
-        if ($this->fechaInicial) {
-            return $this->fechaInicial->format('Y-m-d');
-        }
         return $this->fechaInicial;
     }
 

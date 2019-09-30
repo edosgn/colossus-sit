@@ -449,20 +449,33 @@ class SvSenialUbicacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $idMunicipio = (isset($params->idMunicipio)) ? $params->idMunicipio : null;
+
             $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->getByFechasAndMunicipio(
                 new \Datetime($params->fechaInicial),
                 new \Datetime($params->fechaFinal),
-                $params->idMunicipio
+                $idMunicipio
             );
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($ubicaciones).' registros encontrados con exito.',
-                'data' => $ubicaciones,
-            );
+            if ($ubicaciones) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($ubicaciones).' registros encontrados con exito.',
+                    'data' => $ubicaciones,
+                );
+            } else {
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'Nogún registro encontrado.',
+                );
+            }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.',

@@ -575,9 +575,7 @@ class FroTrtePrecioController extends Controller
                 $params->id
             );
 
-            $fechaAnterior = $helpers->convertDateTime(
-                $tramitePrecio->getFechaInicial()
-            );
+            $fechaAnterior = $tramitePrecio->getFechaInicial();
             $fechaNueva = $helpers->convertDateTime($params->date);
             $fechaActual = new \Datetime(date('Y-m-d'));
 

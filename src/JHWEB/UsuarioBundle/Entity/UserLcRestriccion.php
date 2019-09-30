@@ -80,7 +80,7 @@ class UserLcRestriccion
     /**
      * @var bool
      *
-     * @ORM\Column(name="horas_comunitarias", type="boolean")
+     * @ORM\Column(name="horas_comunitarias", type="boolean", nullable=true)
      */
     private $horasComunitarias;
     
@@ -93,6 +93,7 @@ class UserLcRestriccion
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+    
 
     /**
      * Get id

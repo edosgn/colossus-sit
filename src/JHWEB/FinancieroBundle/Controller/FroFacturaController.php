@@ -7,6 +7,7 @@ use JHWEB\FinancieroBundle\Entity\FroFacComparendo;
 use JHWEB\FinancieroBundle\Entity\FroFacTramite;
 use JHWEB\FinancieroBundle\Entity\FroFacParqueadero;
 use JHWEB\FinancieroBundle\Entity\FroFacRetefuente;
+use JHWEB\FinancieroBundle\Entity\FroFacTransferencia;
 use JHWEB\VehiculoBundle\Entity\VhloCfgValor;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -585,7 +586,7 @@ class FroFacturaController extends Controller
                                     )
                                 );
 
-                                $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha());
+                                $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha()->format('d/m/Y'));
 
                                 $porcentajeInteres = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
                                    true
@@ -684,7 +685,7 @@ class FroFacturaController extends Controller
                                 )
                             );
 
-                            $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha());
+                            $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha()->format('d/m/Y'));
 
                             $porcentajeInteres = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
                                true
@@ -705,6 +706,31 @@ class FroFacturaController extends Controller
                 $em->flush();
 
                 $totalPagar += $comparendo->getValorPagar();
+
+                /* ========= Forzar tranferencia */
+                $transferencia = new FroFacTransferencia();
+
+                $transferencia->setFecha(new \Datetime(date('Y-m-d')));
+                $transferencia->setHora(new \Datetime(date('h:i:s A')));
+
+                if ($comparendo->getPolca()) {
+                    $transferencia->setTipo('POLCA');
+                    $transferencia->setValorSttdn($comparendo->getValorPagar() * (45 / 100));
+                    $transferencia->setValorSimit($comparendo->getValorPagar() * (10 / 100));
+                    $transferencia->setValorPolca($comparendo->getValorPagar() * (45 / 100));
+                } else {
+                    $transferencia->setTipo('STTDN');
+                    $transferencia->setValorSttdn($comparendo->getValorPagar() * (90 / 100));
+                    $transferencia->setValorSimit($comparendo->getValorPagar() * (10 / 100));
+                    $transferencia->setValorPolca(0);
+                }
+
+                $transferencia->setActivo(true);
+                $transferencia->setFactura($factura);
+                $transferencia->setComparendo($comparendo);
+
+                $em->persist($transferencia);
+                $em->flush();
             }
         }
 
