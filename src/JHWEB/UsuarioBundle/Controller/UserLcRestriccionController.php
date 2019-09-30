@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Userlcrestriccion controller.
@@ -112,25 +113,36 @@ class UserLcRestriccionController extends Controller
         $em = $this->getDoctrine()->getManager(); 
         $json = $request->get("data",null);
         $params = json_decode($json);
+        
 
         $userLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->idLicenciaConduccion);
         
-        $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
-            array(
-                'userLicenciaConduccion' => $params->idLicenciaConduccion,
-                'estado' =>'ACTIVA',
-            )
-        );
+        
 
-        $userLcRestriccion->setHorasComunitarias($params->horasComunitarias);
-        $userLcRestriccion->setEstado('DEVUELTA');
+        $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
 
-        $userLicenciaConduccion->setEstado('ACTIVA');
-        $userLicenciaConduccion->setActivo(1);
+        foreach ($licanciasConduccion as $key => $userLicenciaConduccionFor) {
+            $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
+                array(
+                    'userLicenciaConduccion' => $userLicenciaConduccionFor->getId(),
+                    'estado' =>'ACTIVO',
+                )
+            );
+            // var_dump($userLicenciaConduccionFor->getId());
 
-        $em->persist($userLicenciaConduccion);
-        $em->persist($userLcRestriccion);
-        $em->flush();
+            $userLcRestriccion->setHorasComunitarias($params->horasComunitarias);
+            $userLcRestriccion->setEstado('DEVUELTA');
+
+            $userLicenciaConduccionFor->setEstado('ACTIVA');
+            $userLicenciaConduccionFor->setActivo(1);
+    
+            $em->persist($userLicenciaConduccionFor);
+            $em->persist($userLcRestriccion);
+
+            $em->flush();
+        }
+        // die();
+
        
         $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array()); 
 
