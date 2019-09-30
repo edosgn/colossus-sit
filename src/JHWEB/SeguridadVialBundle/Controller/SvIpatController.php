@@ -69,419 +69,437 @@ class SvIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $ipat = new SvIpat();
-
-            if ($params->idOrganismoTransito) {
-                $idOrganismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
-                $ipat->setOrganismoTransito($idOrganismoTransito);
-            }
-            
-            if ($params->idGravedad) {
-                $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->idGravedad);
-                $ipat->setGravedadAccidente($gravedadAccidente);
-            }
-
-            $ipat->setLugar($params->lugar);
-
-            $fechaAccidenteDatetime = new \Datetime($params->fechaAccidente);
-            $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d');
-
-            $horaAccidenteDatetime = new \Datetime($params->horaAccidente);
-            $horaAccidente = $horaAccidenteDatetime->format('H:i:s');
-
-            $fechaLevantamientoDatetime = new \Datetime($params->fechaLevantamiento);
-            $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d');
-
-            $horaLevantamientoDatetime = new \Datetime($params->horaLevantamiento);
-            $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s');
-
-            $fechaActualDatetime = new \Datetime();
-            $fechaActual = $fechaActualDatetime->format('Y-m-d');
-
-            
-            if ($fechaLevantamientoDatetime <= $fechaActualDatetime && $fechaLevantamientoDatetime > $fechaAccidenteDatetime) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "La fecha de levantamiento es válida.",
-                );
-                $ipat->setFechaAccidente($fechaAccidenteDatetime);
-                $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
-                $ipat->setHoraAccidente($horaAccidenteDatetime);
-                $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
-            } else if ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
-                if ($horaLevantamientoDatetime > $horaAccidenteDatetime) {
-                    
-                    $ipat->setFechaAccidente($fechaAccidenteDatetime);
-                    $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
-                    $ipat->setHoraAccidente($horaAccidenteDatetime);
-                    $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
-
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Las hora de levantamiento y accidente son válidas.",
-                    );
-                } else {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "Hora de levantamiento o accidente incorrectas.",
-                    );
-                }
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "La fecha de levantamiento debe ser menor o igual a la fecha del sistema y mayor o igual a la fecha del accidente.",
-                );
-                return $helpers->json($response);
-            }
-
-            $diaSemana = $fechaAccidenteDatetime->format('l');
-            switch ($diaSemana) {
-                case 'Monday':
-                    $ipat->setDiaAccidente('LUNES');
-                    break;
-                case 'Tuesday':
-                    $ipat->setDiaAccidente('MARTES');
-                    break;
-                case 'Wednesday':
-                    $ipat->setDiaAccidente('MIERCOLES');
-                    break;
-                case 'Thursday':
-                    $ipat->setDiaAccidente('JUEVES');
-                    break;
-                case 'Friday':
-                    $ipat->setDiaAccidente('VIERNES');
-                    break;
-                case 'Saturday':
-                    $ipat->setDiaAccidente('SABADO');
-                    break;
-                case 'Sunday':
-                    $ipat->setDiaAccidente('DOMINGO');
-                    break;
-            }
-
-            if ($params->idClaseAccidente) {
-                $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->find($params->idClaseAccidente);
-                $ipat->setClaseAccidente($claseAccidente);
-            }
-
-            $ipat->setOtroClaseAccidente($params->otroClaseAccidente);
-
-            if ($params->idClaseChoque) {
-                $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->idClaseChoque);
-                $ipat->setClaseChoque($claseChoque);
-            }
-
-            if ($params->idObjetoFijo) {
-                $objetoFijo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgObjetoFijo')->find($params->idObjetoFijo);
-                $ipat->setObjetoFijo($objetoFijo);
-            }
-            
-            $ipat->setOtroObjetoFijo($params->otroObjetoFijo);
-
-            if ($params->idArea) {
-                $area = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgArea')->find(
-                    $params->idArea
-                );
-                $ipat->setArea($area);
-            }
-            if ($params->idTipoArea) {
-                $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find(
-                    $params->idTipoArea
-                );
-                $ipat->setTipoArea($tipoArea);
-            }
-            if ($params->idTipoVia) {
-                $tipoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVia')->find(
-                    $params->idTipoVia
-                );
-                $ipat->setTipoVia($tipoVia);
-            }
-            if ($params->idCardinalidad) {
-                $cardinalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCardinalidad')->find(
-                    $params->idCardinalidad
-                );
-                $ipat->setCardinalidad($cardinalidad);
-            }
-            if ($params->idSector) {
-                $sector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSector')->find(
-                    $params->idSector
-                );
-                $ipat->setSector($sector);
-            }
-
-            if ($params->idZona) {
-                $zona = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgZona')->find(
-                    $params->idZona
-                );
-                $ipat->setZona($zona);
-            }
-
-            /* if ($params->idDisenio) {
-                $disenio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgDisenio')->find(
-                    $params->idDisenio
-                );
-                $ipat->setDisenio($disenio);
-            } */
-
-            if($params->arrayDisenios) {
-                $ipat->setDisenios($params->arrayDisenios);
-            }
-
-            if($params->arrayEstadosTiempo) {
-                $ipat->setEstadoTiempo(implode(",", $params->arrayEstadosTiempo));
-            }
-
-            /* if ($params->idGeometria) {
-                $geometria = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGeometria')->find(
-                    $params->idGeometria
-                );
-                $ipat->setGeometria($geometria);
-            } */
-
-            if($params->arrayGeometrias) {
-                $ipat->setGeometrias($params->arrayGeometrias);
-            }
-
-            if ($params->idUtilizacion) {
-                $utilizacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUtilizacion')->find(
-                    $params->idUtilizacion
-                );
-                $ipat->setUtilizacion($utilizacion);
-            }
-
-            if ($params->idCalzada) {
-                $calzada = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCalzadaCarril')->find(
-                    $params->idCalzada
-                );
-                $ipat->setCalzada($calzada);
-            }
-
-            if ($params->idCarril) {
-                $carril = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCalzadaCarril')->find(
-                    $params->idCarril
-                );
-                $ipat->setCarril($carril);
-            }
-
-            if ($params->idMaterial) {
-                $material = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMaterial')->find(
-                    $params->idMaterial
-                );
-                $ipat->setMaterial($material);
-            }
-            $ipat->setOtroMaterial($params->otroMaterial);
-
-            if ($params->idEstadoVia) {
-                $estadoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoVia')->find(
-                    $params->idEstadoVia
-                );
-                $ipat->setEstadoVia($estadoVia);
-            }
-
-            /* if ($params->idCondicionVia) {
-                $condicionVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCondicionVia')->find(
-                    $params->idCondicionVia
-                );
-                $ipat->setCondicionVia($condicionVia);
-            } */
-
-            if($params->arrayCondicionesVia) {
-                $ipat->setCondicionesVia($params->arrayCondicionesVia);
-            }
-
-            if ($params->idIluminacion) {
-                $iluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgIluminacion')->find(
-                    $params->idIluminacion
-                );
-                $ipat->setIluminacion($iluminacion);
-            }
-
-            if ($params->idEstadoIluminacion) {
-                $estadoIluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoIluminacion')->find(
-                    $params->idEstadoIluminacion
-                );
-                $ipat->setEstadoIluminacion($estadoIluminacion);
-            }
-
-            if ($params->idVisual) {
-                $visual = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisual')->find(
-                    $params->idVisual
-                );
-                $ipat->setVisual($visual);
-            }
-            
-            if ($params->idVisualDisminuida) {
-                $visualDisminuida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisualDisminuida')->find(
-                    $params->idVisualDisminuida
-                );
-                $ipat->setVisualDisminuida($visualDisminuida);
-            }
-            
-            $ipat->setOtraVisualDisminuida($params->otraVisualDisminuida);
-            $ipat->setHayAgenteTransito($params->hayAgenteTransito);
-
-            if ($params->idEstadoSemaforo) {
-                $estadoSemaforo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
-                    $params->idEstadoSemaforo
-                );
-                $ipat->setEstadoSemaforo($estadoSemaforo);
-            }
-
-            if($params->arraySenialesVerticales) {
-                $ipat->setSenialVertical(implode(",", $params->arraySenialesVerticales));
-            }
-            if($params->arraySenialesHorizontales) {
-                $ipat->setSenialHorizontal(implode(",", $params->arraySenialesHorizontales));
-            }
-            if($params->arrayReductoresVelocidad) {
-                $ipat->setReductorVelocidad(implode(",", $params->arrayReductoresVelocidad));
-            }
-            $ipat->setOtroReductorVelocidad($params->otroReductorVelocidad);
-
-            if ($params->idDelineadorPiso) {
-                $delineadorPiso = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
-                    $params->idDelineadorPiso
-                );
-                $ipat->setDelineadorPiso($delineadorPiso);
-            }
-            
-            $ipat->setOtroDelineadorPiso($params->otroDelineadorPiso);
-            
-            /* if ($params->idHipotesis) {
-                $hipotesis = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHipotesis')->find(
-                    $params->idHipotesis
-                );
-                $ipat->setHipotesis($hipotesis);
-            } */
-
-            $ipat->setHipotesis($params->arrayHipotesis);
-            $ipat->setOtraHipotesis($params->otraHipotesis);
-            
-            $ipat->setMismoConductor($params->mismoConductor);
-            $ipat->setNombresPropietario($params->nombresPropietario);
-            $ipat->setApellidosPropietario($params->apellidosPropietario);
-
-
-            $idTipoIdentificacion = (isset($params->tipoIdentificacionPropietario)) ? $params->tipoIdentificacionPropietario : null;
-            if($idTipoIdentificacion){
-                $tipoIdentificacionPropietario = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($idTipoIdentificacion);
-                $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
-            }
-            $ipat->setIdentificacionPropietario($params->identificacionPropietario);
-            
-            $ipat->setHayTestigo($params->hayTestigo);
-            
-            $idTipoIdentificacionTestigo = (isset($params->tipoIdentificacionTestigo)) ? $params->tipoIdentificacionTestigo : null;
-
-            if ($idTipoIdentificacionTestigo){
-                $tipoIdentificacionTestigo = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionTestigo);
-                $ipat->setTipoIdentificacionTestigo($tipoIdentificacionTestigo->getNombre());
-            }
-            
-            $ipat->setIdentificacionTestigo($params->identificacionTestigo);
-            $ipat->setNombresTestigo($params->nombresTestigo);
-            $ipat->setApellidosTestigo($params->apellidosTestigo);
-            
-            $ipat->setDireccionResidenciaTestigo($params->direccionTestigo);
-            
-            $idCiudadResidenciaTestigo = (isset($params->ciudadResidenciaTestigo)) ? $params->ciudadResidenciaTestigo : null;
-
-            if($idCiudadResidenciaTestigo) {
-                $ciudadResidenciaTestigo = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaTestigo);    
-                $ipat->setCiudadResidenciaTestigo($ciudadResidenciaTestigo->getNombre());
-            }
-            $ipat->setTelefonoTestigo($params->telefonoTestigo);
-            
-            $ipat->setGradoAgente($params->gradoAgente);
-
-            $tipoIdentificacionAgente = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionAgente);
-            $ipat->setTipoIdentificacionAgente($tipoIdentificacionAgente->getNombre());
-
-            $ipat->setIdentificacionAgente($params->identificacionAgente);
-            $ipat->setNombresAgente($params->nombresAgente);
-            $ipat->setApellidosAgente($params->apellidosAgente);
-            $ipat->setPlacaAgente($params->placaAgente);
-            $ipat->setEntidadAgente($params->entidadAgente);
-            
             $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
                 array(
                     'numero' => $params->numeroConsecutivo->numero
                 )
             );
 
-            $ipat->setConsecutivo($consecutivo);
+            $ipatOld = $em->getRepository('JHWEBSeguridadVialBundle:SvIpat')->findOneBy(
+                array(
+                    'consecutivo' => $consecutivo->getId()
+                )
+            );
 
-            if ($consecutivo) {
-                $consecutivo->setEstado('UTILIZADO');
+            if(!$ipatOld) {
+                $ipat = new SvIpat();
 
-                $em->persist($consecutivo);
+                if ($params->idOrganismoTransito) {
+                    $idOrganismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+                    $ipat->setOrganismoTransito($idOrganismoTransito);
+                }
+                
+                if ($params->idGravedad) {
+                    $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->idGravedad);
+                    $ipat->setGravedadAccidente($gravedadAccidente);
+                }
+
+                $ipat->setLugar($params->lugar);
+
+                $ipat->setGeolocalizacion((array)$params->markers);
+
+                $fechaAccidenteDatetime = new \Datetime($params->fechaAccidente);
+                $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d');
+
+                $horaAccidenteDatetime = new \Datetime($params->horaAccidente);
+                $horaAccidente = $horaAccidenteDatetime->format('H:i:s');
+
+                $fechaLevantamientoDatetime = new \Datetime($params->fechaLevantamiento);
+                $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d');
+
+                $horaLevantamientoDatetime = new \Datetime($params->horaLevantamiento);
+                $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s');
+
+                $fechaActualDatetime = new \Datetime();
+                $fechaActual = $fechaActualDatetime->format('Y-m-d');
+
+                
+                if ($fechaLevantamientoDatetime <= $fechaActualDatetime && $fechaLevantamientoDatetime > $fechaAccidenteDatetime) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "La fecha de levantamiento es válida.",
+                    );
+                    $ipat->setFechaAccidente($fechaAccidenteDatetime);
+                    $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
+                    $ipat->setHoraAccidente($horaAccidenteDatetime);
+                    $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
+                } else if ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
+                    if ($horaLevantamientoDatetime > $horaAccidenteDatetime) {
+                        
+                        $ipat->setFechaAccidente($fechaAccidenteDatetime);
+                        $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
+                        $ipat->setHoraAccidente($horaAccidenteDatetime);
+                        $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Las hora de levantamiento y accidente son válidas.",
+                        );
+                    } else {
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "Hora de levantamiento o accidente incorrectas.",
+                        );
+                    }
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de levantamiento debe ser menor o igual a la fecha del sistema y mayor o igual a la fecha del accidente.",
+                    );
+                    return $helpers->json($response);
+                }
+
+                $diaSemana = $fechaAccidenteDatetime->format('l');
+                switch ($diaSemana) {
+                    case 'Monday':
+                        $ipat->setDiaAccidente('LUNES');
+                        break;
+                    case 'Tuesday':
+                        $ipat->setDiaAccidente('MARTES');
+                        break;
+                    case 'Wednesday':
+                        $ipat->setDiaAccidente('MIERCOLES');
+                        break;
+                    case 'Thursday':
+                        $ipat->setDiaAccidente('JUEVES');
+                        break;
+                    case 'Friday':
+                        $ipat->setDiaAccidente('VIERNES');
+                        break;
+                    case 'Saturday':
+                        $ipat->setDiaAccidente('SABADO');
+                        break;
+                    case 'Sunday':
+                        $ipat->setDiaAccidente('DOMINGO');
+                        break;
+                }
+
+                if ($params->idClaseAccidente) {
+                    $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->find($params->idClaseAccidente);
+                    $ipat->setClaseAccidente($claseAccidente);
+                }
+
+                $ipat->setOtroClaseAccidente($params->otroClaseAccidente);
+
+                if ($params->idClaseChoque) {
+                    $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->idClaseChoque);
+                    $ipat->setClaseChoque($claseChoque);
+                }
+
+                if ($params->idObjetoFijo) {
+                    $objetoFijo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgObjetoFijo')->find($params->idObjetoFijo);
+                    $ipat->setObjetoFijo($objetoFijo);
+                }
+                
+                $ipat->setOtroObjetoFijo($params->otroObjetoFijo);
+
+                if ($params->idArea) {
+                    $area = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgArea')->find(
+                        $params->idArea
+                    );
+                    $ipat->setArea($area);
+                }
+                if ($params->idTipoArea) {
+                    $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find(
+                        $params->idTipoArea
+                    );
+                    $ipat->setTipoArea($tipoArea);
+                }
+                if ($params->idTipoVia) {
+                    $tipoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVia')->find(
+                        $params->idTipoVia
+                    );
+                    $ipat->setTipoVia($tipoVia);
+                }
+                if ($params->idCardinalidad) {
+                    $cardinalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCardinalidad')->find(
+                        $params->idCardinalidad
+                    );
+                    $ipat->setCardinalidad($cardinalidad);
+                }
+                if ($params->idSector) {
+                    $sector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSector')->find(
+                        $params->idSector
+                    );
+                    $ipat->setSector($sector);
+                }
+
+                if ($params->idZona) {
+                    $zona = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgZona')->find(
+                        $params->idZona
+                    );
+                    $ipat->setZona($zona);
+                }
+
+                /* if ($params->idDisenio) {
+                    $disenio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgDisenio')->find(
+                        $params->idDisenio
+                    );
+                    $ipat->setDisenio($disenio);
+                } */
+
+                if($params->arrayDisenios) {
+                    $ipat->setDisenios($params->arrayDisenios);
+                }
+
+                if($params->arrayEstadosTiempo) {
+                    $ipat->setEstadoTiempo(implode(",", $params->arrayEstadosTiempo));
+                }
+
+                /* if ($params->idGeometria) {
+                    $geometria = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGeometria')->find(
+                        $params->idGeometria
+                    );
+                    $ipat->setGeometria($geometria);
+                } */
+
+                if($params->arrayGeometrias) {
+                    $ipat->setGeometrias($params->arrayGeometrias);
+                }
+
+                if ($params->idUtilizacion) {
+                    $utilizacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUtilizacion')->find(
+                        $params->idUtilizacion
+                    );
+                    $ipat->setUtilizacion($utilizacion);
+                }
+
+                if ($params->idCalzada) {
+                    $calzada = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCalzadaCarril')->find(
+                        $params->idCalzada
+                    );
+                    $ipat->setCalzada($calzada);
+                }
+
+                if ($params->idCarril) {
+                    $carril = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCalzadaCarril')->find(
+                        $params->idCarril
+                    );
+                    $ipat->setCarril($carril);
+                }
+
+                if ($params->idMaterial) {
+                    $material = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMaterial')->find(
+                        $params->idMaterial
+                    );
+                    $ipat->setMaterial($material);
+                }
+                $ipat->setOtroMaterial($params->otroMaterial);
+
+                if ($params->idEstadoVia) {
+                    $estadoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoVia')->find(
+                        $params->idEstadoVia
+                    );
+                    $ipat->setEstadoVia($estadoVia);
+                }
+
+                /* if ($params->idCondicionVia) {
+                    $condicionVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCondicionVia')->find(
+                        $params->idCondicionVia
+                    );
+                    $ipat->setCondicionVia($condicionVia);
+                } */
+
+                if($params->arrayCondicionesVia) {
+                    $ipat->setCondicionesVia($params->arrayCondicionesVia);
+                }
+
+                if ($params->idIluminacion) {
+                    $iluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgIluminacion')->find(
+                        $params->idIluminacion
+                    );
+                    $ipat->setIluminacion($iluminacion);
+                }
+
+                if ($params->idEstadoIluminacion) {
+                    $estadoIluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoIluminacion')->find(
+                        $params->idEstadoIluminacion
+                    );
+                    $ipat->setEstadoIluminacion($estadoIluminacion);
+                }
+
+                if ($params->idVisual) {
+                    $visual = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisual')->find(
+                        $params->idVisual
+                    );
+                    $ipat->setVisual($visual);
+                }
+                
+                if ($params->idVisualDisminuida) {
+                    $visualDisminuida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisualDisminuida')->find(
+                        $params->idVisualDisminuida
+                    );
+                    $ipat->setVisualDisminuida($visualDisminuida);
+                }
+                
+                $ipat->setOtraVisualDisminuida($params->otraVisualDisminuida);
+                $ipat->setHayAgenteTransito($params->hayAgenteTransito);
+
+                if ($params->idEstadoSemaforo) {
+                    $estadoSemaforo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
+                        $params->idEstadoSemaforo
+                    );
+                    $ipat->setEstadoSemaforo($estadoSemaforo);
+                }
+
+                if($params->arraySenialesVerticales) {
+                    $ipat->setSenialVertical(implode(",", $params->arraySenialesVerticales));
+                }
+                if($params->arraySenialesHorizontales) {
+                    $ipat->setSenialHorizontal(implode(",", $params->arraySenialesHorizontales));
+                }
+                if($params->arrayReductoresVelocidad) {
+                    $ipat->setReductorVelocidad(implode(",", $params->arrayReductoresVelocidad));
+                }
+                $ipat->setOtroReductorVelocidad($params->otroReductorVelocidad);
+
+                if ($params->idDelineadorPiso) {
+                    $delineadorPiso = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
+                        $params->idDelineadorPiso
+                    );
+                    $ipat->setDelineadorPiso($delineadorPiso);
+                }
+                
+                $ipat->setOtroDelineadorPiso($params->otroDelineadorPiso);
+                
+                /* if ($params->idHipotesis) {
+                    $hipotesis = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHipotesis')->find(
+                        $params->idHipotesis
+                    );
+                    $ipat->setHipotesis($hipotesis);
+                } */
+
+                $ipat->setHipotesis($params->arrayHipotesis);
+                $ipat->setOtraHipotesis($params->otraHipotesis);
+                
+                $ipat->setMismoConductor($params->mismoConductor);
+                $ipat->setNombresPropietario($params->nombresPropietario);
+                $ipat->setApellidosPropietario($params->apellidosPropietario);
+
+
+                $idTipoIdentificacion = (isset($params->tipoIdentificacionPropietario)) ? $params->tipoIdentificacionPropietario : null;
+                if($idTipoIdentificacion){
+                    $tipoIdentificacionPropietario = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($idTipoIdentificacion);
+                    $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
+                }
+                $ipat->setIdentificacionPropietario($params->identificacionPropietario);
+                
+                $ipat->setHayTestigo($params->hayTestigo);
+                
+                $idTipoIdentificacionTestigo = (isset($params->tipoIdentificacionTestigo)) ? $params->tipoIdentificacionTestigo : null;
+
+                if ($idTipoIdentificacionTestigo){
+                    $tipoIdentificacionTestigo = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionTestigo);
+                    $ipat->setTipoIdentificacionTestigo($tipoIdentificacionTestigo->getNombre());
+                }
+                
+                $ipat->setIdentificacionTestigo($params->identificacionTestigo);
+                $ipat->setNombresTestigo($params->nombresTestigo);
+                $ipat->setApellidosTestigo($params->apellidosTestigo);
+                
+                $ipat->setDireccionResidenciaTestigo($params->direccionTestigo);
+                
+                $idCiudadResidenciaTestigo = (isset($params->ciudadResidenciaTestigo)) ? $params->ciudadResidenciaTestigo : null;
+
+                if($idCiudadResidenciaTestigo) {
+                    $ciudadResidenciaTestigo = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaTestigo);    
+                    $ipat->setCiudadResidenciaTestigo($ciudadResidenciaTestigo->getNombre());
+                }
+                $ipat->setTelefonoTestigo($params->telefonoTestigo);
+                
+                $ipat->setGradoAgente($params->gradoAgente);
+
+                $tipoIdentificacionAgente = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionAgente);
+                $ipat->setTipoIdentificacionAgente($tipoIdentificacionAgente->getNombre());
+
+                $ipat->setIdentificacionAgente($params->identificacionAgente);
+                $ipat->setNombresAgente($params->nombresAgente);
+                $ipat->setApellidosAgente($params->apellidosAgente);
+                $ipat->setPlacaAgente($params->placaAgente);
+                $ipat->setEntidadAgente($params->entidadAgente);
+
+                $ipat->setConsecutivo($consecutivo);
+
+                if ($consecutivo) {
+                    $consecutivo->setEstado('UTILIZADO');
+
+                    $em->persist($consecutivo);
+                    $em->flush();
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "IPAT registrado con éxito.",
+                    );
+
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El IPAT no pudo ser registrado.",
+                    );
+                }
+
+                /* $ipat->setDescripcionLesionVictima($params->descripcionLesionVictima); */
+                $ipat->setObservaciones($params->observaciones);
+                
+                $ipat->setTotalPeaton($params->totalPeatones);
+                $ipat->setTotalAcompaniante($params->totalAcompaniantes);
+                $ipat->setTotalPasajero($params->totalPasajeros);
+                $ipat->setTotalConductor($params->totalConductores);
+                $ipat->setTotalHerido($params->totalHeridos);
+                $ipat->setTotalHerido($params->totalHeridos);
+                $ipat->setTotalMuerto($params->totalMuertos);
+                
+                $idMunicipio = (isset($params->idMunicipio)) ? $params->idMunicipio : null;
+
+                if($idMunicipio) {
+                    $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->idMunicipio);
+                    $ipat->setMunicipioCorrespondio($municipio);
+                }
+
+                $idEntidadAccidente = (isset($params->idEntidad)) ? $params->idEntidad : null;
+                if($idEntidadAccidente){
+                    $entidadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
+                    $ipat->setEntidadCorrespondio($entidadAccidente);
+                }
+
+                $idUnidadReceptora = (isset($params->idUnidad)) ? $params->idUnidad : null;
+                if($idUnidadReceptora){
+                    $unidadReceptora = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
+                    $ipat->setUnidadCorrespondio($unidadReceptora);
+                }
+
+                
+                $ipat->setAnioCorrespondio($params->idAnio);
+                $ipat->setConsecutivoCorrespondio($params->consecutivo);
+                $ipat->setCorrespondio($params->correspondio);
+
+                $ipat->setActivo(true);
+                $em->persist($ipat);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "IPAT registrado con éxito.",
+                    'message' => "Registro creado con éxito.",
+                    'data' => $ipat
                 );
-
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El IPAT no pudo ser registrado.",
+                    'message' => "No se puede registrar el IPAT porque el consecutivo al que intenta vincularlo ya se encuentra asociado a otro IPAT.",
                 );
             }
-
-            /* $ipat->setDescripcionLesionVictima($params->descripcionLesionVictima); */
-            $ipat->setObservaciones($params->observaciones);
-            
-            $ipat->setTotalPeaton($params->totalPeatones);
-            $ipat->setTotalAcompaniante($params->totalAcompaniantes);
-            $ipat->setTotalPasajero($params->totalPasajeros);
-            $ipat->setTotalConductor($params->totalConductores);
-            $ipat->setTotalHerido($params->totalHeridos);
-            $ipat->setTotalHerido($params->totalHeridos);
-            $ipat->setTotalMuerto($params->totalMuertos);
-            
-            $idMunicipio = (isset($params->idMunicipio)) ? $params->idMunicipio : null;
-
-            if($idMunicipio) {
-                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->idMunicipio);
-                $ipat->setMunicipioCorrespondio($municipio);
-            }
-
-            $idEntidadAccidente = (isset($params->idEntidad)) ? $params->idEntidad : null;
-            if($idEntidadAccidente){
-                $entidadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
-                $ipat->setEntidadCorrespondio($entidadAccidente);
-            }
-
-            $idUnidadReceptora = (isset($params->idUnidad)) ? $params->idUnidad : null;
-            if($idUnidadReceptora){
-                $unidadReceptora = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
-                $ipat->setUnidadCorrespondio($unidadReceptora);
-            }
-
-            
-            $ipat->setAnioCorrespondio($params->idAnio);
-            $ipat->setConsecutivoCorrespondio($params->consecutivo);
-            $ipat->setCorrespondio($params->correspondio);
-
-            $ipat->setActivo(true);
-            $em->persist($ipat);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 4200,
-                'message' => "Registro creado con éxito.",
-                'data' => $ipat
-            );
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
