@@ -34,6 +34,13 @@ class SvIpat
      * @ORM\Column(name="lugar", type="string", nullable = true)
      */
     private $lugar;
+    
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="geolocalizacion", type="array")
+     */
+    private $geolocalizacion;
 
     /**
      * @var \DateTime
@@ -2448,5 +2455,29 @@ class SvIpat
     public function getUnidadCorrespondio()
     {
         return $this->unidadCorrespondio;
+    }
+
+    /**
+     * Set geolocalizacion
+     *
+     * @param array $geolocalizacion
+     *
+     * @return SvIpat
+     */
+    public function setGeolocalizacion($geolocalizacion)
+    {
+        $this->geolocalizacion = $geolocalizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get geolocalizacion
+     *
+     * @return array
+     */
+    public function getGeolocalizacion()
+    {
+        return $this->geolocalizacion;
     }
 }
