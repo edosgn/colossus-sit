@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FroRecaudoType extends AbstractType
+class FroFacTransferenciaType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('fecha')->add('valor')->add('valorMora')->add('valorFinanciacion')->add('valorCapital')->add('valorDescuento')->add('froFactura')->add('sedeOperativa');
+        $builder->add('fecha')->add('hora')->add('valorSttdn')->add('valorSimit')->add('valorPolca')->add('tipo')->add('activo')->add('factura')->add('comparendo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JHWEB\FinancieroBundle\Entity\FroRecaudo'
+            'data_class' => 'JHWEB\FinancieroBundle\Entity\FroFacTransferencia'
         ));
     }
 
@@ -29,7 +29,7 @@ class FroRecaudoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jhweb_financierobundle_frorecaudo';
+        return 'jhweb_financierobundle_frofactransferencia';
     }
 
 

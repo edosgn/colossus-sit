@@ -1506,10 +1506,12 @@ class CvCdoComparendoController extends Controller
             
             $fechaInicial = new \Datetime($params->fechaInicial);
             $fechaFinal = new \Datetime($params->fechaFinal);
+
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
             
             if($params->tipoReporte == 1) {
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."SIMITCOMP.txt"; 
+                $file = $dir. '"' . $organismoTransito->getDivipo() . 'comp.txt' . '"'; 
                 
                 if( file_exists("datos.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
@@ -1681,11 +1683,11 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => "SIMITCOMP.txt"
+                    'data' => '"' . $organismoTransito->getDivipo() . 'comp.txt'
                 );
             } elseif($params->tipoReporte == 2){
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."SIMITRESOL.txt"; 
+                $file = $dir. '"' . $organismoTransito->getDivipo() . "resol.txt"; 
                 
                 if( file_exists("datos.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
@@ -1702,7 +1704,13 @@ class CvCdoComparendoController extends Controller
                         $fechaFinal
                     );
 
+                    $sumatoriaValorComparendo = 0;
+                    $cont = 0;
+
                     foreach ($resoluciones as $key => $resolucion) {
+                        $cont ++;
+                        $sumatoriaValorComparendo += $resolucion->getComparendo()->getValorPagar();
+
                         fwrite($archivo, $key + 1 . ",");
                         fwrite($archivo, $resolucion->getActoAdministrativo()->getNumero() . ",");
                         fwrite($archivo, "" . ",");
@@ -1734,7 +1742,7 @@ class CvCdoComparendoController extends Controller
                         /* fwrite($archivo, $resolucion->getComparendo()->getValorAdicional() . ","); */ //valor adicional a pagar del comparendo
                         /* fwrite($archivo, $resolucion->getComparendo()->getFotomulta() . ","); */
                         // eliminarlos luego
-                        fwrite($archivo, "" . ",");
+                        fwrite($archivo, "0" . ",");
                         fwrite($archivo, "N" . ",");
                         //=============================================================================
                         if($resolucion->getComparendo()->getOrganismoTransito() != null) {
@@ -1753,6 +1761,7 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         fwrite($archivo, $resolucion->getComparendo()->getValorInfraccion() . ",");
+                        fwrite($archivo, $resolucion->getComparendo()->getValorPagar() . ",");
                         fwrite($archivo, $resolucion->getComparendo()->getGradoAlcoholemia() . ",");
                         if($resolucion->getRestriccion() != null) {
                             if($resolucion->getRestriccion()->getHorasComunitarias() == 1) {
@@ -1763,7 +1772,13 @@ class CvCdoComparendoController extends Controller
                         } elseif ($resolucion->getRestriccion() == null) {
                             fwrite($archivo, "" . "\r\n");
                         }
-                    }  
+                    }
+                    
+                    fwrite($archivo, $cont . ",");
+                    fwrite($archivo, $sumatoriaValorComparendo . ",");
+                    fwrite($archivo, "0" . ",");
+                    fwrite($archivo, "0" .  "\r\n");
+
                     fflush($archivo);
                 }
 
@@ -1774,12 +1789,12 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => "SIMITRESOL.txt"
+                    'data' => '"' . $organismoTransito->getDivipo() . "resol.txt"
                 );  
             
             } elseif($params->tipoReporte == 3){
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."SIMITRECAUD.txt"; 
+                $file = $dir. '"' . $organismoTransito->getDivipo() . "rec.txt"; 
                 
                 if( file_exists("datos.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
@@ -1811,7 +1826,7 @@ class CvCdoComparendoController extends Controller
                         
                         //============================ fin encabezado ===============================
                         $cont ++;
-                        $sumatoriaValorComparendo += $comparendo->getValorPagar();
+                        $sumatoriaValorComparendo += $recaudo->getComparendo()->getValorPagar();
     
                         fwrite($archivo, $key + 1 . ",");
                         if($recaudo->getFactura() != null) {
@@ -1822,16 +1837,19 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         fwrite($archivo, $recaudo->getFactura()->getFechaPago()->format('d/m/Y') . ","); //fecha real transaccion
-                        fwrite($archivo, $recaudo->getFactura()->getHoraPago()->format('H:m') . ","); //hora transaccion
                         fwrite($archivo, "0". ","); //cod canal de origen
-                        fwrite($archivo, "taquilla de transito" . ","); // descripcion del origen
+                        fwrite($archivo, "TAQUILLA TRANSITO" . ","); // descripcion del origen
                         if($recaudo->getFactura() != null) {
                             fwrite($archivo, $recaudo->getFactura()->getValorNeto() . ",");
                         } elseif($recaudo->getFactura() == null){
                             fwrite($archivo, "" . ",");
                         }
                         fwrite($archivo, 0 . ",");
-                        fwrite($archivo, 0 . ",");
+                        if($recaudo->getFactura() != null) {
+                            fwrite($archivo, $recaudo->getFactura()->getValorNeto() . ",");
+                        } elseif($recaudo->getFactura() == null){
+                            fwrite($archivo, "" . ",");
+                        }fwrite($archivo, 0 . ",");
                         if($recaudo->getComparendo()->getConsecutivo() != null) {
                             fwrite($archivo, $recaudo->getComparendo()->getConsecutivo()->getNumero() . ",");
                         } elseif ($recaudo->getComparendo()->getConsecutivo() == null) {
@@ -1861,11 +1879,11 @@ class CvCdoComparendoController extends Controller
                         if($recaudo->getComparendo()->getAcuerdoPago() != null) {
                             fwrite($archivo, $recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas() . ",");
                         } elseif($recaudo->getComparendo()->getAcuerdoPago() == null) {
-                            fwrite($archivo, "" . ",");
+                            fwrite($archivo, '' . "," );
                         }
-                        fwrite($archivo, "" . "\r\n");
-
-
+                        if($recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas() != null) {
+                            fwrite($archivo, $recaudo->getComparendo()->getAcuerdoPago()->getCiudadano()->getTipoIdentificacion()->getCodigo() . "\r\n");
+                        }
                     }
 
                     fwrite($archivo, $cont . ",");
@@ -1883,7 +1901,7 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => "SIMITRECAUD.txt"
+                    'data' => '"' . $organismoTransito->getDivipo() . "rec.txt"
                 );
             }
             else{
