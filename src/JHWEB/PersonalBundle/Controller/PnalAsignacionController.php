@@ -451,4 +451,55 @@ class PnalAsignacionController extends Controller
 
         $this->get('app.pdf')->templateAsignacionTalonarios($html, $asignacion);
     }
+
+    /**
+     * Busca un rango activo por sede operativa.
+     *
+     * @Route("/find/activo/organismotransito", name="pnalasignacion_find_activo_organismotransito")
+     * @Method({"GET", "POST"})
+     */
+    public function findActivoByOrganismoTransitoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $asignacion = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->findOneBy(
+                array(
+                    'organismoTransito' => $params->idOrganismoTransito,
+                    'activo' => true,
+                )
+            );
+                
+            if ($asignacion) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $asignacion,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'Ningún registro encontrado.',
+                );
+            }            
+        }else{
+            $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Autorización no valida.', 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
