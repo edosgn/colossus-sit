@@ -83,6 +83,13 @@ class CvCdoCfgEstado
      * @ORM\Column(name="reparto", type="boolean")
      */
     private $reparto;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="notificacion", type="boolean")
+     */
+    private $notificacion;
     
     /**
      * @var bool
@@ -276,6 +283,30 @@ class CvCdoCfgEstado
     }
 
     /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return CvCdoCfgEstado
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
      * Set reparto
      *
      * @param boolean $reparto
@@ -297,6 +328,30 @@ class CvCdoCfgEstado
     public function getReparto()
     {
         return $this->reparto;
+    }
+
+    /**
+     * Set notificacion
+     *
+     * @param boolean $notificacion
+     *
+     * @return CvCdoCfgEstado
+     */
+    public function setNotificacion($notificacion)
+    {
+        $this->notificacion = $notificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get notificacion
+     *
+     * @return boolean
+     */
+    public function getNotificacion()
+    {
+        return $this->notificacion;
     }
 
     /**
@@ -345,29 +400,5 @@ class CvCdoCfgEstado
     public function getFormato()
     {
         return $this->formato;
-    }
-
-    /**
-     * Set codigo
-     *
-     * @param string $codigo
-     *
-     * @return CvCdoCfgEstado
-     */
-    public function setCodigo($codigo)
-    {
-        $this->codigo = $codigo;
-
-        return $this;
-    }
-
-    /**
-     * Get codigo
-     *
-     * @return string
-     */
-    public function getCodigo()
-    {
-        return $this->codigo;
     }
 }
