@@ -25,6 +25,7 @@ class VhloPropietarioRepository extends \Doctrine\ORM\EntityRepository
             JHWEBConfigBundle:CfgModulo m
 
             WHERE fts.ciudadano = c.id
+            AND fts.vehiculo = v.id
             AND vp.ciudadano = c.id
             AND v.organismoTransito = :idOrganismoTransito
             AND v.clase = vcc.id

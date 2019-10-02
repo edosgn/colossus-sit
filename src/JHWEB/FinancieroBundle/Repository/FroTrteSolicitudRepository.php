@@ -263,7 +263,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     }
     
     //Obtiene trámites solicitud según el filtro de búsqueda
-    public function getByTramites($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
+    /* public function getByTramites($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT fts
@@ -275,6 +275,42 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             AND fts.tramiteFactura = fft.id
             AND fft.precio = ftp.id
             AND ftp.modulo = :idModulo";
+        $consulta = $em->createQuery($dql);
+    
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idModulo' => $idModulo,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta
+        ));
+        
+        return $consulta->getResult();
+    } */
+    
+    //Obtiene trámites solicitud según el filtro de búsqueda
+    public function getByTramites($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, 
+            JHWEBUsuarioBundle:UserCiudadano c, 
+            JHWEBVehiculoBundle:VhloPropietario vp, 
+            JHWEBVehiculoBundle:VhloVehiculo v,
+            JHWEBVehiculoBundle:VhloCfgClase vcc,
+            JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
+            JHWEBConfigBundle:CfgModulo m
+
+            WHERE fts.ciudadano = c.id
+            AND fts.vehiculo = v.id
+            AND vp.ciudadano = c.id
+            AND v.organismoTransito = :idOrganismoTransito
+            AND v.clase = vcc.id
+            AND vcc.tipoVehiculo = vctv.id
+            AND vctv.modulo = :idModulo
+            AND vp.activo = 1
+            AND v.activo = 1
+            AND vp.fechaInicial BETWEEN :fechaDesde AND :fechaHasta";
+
         $consulta = $em->createQuery($dql);
     
         $consulta->setParameters(array(
