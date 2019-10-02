@@ -416,10 +416,9 @@ class ImoInsumoController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
         
-        // var_dump($params->insumos);
-        // die();
-        $sustratos = $params->insumos;
         $fecha = new \DateTime('now');
+        $sustratos = $params->insumos;
+
         
         $organismoTransitoOrigen = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
             $params->idOrganismoTransitoOrigen
@@ -432,8 +431,8 @@ class ImoInsumoController extends Controller
         $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find(1);
 
         $lote = new ImoLote();
-        
-        $lote->setNumeroActa(null);
+
+        $lote->setNumeroActa($sustratos[0]->lote->numeroActa);
         $lote->setEstado('REASIGNADO');
         $lote->setTipoInsumo($tipoInsumo);
         $lote->setTipo('SUSTRATO');
@@ -457,7 +456,7 @@ class ImoInsumoController extends Controller
 
         $em->persist($imoTrazabilidad);
         $em->flush();
-
+        
         foreach ($sustratos as $key => $sustrato) {
             $sustrato = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
                 $sustrato->id
@@ -480,6 +479,8 @@ class ImoInsumoController extends Controller
             $em->persist($imoAsignacion);
             $em->flush();
         }
+
+        
         
         $response = array(
             'status' => 'success',

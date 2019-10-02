@@ -329,6 +329,15 @@ class UserLicenciaConduccionController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
 
+
+            $usuario = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->idCiudadano);
+            if(!$usuario){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 401,
+                    'message' => "No se encontraro al ciudadano",
+                );
+            }
             $licenciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
                 array(
                     'ciudadano' => $params->idCiudadano,
@@ -342,13 +351,12 @@ class UserLicenciaConduccionController extends Controller
                     'message' => count($licenciasConduccion)." registros encontrados",
                     'data' => $licenciasConduccion
                 );
-            } else 
-            {
+            } else {
                 $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "No se encontraron licencias para el ciudadano",
-            );
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron licencias para el ciudadano",
+                );
             }
         } else {
             $response = array(
