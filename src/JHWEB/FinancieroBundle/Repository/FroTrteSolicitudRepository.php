@@ -336,7 +336,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     public function getByPrendas($idOrganismoTransito, $idModulo, $fechaInicial, $fechaFinal)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT fts as tramiteSolicitud, va as acreedor
+        $dql = "SELECT fts as tramiteSolicitud, va.id as idAcreedor
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
             JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
             JHWEBFinancieroBundle:FroTramite ft,

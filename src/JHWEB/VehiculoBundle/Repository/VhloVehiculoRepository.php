@@ -201,10 +201,12 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
     {
         $em = $this->getEntityManager();
         $dql = "SELECT v
-            FROM JHWEBVehiculoBundle:VhloVehiculo v,
+            FROM JHWEBFinancieroBundle:FtoTrteSolicitud fts,
+            JHWEBVehiculoBundle:VhloVehiculo v,
             JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
             JHWEBVehiculoBundle:VhloCfgClase vcc 
-            WHERE v.organismoTransito = :idOrganismoTransito
+            WHERE fts.vehiculo = v.id
+            AND v.organismoTransito = :idOrganismoTransito
             AND v.clase = vcc.id
             AND vcc.tipoVehiculo = vctv.id
             AND vctv.modulo = :idModulo

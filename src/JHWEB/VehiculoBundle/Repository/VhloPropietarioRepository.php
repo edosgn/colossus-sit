@@ -16,13 +16,17 @@ class VhloPropietarioRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $dql = "SELECT vp
 
-        FROM JHWEBVehiculoBundle:VhloPropietario vp, 
+        FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, 
+            JHWEBUsuarioBundle:UserCiudadano c, 
+            JHWEBVehiculoBundle:VhloPropietario vp, 
             JHWEBVehiculoBundle:VhloVehiculo v,
             JHWEBVehiculoBundle:VhloCfgClase vcc,
             JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
             JHWEBConfigBundle:CfgModulo m
 
-            WHERE v.organismoTransito = :idOrganismoTransito
+            WHERE fts.ciudadano = c.id
+            AND vp.ciudadano = c.id
+            AND v.organismoTransito = :idOrganismoTransito
             AND v.clase = vcc.id
             AND vcc.tipoVehiculo = vctv.id
             AND vctv.modulo = :idModulo
