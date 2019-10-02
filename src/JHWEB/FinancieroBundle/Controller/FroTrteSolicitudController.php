@@ -3022,20 +3022,21 @@ class FroTrteSolicitudController extends Controller
                         } elseif ($medidaCautelar['medidaCautelar']->getFechaRegistro() == null) {
                             fwrite($archivo, str_pad("", 8,' ', STR_PAD_RIGHT));
                         }
-                        if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() == null){
-                            fwrite($archivo, str_pad("I", 1,' ', STR_PAD_RIGHT));
-                        } else {
+                        if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() != null){
                             fwrite($archivo, str_pad("L", 1,' ', STR_PAD_RIGHT));
+                        } else if(($medidaCautelar['medidaCautelar']->getFechaLevantamiento() == null)) {
+                            fwrite($archivo, str_pad("I", 1,' ', STR_PAD_RIGHT));
                         }
-                        if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() == null){
-                            fwrite($archivo, str_pad("", 20,' ', STR_PAD_RIGHT));
-                        } else if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() != null) {
-                            fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getFechaLevantamiento()->format('Ymd'), 20,' ', STR_PAD_RIGHT));
+                        if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() != null){
                             fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getNumeroOficioLevantamiento(), 20,' ', STR_PAD_RIGHT));
+                        } else if($medidaCautelar['medidaCautelar']->getFechaLevantamiento() == null) {
+                            fwrite($archivo, str_pad("", 20,' ', STR_PAD_RIGHT));
                         }
                         if($medidaCautelar['medidaCautelar']->getTipoMedida() != null){
                             if($medidaCautelar['medidaCautelar']->getTipoMedida()->getId() == 99) {
-                                fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getObservaciones(), 90,' ', STR_PAD_RIGHT));
+                                fwrite($archivo, str_pad($medidaCautelar['medidaCautelar']->getObservaciones(), 90,' ', STR_PAD_RIGHT) . "\r\n");
+                            } elseif ($medidaCautelar['medidaCautelar']->getTipoMedida()->getId() != 99) {
+                                fwrite($archivo, str_pad("", 90,' ', STR_PAD_RIGHT) . "\r\n");
                             }
                         } else if($medidaCautelar['medidaCautelar']->getTipoMedida() == null) {
                             fwrite($archivo, str_pad("", 90,' ', STR_PAD_RIGHT) . "\r\n");
