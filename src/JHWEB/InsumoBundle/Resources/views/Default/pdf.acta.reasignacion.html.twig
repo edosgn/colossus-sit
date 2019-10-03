@@ -24,18 +24,14 @@
     {% if trazabilidad %}
         <table border="1" cellpadding="5">
             <tr>
-                <td width="40%">Nombre sustrato</td>
-                <td width="15%">Rango inicial</td> 
-                <td width="15%">Rango final</td>
-                <td width="15%">Cantidad</td>
                 <td width="15%">No. acta</td>
+                <td width="40%">Nombre sustrato</td>
+                <td width="15%">Cantidad</td>
             </tr>
             <tr>
-                <td>{{ trazabilidad.lote.tipoInsumo.nombre }}</td>
-                <td>{{ trazabilidad.lote.rangoInicio }}</td>
-                <td>{{ trazabilidad.lote.rangoFin }}</td>
-                <td>{{ trazabilidad.lote.cantidad }}</td>
                 <td>{{ trazabilidad.lote.numeroActa }}</td>
+                <td>{{ trazabilidad.lote.tipoInsumo.nombre }}</td>
+                <td>{{ trazabilidad.lote.cantidad }}</td>
             </tr>
         </table>
     {% endif %}
