@@ -10,4 +10,20 @@ namespace JHWEB\UsuarioBundle\Repository;
  */
 class UserLcProhibicionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getFecha($fechaInicial, $fechaFinal)
+    { 
+        $em = $this->getEntityManager();
+ 
+        $dql = "SELECT up
+        FROM JHWEBUsuarioBundle:UserLcProhibicion up
+        WHERE up.fechaInicio BETWEEN :fechaInicial AND :fechaFinal";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+
+        return $consulta->getResult();
+    }
 }

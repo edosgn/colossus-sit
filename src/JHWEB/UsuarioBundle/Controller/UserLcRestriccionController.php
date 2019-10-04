@@ -53,6 +53,8 @@ class UserLcRestriccionController extends Controller
             
             $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
             
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find($params->idComparendo);
+
             foreach ($licanciasConduccion as $key => $userLicenciaConduccion) {
                 $userLcRestriccion = new UserLcRestriccion();
                 $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
@@ -62,6 +64,10 @@ class UserLcRestriccionController extends Controller
                 $userLcRestriccion->setNumeroResolucion($params->numResolucion);
                 $userLcRestriccion->setEstado('ACTIVO');
                 $userLcRestriccion->setActivo(true);
+
+                if($comparendo){
+                    $userLcRestriccion->setComparendo($comparendo); 
+                }
     
                 if($params->tipo == 'CANCELACION'){
                     $userLcRestriccion->setFechaCancelacion(new \Datetime($params->fechaCancelacion));
@@ -116,10 +122,9 @@ class UserLcRestriccionController extends Controller
         
 
         $userLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->idLicenciaConduccion);
-        
-        
 
         $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
+        
 
         foreach ($licanciasConduccion as $key => $userLicenciaConduccionFor) {
             $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
@@ -128,6 +133,7 @@ class UserLcRestriccionController extends Controller
                     'estado' =>'ACTIVO',
                 )
             );
+            
             // var_dump($userLicenciaConduccionFor->getId());
 
             $userLcRestriccion->setHorasComunitarias($params->horasComunitarias);
@@ -139,12 +145,22 @@ class UserLcRestriccionController extends Controller
             $em->persist($userLicenciaConduccionFor);
             $em->persist($userLcRestriccion);
 
-            $em->flush();
+            // $em->flush();
         }
         // die();
 
+        $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
+            array(
+                'userLicenciaConduccion' => $userLicenciaConduccion->getId(),
+                'estado' =>'ACTIVO',
+            )
+        );
+
        
-        $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array()); 
+        $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array(
+            'userLicenciaConduccion'=>$userLicenciaConduccion,
+            'comparendo'=>$userLcRestriccion->getComparendo()
+        )); 
 
         /* ================= */
         return new Response(

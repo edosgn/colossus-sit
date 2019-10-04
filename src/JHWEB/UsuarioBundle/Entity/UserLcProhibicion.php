@@ -94,11 +94,11 @@ class UserLcProhibicion
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEntidadJudicial", inversedBy="ciudadanos") */
     private $juzgado;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="UserCiudadano", inversedBy="limitaciones")
      **/
     protected $usuario;
-
 
 
 

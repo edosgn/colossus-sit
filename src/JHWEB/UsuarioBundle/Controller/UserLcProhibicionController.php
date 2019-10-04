@@ -117,6 +117,123 @@ class UserLcProhibicionController extends Controller
         return $helpers->json($response);
     }
 
+
+
+    /**
+     * Creates a new userLcProhibicion entity.
+     *
+     * @Route("/reporte", name="userlcprohibicion_reporte")
+     * @Method({"GET", "POST"})
+     */
+    public function reporteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $fechaInicio = new \Datetime($params->fechaInicio);
+            $fechaFin = new \Datetime($params->fechaFin);
+
+           
+            $prohibiciones = $em->getRepository('JHWEBUsuarioBundle:UserLcProhibicion')->getFecha($fechaInicio,$fechaFin);
+            
+            if($prohibiciones){ 
+                $dir=__DIR__.'/../../../../web/docs/';
+                $file = $dir."reporteProhibicion.txt"; 
+    
+                if( file_exists("reporteProhibicion.txt") == false ){
+                    $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
+                }else{
+                    $archivo = fopen($file,"r"); 
+                }
+    
+                if($archivo == false){
+                    echo("Error al crear el archivo");
+                } else {
+                    foreach ($prohibiciones as $key => $prohibicion) {
+                        
+                        if($prohibicion->getNumProceso() != null) {
+                            fwrite($archivo, $prohibicion->getNumProceso(). ",");
+                        } elseif ($prohibicion->getNumProceso() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getFechaInicio() != null) {
+                            fwrite($archivo, $prohibicion->getFechaInicio()->format('Y-m-d'). ",");
+                        } elseif ($prohibicion->getFechaInicio() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getFechaFin() != null) {
+                            fwrite($archivo, $prohibicion->getFechaFin()->format('Y-m-d'). ",");
+                        } elseif ($prohibicion->getFechaFin() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getFechaResolucion() != null) {
+                            fwrite($archivo, $prohibicion->getFechaResolucion()->format('Y-m-d'). ",");
+                        } elseif ($prohibicion->getFechaResolucion() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getFechaPlazo() != null) {
+                            fwrite($archivo, $prohibicion->getFechaPlazo()->format('Y-m-d'). ",");
+                        } elseif ($prohibicion->getFechaPlazo() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getTipoOrden() != null) {
+                            fwrite($archivo, $prohibicion->getTipoOrden(). ",");
+                        } elseif ($prohibicion->getTipoOrden() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getTipoNovedad() != null) {
+                            fwrite($archivo, $prohibicion->getTipoNovedad(). ",");
+                        } elseif ($prohibicion->getTipoNovedad() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getMotivo() != null) {
+                            fwrite($archivo, $prohibicion->getMotivo(). ",");
+                        } elseif ($prohibicion->getMotivo() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getUsuario() != null) {
+                            fwrite($archivo, $prohibicion->getUsuario()->getIdentificacion(). ",");
+                        } elseif ($prohibicion->getUsuario() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        if($prohibicion->getUsuario() != null) {
+                            fwrite($archivo, $prohibicion->getUsuario()->getPrimerNombre().' '.$prohibicion->getUsuario()->getSegundoNombre().' '.$prohibicion->getUsuario()->getPrimerApellido().' '.$prohibicion->getUsuario()->getSegundoApellido(). ",");
+                        } elseif ($prohibicion->getUsuario() == null) {
+                            fwrite($archivo, "" . ",");
+                        }
+                        
+                        fwrite($archivo, "" . "\r\n");
+                       
+                    }
+                    fflush($archivo);
+    
+                    fclose($archivo);   // Cerrar el archivo
+    
+                    $arrayReportes[] = "TTAMTRVE.DAT";
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                        'data' => "reporteProhibicion.txt",
+                    );
+                }
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
     /**
      * Finds and displays a userLcProhibicion entity.
      *

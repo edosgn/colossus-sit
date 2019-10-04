@@ -86,6 +86,9 @@ class UserLcRestriccion
     
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion", inversedBy="licenciasConduccion") */
     private $userLicenciaConduccion;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoComparendo", inversedBy="ciudadanos") */
+    private $comparendo;
     
     /**
      * @var bool
@@ -95,10 +98,11 @@ class UserLcRestriccion
     private $activo;
     
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -367,5 +371,29 @@ class UserLcRestriccion
     public function getUserLicenciaConduccion()
     {
         return $this->userLicenciaConduccion;
+    }
+
+    /**
+     * Set comparendo
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
+     *
+     * @return UserLcRestriccion
+     */
+    public function setComparendo(\JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo = null)
+    {
+        $this->comparendo = $comparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get comparendo
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo
+     */
+    public function getComparendo()
+    {
+        return $this->comparendo;
     }
 }

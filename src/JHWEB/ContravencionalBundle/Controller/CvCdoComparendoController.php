@@ -889,7 +889,7 @@ class CvCdoComparendoController extends Controller
                     'infractorIdentificacion' => $params->infractorIdentificacion,
                     'estado' => array(1,2,3,4,5)
                 )
-            );
+            ); 
 
             if ($comparendos) {
                 $response = array(
