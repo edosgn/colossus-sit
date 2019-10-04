@@ -288,6 +288,7 @@ class UserLicenciaConduccionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $json = $request->get("data", null);
             $params = json_decode($json);
+            
 
             $licenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->id);
 
@@ -337,7 +338,15 @@ class UserLicenciaConduccionController extends Controller
                     'code' => 401,
                     'message' => "No se encontraro al ciudadano",
                 );
+                return $helpers->json($response);
             }
+
+            $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->findBy(
+                array(
+                    'infractorIdentificacion' => $usuario->getIdentificacion()
+                )
+            );
+
             $licenciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
                 array(
                     'ciudadano' => $params->idCiudadano,
@@ -349,7 +358,10 @@ class UserLicenciaConduccionController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($licenciasConduccion)." registros encontrados",
-                    'data' => $licenciasConduccion
+                    'data'=>array(
+                        'licenciasConduccion' => $licenciasConduccion,
+                        'comparendos' => $comparendos
+                    )
                 );
             } else {
                 $response = array(
@@ -368,3 +380,4 @@ class UserLicenciaConduccionController extends Controller
         return $helpers->json($response);
     }
 }
+ 
