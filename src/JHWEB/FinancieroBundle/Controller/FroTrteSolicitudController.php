@@ -2666,7 +2666,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMVEHI.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMVEHI.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2782,7 +2782,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMPROP.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMPROP.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // a$archivo el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2914,7 +2914,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMTRVE.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMTRVE.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2980,7 +2980,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMCAUT.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMCAUT.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3040,7 +3040,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMCANC.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMCANC.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3087,7 +3087,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTARUNTPREN.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTARUNTPREN.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3171,7 +3171,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTARUNTRADI.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTARUNTRADI.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
