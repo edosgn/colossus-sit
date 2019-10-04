@@ -1,0 +1,51 @@
+<html>
+    <h4>ALCALDIA MUNICIPAL DE PASTO
+            SECRETARIA DE TRANSITO Y TRANSPORTE
+            SUBSECRETARIA DE MOVILIDAD</h4>
+    <hr>
+    <h4>TARIFAS VIGENTESPARA LA PRESTACION DE SERVICIO  PUBLICO
+            DE TRANSPORTE INDIVIDUAL DE PASAJERO AÑO
+        <h2>2019-2019</h2>
+        DECRETO No. 0463 DEL 11  DE DICIEMBRE DE 2018.</h4>
+    <table>
+
+    </table>
+    <h2>TARJETA DE CONTROL</h2>
+    <h4>PERSONAL E INTRANSFERIBLE</h4>
+    <div style="border: 1px solid black, border-radius: 4%; ; height: 10px !auto important; width: 15%;">
+        <p font-size="20%">No <h2 style="color:red">{{ insumo.numero }}</h2></p>
+    </div>
+    <hr style="border: 0; border-top: 1px solid #999; border-bottom: 1px solid #333; height:0;">
+    <div style="border: 1px solid black, border-radius: 4%; height: 50px !auto important; width: 8%;"></div>
+    <p>{{ ciudadano.primerNombre ciudadano.segundoNombre }}</p>
+    <p>____________________________________________________</p>
+    <p>NOMBRE(S)</p>
+    <br>
+    <p>{{ ciudadano.primerApellido ciudadano.segundoApellido }}</p>
+    <p>____________________________________________________</p>
+    <p>APELLIDO(S)</p>
+    <br>
+    <p>{{ ciudadano.identificacion }}</p>
+    <p>____________________________________________________</p>
+    <p>CEDULA</p>
+    <br>
+    <p>{{ ciudadano.grupoSanguineo.sigla }}</p>
+    <p>____________</p>
+    <p>RH</p>
+    <br>
+    <hr style="border: 0; border-top: 1px solid #999; border-bottom: 1px solid #333; height:0;">
+    <h2>EMRESA: {{ empresaTransporte.empresa.nombre }}</h2>
+    <h4>PLACAS: {{ vehiculo.placa.numero }}</h4>
+    <h4>No DE ORDEN: {{ insumo.numero }}</h4>
+    <h4>No: {{ tecnomecanica.numeroControl }}</h4>
+    <p>CERT. REVISIÓN TÉNICO MECÁNICA Y DE GASES</p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p>____________________________________________________</p>
+    <p>REPRESENTANTE LEGAL DE LA EMPRESA</p>
+    <p>CUALQUIER ENMENDADURA  O INCONSISTENIA  EN LA INFRMACIÓN, FAVOR INFROMAR A LAS AUTORIDADES DE TRÁNSITO O POLICÍA NACIONAL.</p>
+
+</html>
