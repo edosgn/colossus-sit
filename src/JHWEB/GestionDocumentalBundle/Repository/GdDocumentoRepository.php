@@ -86,7 +86,7 @@ class GdDocumentoRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT d
         FROM JHWEBGestionDocumentalBundle:GdDocumento d
         WHERE d.fechaLlegada BETWEEN :fechaInicial AND :fechaFinal
-        ORDER BY d.fechaLLegada ASC";
+        ORDER BY d.fechaLlegada ASC";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
@@ -94,6 +94,6 @@ class GdDocumentoRepository extends \Doctrine\ORM\EntityRepository
             'fechaFinal' => $fechaFinal,
         ));
 
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
 }

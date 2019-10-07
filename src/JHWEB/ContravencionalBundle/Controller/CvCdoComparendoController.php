@@ -1638,8 +1638,12 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, $comparendo->getInfractorNombres() . ",");
                         fwrite($archivo, $comparendo->getInfractorApellidos() . ",");
 
-                        $infractorEdad = $this->get("app.helpers")->calculateAge($comparendo->getInfractorFechaNacimiento()->format('Y/m/d'));
-                        fwrite($archivo, $infractorEdad . ",");
+                        if ($comparendo->getInfractorFechaNacimiento()) {
+                            $infractorEdad = $this->get("app.helpers")->calculateAge($comparendo->getInfractorFechaNacimiento()->format('Y/m/d'));
+                            fwrite($archivo, $infractorEdad . ",");
+                        }else{
+                            fwrite($archivo, ",");
+                        }
 
                         fwrite($archivo, $comparendo->getInfractorDireccion() . ",");
                         fwrite($archivo, $comparendo->getInfractorEmail() . ",");
