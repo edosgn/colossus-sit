@@ -68,6 +68,25 @@ class CvCdoComparendoController extends Controller
 
             $comparendo = new CvCdoComparendo();
 
+            $fecha = new \DateTime($params->comparendo->fecha);
+
+            $expedienteConsecutivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getMaximo(
+                $fecha->format('Y')
+            );
+            $expedienteConsecutivo = (empty($expedienteConsecutivo['maximo']) ? 1 : $expedienteConsecutivo['maximo']+=1);
+            $comparendo->setExpedienteConsecutivo($expedienteConsecutivo);
+
+            $comparendo->setExpedienteNumero($fecha->format('Y').'-'.str_pad($expedienteConsecutivo, 3, '0', STR_PAD_LEFT));
+
+            $comparendo->setFecha($fecha);
+            $hora = $params->comparendo->hora;
+            $minutos = $params->comparendo->minutos;
+            
+            $comparendo->setHora(new \DateTime($hora.':'.$minutos.':00'));
+            
+            $comparendo->setDireccion($params->comparendo->direccion);
+            $comparendo->setLocalidad($params->comparendo->localidad);
+
             if (isset($params->comparendo->vehiculoPlaca)) {
                 $comparendo->setPlaca($params->comparendo->vehiculoPlaca);
             }
@@ -123,14 +142,6 @@ class CvCdoComparendoController extends Controller
                 $comparendo->setTransporteEspecial($transporteEspecial);
             }
 
-            $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
-            $hora = $params->comparendo->hora;
-            $minutos = $params->comparendo->minutos;
-            
-            $comparendo->setHora(new \DateTime($hora.':'.$minutos.':00'));
-            
-            $comparendo->setDireccion($params->comparendo->direccion);
-            $comparendo->setLocalidad($params->comparendo->localidad);
             $comparendo->setFuga($params->comparendo->fuga);
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia(
@@ -532,7 +543,7 @@ class CvCdoComparendoController extends Controller
 
                 $archivo = fopen($this->getParameter('data_upload').$documentoName , "r" );
 
-                $batchSize = 100;
+                $batchSize = 500;
                 $arrayComparendos = null;
                 $transacciones = null;
                 $procesados = 0;
@@ -540,10 +551,13 @@ class CvCdoComparendoController extends Controller
                 $rows = 0;
                 $cols = 0;
 
+                //Longitud de columnas según el tipo de fuente: 1-STTDN, 2-POLCA, 3 SIMIT
                 if ($params->tipoFuente == 1) {
                     $length = 59;
                 }elseif ($params->tipoFuente == 2) {
                     $length = 57;
+                }elseif ($params->tipoFuente == 3) {
+                    $length = 63;
                 }
 
                 if($params->idOrganismoTransito) {
@@ -565,14 +579,34 @@ class CvCdoComparendoController extends Controller
                                 'fecha'=>$helpers->convertDateTime($datos[2]),
                                 'hora'=>$datos[3],
                                 'direccion'=>$datos[4],
+                                'divipoDireccion'=>$datos[5],
                                 'localidad'=>$datos[6],
                                 'placa'=>$datos[7],
+                                'divipoMatriculado'=>$datos[8],
+                                'vehiculoClase'=>$datos[9],
+                                'vehiculoServicio'=>$datos[10],
+                                'vehiculoRadioAccion'=>$datos[11],
+                                'vehiculoModalidaTransporte'=>$datos[12],
+                                'vehiculoTransportePasajeros'=>$datos[13],
                                 'identificacion'=>$datos[14],
                                 'idTipoIdentificacion'=>$datos[15],
                                 'nombres'=>$datos[16],
                                 'apellidos'=>$datos[17],
-                                'codigoInfraccion' => $datos[55],
-                                'valor'=>$datos[56],
+                                'infractorEdad'=>$datos[18],
+                                'infractorDireccion'=>$datos[19],
+                                'infractorCorreo'=>$datos[20],
+                                'infractorTelefono'=>$datos[21],
+                                'infractorDivipoResidencia'=>$datos[22],
+                                'licenciaConduccionNumero'=>$datos[23],
+                                'licenciaConduccionCategoria'=>$datos[24],
+                                'licenciaConduccionDivipo'=>$datos[25],
+                                'licenciaConduccionFechaVencimiento'=>$datos[26],
+                                'tipoInfractor'=>$datos[27],
+                                'licenciaTransitoNumero'=>$datos[28],
+                                'licenciaTransitoDivipo'=>$datos[29],
+                                'infraccionCodigo' => $datos[55],
+                                'infraccionValor'=>$datos[56],
+                                'gradoAlcoholemia'=>$datos[57],
                                 'organismoTransito'=>$organismoTransito,
                                 'tipoFuente'=>$params->tipoFuente,
                             );
@@ -668,9 +702,8 @@ class CvCdoComparendoController extends Controller
                         $comparendo->setConsecutivo($consecutivo);
                         $consecutivo->setEstado('UTILIZADO');
                         $consecutivo->setActivo(false);
-                        $em->flush();
 
-                        $response = $this->register($arrayComparedndo, $consecutivo);
+                        $response = $this->register($arrayComparendo, $consecutivo, $fila);
                     } else {
                         $response = array(
                             'title' => 'Atención!',
@@ -687,15 +720,14 @@ class CvCdoComparendoController extends Controller
                         'message' => "Error! Fila:(".$fila.") El número consecutivo aún no se encuentra registrado en el sistema.",
                     ); 
                 }
-            }elseif ($arrayComparendo['tipoFuente'] == 2) {
+            }elseif ($arrayComparendo['tipoFuente'] == 2 || $arrayComparendo['tipoFuente'] == 3) {
                 if($consecutivo){
                     if ($consecutivo->getEstado() == 'ASIGNADO') {
                         $comparendo->setConsecutivo($consecutivo);
                         $consecutivo->setEstado('UTILIZADO');
                         $consecutivo->setActivo(false);
-                        $em->flush();
 
-                        $response = $this->register($arrayComparendo, $consecutivo);
+                        $response = $this->register($arrayComparendo, $consecutivo, $fila);
                     } else {
                         $response = array(
                             'title' => 'Atención!',
@@ -714,9 +746,8 @@ class CvCdoComparendoController extends Controller
                     $consecutivo->setOrganismoTransito($arrayComparendo['organismoTransito']);
 
                     $em->persist($consecutivo);
-                    $em->flush();
 
-                    $response = $this->register($arrayComparendo, $consecutivo);
+                    $response = $this->register($arrayComparendo, $consecutivo, $fila);
                 }
             }
 
@@ -740,7 +771,7 @@ class CvCdoComparendoController extends Controller
     /*
      * Realiza el registro del talonario y la secuencia de consecutivos según el rango solicitado
     */
-    public function register($arrayComparendo, $consecutivo){
+    public function register($arrayComparendo, $consecutivo, $fila){
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
@@ -761,15 +792,34 @@ class CvCdoComparendoController extends Controller
             $comparendo->setPlaca($arrayComparendo['placa']);
         }
 
-        $comparendo->setFecha($arrayComparendo['fecha']);
-        $hora = substr($arrayComparendo['hora'], 0, 2).':'.substr($arrayComparendo['hora'], 2, 2).':00';
+        $fecha = $arrayComparendo['fecha'];
+        $comparendo->setFecha($fecha);
+
+        if($fila > 0){
+            $comparendo->setExpedienteConsecutivo($fila);
+            $comparendo->setExpedienteNumero($fecha->format('Y').'-'.str_pad($fila, 3, '0', STR_PAD_LEFT));
+        }else{
+            $expedienteConsecutivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getMaximo(
+                $fecha->format('Y')
+            );
+            $expedienteConsecutivo = (empty($expedienteConsecutivo['maximo']) ? 1 : $expedienteConsecutivo['maximo']+=1);
+            $comparendo->setExpedienteConsecutivo($expedienteConsecutivo);
+            $comparendo->setExpedienteNumero($fecha->format('Y').'-'.str_pad($expedienteConsecutivo, 3, '0', STR_PAD_LEFT));
+        }
+
+        if (strlen($arrayComparendo['hora']) == 5){
+            $hora = substr($arrayComparendo['hora'], 0, 2).substr($arrayComparendo['hora'], 2, 2).':00';
+        }else{
+            $hora = substr($arrayComparendo['hora'], 0, 1).substr($arrayComparendo['hora'], 2, 2).':00';
+        }
+
         $comparendo->setHora(new \DateTime($hora));        
         $comparendo->setDireccion($arrayComparendo['direccion']);
         $comparendo->setLocalidad($arrayComparendo['localidad']);
 
-        $comparendo->setObservacionesAgente(
+        /*$comparendo->setObservacionesAgente(
             $params->comparendo->observacionesAgente
-        );
+        );*/
 
         /* INFRACTOR */
         if ($arrayComparendo['idTipoIdentificacion']) {
@@ -803,14 +853,15 @@ class CvCdoComparendoController extends Controller
         $comparendo->setActivo(true);
 
         /* INFRACCION */
-        if ($arrayComparendo['codigoInfraccion'] != 'F') {
+        if ($arrayComparendo['infraccionCodigo'] != 'F') {
             $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->findOneByCodigo(
-                $arrayComparendo['codigoInfraccion']
+                $arrayComparendo['infraccionCodigo']
             );
         } else {
             $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->findOneByCategoria(
                 5
             );
+            $comparendo->setGradoAlcoholemia($arrayComparendo['gradoAlcoholemia']);
         }
 
         if ($infraccion) {
@@ -830,7 +881,7 @@ class CvCdoComparendoController extends Controller
                     'title' => 'Atención!',
                     'status' => 'warning',
                     'code' => 400,
-                    'message' => "Error! Fila:(".$key++.") No se puede registrar el valor de la infraccipon porque aún no se ha configurado el SMLMV.",
+                    'message' => "Error! Fila:(".$rows.") No se puede registrar el valor de la infracción porque aún no se ha configurado el SMLMV.",
                 );
 
                 return $helpers->json($response);
@@ -858,10 +909,8 @@ class CvCdoComparendoController extends Controller
             'title' => 'Perfecto!',
             'status' => 'success',
             'code' => 200,
-            'message' => "Perfecto! Fila:(".$key++.") Registro creado con exito.",
+            'message' => "Perfecto! Fila:(".$fila.") Registro creado con exito.",
         );
-
-        $em->flush();
 
         return $response;
     }
@@ -1920,5 +1969,37 @@ class CvCdoComparendoController extends Controller
             );
         }
         return $helpers->json($response);
+    }
+
+    /**
+     * Crea PDF con resumen de comparendo .
+     *
+     * @Route("/{id}/hojacontrol/pdf", name="cvcdocomparendo_hojacontrol_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfHojaControlAction(Request $request, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+            $id
+        );
+
+        $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+            array(
+                'comparendo' => $comparendo->getId()
+            )
+        );
+        
+        $html = $this->renderView('@JHWEBContravencional/Default/pdf.hojacontrol.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'comparendo'=> $comparendo,
+            'trazabilidades'=> $trazabilidades,
+        ));
+
+        $this->get('app.pdf')->templatePreview($html, 'Hoja_Control_Exp_'.$comparendo->getExpedienteNumero());
     }
 }

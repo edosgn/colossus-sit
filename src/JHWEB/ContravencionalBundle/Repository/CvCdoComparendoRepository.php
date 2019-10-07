@@ -10,6 +10,21 @@ namespace JHWEB\ContravencionalBundle\Repository;
  */
 class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de documentos por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(c.expedienteConsecutivo) AS maximo
+        FROM JHWEBContravencionalBundle:CvCdoComparendo c
+        WHERE YEAR(c.fecha) = :ANIO";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        
+        return $consulta->getOneOrNullResult();
+    }
+
 	//Obtiene todos los comparendos por tramitar
     public function getForProcessing(){
         $em = $this->getEntityManager();

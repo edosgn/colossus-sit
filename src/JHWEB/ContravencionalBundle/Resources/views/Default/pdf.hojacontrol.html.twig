@@ -1,0 +1,65 @@
+<html>
+  <header>
+    <style type="text/css">
+        .separator{
+            margin-top: 5px;
+        }
+        .table td{
+            max-height: 15px;
+            padding: 2px;
+        }
+    </style>
+  </header>
+  <body style="font-size:12px">
+    <p align="center">
+    	<h3>
+      HOJA DE CONTROL
+      <br>
+      <br>
+      EXPEDIENTE CONTRAVENCIONAL  No. {{ comparendo.expedienteNumero }}
+      </h3>
+    </p>
+    <br>
+    <br>
+    <br>
+    <table border="0" width="100%">
+      <tbody>
+        <tr>
+          <td width="30%">Fecha: {{ comparendo.fecha|date('Y-m-d') }}</td>
+          <td width="70%">Infracción: {{ comparendo.infraccion.nombre }}</td>
+        </tr>
+        <tr>
+          <td width="100%" colspan="2">Nombre infractor:
+          {% if comparendo.infractorNombres %}{{ comparendo.infractorNombres }}{% endif %}
+          {% if comparendo.infractorApellidos %}{{ comparendo.infractorApellidos }}{% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td width="100%" colspan="2">Identificación:
+          {% if comparendo.infractorTipoIdentificacion %}{{ comparendo.infractorTipoIdentificacion.nombre }}{% endif %}
+          {% if comparendo.infractorIdentificacion %} {{ comparendo.infractorIdentificacion }}{% endif %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table border="1" border="1" cellpadding="3" style="font-size: 10px;">
+      <tr>
+        <td align="center" width="5%"><b>No.</b></td>
+        <td align="center" width="40%"><b>Tipo de documento</b></td>
+        <td align="center" width="15%"><b>Folio</b></td>
+        <td align="center" width="15%"><b>Rango</b></td>
+        <td align="center" width="25%"><b>Observaciones</b></td>
+      </tr>
+      {% for key, trazabilidad in trazabilidades %}  
+      <tr>
+        <td>{{ key + 1 }}</td>
+        <td>{{ trazabilidad.estado.nombre }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

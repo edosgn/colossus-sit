@@ -38,9 +38,16 @@ class CvCdoComparendo
     /**
      * @var string
      *
-     * @ORM\Column(name="expediente", type="string", length=255, nullable=true)
+     * @ORM\Column(name="expediente_numero", type="string", length=255, nullable=true)
      */
-    private $expediente;
+    private $expedienteNumero;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="expediente_consecutivo", type="integer", nullable=true)
+     */
+    private $expedienteConsecutivo;
 
     /**
      * @var string
@@ -513,27 +520,51 @@ class CvCdoComparendo
     }
 
     /**
-     * Set expediente
+     * Set expedienteNumero
      *
-     * @param string $expediente
+     * @param string $expedienteNumero
      *
      * @return CvCdoComparendo
      */
-    public function setExpediente($expediente)
+    public function setExpedienteNumero($expedienteNumero)
     {
-        $this->expediente = $expediente;
+        $this->expedienteNumero = $expedienteNumero;
 
         return $this;
     }
 
     /**
-     * Get expediente
+     * Get expedienteNumero
      *
      * @return string
      */
-    public function getExpediente()
+    public function getExpedienteNumero()
     {
-        return $this->expediente;
+        return $this->expedienteNumero;
+    }
+
+    /**
+     * Set expedienteConsecutivo
+     *
+     * @param integer $expedienteConsecutivo
+     *
+     * @return CvCdoComparendo
+     */
+    public function setExpedienteConsecutivo($expedienteConsecutivo)
+    {
+        $this->expedienteConsecutivo = $expedienteConsecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get expedienteConsecutivo
+     *
+     * @return integer
+     */
+    public function getExpedienteConsecutivo()
+    {
+        return $this->expedienteConsecutivo;
     }
 
     /**
@@ -1569,6 +1600,30 @@ class CvCdoComparendo
     }
 
     /**
+     * Set gradoAlcoholemia
+     *
+     * @param integer $gradoAlcoholemia
+     *
+     * @return CvCdoComparendo
+     */
+    public function setGradoAlcoholemia($gradoAlcoholemia)
+    {
+        $this->gradoAlcoholemia = $gradoAlcoholemia;
+
+        return $this;
+    }
+
+    /**
+     * Get gradoAlcoholemia
+     *
+     * @return integer
+     */
+    public function getGradoAlcoholemia()
+    {
+        return $this->gradoAlcoholemia;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -2022,29 +2077,5 @@ class CvCdoComparendo
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set gradoAlcoholemia
-     *
-     * @param integer $gradoAlcoholemia
-     *
-     * @return CvCdoComparendo
-     */
-    public function setGradoAlcoholemia($gradoAlcoholemia)
-    {
-        $this->gradoAlcoholemia = $gradoAlcoholemia;
-
-        return $this;
-    }
-
-    /**
-     * Get gradoAlcoholemia
-     *
-     * @return integer
-     */
-    public function getGradoAlcoholemia()
-    {
-        return $this->gradoAlcoholemia;
     }
 }
