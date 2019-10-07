@@ -77,4 +77,23 @@ class GdDocumentoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    //Obtiene los documentos entre fechas
+    public function getByDates($fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT d
+        FROM JHWEBGestionDocumentalBundle:GdDocumento d
+        WHERE d.fechaLlegada BETWEEN :fechaInicial AND :fechaFinal
+        ORDER BY d.fechaLlegada ASC";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+
+        return $consulta->getResult();
+    }
 }

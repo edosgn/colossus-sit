@@ -14,52 +14,57 @@
         <p style="text-align: center">
         CONSIDERANDO
         </p>
+        {% if comparendo %}
+            <p style="text-align: justify" >
+                Que mediante resolución sancionatoria F-6545784-14 de {{comparendo.fecha|date('Y-m-d')}} fue impuesta la
+                sanción {{comparendo.infraccion.nombre}}, por el término de 30 horas al Sr(a). {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}, identificado con cédula de ciudadanía No. {{userLicenciaConduccion.ciudadano.identificacion}}, de conformidad
+                a lo establecido en la ley 1696 de 2013, por haber conducido en estado de embriaguez.
+                Que previa solicitud de disponibilidad de realizar las actividades relacionadas con el servicio
+                comunitario por parte del infractor, se dispuso la actividad de socialización de la Campaña de
+                seguridad vial departamental: Firma de pactos por la conducción responsable de los actores de la
+                vía en trabajo comunitario en Pasto STTD-Nariño y en el municipio de La Unión (Nariño) bajo la
+                entrega del material publicitario respectivo diseñado por esta entidad departamental.
+                Como prueba de ello fue diligenciado y suscrito por los funcionarios de la Subsecretaría de
+                Tránsito Departamental, el registro de prestación de servicio comunitario Ley 1696 de 2013, por el
+                cual se constató el cumplimiento de las 30 horas impuestas como sanción, mismas que se llevaron
+                a cabo desde el día {{comparendo.fecha|date('Y-m-d')}}.
+                Que a la fecha el implicado, solicita devolución de la licencia de conducción retenida por efectos
+                del proceso contravencional administrativo que antecede, siendo viable la devolución de la misma
+                dado el cumplimiento del servicio comunitario señalado en la resolución sancionatoria.
+                En mérito de lo expuesto, este Despacho,
+            </p>
 
-        <p style="text-align: justify">
-            Que mediante resolución sancionatoria F-6545784-14 de {{comparendo.fecha|date('Y-m-d')}} fue impuesta la
-            sanción {{comparendo.infraccion.nombre}}, por el término de 30 horas al Sr(a). {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}, identificado con cédula de ciudadanía No. {{userLicenciaConduccion.ciudadano.identificacion}}, de conformidad
-            a lo establecido en la ley 1696 de 2013, por haber conducido en estado de embriaguez.
-            Que previa solicitud de disponibilidad de realizar las actividades relacionadas con el servicio
-            comunitario por parte del infractor, se dispuso la actividad de socialización de la Campaña de
-            seguridad vial departamental: Firma de pactos por la conducción responsable de los actores de la
-            vía en trabajo comunitario en Pasto STTD-Nariño y en el municipio de La Unión (Nariño) bajo la
-            entrega del material publicitario respectivo diseñado por esta entidad departamental.
-            Como prueba de ello fue diligenciado y suscrito por los funcionarios de la Subsecretaría de
-            Tránsito Departamental, el registro de prestación de servicio comunitario Ley 1696 de 2013, por el
-            cual se constató el cumplimiento de las 30 horas impuestas como sanción, mismas que se llevaron
-            a cabo desde el día {{comparendo.fecha|date('Y-m-d')}}.
-            Que a la fecha el implicado, solicita devolución de la licencia de conducción retenida por efectos
-            del proceso contravencional administrativo que antecede, siendo viable la devolución de la misma
-            dado el cumplimiento del servicio comunitario señalado en la resolución sancionatoria.
-            En mérito de lo expuesto, este Despacho,
-        </p>
+            <p style="text-align: center">
+            RESUELVE
+            </p>
 
-        <p style="text-align: center">
-        RESUELVE
-        </p>
+            <p style="text-align: justify">
+            ARTÍCULO PRIMERO. - Declarar el cumplimiento de la realización de actividades comunitarias por
+                30 horas a favor del señor(a) {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}, identificado con cédula
+                de ciudadanía No. {{userLicenciaConduccion.ciudadano.identificacion}}.
+                ARTICULO SEGUNDO. - Ordenar la devolución de la licencia de conducción bajo la suscripción
+                del acta respectiva.
+                ARTÍCULO TERCERO. - Comunicar del presente auto al señor(a) {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}
+                ARELLANO, identificado con cédula de ciudadanía No. {{userLicenciaConduccion.ciudadano.identificacion}}, extendiéndole copia gratuita
+                del mismo.
+                ARTICULO CUARTO. - Informar a la operadora de SIMIT, sobre el levantamiento de la medida de
+                retención de licencia de conducción.
+                ARTICULO QUINTO: Contra el presente auto no procede recurso alguno.
+                Dada en San Juan de Pasto, {{comparendo.fecha|date('Y-m-d')}}.
 
-        <p style="text-align: justify">
-        ARTÍCULO PRIMERO. - Declarar el cumplimiento de la realización de actividades comunitarias por
-            30 horas a favor del señor(a) {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}, identificado con cédula
-            de ciudadanía No. {{userLicenciaConduccion.ciudadano.identificacion}}.
-            ARTICULO SEGUNDO. - Ordenar la devolución de la licencia de conducción bajo la suscripción
-            del acta respectiva.
-            ARTÍCULO TERCERO. - Comunicar del presente auto al señor(a) {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}
-            ARELLANO, identificado con cédula de ciudadanía No. {{userLicenciaConduccion.ciudadano.identificacion}}, extendiéndole copia gratuita
-            del mismo.
-            ARTICULO CUARTO. - Informar a la operadora de SIMIT, sobre el levantamiento de la medida de
-            retención de licencia de conducción.
-            ARTICULO QUINTO: Contra el presente auto no procede recurso alguno.
-            Dada en San Juan de Pasto, {{comparendo.fecha|date('Y-m-d')}}.
+                COMUNIQUESE Y CUMPLASE
+                YAMILE CALDERON DELGADO
 
-            COMUNIQUESE Y CUMPLASE
-            YAMILE CALDERON DELGADO
+                Profesional Universitario Subsecretaría de Tránsito y Transporte Departamental
+                Constancia de comunicación y recepción de la licencia de conducción original:
 
-            Profesional Universitario Subsecretaría de Tránsito y Transporte Departamental
-            Constancia de comunicación y recepción de la licencia de conducción original:
-
-            {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}
-            C.C. No. {{userLicenciaConduccion.ciudadano.identificacion}}
-        </p>
+                {{userLicenciaConduccion.ciudadano.primerNombre}} {{userLicenciaConduccion.ciudadano.segundoNombre}} {{userLicenciaConduccion.ciudadano.primerApellido}} {{userLicenciaConduccion.ciudadano.segundoApellido}}
+                C.C. No. {{userLicenciaConduccion.ciudadano.identificacion}}
+            </p>
+        {% else %}
+        <p>Resuelve: 'este documento se modificara por el la generación de acta judicial'</p>
+        {% endif %}
+            
+        
     </body>
 </html>

@@ -806,4 +806,66 @@ class GdDocumentoController extends Controller
         $pdf->Output("example.pdf", 'I');
         die();
     }
+
+    /**
+     * Busca si existen documentos entre fechas.
+     *
+     * @Route("/report", name="gddocumento_report")
+     * @Method({"GET", "POST"})
+     */
+    public function reportAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
+
+            if ($fechaInicial < $fechaFinal) {
+                $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getByDates(
+                    $fechaInicial, $fechaFinal
+                );
+    
+                if ($documentos) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($documentos)." Documentos registrados.", 
+                        'data'=> $documentos,
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => "Ningún resultado encontrado.", 
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "La fecha inicial debe ser menor a la fecha final.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
