@@ -53,7 +53,13 @@ class UserLcRestriccionController extends Controller
             
             $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
             
-            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find($params->idComparendo);
+            $idComparendo = (isset($params->idComparendo)) ? $params->idComparendo : null;
+
+            if($idComparendo){
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find($idComparendo);
+            }else{
+                $comparendo=null;
+            }
 
             foreach ($licanciasConduccion as $key => $userLicenciaConduccion) {
                 $userLcRestriccion = new UserLcRestriccion();
@@ -125,9 +131,15 @@ class UserLcRestriccionController extends Controller
 
         $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
         
+        $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
+            array(
+                'userLicenciaConduccion' => $userLicenciaConduccion->getId(),
+                'estado' =>'ACTIVO',
+            )
+        );
 
         foreach ($licanciasConduccion as $key => $userLicenciaConduccionFor) {
-            $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
+            $userLcRestriccionFor = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
                 array(
                     'userLicenciaConduccion' => $userLicenciaConduccionFor->getId(),
                     'estado' =>'ACTIVO',
@@ -136,25 +148,18 @@ class UserLcRestriccionController extends Controller
             
             // var_dump($userLicenciaConduccionFor->getId());
 
-            $userLcRestriccion->setHorasComunitarias($params->horasComunitarias);
-            $userLcRestriccion->setEstado('DEVUELTA');
+            $userLcRestriccionFor->setHorasComunitarias($params->horasComunitarias);
+            $userLcRestriccionFor->setEstado('DEVUELTA');
 
             $userLicenciaConduccionFor->setEstado('ACTIVA');
             $userLicenciaConduccionFor->setActivo(1);
     
             $em->persist($userLicenciaConduccionFor);
-            $em->persist($userLcRestriccion);
+            $em->persist($userLcRestriccionFor);
 
             $em->flush();
         }
         // die();
-
-        $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
-            array(
-                'userLicenciaConduccion' => $userLicenciaConduccion->getId(),
-            )
-        );
-
        
         $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array(
             'userLicenciaConduccion'=>$userLicenciaConduccion,
