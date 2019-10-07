@@ -152,7 +152,6 @@ class UserLcRestriccionController extends Controller
         $userLcRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcRestriccion')->findOneBy(
             array(
                 'userLicenciaConduccion' => $userLicenciaConduccion->getId(),
-                'estado' =>'ACTIVO',
             )
         );
 
