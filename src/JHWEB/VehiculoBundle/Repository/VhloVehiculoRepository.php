@@ -200,18 +200,23 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
     public function getByFechasForFile($idOrganismoTransito, $idModulo, $fechaInicial, $fechaFinal)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT v
+        $dql = "SELECT fts
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFacTramite ft,
+            JHWEBFinancieroBundle:FroTrtePrecio tp,
             JHWEBVehiculoBundle:VhloVehiculo v,
             JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
             JHWEBVehiculoBundle:VhloCfgClase vcc 
             WHERE fts.vehiculo = v.id
+            AND fts.tramiteFactura = ft.id
+            AND ft.precio = tp.id
             AND v.organismoTransito = :idOrganismoTransito
+            AND (tp.tramite = 1 OR tp.tramite = 4)
             AND v.clase = vcc.id
             AND vcc.tipoVehiculo = vctv.id
             AND vctv.modulo = :idModulo
             AND v.activo = true
-            AND v.fechaMatricula BETWEEN :fechaInicial AND :fechaFinal";
+            AND fts.fecha BETWEEN :fechaInicial AND :fechaFinal";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

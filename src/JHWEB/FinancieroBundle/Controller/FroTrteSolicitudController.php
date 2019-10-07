@@ -2652,11 +2652,11 @@ class FroTrteSolicitudController extends Controller
             $fechaInicial = new \Datetime($params->fechaInicial);
             $fechaFinal = new \Datetime($params->fechaFinal);
 
-            $arrayReportes[] = null;
+            $arrayReportes = null;
 
             for ($i=1; $i < 8; $i++) { 
                 if($i == 1) {
-                    $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFechasForFile(
+                    $tramitesSolicitud = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFechasForFile(
                         $params->idOrganismoTransito,
                         $params->idModulo,
                         $fechaInicial,
@@ -2666,7 +2666,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMVEHI.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMVEHI.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2675,10 +2675,10 @@ class FroTrteSolicitudController extends Controller
                     if($archivo == false){
                         echo("Error al crear el archivo");
                     }else{
-                        foreach ($vehiculos as $key => $vehiculo) {
+                        foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
                             $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                                 array(
-                                    'vehiculo' => $vehiculo->getId(),
+                                    'vehiculo' => $tramiteSolicitud->getVehiculo()->getId(),
                                     'activo' => true
                                 )
                             );
@@ -2690,67 +2690,67 @@ class FroTrteSolicitudController extends Controller
                                 )
                             );
         
-                            if($vehiculo->getOrganismoTransito() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getOrganismoTransito() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getOrganismoTransito() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getOrganismoTransito()->getDivipo(), 8, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getOrganismoTransito() == null) {
                                 fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getPlaca() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getPlaca() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getPlaca() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getPlaca()->getNumero(), 6, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getPlaca() == null) {
                                 fwrite($archivo, str_pad("", 6, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getLinea() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getLinea()->getMarca()->getNombre(), 30, ' ', STR_PAD_RIGHT));
-                                fwrite($archivo, str_pad($vehiculo->getLinea()->getNombre(), 50, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getLinea() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getLinea() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getLinea()->getMarca()->getNombre(), 30, ' ', STR_PAD_RIGHT));
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getLinea()->getNombre(), 50, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getLinea() == null) {
                                 fwrite($archivo, str_pad("", 30, ' ', STR_PAD_RIGHT));
                                 fwrite($archivo, str_pad("", 50, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getClase() != null) {
-                                if($vehiculo->getClase()->getCodigo() < 10) {
-                                    fwrite($archivo, str_pad($vehiculo->getClase()->getCodigo(), 2, '0', STR_PAD_LEFT));
-                                } elseif ($vehiculo->getClase()->getCodigo() >= 10) {
-                                    fwrite($archivo, str_pad($vehiculo->getClase()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
+                            if($tramiteSolicitud->getVehiculo()->getClase() != null) {
+                                if($tramiteSolicitud->getVehiculo()->getClase()->getCodigo() < 10) {
+                                    fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getClase()->getCodigo(), 2, '0', STR_PAD_LEFT));
+                                } elseif ($tramiteSolicitud->getVehiculo()->getClase()->getCodigo() >= 10) {
+                                    fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getClase()->getCodigo(), 2, ' ', STR_PAD_RIGHT));
                                 }
-                            } elseif ($vehiculo->getClase() == null) {
+                            } elseif ($tramiteSolicitud->getVehiculo()->getClase() == null) {
                                 fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getColor() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getColor()->getNombre(), 60, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getColor() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getColor() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getColor()->getNombre(), 60, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getColor() == null) {
                                 fwrite($archivo, str_pad("", 60, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getServicio() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getServicio()->getId(), 2, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getServicio() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getServicio() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getServicio()->getId(), 2, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getServicio() == null) {
                                 fwrite($archivo, str_pad("", 2, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getCarroceria() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getCarroceria()->getCodigo(), 3, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getCarroceria() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getCarroceria() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getCarroceria()->getCodigo(), 3, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getCarroceria() == null) {
                                 fwrite($archivo, str_pad("", 3, ' ', STR_PAD_RIGHT));
                             }
-                            if($vehiculo->getModalidadTransporte() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getModalidadTransporte()->getId(), 1, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getModalidadTransporte() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getModalidadTransporte() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getModalidadTransporte()->getId(), 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getModalidadTransporte() == null) {
                                 fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
                             }
-                            fwrite($archivo, str_pad($vehiculo->getCilindraje(), 5, ' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad($vehiculo->getModelo(), 4, ' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad($vehiculo->getMotor(), 25, ' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad($vehiculo->getChasis(), 25, ' ', STR_PAD_RIGHT));
-                            fwrite($archivo, str_pad($vehiculo->getSerie(), 25, ' ', STR_PAD_RIGHT));
-                            if($vehiculo->getCapacidadCarga() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getCapacidadCarga() == null) {
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getCilindraje(), 5, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getModelo(), 4, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getMotor(), 25, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getChasis(), 25, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getSerie(), 25, ' ', STR_PAD_RIGHT));
+                            if($tramiteSolicitud->getVehiculo()->getCapacidadCarga() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getCapacidadCarga(), 5, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getCapacidadCarga() == null) {
                                 fwrite($archivo, str_pad("0", 5, ' ', STR_PAD_RIGHT));
                             }
-                            fwrite($archivo, str_pad($vehiculo->getNumeroPasajeros(), 3, ' ', STR_PAD_RIGHT));
-                            if($vehiculo->getFechaMatricula() != null){
-                                fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getFechaMatricula() == null) {
-                                fwrite($archivo, str_pad($vehiculo->getFechaMatricula()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getNumeroPasajeros(), 3, ' ', STR_PAD_RIGHT));
+                            if($tramiteSolicitud->getFecha() != null){
+                                fwrite($archivo, str_pad($tramiteSolicitud->getFecha()->format('Ymd'), 8, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getFecha() == null) {
+                                fwrite($archivo, str_pad("", 8, ' ', STR_PAD_RIGHT));
                             }
                             if($licenciaTransito != null) {
                                 fwrite($archivo, str_pad($licenciaTransito->getNumero(), 10, ' ', STR_PAD_RIGHT));
@@ -2758,12 +2758,12 @@ class FroTrteSolicitudController extends Controller
                                 fwrite($archivo, str_pad("", 10, ' ', STR_PAD_RIGHT));
                             }
                             fwrite($archivo, str_pad("", 16, ' ', STR_PAD_RIGHT));
-                            if($vehiculo->getCombustible() != null) {
-                                fwrite($archivo, str_pad($vehiculo->getCombustible()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
-                            } elseif ($vehiculo->getCombustible() == null) {
+                            if($tramiteSolicitud->getVehiculo()->getCombustible() != null) {
+                                fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getCombustible()->getCodigo(), 1, ' ', STR_PAD_RIGHT));
+                            } elseif ($tramiteSolicitud->getVehiculo()->getCombustible() == null) {
                                 fwrite($archivo, str_pad("", 1, ' ', STR_PAD_RIGHT));
                             }
-                            fwrite($archivo, str_pad($vehiculo->getActivo(), 1, ' ', STR_PAD_RIGHT) . "\r\n");
+                            fwrite($archivo, str_pad($tramiteSolicitud->getVehiculo()->getActivo(), 1, ' ', STR_PAD_RIGHT) . "\r\n");
                         }
                         fflush($archivo);
                     }
@@ -2782,7 +2782,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMPROP.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMPROP.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // a$archivo el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2914,7 +2914,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMTRVE.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMTRVE.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2932,7 +2932,8 @@ class FroTrteSolicitudController extends Controller
             
                             $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
                                 array(
-                                    'propietario' => $propietario->getId()
+                                    'propietario' => $propietario->getId(),
+                                    'activo' => true
                                 )
                             );
                             
@@ -2979,7 +2980,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMCAUT.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMCAUT.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3039,7 +3040,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTAMCANC.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTAMCANC.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3086,7 +3087,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTARUNTPREN.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTARUNTPREN.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3170,7 +3171,7 @@ class FroTrteSolicitudController extends Controller
                     $dir=__DIR__.'/../../../../web/docs/';
                     $file = $dir."TTARUNTRADI.DAT"; 
     
-                    if( file_exists("datos.txt") == false ){
+                    if( file_exists("TTARUNTRADI.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
