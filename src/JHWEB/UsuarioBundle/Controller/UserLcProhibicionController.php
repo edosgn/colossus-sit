@@ -154,7 +154,10 @@ class UserLcProhibicionController extends Controller
     
                 if($archivo == false){
                     echo("Error al crear el archivo");
+                    var_dump(1);
+                    die();
                 } else {
+                    
                     foreach ($prohibiciones as $key => $prohibicion) {
                         
                         if($prohibicion->getNumProceso() != null) {
@@ -211,6 +214,7 @@ class UserLcProhibicionController extends Controller
                         fwrite($archivo, "" . "\r\n");
                        
                     }
+                    
                     fflush($archivo);
     
                     fclose($archivo);   // Cerrar el archivo
@@ -219,10 +223,17 @@ class UserLcProhibicionController extends Controller
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Registro creado con éxito",
+                        'message' => "Reporte generado con éxito",
                         'data' => "reporteProhibicion.txt",
                     );
                 }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron prohibiciones",
+                    'data' => null,
+                );
             }
         }else{
             $response = array(
@@ -231,6 +242,7 @@ class UserLcProhibicionController extends Controller
                 'message' => "Autorización no valida",
             );
         }
+        
         return $helpers->json($response);
     }
 

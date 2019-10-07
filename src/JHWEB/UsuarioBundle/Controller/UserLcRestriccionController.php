@@ -145,7 +145,7 @@ class UserLcRestriccionController extends Controller
             $em->persist($userLicenciaConduccionFor);
             $em->persist($userLcRestriccion);
 
-            // $em->flush();
+            $em->flush();
         }
         // die();
 
