@@ -846,4 +846,115 @@ class ImoInsumoController extends Controller
         );
 
     }
+
+    
+    /**
+     * Finds and displays a first insumo entity by modulo.
+     *
+     * @Route("/search/first/insumo/modulo", name="imoinsumo_search_first_by_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchFirstInsumoByModuloAndReferenciaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+        
+        if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
+
+            $idInsumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findFirstByModuloAndReferencia(
+                $params->idModulo
+            );
+
+            if ($idInsumo){
+                $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
+                    $idInsumo[1]
+                );
+            }
+
+            if($insumo){
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'data' => $insumo,
+                    'message' => "Registro encontrado", 
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+    
+    /**
+     * Finds and displays a first insumo entity by modulo.
+     *
+     * @Route("/search/first/numero/tarjeta/control", name="imoinsumo_search_first_tarjeta_control")
+     * @Method({"GET", "POST"})
+     */
+    public function searchTarjetaControlAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+        
+        if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
+
+            $idInsumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findTarjetaControlByModuloAndReferencia(
+                $params->idModulo
+            );
+
+            if($idInsumo) {
+                $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
+                    $idInsumo[1]
+                );
+            }
+
+            if($insumo){
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'data' => $insumo,
+                    'message' => "Registro encontrado", 
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
