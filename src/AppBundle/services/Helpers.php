@@ -476,30 +476,33 @@ class Helpers
 
 		$to = array();
 		array_push($to,'edgargn87@gmail.com');
-        /*foreach ($trazabilidad->getFuncionario()->getUsuario()->getCorreos() as $key => $correo) {
-          $correoValido = $this->is_valid_email($correo);
 
-          if ($correoValido) {
-            array_push($to,$correo);
-            $this->templateAssignment($trazabilidad, $to);
-          }else{
-            $correosInvalidos[] = $correo;
-          }
-        };*/
-		
-		if ($comparendo->getInfractorEmail()) {
-			$this->mailer->templateNotify($trazabilidad, $to);
-		}
-
-		if ($estado->getReparto()) {
-			$funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-				2
-			);
-
-			$trazabilidad->setFuncionario($funcionario);
-			$em->flush();
-
-			$this->mailer->templateAssignment($trazabilidad, $to);
+		if ($estado->getNotificacion()) {
+			/*foreach ($trazabilidad->getFuncionario()->getUsuario()->getCorreos() as $key => $correo) {
+			  $correoValido = $this->is_valid_email($correo);
+	
+			  if ($correoValido) {
+				array_push($to,$correo);
+				$this->templateAssignment($trazabilidad, $to);
+			  }else{
+				$correosInvalidos[] = $correo;
+			  }
+			};*/
+			
+			if ($comparendo->getInfractorEmail()) {
+				$this->mailer->templateNotify($trazabilidad, $to);
+			}
+	
+			if ($estado->getReparto()) {
+				$funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+					2
+				);
+	
+				$trazabilidad->setFuncionario($funcionario);
+				$em->flush();
+	
+				$this->mailer->templateAssignment($trazabilidad, $to);
+			}
 		}
 
 		return $trazabilidad;

@@ -1,3 +1,7 @@
+jhweb_config_cfg_auditoria:
+    resource: "@JHWEBConfigBundle/Controller/CfgAuditoriaController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

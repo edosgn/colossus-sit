@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form;
+namespace JHWEB\ConfigBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,14 +13,14 @@ class CfgAuditoriaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('url')->add('token')->add('fecha')->add('datos')->add('tipoPeticion');
+        $builder->add('url')->add('token')->add('fecha')->add('datos')->add('accion')->add('ip')->add('funcionario');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\CfgAuditoria'
+            'data_class' => 'JHWEB\ConfigBundle\Entity\CfgAuditoria'
         ));
     }
 
@@ -29,7 +29,7 @@ class CfgAuditoriaType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_cfgauditoria';
+        return 'jhweb_configbundle_cfgauditoria';
     }
 
 
