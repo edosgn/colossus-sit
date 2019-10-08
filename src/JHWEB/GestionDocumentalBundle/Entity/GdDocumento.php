@@ -31,7 +31,7 @@ class GdDocumento
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_radicado", type="string", length=10)
+     * @ORM\Column(name="numero_radicado", type="string", length=10, nullable=true)
      */
     private $numeroRadicado;
 
@@ -45,6 +45,13 @@ class GdDocumento
     /**
      * @var int
      *
+     * @ORM\Column(name="consecutivo_salida", type="integer", nullable=true)
+     */
+    private $consecutivoSalida;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="consecutivo", type="integer")
      */
     private $consecutivo;
@@ -52,7 +59,7 @@ class GdDocumento
     /**
      * @var int
      *
-     * @ORM\Column(name="folios", type="integer")
+     * @ORM\Column(name="folios", type="integer", nullable=true)
      */
     private $folios;
 
@@ -240,6 +247,7 @@ class GdDocumento
     private $comparendo;
 
 
+
     /**
      * Get id
      *
@@ -320,6 +328,30 @@ class GdDocumento
     public function getNumeroSalida()
     {
         return $this->numeroSalida;
+    }
+
+    /**
+     * Set consecutivoSalida
+     *
+     * @param integer $consecutivoSalida
+     *
+     * @return GdDocumento
+     */
+    public function setConsecutivoSalida($consecutivoSalida)
+    {
+        $this->consecutivoSalida = $consecutivoSalida;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivoSalida
+     *
+     * @return integer
+     */
+    public function getConsecutivoSalida()
+    {
+        return $this->consecutivoSalida;
     }
 
     /**

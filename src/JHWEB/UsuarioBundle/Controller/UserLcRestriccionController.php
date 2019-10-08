@@ -61,43 +61,53 @@ class UserLcRestriccionController extends Controller
                 $comparendo=null;
             }
 
-            foreach ($licanciasConduccion as $key => $userLicenciaConduccion) {
-                $userLcRestriccion = new UserLcRestriccion();
-                $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
-                $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
-                $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
-                $userLcRestriccion->setTipoActo($params->tipoActo);
-                $userLcRestriccion->setNumeroResolucion($params->numResolucion);
-                $userLcRestriccion->setEstado('ACTIVO');
-                $userLcRestriccion->setActivo(true);
+            $fechaInicio = new \Datetime($params->fechaInicio);
+            $fechaFin = new \Datetime($params->fechaFin);
 
-                if($comparendo){
-                    $userLcRestriccion->setComparendo($comparendo); 
+            if($fechaInicio > $fechaFin){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Fecha inicio no puede ser mayor a la fecha fin",
+                );
+            }else{
+                foreach ($licanciasConduccion as $key => $userLicenciaConduccion) {
+                    $userLcRestriccion = new UserLcRestriccion();
+                    $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
+                    $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
+                    $userLcRestriccion->setTipoActo($params->tipoActo);
+                    $userLcRestriccion->setNumeroResolucion($params->numResolucion);
+                    $userLcRestriccion->setEstado('ACTIVO');
+                    $userLcRestriccion->setActivo(true);
+    
+                    if($comparendo){
+                        $userLcRestriccion->setComparendo($comparendo); 
+                    }
+        
+                    if($params->tipo == 'CANCELACION'){
+                        $userLcRestriccion->setFechaCancelacion(new \Datetime($params->fechaCancelacion));
+                        $userLcRestriccion->setTipo('CANCELACION');
+                        $userLicenciaConduccion->setEstado('CANCELADA');
+        
+                    }else{
+                        $userLcRestriccion->setFechaInicio(new \Datetime($params->fechaInicio));
+                        $userLcRestriccion->setFechaFin(new \Datetime($params->fechaFin));
+                        $userLcRestriccion->setTipo('SUSPENSION');
+                        $userLicenciaConduccion->setEstado('SUSPENDIDA');
+                    }
+                    $userLicenciaConduccion->setActivo(false);
+        
+                    $em->persist($userLcRestriccion);
+                    $em->persist($userLicenciaConduccion);
+                    $em->flush();
                 }
     
-                if($params->tipo == 'CANCELACION'){
-                    $userLcRestriccion->setFechaCancelacion(new \Datetime($params->fechaCancelacion));
-                    $userLcRestriccion->setTipo('CANCELACION');
-                    $userLicenciaConduccion->setEstado('CANCELADA');
-    
-                }else{
-                    $userLcRestriccion->setFechaInicio(new \Datetime($params->fechaFin));
-                    $userLcRestriccion->setFechaFin(new \Datetime($params->fechaFin));
-                    $userLcRestriccion->setTipo('SUSPENSION');
-                    $userLicenciaConduccion->setEstado('SUSPENDIDA');
-                }
-                $userLicenciaConduccion->setActivo(false);
-    
-                $em->persist($userLcRestriccion);
-                $em->persist($userLicenciaConduccion);
-                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito.", 
+                );
             }
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con éxito.", 
-            );
         } else {
           $response = array(
                 'status' => 'error',
@@ -105,6 +115,7 @@ class UserLcRestriccionController extends Controller
                 'message' => "Autorización no valida",
             );
         }
+        
         return $helpers->json($response);
     }
 
