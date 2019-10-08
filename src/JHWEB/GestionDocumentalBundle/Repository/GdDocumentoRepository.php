@@ -23,6 +23,19 @@ class GdDocumentoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
+	//Obtiene el numero maximo de documentos por año para la salida
+    public function getMaximoSalida($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(d.consecutivoSalida) AS maximo 
+            FROM JHWEBGestionDocumentalBundle:GdDocumento d
+            WHERE YEAR(d.fechaRegistro) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
+
 	//Obtiene la lista de documentos por tipo de filtro
     public function getByFilter($params){  
         $em = $this->getEntityManager();

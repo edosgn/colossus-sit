@@ -518,7 +518,6 @@ class GdDocumentoController extends Controller
             );
             
             if ($documento) {
-
                 $file = $request->files->get('file');
                
                 if ($file) {
@@ -866,6 +865,143 @@ class GdDocumentoController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new gdDocumento entity.
+     *
+     * @Route("/exit", name="gddocumento_exit")
+     * @Method({"GET", "POST"})
+     */
+    public function exitAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = new GdDocumento();
+
+            $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
+
+            $consecutivoSalida = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getMaximoSalida(
+                $fechaRegistro->format('Y')
+            );
+            $consecutivoSalida = (empty($consecutivoSalida['maximo']) ? 1 : $consecutivoSalida['maximo']+=1);
+            $documento->setConsecutivo($consecutivoSalida);
+
+            $documento->setNumeroSalida('SH-STTOTTEDN-'.str_pad($consecutivoSalida, 3, '0', STR_PAD_LEFT).'-'.$fechaRegistro->format('Y'));
+
+            $documento->setFechaRegistro($fechaRegistro);
+            $documento->setFolios($params->documento->folios);
+
+            if ($params->documento->peticionarioNombres) {
+                $documento->setPeticionarioNombres(
+                    strtoupper($params->documento->peticionarioNombres)
+                );
+            }
+
+            if ($params->documento->peticionarioApellidos) {
+                $documento->setPeticionarioApellidos(
+                    strtoupper($params->documento->peticionarioApellidos)
+                );
+            }
+
+            if ($params->documento->identificacion) {
+                $documento->setIdentificacion($params->documento->identificacion);
+            }
+
+            if ($params->documento->entidadCargo) {
+                $documento->setEntidadCargo(strtoupper($params->documento->entidadCargo));
+            }
+
+            if ($params->documento->entidadNombre) {
+                $documento->setEntidadNombre(strtoupper($params->documento->entidadNombre));
+            }
+
+            if (isset($params->documento->idTipoIdentificacion)) {
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
+                    $params->documento->idTipoIdentificacion
+                );
+                $documento->setTipoIdentificacion($tipoIdentificacion);
+            }
+
+            $persona = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find($params->idFuncionario);
+
+
+            $documento->setOrganismoTransito($persona->getOrganismoTransito());
+
+            $medioCorrespondenciaEnvio = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
+                $params->idMedioCorrespondenciaEnvio
+            );
+            $documento->setMedioCorrespondenciaEnvio($medioCorrespondenciaEnvio);
+            $documento->setFechaEnvio(new \Datetime(date('Y-m-d h:i:s')));
+            $documento->setDetalleEnvio($params->detalleEnvio);
+            $documento->setObservaciones($params->observaciones);
+            $documento->setEstado('ENVIADA');
+
+            if ($params->documento->idTipoCorrespondencia) {
+                $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find(
+                    $params->documento->idTipoCorrespondencia
+                );
+                $documento->setTipoCorrespondencia($tipoCorrespondencia);
+            }
+
+            if ($params->documento->vigencia) {
+                $vigencia = $params->documento->vigencia;
+            }else{
+                $vigencia = $tipoCorrespondencia->getDiasVigencia();
+            }
+
+            $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
+                new \Datetime($params->documento->fechaLlegada),
+                $vigencia + 1
+            );
+            $documento->setFechaVencimiento($fechaVencimiento);
+            $documento->setDiasVigencia($vigencia);
+            $documento->setNumeroCarpeta($params->documento->numeroCarpeta);
+
+            $file = $request->files->get('file');
+               
+            if ($file) {
+                $extension = $file->guessExtension();
+                //$filename = md5(rand().time()).".".$extension;
+                $filename = 'radicado_'.$documento->getNumeroSalida().".".$extension;
+                $dir=__DIR__.'/../../../../web/docs';
+
+                $file->move($dir,$filename);
+                $documento->setUrlFinalizado($filename);
+                $documento->setEstado('FINALIZADO');
+            }
+            if ($params->idComparendo) {
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                    $params->idComparendo
+                );
+                $documento->setComparendo($comparendo);
+            }
+            
+            $em->persist($documento);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito, su número de radicado es: ".$documento->getNumeroRadicado(),
+                'data' => $documento
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
         return $helpers->json($response);
     }
 }

@@ -67,7 +67,7 @@ class CvCdoCfgEstadoController extends Controller
             $estado = new CvCdoCfgEstado();
 
             $estado->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
-            $estado->setSigla($params->codigo);
+            $estado->setCodigo($params->codigo);
             $estado->setSigla(mb_strtoupper($params->sigla, 'utf-8'));
             $estado->setDias($params->dias);
             $estado->setHabiles($params->habiles);
@@ -165,9 +165,9 @@ class CvCdoCfgEstadoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("data",null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
-            
+
             $em = $this->getDoctrine()->getManager();
             
             $estado = $em->getRepository("JHWEBContravencionalBundle:CvCdoCfgEstado")->find(
@@ -176,6 +176,7 @@ class CvCdoCfgEstadoController extends Controller
 
             if ($estado) {
                 $estado->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                $estado->setCodigo($params->codigo);
                 $estado->setSigla(mb_strtoupper($params->sigla, 'utf-8'));
                 $estado->setDias($params->dias);
                 $estado->setHabiles($params->habiles);

@@ -42,7 +42,6 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getByParametros($params){
-        
         $fechaDesde = new \DateTime($params->fechaDesde);
         $fechaHasta = new \DateTime($params->fechaHasta);
         $comparendos = $params->comparendos;
@@ -371,6 +370,27 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
             'fechaFinal' => $fechaFinal
         ));
         
+        return $consulta->getResult();
+    }
+
+    public function getReincidenciasByMonths($identificacion, $fechaFinal, $meses){
+        $fechaInicial = new \DateTime(date("Y-m-d",strtotime($fechaFinal->format('Y-m-d')."- ".$meses." month"))); 
+
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c
+        from JHWEBContravencionalBundle:CvCdoComparendo c
+        WHERE c.infractorIdentificacion = :identificacion
+        AND c.fecha BETWEEN :fechaInicial AND :fechaFinal";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'identificacion' => $identificacion,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+
         return $consulta->getResult();
     }
 }
