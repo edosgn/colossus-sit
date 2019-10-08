@@ -376,9 +376,15 @@ class CvCdoComparendo
      */
     private $gradoAlcoholemia;
 
-
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="reincidencia", type="boolean")
+     */
+    private $reincidencia;
+
+    /**
+     * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
@@ -2077,5 +2083,29 @@ class CvCdoComparendo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set reincidencia
+     *
+     * @param boolean $reincidencia
+     *
+     * @return CvCdoComparendo
+     */
+    public function setReincidencia($reincidencia)
+    {
+        $this->reincidencia = $reincidencia;
+
+        return $this;
+    }
+
+    /**
+     * Get reincidencia
+     *
+     * @return boolean
+     */
+    public function getReincidencia()
+    {
+        return $this->reincidencia;
     }
 }
