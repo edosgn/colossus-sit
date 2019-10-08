@@ -56,7 +56,7 @@ class CvCdoTrazabilidadController extends Controller
             $trazabilidadNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                 array(
                     'estado' => $params->idComparendoEstado,
-                    'comparendo' => $audienciaparams->idComparendo
+                    'comparendo' => $params->idComparendo
                 )
             );
 
@@ -92,7 +92,7 @@ class CvCdoTrazabilidadController extends Controller
                 //Valida si el estado a registrar es SANCIONADO
                 if ($estado->getId() == 2) {
                     //Valida que tenga auto de no comparecencia
-                    $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(
+                    $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                         array(
                             'comparendo' => $params->idComparendo,
                             'estado' => 14
@@ -107,9 +107,14 @@ class CvCdoTrazabilidadController extends Controller
 
                         $audiencia->setFecha(new \Datetime(date('Y-m-d')));
                         $audiencia->setHora(new \Datetime(date('h:i:s A')));
-                        $audiencia->setTipo('AUTOMATICA');
+                        $audiencia->setEstado('AUTOMATICA');
                         $audiencia->setActivo(true);
                         $audiencia->setComparendo($comparendo);
+
+                        $tipo = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->find(
+                            1
+                        );
+                        $audiencia->setTipo($tipo);
 
                         $em->persist($audiencia);
                         $em->flush();
@@ -132,6 +137,11 @@ class CvCdoTrazabilidadController extends Controller
                         );
                         $helpers->generateTrazabilidad($comparendo, $estadoNew);
                     }
+
+                    $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                        2
+                    );
+                    $helpers->generateTrazabilidad($comparendo, $estadoNew);
 
                     $response = array(
                         'status' => 'success',
@@ -182,6 +192,12 @@ class CvCdoTrazabilidadController extends Controller
                             );
                             $helpers->generateTrazabilidad($comparendo, $estadoNew);
                         }
+
+                        //Inserta el estado de cobro coactivo
+                        $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                            3
+                        );
+                        $helpers->generateTrazabilidad($comparendo, $estadoNew);
 
                         $response = array(
                             'status' => 'success',

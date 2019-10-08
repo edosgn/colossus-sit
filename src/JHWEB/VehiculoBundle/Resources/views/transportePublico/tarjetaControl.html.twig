@@ -13,15 +13,15 @@
     <h2>TARJETA DE CONTROL</h2>
     <h4>PERSONAL E INTRANSFERIBLE</h4>
     <div style="border: 1px solid black, border-radius: 4%; ; height: 10px !auto important; width: 15%;">
-        <p font-size="20%">No <h2 style="color:red">{{ insumo.numero }}</h2></p>
+        <p font-size="20%">No <h2 style="color:red">{{ insumoTarjetaControl.numero }}</h2></p>
     </div>
     <hr style="border: 0; border-top: 1px solid #999; border-bottom: 1px solid #333; height:0;">
     <div style="border: 1px solid black, border-radius: 4%; height: 50px !auto important; width: 8%;"></div>
-    <p>{{ ciudadano.primerNombre ciudadano.segundoNombre }}</p>
+    <p>{{ ciudadano.primerNombre}} {{ ciudadano.segundoNombre }}</p>
     <p>____________________________________________________</p>
     <p>NOMBRE(S)</p>
     <br>
-    <p>{{ ciudadano.primerApellido ciudadano.segundoApellido }}</p>
+    <p>{{ ciudadano.primerApellido}} {{ ciudadano.segundoApellido }}</p>
     <p>____________________________________________________</p>
     <p>APELLIDO(S)</p>
     <br>
@@ -36,7 +36,7 @@
     <hr style="border: 0; border-top: 1px solid #999; border-bottom: 1px solid #333; height:0;">
     <h2>EMRESA: {{ empresaTransporte.empresa.nombre }}</h2>
     <h4>PLACAS: {{ vehiculo.placa.numero }}</h4>
-    <h4>No DE ORDEN: {{ insumo.numero }}</h4>
+    <h4>No DE ORDEN: {{ insumoTarjetaControl.numero }}</h4>
     <h4>No: {{ tecnomecanica.numeroControl }}</h4>
     <p>CERT. REVISIÓN TÉNICO MECÁNICA Y DE GASES</p>
     <br>

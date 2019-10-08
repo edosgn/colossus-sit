@@ -206,9 +206,24 @@ class CvCdoComparendoController extends Controller
                 $comparendo->setCategoria($categoria->getNombre());
             }
 
-            $comparendo->setInfractorIdentificacion(
-                $params->infractor->identificacion
-            );
+            if ($params->infractor->identificacion) {
+                $comparendo->setInfractorIdentificacion(
+                    $params->infractor->identificacion
+                );
+
+                //Buscar si el infractor es reincidente en los ultimos 6 meses
+                $comparendosOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getReincidenciasByMonths(
+                    $params->infractor->idCategoriaLicenciaConduccion,
+                    $comparendo->getFecha(),
+                    6
+                );
+
+                if ($comparendosOld) {
+                    $comparendo->setReincidencia(true);
+                } else {
+                    $comparendo->setReincidencia(false);
+                }
+            }
 
             $comparendo->setFechaExpedicion(
                 new \Datetime($params->infractor->fechaExpedicion)
@@ -381,12 +396,25 @@ class CvCdoComparendoController extends Controller
                     $em->flush();
                 }
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con exito",
-                    'data' => $comparendo,
-                );
+                if ($comparendo->getReincidencia()) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito, el infractor es reincidente.",
+                        'data' => $comparendo,
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                        'data' => $comparendo,
+                    );
+                }
+                
+                
             }else{
                 $response = array(
                     'status' => 'error',
@@ -431,7 +459,7 @@ class CvCdoComparendoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado con exito",
+                    'message' => "Registro encontrado con éxito",
                     'data' => $comparendo
                 );
             }else{
@@ -830,10 +858,25 @@ class CvCdoComparendoController extends Controller
                 $tipoIdentificacion
             );
         }
+        
+        if ($arrayComparendo['identificacion'] && $arrayComparendo['identificacion'] != '') {
+            $comparendo->setInfractorIdentificacion(
+                $arrayComparendo['identificacion']
+            );
 
-        $comparendo->setInfractorIdentificacion(
-            $arrayComparendo['identificacion']
-        );
+            //Buscar si el infractor es reincidente en los ultimos 6 meses
+            $comparendosOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getReincidenciasByMonths(
+                $arrayComparendo['identificacion'],
+                $comparendo->getFecha(),
+                6
+            );
+
+            if ($comparendosOld) {
+                $comparendo->setReincidencia(true);
+            } else {
+                $comparendo->setReincidencia(false);
+            }
+        }
 
         $comparendo->setInfractorNombres(
             $arrayComparendo['nombres'].' '.$arrayComparendo['apellidos']
@@ -909,7 +952,7 @@ class CvCdoComparendoController extends Controller
             'title' => 'Perfecto!',
             'status' => 'success',
             'code' => 200,
-            'message' => "Perfecto! Fila:(".$fila.") Registro creado con exito.",
+            'message' => "Perfecto! Fila:(".$fila.") Registro creado con éxito.",
         );
 
         return $response;
@@ -1638,8 +1681,12 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, $comparendo->getInfractorNombres() . ",");
                         fwrite($archivo, $comparendo->getInfractorApellidos() . ",");
 
-                        $infractorEdad = $this->get("app.helpers")->calculateAge($comparendo->getInfractorFechaNacimiento()->format('Y/m/d'));
-                        fwrite($archivo, $infractorEdad . ",");
+                        if ($comparendo->getInfractorFechaNacimiento()) {
+                            $infractorEdad = $this->get("app.helpers")->calculateAge($comparendo->getInfractorFechaNacimiento()->format('Y/m/d'));
+                            fwrite($archivo, $infractorEdad . ",");
+                        }else{
+                            fwrite($archivo, ",");
+                        }
 
                         fwrite($archivo, $comparendo->getInfractorDireccion() . ",");
                         fwrite($archivo, $comparendo->getInfractorEmail() . ",");

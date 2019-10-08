@@ -1259,7 +1259,6 @@ class FroTrteSolicitudController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        
         $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
             array(
                 'vehiculo' => $params->idVehiculo,
@@ -1291,9 +1290,25 @@ class FroTrteSolicitudController extends Controller
                 $tarjetaOperacionNew->setVehiculo($vehiculo);
                 $tarjetaOperacionNew->setActivo(true);
 
-                /* $tarjetaOperacion->setActivo(false); */
+                //para tarjetas de los insumos utilizados
+                $insumoTarjetaOperacion = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findOneBy(
+                    array(
+                        'numero' =>$params->numeroTarjetaOperacion
+                    )
+                ); 
+                $insumoTarjetaControl = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findOneBy(
+                    array(
+                        'numero' =>$params->numeroTarjetaControl
+                    )
+                ); 
+
+                $insumoTarjetaOperacion->setEstado('ASIGNADO');
+                $insumoTarjetaControl->setEstado('ASIGNADO');
+                // fin insumos
                 
                 /* $em->persist($tarjetaOperacion); */
+                $em->persist($insumoTarjetaOperacion);
+                $em->persist($insumoTarjetaControl);
                 $em->persist($tarjetaOperacionNew);
                 $em->flush();
             
@@ -3303,6 +3318,102 @@ class FroTrteSolicitudController extends Controller
             
             return new Response(
                 $this->get('app.pdf')->templatePreview($html, 'EXPEDICIÓN TARJETA OPERACIÓN'),
+                200,
+                array(
+                    'Content-Type'        => 'application/pdf',
+                    'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                )
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+    }
+
+    /**
+     * Exporta la tarjeta de control.
+     *
+     * @Route("/pdf/expedicion/tarjeta/control", name="frotrtesolicitud_expedicion_tarjeta_control")
+     * @Method("POST")
+     */
+    public function pdfExpedicionTarjetaControlAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $fechaActual = new \Datetime();
+
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'numeroTarjetaOperacion' => $params->numeroTarjetaOperacion,
+                    'activo' => true
+                )
+            );
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion,
+                    'activo' => true
+                )
+            );
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
+                    'activo' => true
+                )
+            );
+
+            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $tarjetaOperacion->getVehiculo()->getId(),
+                    'activo' => true
+                )
+            );
+
+            $insumoTarjetaControl = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findOneBy(
+                array(
+                    'numero' => $params->numeroTarjetaControl
+                )
+            );
+            $tecnomecanica = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->findOneBy(
+                array(
+                    'vehiculo' => $tarjetaOperacion->getVehiculo()->getId(),
+                    'activo' => true
+                )
+            );
+
+            $vehiculo = $tarjetaOperacion->getVehiculo();
+
+            if($tarjetaOperacion) {
+                $html = $this->renderView('@JHWEBVehiculo/transportePublico/tarjetaControl.html.twig', array(
+                    'tarjetaOperacion' => $tarjetaOperacion, 
+                    'fechaActual' => $fechaActual,
+                    'ciudadano' => $ciudadano,
+                    'organismoTransito' => $funcionario->getOrganismoTransito(),
+                    'numeroTarjetaControl' => $params->numeroTarjetaControl,
+                    'insumoTarjetaControl' => $insumoTarjetaControl,
+                    'empresaTransporte' => $asignacion->getEmpresaTransporte(),
+                    'vehiculo' => $vehiculo,
+                    'tecnomecanica' => $tecnomecanica
+                )); 
+
+            }
+            
+            return new Response(
+                $this->get('app.pdf')->templatePreview($html, 'EXPEDICIÓN TARJETA CONTROL'),
                 200,
                 array(
                     'Content-Type'        => 'application/pdf',

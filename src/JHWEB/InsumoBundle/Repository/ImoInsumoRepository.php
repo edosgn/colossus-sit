@@ -145,4 +145,46 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    public function findFirstByModuloAndReferencia($idModulo)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MIN(i.id)
+        FROM JHWEBInsumoBundle:ImoInsumo i,
+        JHWEBInsumoBundle:ImoCfgTipo t
+
+        WHERE i.tipo = t.id
+        AND t.referencia = 'TO'
+        AND t.modulo = :idModulo
+        AND i.estado = 'DISPONIBLE'"; 
+ 
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idModulo' => $idModulo,
+        ));
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function findTarjetaControlByModuloAndReferencia($idModulo)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MIN(i.id)
+        FROM JHWEBInsumoBundle:ImoInsumo i,
+        JHWEBInsumoBundle:ImoCfgTipo t
+
+        WHERE i.tipo = t.id
+        AND t.referencia = 'TC'
+        AND t.modulo = :idModulo
+        AND i.estado = 'DISPONIBLE'"; 
+ 
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idModulo' => $idModulo,
+        ));
+        return $consulta->getOneOrNullResult();
+    }
+
 }
