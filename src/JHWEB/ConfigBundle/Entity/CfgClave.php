@@ -155,7 +155,7 @@ class CfgClave
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion;
+        return $this->fechaCreacion->format('Y-m-d');
     }
 
     /**
@@ -179,7 +179,7 @@ class CfgClave
      */
     public function getHoraCreacion()
     {
-        return $this->horaCreacion;
+        return $this->horaCreacion->format('H:m');
     }
 
     /**
@@ -203,7 +203,7 @@ class CfgClave
      */
     public function getFechaVencimiento()
     {
-        return $this->fechaVencimiento;
+        return $this->fechaVencimiento->format('Y-m-d');
     }
 
     /**
@@ -227,7 +227,7 @@ class CfgClave
      */
     public function getHoraVencimiento()
     {
-        return $this->horaVencimiento;
+        return $this->horaVencimiento->format('H:m');
     }
 
     /**
