@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgclave</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cfgClave.id }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ cfgClave.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Observacion</th>
+                <td>{{ cfgClave.observacion }}</td>
+            </tr>
+            <tr>
+                <th>Fechacreacion</th>
+                <td>{% if cfgClave.fechaCreacion %}{{ cfgClave.fechaCreacion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horacreacion</th>
+                <td>{% if cfgClave.horaCreacion %}{{ cfgClave.horaCreacion|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechavencimiento</th>
+                <td>{% if cfgClave.fechaVencimiento %}{{ cfgClave.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horavencimiento</th>
+                <td>{% if cfgClave.horaVencimiento %}{{ cfgClave.horaVencimiento|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if cfgClave.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgclave_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cfgclave_edit', { 'id': cfgClave.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
