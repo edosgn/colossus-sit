@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\ConfigBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CfgAuditoria
  *
  * @ORM\Table(name="cfg_auditoria")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgAuditoriaRepository")
+ * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgAuditoriaRepository")
  */
 class CfgAuditoria
 {
@@ -62,6 +62,11 @@ class CfgAuditoria
      * @ORM\Column(name="ip", type="string", length=255)
      */
     private $ip;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="tramitesSolicitud")
+     **/
+    protected $funcionario;
 
 
     /**
@@ -143,7 +148,7 @@ class CfgAuditoria
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d h:i:s A');
+        return $this->fecha;
     }
 
     /**
@@ -216,5 +221,29 @@ class CfgAuditoria
     public function getIp()
     {
         return $this->ip;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return CfgAuditoria
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }

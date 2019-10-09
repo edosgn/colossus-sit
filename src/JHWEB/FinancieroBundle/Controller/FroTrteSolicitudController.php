@@ -3413,7 +3413,7 @@ class FroTrteSolicitudController extends Controller
             }
             
             return new Response(
-                $this->get('app.pdf')->templatePreview($html, 'EXPEDICIÓN TARJETA CONTROL'),
+                $this->get('app.pdf')->templateTarjetaControl($html, 'EXPEDICIÓN TARJETA CONTROL'),
                 200,
                 array(
                     'Content-Type'        => 'application/pdf',
