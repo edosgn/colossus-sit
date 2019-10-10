@@ -72,8 +72,7 @@ class CfgClaveController extends Controller
                 $params->idFuncionario
             );
 
-            var_dump($horaCreacion);
-            die();
+            
             $horaVencimiento = $helpers->getHoraVencimiento($horaCreacion,5);
 
             $cfgClave = new Cfgclave();
