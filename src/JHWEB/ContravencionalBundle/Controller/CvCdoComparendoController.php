@@ -1605,7 +1605,7 @@ class CvCdoComparendoController extends Controller
                 $dir=__DIR__.'/../../../../web/docs/';
                 $file = $dir. '"' . $organismoTransito->getDivipo() . 'comp.txt' . '"'; 
                 
-                if( file_exists("comp.txt") == false ){
+                if( file_exists('"' . $organismoTransito->getDivipo() . "comp.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
@@ -1785,7 +1785,7 @@ class CvCdoComparendoController extends Controller
                 $dir=__DIR__.'/../../../../web/docs/';
                 $file = $dir. '"' . $organismoTransito->getDivipo() . "resol.txt"; 
                 
-                if( file_exists("resol.txt") == false ){
+                if( file_exists('"' . $organismoTransito->getDivipo() . "resol.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
@@ -1892,7 +1892,7 @@ class CvCdoComparendoController extends Controller
                 $dir=__DIR__.'/../../../../web/docs/';
                 $file = $dir. '"' . $organismoTransito->getDivipo() . "rec.txt"; 
                 
-                if( file_exists("rec.txt") == false ){
+                if( file_exists('"' . $organismoTransito->getDivipo() . "rec.txt") == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
