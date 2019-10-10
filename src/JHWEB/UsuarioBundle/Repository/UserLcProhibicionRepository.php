@@ -18,7 +18,7 @@ class UserLcProhibicionRepository extends \Doctrine\ORM\EntityRepository
         FROM JHWEBUsuarioBundle:UserLcProhibicion up
         WHERE up.fechaInicio BETWEEN :fechaInicial AND :fechaFinal";
 
-        $consulta = $em->createQuery($dql);
+        $consulta = $em->createQuery($dql); 
         $consulta->setParameters(array(
             'fechaInicial' => $fechaInicial,
             'fechaFinal' => $fechaFinal,
