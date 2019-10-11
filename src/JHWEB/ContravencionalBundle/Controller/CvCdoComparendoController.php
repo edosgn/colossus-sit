@@ -1603,9 +1603,9 @@ class CvCdoComparendoController extends Controller
             
             if($params->tipoReporte == 1) {
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir. '"' . $organismoTransito->getDivipo() . 'comp.txt' . '"'; 
+                $file = $dir. $organismoTransito->getDivipo() . 'comp.txt'; 
                 
-                if( file_exists('"' . $organismoTransito->getDivipo() . "comp.txt") == false ){
+                if( file_exists($organismoTransito->getDivipo() . 'comp.txt') == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
@@ -1763,9 +1763,9 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, substr($comparendo->getTestigoDireccion(),0,40) . ",");
                         fwrite($archivo, $comparendo->getTestigoTelefono() . ",");
                         fwrite($archivo, $comparendo->getValorPagar() . ",");
-                        if($comparendo->getValorAdicional()) {
+                        if($comparendo->getValorAdicional() != null) {
                             fwrite($archivo, $comparendo->getValorAdicional() . ",");
-                        } elseif (!$comparendo->getValorAdicional()) {
+                        } elseif ($comparendo->getValorAdicional() == null) {
                             fwrite($archivo, "0" . ",");
                         }
                         if($comparendo->getOrganismoTransito() != null) {
@@ -1805,13 +1805,13 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => '"' . $organismoTransito->getDivipo() . 'comp.txt'
+                    'data' => $organismoTransito->getDivipo() . 'comp.txt'
                 );
             } elseif($params->tipoReporte == 2){
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir. '"' . $organismoTransito->getDivipo() . "resol.txt"; 
+                $file = $dir. $organismoTransito->getDivipo() . 'resol.txt'; 
                 
-                if( file_exists('"' . $organismoTransito->getDivipo() . "resol.txt") == false ){
+                if( file_exists($organismoTransito->getDivipo() . 'resol.txt') == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
@@ -1911,14 +1911,14 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => '"' . $organismoTransito->getDivipo() . "resol.txt"
+                    'data' => $organismoTransito->getDivipo() . "resol.txt"
                 );  
             
             } elseif($params->tipoReporte == 3){
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir. '"' . $organismoTransito->getDivipo() . "rec.txt"; 
+                $file = $dir. $organismoTransito->getDivipo() . 'rec.txt'; 
                 
-                if( file_exists('"' . $organismoTransito->getDivipo() . "rec.txt") == false ){
+                if( file_exists($organismoTransito->getDivipo() . 'rec.txt') == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
@@ -2023,7 +2023,7 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Archivo generado",
-                    'data' => '"' . $organismoTransito->getDivipo() . "rec.txt"
+                    'data' => $organismoTransito->getDivipo() . "rec.txt"
                 );
             }
             else{
