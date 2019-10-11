@@ -45,9 +45,9 @@ class FroInfraccion
     /**
      * @var bool
      *
-     * @ORM\Column(name="retiene", type="boolean")
+     * @ORM\Column(name="suspende", type="boolean")
      */
-    private $retiene;
+    private $suspende;
 
     /**
      * @var bool
@@ -159,27 +159,27 @@ class FroInfraccion
     }
 
     /**
-     * Set retiene
+     * Set suspende
      *
-     * @param boolean $retiene
+     * @param boolean $suspende
      *
      * @return FroInfraccion
      */
-    public function setRetiene($retiene)
+    public function setSuspende($suspende)
     {
-        $this->retiene = $retiene;
+        $this->suspende = $suspende;
 
         return $this;
     }
 
     /**
-     * Get retiene
+     * Get suspende
      *
      * @return boolean
      */
-    public function getRetiene()
+    public function getSuspende()
     {
-        return $this->retiene;
+        return $this->suspende;
     }
 
     /**
