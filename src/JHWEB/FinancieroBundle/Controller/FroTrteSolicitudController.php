@@ -1025,7 +1025,9 @@ class FroTrteSolicitudController extends Controller
                         )
                     );
 
-                    $acreedorOld->setActivo(false);
+                    if($acreedorOld){
+                        $acreedorOld->setActivo(false);
+                    }
 
                     $acreedor = new VhloAcreedor();
 
