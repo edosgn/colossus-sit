@@ -2667,6 +2667,8 @@ class FroTrteSolicitudController extends Controller
             $fechaInicial = new \Datetime($params->fechaInicial);
             $fechaFinal = new \Datetime($params->fechaFinal);
 
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+
             $arrayReportes = null;
 
             for ($i=1; $i < 8; $i++) { 
@@ -2679,9 +2681,9 @@ class FroTrteSolicitudController extends Controller
                     );
     
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTAMVEHI.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "mvehi.DAT"; 
     
-                    if( file_exists("TTAMVEHI.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "mvehi.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2785,7 +2787,7 @@ class FroTrteSolicitudController extends Controller
     
                     fclose($archivo);   // Cerrar el archivo
 
-                    $arrayReportes[] = "TTAMVEHI.DAT";
+                    $arrayReportes[] = $organismoTransito->getDivipo() . "mvehi.DAT";
                 } elseif($i == 2){
                     $propetariosActuales = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->getByFechasForFile(
                         $params->idOrganismoTransito,
@@ -2795,9 +2797,9 @@ class FroTrteSolicitudController extends Controller
                     );
     
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTAMPROP.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "mprop.DAT"; 
     
-                    if( file_exists("TTAMPROP.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "mprop.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // a$archivo el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2916,7 +2918,7 @@ class FroTrteSolicitudController extends Controller
     
                     fclose($archivo);   // Cerrar el archivo
     
-                    $arrayReportes[] = "TTAMPROP.DAT";
+                    $arrayReportes[] = $organismoTransito->getDivipo() . "mprop.DAT";
                 }
                 else if($i == 3) {
                     $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites(
@@ -2927,9 +2929,9 @@ class FroTrteSolicitudController extends Controller
                     );
                     
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTAMTRVE.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "mtrve.DAT"; 
     
-                    if( file_exists("TTAMTRVE.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "mtrve.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -2953,7 +2955,7 @@ class FroTrteSolicitudController extends Controller
                             );
                             
                             if($tramite->getTramiteFactura() != null) {
-                                fwrite($archivo, str_pad($tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(), 2,' ', STR_PAD_RIGHT));
+                                fwrite($archivo, str_pad($tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(), 2,'0', STR_PAD_LEFT));
                             } elseif ($tramite->getTramiteFactura() == null) {
                                 fwrite($archivo, str_pad("", 2,' ', STR_PAD_RIGHT));
                             }
@@ -2983,7 +2985,7 @@ class FroTrteSolicitudController extends Controller
     
                         fclose($archivo);   // Cerrar el archivo
     
-                        $arrayReportes[] = "TTAMTRVE.DAT";
+                        $arrayReportes[] = $organismoTransito->getDivipo() . "mtrve.DAT";
                     }
                 }
                 else if($i == 4) {
@@ -2993,9 +2995,9 @@ class FroTrteSolicitudController extends Controller
                     );
                     
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTAMCAUT.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "mcaut.DAT"; 
     
-                    if( file_exists("TTAMCAUT.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "mcaut.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3047,15 +3049,15 @@ class FroTrteSolicitudController extends Controller
     
                         fclose($archivo);   // Cerrar el archivo
     
-                        $arrayReportes[] = "TTAMCAUT.DAT";
+                        $arrayReportes[] = $organismoTransito->getDivipo() . "mcaut.DAT";
                     }
                 }
                 else if($i == 5) {
                     
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTAMCANC.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "mcanc.DAT"; 
     
-                    if( file_exists("TTAMCANC.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "mcanc.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3095,14 +3097,14 @@ class FroTrteSolicitudController extends Controller
     
                         fclose($archivo);   // Cerrar el archivo
     
-                        $arrayReportes[] = "TTAMCANC.DAT";
+                        $arrayReportes[] = $organismoTransito->getDivipo() . "mcanc.DAT";
                     }
                 }
                 else if($i == 6) {
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTARUNTPREN.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "runtpren.DAT"; 
     
-                    if( file_exists("TTARUNTPREN.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "runtpren.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3180,13 +3182,13 @@ class FroTrteSolicitudController extends Controller
     
                         fclose($archivo);   // Cerrar el archivo
     
-                        $arrayReportes[] = "TTARUNTPREN.DAT";
+                        $arrayReportes[] = $organismoTransito->getDivipo() . "runtpren.DAT";
                     }
                 } else if($i == 7) {
                     $dir=__DIR__.'/../../../../web/docs/';
-                    $file = $dir."TTARUNTRADI.DAT"; 
+                    $file = $dir. $organismoTransito->getDivipo() . "runtradi.DAT"; 
     
-                    if( file_exists("TTARUNTRADI.DAT") == false ){
+                    if( file_exists($organismoTransito->getDivipo() . "runtradi.DAT") == false ){
                         $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                     }else{
                         $archivo = fopen($file,"r"); 
@@ -3225,7 +3227,7 @@ class FroTrteSolicitudController extends Controller
     
                         fclose($archivo);   // Cerrar el archivo
     
-                        $arrayReportes[] = "TTARUNTRADI.DAT";
+                        $arrayReportes[] = $organismoTransito->getDivipo() . "runtradi.DAT";
                     }
                 }
                 
@@ -3234,7 +3236,7 @@ class FroTrteSolicitudController extends Controller
                         'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Archivo generado",
+                        'message' => "Archivos generado",
                         'data' => $arrayReportes
                     );
                 } else{

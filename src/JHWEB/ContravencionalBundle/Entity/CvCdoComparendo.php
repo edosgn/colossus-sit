@@ -314,6 +314,13 @@ class CvCdoComparendo
     private $valorPagar;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_adicional", type="integer", nullable=true)
+     */
+    private $valorAdicional;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="url_documento", type="string", nullable=true)
@@ -1414,6 +1421,30 @@ class CvCdoComparendo
     }
 
     /**
+     * Set valorAdicional
+     *
+     * @param integer $valorAdicional
+     *
+     * @return CvCdoComparendo
+     */
+    public function setValorAdicional($valorAdicional)
+    {
+        $this->valorAdicional = $valorAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAdicional
+     *
+     * @return integer
+     */
+    public function getValorAdicional()
+    {
+        return $this->valorAdicional;
+    }
+
+    /**
      * Set urlDocumento
      *
      * @param string $urlDocumento
@@ -1627,6 +1658,30 @@ class CvCdoComparendo
     public function getGradoAlcoholemia()
     {
         return $this->gradoAlcoholemia;
+    }
+
+    /**
+     * Set reincidencia
+     *
+     * @param boolean $reincidencia
+     *
+     * @return CvCdoComparendo
+     */
+    public function setReincidencia($reincidencia)
+    {
+        $this->reincidencia = $reincidencia;
+
+        return $this;
+    }
+
+    /**
+     * Get reincidencia
+     *
+     * @return boolean
+     */
+    public function getReincidencia()
+    {
+        return $this->reincidencia;
     }
 
     /**
@@ -2083,29 +2138,5 @@ class CvCdoComparendo
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set reincidencia
-     *
-     * @param boolean $reincidencia
-     *
-     * @return CvCdoComparendo
-     */
-    public function setReincidencia($reincidencia)
-    {
-        $this->reincidencia = $reincidencia;
-
-        return $this;
-    }
-
-    /**
-     * Get reincidencia
-     *
-     * @return boolean
-     */
-    public function getReincidencia()
-    {
-        return $this->reincidencia;
     }
 }

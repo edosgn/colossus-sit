@@ -81,9 +81,7 @@ class UserLcProhibicionController extends Controller
             $userLcProhibicion->setFechaInicio(new \Datetime($fechaInicio));
             $userLcProhibicion->setFechaFin(new \Datetime($fechaFin));
             $userLcProhibicion->setMotivo($params->motivo);
-            
-            // var_dump($userLcProhibicion);
-            // die();
+       
             $em->persist($userLcProhibicion);
             $em->flush();
             
@@ -142,7 +140,7 @@ class UserLcProhibicionController extends Controller
            
             $prohibiciones = $em->getRepository('JHWEBUsuarioBundle:UserLcProhibicion')->getFecha($fechaInicio,$fechaFin);
             
-            if($prohibiciones){ 
+            if($prohibiciones){  
                 $dir=__DIR__.'/../../../../web/docs/';
                 $file = $dir."reporteProhibicion.txt"; 
     
@@ -154,8 +152,7 @@ class UserLcProhibicionController extends Controller
     
                 if($archivo == false){
                     echo("Error al crear el archivo");
-                    var_dump(1);
-                    die();
+                    
                 } else {
                     
                     foreach ($prohibiciones as $key => $prohibicion) {
