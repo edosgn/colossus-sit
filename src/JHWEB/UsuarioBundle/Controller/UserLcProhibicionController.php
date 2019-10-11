@@ -81,9 +81,7 @@ class UserLcProhibicionController extends Controller
             $userLcProhibicion->setFechaInicio(new \Datetime($fechaInicio));
             $userLcProhibicion->setFechaFin(new \Datetime($fechaFin));
             $userLcProhibicion->setMotivo($params->motivo);
-            
-            // var_dump($userLcProhibicion);
-            // die();
+       
             $em->persist($userLcProhibicion);
             $em->flush();
             
