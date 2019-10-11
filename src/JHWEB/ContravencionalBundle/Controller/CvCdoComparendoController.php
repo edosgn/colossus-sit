@@ -1729,19 +1729,45 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, $comparendo->getObservacionesAgente() . ",");
                         fwrite($archivo, $comparendo->getFuga() . ",");
                         fwrite($archivo, $comparendo->getAccidente() . ",");
-                        fwrite($archivo, "" . "," );
-                        fwrite($archivo, "" . "," );
-                        fwrite($archivo, "" . "," );
-                        fwrite($archivo, "" . "," );
-                        fwrite($archivo, "" . "," );
-                        fwrite($archivo, "" . "," );
+
+                        $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->findOneBy(
+                            array(
+                                'numeroComparendo' => $comparendo->getConsecutivo()->getNumero()
+                            )
+                        );
+
+                        if($comparendo->getInfraccion()->getCategoria()->getNombre() == 'F') {
+                            fwrite($archivo, 'S' . "," );
+                        } elseif($comparendo->getInfraccion()->getCategoria()->getNombre() != 'F') {
+                            if($inmovilizacion) {
+                                fwrite($archivo, 'S' . "," );
+                                fwrite($archivo, $inmovilizacion->getPatio()->getDireccion() . "," );
+                                if($inmovilizacion->getGrua()) {
+                                    fwrite($archivo, $inmovilizacion->getGrua()->getCodigo() . "," );
+                                    fwrite($archivo, $inmovilizacion->getGrua()->getPlaca() . "," );
+                                } else {
+                                    fwrite($archivo, "" . "," );
+                                    fwrite($archivo, "" . "," );
+                                }
+                                fwrite($archivo, $inmovilizacion->getNumeroInventario() . "," );
+                            } else {
+                                fwrite($archivo, "" . "," );
+                                fwrite($archivo, "" . "," );
+                                fwrite($archivo, "" . "," );
+                                fwrite($archivo, "" . "," );
+                                fwrite($archivo, "" . "," );
+                            }
+                        }
                         fwrite($archivo, $comparendo->getTestigoIdentificacion() . ",");
                         fwrite($archivo, $comparendo->getTestigoNombres() . " " . $comparendo->getTestigoApellidos() . ",");
                         fwrite($archivo, $comparendo->getTestigoDireccion() . ",");
                         fwrite($archivo, $comparendo->getTestigoTelefono() . ",");
                         fwrite($archivo, $comparendo->getValorPagar() . ",");
-                        /* fwrite($archivo, $comparendo->getValorAdicional() . ","); */
-                        fwrite($archivo, "" . ",");
+                        if($comparendo->getValorAdicional()) {
+                            fwrite($archivo, $comparendo->getValorAdicional() . ",");
+                        } elseif (!$comparendo->getValorAdicional()) {
+                            fwrite($archivo, "0" . ",");
+                        }
                         if($comparendo->getOrganismoTransito() != null) {
                             fwrite($archivo, $comparendo->getOrganismoTransito()->getDivipo() . ",");
                         } elseif ($comparendo->getOrganismoTransito() == null) {
