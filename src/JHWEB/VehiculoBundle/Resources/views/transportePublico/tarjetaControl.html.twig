@@ -1,35 +1,36 @@
 <html>
     <div style="text-align:center">
         <h4>SUBSECRETARIA DE TRANSITO Y TRANSPORTE</h4>
-        <h4>DEPRTAMENTAL DE NARIÑO</h4>
-    </div>
-    <hr>
-    <div style="text-align:center">
-
-        <h4>TARIFAS VIGENTES PARA LA PRESTACION DE SERVICIO  PUBLICO</h4>
-        <h4>DE TRANSPORTE INDIVIDUAL DE PASAJERO AÑO 2018-2019</h4>
-        <h4>DECRETO No. 0463 DEL 11  DE DICIEMBRE DE 2018.</h4>
+        <h4>DEPARTAMENTAL DE NARIÑO</h4>
+        <p>___________________________________________________________________________________________________________________________________________________________________</p>
+        {# <h4>TARIFAS VIGENTES PARA LA PRESTACION DE SERVICIO  PUBLICO</h4>
+        <h4>DE TRANSPORTE INDIVIDUAL DE PASAJEROS AÑO 2018-2019</h4>
+        <h4>DECRETO No. 0463 DEL 11  DE DICIEMBRE DE 2018.</h4> #}
+        <h4>xxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxx</h4>
+        <h4>xxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxx</h4>
+        <h4>xxxxxxx-xxxxxxx</h4>
     </div>
     <table>
         <tr>
             <td>
-                <div style="text-align:center; border:1px dashed black; border-radius: 30px">
-                    <p>NOMBRE(S) <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.primerNombre}} {{ ciudadano.segundoNombre }}            </b></p>
-                    <p>APELLIDO(S) <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.primerApellido}} {{ ciudadano.segundoApellido }}            </b></p>
-                    <p>CEDULA <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.identificacion }}            </b></p>
-                    <p>RH  <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.grupoSanguineo.sigla }}            </b></p>
+                <div style="text-align:center; border:1px solid black; border-radius: 30px; height: 300px !auto important; width:150%; margin-right: 10%">
+                    <p><b>NOMBRE(S):</b>    <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.primerNombre}} {{ ciudadano.segundoNombre }}            </b></p>
+                    <p><b>APELLIDO(S):</b>    <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.primerApellido}} {{ ciudadano.segundoApellido }}            </b></p>
+                    <p><b>CEDULA:</b>    <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.identificacion }}            </b></p>
+                    <p><b>RH:</b>     <b style="text-decoration: underline; font-size:150%">          {{ ciudadano.grupoSanguineo.sigla }}            </b></p>
                 </div>
             </td>
             <td>
-                <p style="text-align: right; font-size: 180%;  border:1px dashed black;">
-                    <b>TARJETA DE CONTROL</b>
-                    <br>
-                    <b>PERSONAL E INTRANSFERIBLE </b>No <b style="font-size:200%; color: red; text-align: right">{{ insumoTarjetaControl.numero }}</b>
-                </p>
-                <div style="text-align:center; border:1px dashed black; border-radius: 15%">
-                    <h2>EMPRESA: <b style="text-decoration: underline; font-size:150%">          {{ empresaTransporte.empresa.nombre }}             </b></h2>
-                    <h4>PLACAS: <b style="font-size:150%; text-decoration: underline">          {{ vehiculo.placa.numero }}             </b></h4>
-                    <h4>No DE ORDEN: <b style="text-decoration: underline; font-size:150%">          {{ insumoTarjetaControl.numero }}             </b></h4>
+                <div style="text-align:center; border:1px solid black; border-radius: 15%">
+                    <p style="text-align: right; font-size: 180%">
+                        <b>TARJETA DE CONTROL</b>
+                        <br>
+                        <b>PERSONAL E INTRANSFERIBLE </b>No <b style="font-size:200%; color: red; text-align: right">{{ insumoTarjetaControl.numero }}</b>
+                    </p>
+                    <p>____________________________________________________________________________________</p>
+                    <h2>EMPRESA:      <b style="text-decoration: underline; font-size:150%">          {{ empresaTransporte.empresa.nombre }}             </b></h2>
+                    <h4>PLACAS:      <b style="font-size:150%; text-decoration: underline">          {{ vehiculo.placa.numero }}             </b></h4>
+                    {# <h4>No DE ORDEN:     <b style="text-decoration: underline; font-size:150%">          {{ insumoTarjetaControl.numero }}             </b></h4> #}
                     {# <h4>No: <p style="text-decoration: underline"><b style="font-size:150%">          {{ tecnomecanica.numeroControl }}             </b></p></h4>
                     <p>CERT. REVISIÓN TÉNICO MECÁNICA Y DE GASES</p> #}
                     <br>
