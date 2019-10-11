@@ -576,8 +576,8 @@ class Helpers
 	}
 
     public function getHoraVencimiento($horaInicial, $minutosSolicitados){
-		$em = $this->em;
 		$horaVencimiento = $horaInicial->modify('+'.$minutosSolicitados.' minutes');
+		
 		return $horaVencimiento; 
 	}
 

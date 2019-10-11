@@ -64,17 +64,15 @@ class CfgClaveController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $fechaCreacion = new \Datetime('now');
-
-            $horaCreacion = new \Datetime(date('h:i:s'));
+            $horaCreacion = new \Datetime(date('Y-m-d h:i:s'));
 
             $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
                 $params->idFuncionario
             );
 
-            var_dump($horaCreacion);
+            $horaVencimiento = $helpers->getHoraVencimiento($horaCreacion, 5);
+            var_dump($horaVencimiento);
             die();
-            $horaVencimiento = $helpers->getHoraVencimiento($horaCreacion,5);
 
             $cfgClave = new Cfgclave();
 

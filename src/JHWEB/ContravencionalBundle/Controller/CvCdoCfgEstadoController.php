@@ -164,7 +164,7 @@ class CvCdoCfgEstadoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
+        if ($authCheck == true) {           
             $json = $request->get("data", null);
             $params = json_decode($json);
 

@@ -56,7 +56,7 @@ class CfgAuditoriaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if($authCheck == true){
-            $json = $request->get("data",null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -111,7 +111,7 @@ class CfgAuditoriaController extends Controller
     /**
      * Finds and displays a cfgAuditorium entity.
      *
-     * @Route("/{id}", name="cfgauditoria_show")
+     * @Route("/{id}/show", name="cfgauditoria_show")
      * @Method("GET")
      */
     public function showAction(CfgAuditoria $cfgAuditorium)
@@ -152,7 +152,7 @@ class CfgAuditoriaController extends Controller
     /**
      * Deletes a cfgAuditorium entity.
      *
-     * @Route("/{id}", name="cfgauditoria_delete")
+     * @Route("/{id}/delete", name="cfgauditoria_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgAuditoria $cfgAuditorium)
