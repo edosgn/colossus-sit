@@ -1688,7 +1688,7 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, ",");
                         }
 
-                        fwrite($archivo, $comparendo->getInfractorDireccion() . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorDireccion(),0,40) . ",");
                         fwrite($archivo, $comparendo->getInfractorEmail() . ",");
                         fwrite($archivo, $comparendo->getInfractorTelefono() . ",");
                         fwrite($archivo, $comparendo->getInfractorMunicipioResidencia() . ",");
@@ -1741,7 +1741,7 @@ class CvCdoComparendoController extends Controller
                         } elseif($comparendo->getInfraccion()->getCategoria()->getNombre() != 'F') {
                             if($inmovilizacion) {
                                 fwrite($archivo, 'S' . "," );
-                                fwrite($archivo, $inmovilizacion->getPatio()->getDireccion() . "," );
+                                fwrite($archivo, substr($inmovilizacion->getPatio()->getDireccion(),0,30) . "," );
                                 if($inmovilizacion->getGrua()) {
                                     fwrite($archivo, $inmovilizacion->getGrua()->getCodigo() . "," );
                                     fwrite($archivo, $inmovilizacion->getGrua()->getPlaca() . "," );
@@ -1760,7 +1760,7 @@ class CvCdoComparendoController extends Controller
                         }
                         fwrite($archivo, $comparendo->getTestigoIdentificacion() . ",");
                         fwrite($archivo, $comparendo->getTestigoNombres() . " " . $comparendo->getTestigoApellidos() . ",");
-                        fwrite($archivo, $comparendo->getTestigoDireccion() . ",");
+                        fwrite($archivo, substr($comparendo->getTestigoDireccion(),0,40) . ",");
                         fwrite($archivo, $comparendo->getTestigoTelefono() . ",");
                         fwrite($archivo, $comparendo->getValorPagar() . ",");
                         if($comparendo->getValorAdicional()) {
