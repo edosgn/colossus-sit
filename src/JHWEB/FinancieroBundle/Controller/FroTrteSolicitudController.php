@@ -2852,7 +2852,7 @@ class FroTrteSolicitudController extends Controller
                                     fwrite($archivo, str_pad("", 25, ' ', STR_PAD_RIGHT));
                                 }
                                 if($propietarioActual->getCiudadano()){
-                                    fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
+                                    fwrite($archivo, str_pad($propietarioActual->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8, '0', STR_PAD_RIGHT));
                                 } elseif ($propietarioActual->getEmpresa()) {
                                     fwrite($archivo, str_pad($propietarioActual->getEmpresa()->getMunicipio()->getCodigoDane(), 8, ' ', STR_PAD_RIGHT));
                                 }
@@ -3144,7 +3144,7 @@ class FroTrteSolicitudController extends Controller
                                 fwrite($archivo, str_pad($acreedorPrendario->getCiudadano()->getSegundoApellido(), 25,' ', STR_PAD_RIGHT));
                                 fwrite($archivo, str_pad($acreedorPrendario->getCiudadano()->getDireccionPersonal(), 20,' ', STR_PAD_RIGHT));
                                 if($acreedorPrendario->getCiudadano()->getMunicipioResidencia() != null) {
-                                    fwrite($archivo, str_pad($acreedorPrendario->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8,' ', STR_PAD_RIGHT));
+                                    fwrite($archivo, str_pad($acreedorPrendario->getCiudadano()->getMunicipioResidencia()->getCodigoDane(), 8,'0', STR_PAD_RIGHT));
                                 }
                                 fwrite($archivo, str_pad($acreedorPrendario->getCiudadano()->getTelefonoCelular(), 10,' ', STR_PAD_RIGHT));
                                 fwrite($archivo, str_pad($acreedorPrendario->getGradoAlerta(), 1,' ', STR_PAD_RIGHT)); 
