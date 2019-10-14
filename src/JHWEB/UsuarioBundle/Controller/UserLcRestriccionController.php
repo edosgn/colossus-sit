@@ -4,6 +4,7 @@ namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserLcRestriccion;
 use JHWEB\UsuarioBundle\Entity\UserRestriccion;
+use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -76,7 +77,6 @@ class UserLcRestriccionController extends Controller
                     $userLcRestriccion = new UserLcRestriccion();
                     $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
                     $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
-                    $userLcRestriccion->setTipoActo($params->tipoActo);
                     $userLcRestriccion->setNumeroResolucion($params->numResolucion);
                     $userLcRestriccion->setEstado('ACTIVO');
                     $userLcRestriccion->setActivo(true);
@@ -116,6 +116,15 @@ class UserLcRestriccionController extends Controller
                 $userRestriccion->setActivo(true);
                 
                 $em->persist($userRestriccion);
+
+                //Registra trazabilidad de notificacion por estado
+                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->findOneByCodigo(13);
+
+                $template = $helpers->generateTemplate($comparendo, $estado->getFormato()->getCuerpo());
+                $trazabilidad = $helpers->generateTrazabilidad($comparendo, $estado, $template);
+
+                $userLcRestriccion->setTrazabilidad($trazabilidad);
+
                 $em->flush();
     
                 $response = array(

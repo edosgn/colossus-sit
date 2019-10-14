@@ -201,9 +201,9 @@ class UserLcProhibicionController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         if($prohibicion->getUsuario() != null) {
-                            fwrite($archivo, $prohibicion->getUsuario()->getPrimerNombre().' '.$prohibicion->getUsuario()->getSegundoNombre().' '.$prohibicion->getUsuario()->getPrimerApellido().' '.$prohibicion->getUsuario()->getSegundoApellido(). ",");
+                            fwrite($archivo, $prohibicion->getUsuario()->getPrimerNombre().' '.$prohibicion->getUsuario()->getSegundoNombre().' '.$prohibicion->getUsuario()->getPrimerApellido().' '.$prohibicion->getUsuario()->getSegundoApellido());
                         } elseif ($prohibicion->getUsuario() == null) {
-                            fwrite($archivo, "" . ",");
+                            fwrite($archivo, "");
                         }
                         
                         fwrite($archivo, "" . "\r\n");

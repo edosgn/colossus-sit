@@ -35,7 +35,6 @@ class UserLcRestriccion
      */
     private $fechaResolucion;
 
-   
     /**
      * @var string
      *
@@ -74,6 +73,13 @@ class UserLcRestriccion
     /**
      * @var bool
      *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="horas_comunitarias", type="boolean", nullable=true)
      */
     private $horasComunitarias;
@@ -84,16 +90,10 @@ class UserLcRestriccion
     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoComparendo", inversedBy="ciudadanos") */
     private $comparendo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo", inversedBy="trazabilidades") */
-    private $actoAdministrativo;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad", inversedBy="ciudadanos") */
+    private $trazabilidad;
     
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="activo", type="boolean")
-     */
-    private $activo;
-   
+
 
     /**
      * Get id
@@ -274,30 +274,6 @@ class UserLcRestriccion
     }
 
     /**
-     * Set horasComunitarias
-     *
-     * @param boolean $horasComunitarias
-     *
-     * @return UserLcRestriccion
-     */
-    public function setHorasComunitarias($horasComunitarias)
-    {
-        $this->horasComunitarias = $horasComunitarias;
-
-        return $this;
-    }
-
-    /**
-     * Get horasComunitarias
-     *
-     * @return boolean
-     */
-    public function getHorasComunitarias()
-    {
-        return $this->horasComunitarias;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
@@ -319,6 +295,30 @@ class UserLcRestriccion
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set horasComunitarias
+     *
+     * @param boolean $horasComunitarias
+     *
+     * @return UserLcRestriccion
+     */
+    public function setHorasComunitarias($horasComunitarias)
+    {
+        $this->horasComunitarias = $horasComunitarias;
+
+        return $this;
+    }
+
+    /**
+     * Get horasComunitarias
+     *
+     * @return boolean
+     */
+    public function getHorasComunitarias()
+    {
+        return $this->horasComunitarias;
     }
 
     /**
@@ -370,26 +370,26 @@ class UserLcRestriccion
     }
 
     /**
-     * Set actoAdministrativo
+     * Set trazabilidad
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad $trazabilidad
      *
      * @return UserLcRestriccion
      */
-    public function setActoAdministrativo(\JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo = null)
+    public function setTrazabilidad(\JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad $trazabilidad = null)
     {
-        $this->actoAdministrativo = $actoAdministrativo;
+        $this->trazabilidad = $trazabilidad;
 
         return $this;
     }
 
     /**
-     * Get actoAdministrativo
+     * Get trazabilidad
      *
-     * @return \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad
      */
-    public function getActoAdministrativo()
+    public function getTrazabilidad()
     {
-        return $this->actoAdministrativo;
+        return $this->trazabilidad;
     }
 }

@@ -75,6 +75,7 @@ class CvCdoCfgEstadoController extends Controller
             $estado->setActualiza($params->actualiza);
             $estado->setFinaliza($params->finaliza);
             $estado->setReparto($params->reparto);
+            $estado->setNotificacion($params->notificacion);
             $estado->setActivo(true);
 
             if ($params->idFormato) {
