@@ -35,13 +35,7 @@ class UserLcRestriccion
      */
     private $fechaResolucion;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tipo_acto", type="string", length=255, nullable=true)
-     */
-    private $tipoActo;
-
+   
     /**
      * @var string
      *
@@ -89,6 +83,9 @@ class UserLcRestriccion
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoComparendo", inversedBy="ciudadanos") */
     private $comparendo;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo", inversedBy="trazabilidades") */
+    private $actoAdministrativo;
     
     /**
      * @var bool
@@ -96,8 +93,7 @@ class UserLcRestriccion
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
-    
-
+   
 
     /**
      * Get id
@@ -155,30 +151,6 @@ class UserLcRestriccion
     public function getFechaResolucion()
     {
         return $this->fechaResolucion;
-    }
-
-    /**
-     * Set tipoActo
-     *
-     * @param string $tipoActo
-     *
-     * @return UserLcRestriccion
-     */
-    public function setTipoActo($tipoActo)
-    {
-        $this->tipoActo = $tipoActo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoActo
-     *
-     * @return string
-     */
-    public function getTipoActo()
-    {
-        return $this->tipoActo;
     }
 
     /**
@@ -395,5 +367,29 @@ class UserLcRestriccion
     public function getComparendo()
     {
         return $this->comparendo;
+    }
+
+    /**
+     * Set actoAdministrativo
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo
+     *
+     * @return UserLcRestriccion
+     */
+    public function setActoAdministrativo(\JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo = null)
+    {
+        $this->actoAdministrativo = $actoAdministrativo;
+
+        return $this;
+    }
+
+    /**
+     * Get actoAdministrativo
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo
+     */
+    public function getActoAdministrativo()
+    {
+        return $this->actoAdministrativo;
     }
 }

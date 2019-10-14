@@ -58,7 +58,7 @@ class UserLcProhibicionController extends Controller
             $fechaInicio = (isset($params->fechaInicio)) ? $params->fechaInicio : null;
             $fechaFin = (isset($params->fechaFin)) ? $params->fechaFin : null;
 
-            $userLcProhibicion = new Userlcprohibicion();
+            $userLcProhibicion = new UserLcProhibicion();
 
             if($params->idJuzgado){
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find($params->idJuzgado);
@@ -97,9 +97,7 @@ class UserLcProhibicionController extends Controller
             
             $em->persist($userRestriccion);
             $em->flush();
-
-            
-
+         
             $response = array(
                 'status' => 'success',
                 'code' => 200,
