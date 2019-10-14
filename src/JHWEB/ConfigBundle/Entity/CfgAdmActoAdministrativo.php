@@ -52,6 +52,11 @@ class CfgAdmActoAdministrativo
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="actosAdministrativos") */
     private $formato;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="tramitesSolicitud")
+     **/
+    protected $funcionario;
+
 
     /**
      * Get id
@@ -181,5 +186,29 @@ class CfgAdmActoAdministrativo
     public function getFormato()
     {
         return $this->formato;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return CfgAdmActoAdministrativo
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }
