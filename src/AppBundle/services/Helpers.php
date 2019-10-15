@@ -512,8 +512,9 @@ class Helpers
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
 
-        
-        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+        if($comparendo->getInfractorNombres()){
+			$replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+		}
         $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
         $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getNumero()); 
         $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);

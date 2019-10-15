@@ -36,9 +36,9 @@ class UserRestriccion
     private $foranea;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="tabla", type="integer", nullable=true)
+     * @ORM\Column(name="tabla",  type="text", nullable=true)
      */
     private $tabla;
 
@@ -138,7 +138,7 @@ class UserRestriccion
     /**
      * Set tabla
      *
-     * @param integer $tabla
+     * @param string $tabla
      *
      * @return UserRestriccion
      */
@@ -152,7 +152,7 @@ class UserRestriccion
     /**
      * Get tabla
      *
-     * @return integer
+     * @return string
      */
     public function getTabla()
     {

@@ -62,7 +62,7 @@ class PnalCfgCdoConsecutivoController extends Controller
 
                     if (strlen($numeroComparendo) < 20) {
                         $diferencia = abs(strlen($numeroComparendo) - 20);
-                        $numeroComparendo = str_pad($numeroComparendo, $diferencia, '0', STR_PAD_LEFT);
+                        $numeroComparendo = $divipo.str_pad($numero, $diferencia, '0', STR_PAD_LEFT);
                     }
                 }else{
                     $numeroComparendo = $numero;

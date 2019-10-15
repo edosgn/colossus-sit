@@ -3,6 +3,8 @@
 namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserLcRestriccion;
+use JHWEB\UsuarioBundle\Entity\UserRestriccion;
+use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -75,7 +77,6 @@ class UserLcRestriccionController extends Controller
                     $userLcRestriccion = new UserLcRestriccion();
                     $userLcRestriccion->setUserLicenciaConduccion($userLicenciaConduccion);
                     $userLcRestriccion->setFechaResolucion(new \Datetime($params->fechaResolucion));
-                    $userLcRestriccion->setTipoActo($params->tipoActo);
                     $userLcRestriccion->setNumeroResolucion($params->numResolucion);
                     $userLcRestriccion->setEstado('ACTIVO');
                     $userLcRestriccion->setActivo(true);
@@ -101,6 +102,30 @@ class UserLcRestriccionController extends Controller
                     $em->persist($userLicenciaConduccion);
                     $em->flush();
                 }
+                $userRestriccion = new UserRestriccion();
+
+                $usuario = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($userLicenciaConduccion->getCiudadano()->getId());
+
+                $userRestriccion->setUsuario($usuario);
+                $userRestriccion->setTipo($params->tipo);
+                $userRestriccion->setForanea($userLcRestriccion->getId());
+                $userRestriccion->setTabla('UserLcRestriccion');
+                $userRestriccion->setDescripcion($params->tipo.' DERECHO A CONDUCIR');
+                $userRestriccion->setFechaRegistro($fechaInicio);
+                $userRestriccion->setFechaVencimiento($fechaFin);
+                $userRestriccion->setActivo(true);
+                
+                $em->persist($userRestriccion);
+
+                //Registra trazabilidad de notificacion por estado
+                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->findOneByCodigo(13);
+
+                $template = $helpers->generateTemplate($comparendo, $estado->getFormato()->getCuerpo());
+                $trazabilidad = $helpers->generateTrazabilidad($comparendo, $estado, $template);
+
+                $userLcRestriccion->setTrazabilidad($trazabilidad);
+
+                $em->flush();
     
                 $response = array(
                     'status' => 'success',
@@ -137,7 +162,6 @@ class UserLcRestriccionController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
         
-
         $userLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->idLicenciaConduccion);
 
         $licanciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findByCiudadano($userLicenciaConduccion->getCiudadano()->getId());
@@ -170,7 +194,6 @@ class UserLcRestriccionController extends Controller
 
             $em->flush();
         }
-        // die();
        
         $html = $this->renderView('@JHWEBUsuario/Default/pdf.genera.auto.insumo.html.twig', array(
             'userLicenciaConduccion'=>$userLicenciaConduccion,
