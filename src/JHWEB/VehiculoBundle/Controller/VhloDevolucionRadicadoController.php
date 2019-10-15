@@ -51,32 +51,49 @@ class VhloDevolucionRadicadoController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-
-            $devolucionRadicado = new VhloDevolucionRadicado();
-
-            $devolucionRadicado->setVehiculo($vehiculo);
-            $devolucionRadicado->setNumeroLicenciaTransito($params->numeroLicenciaTransito);
-            $devolucionRadicado->setFechaIngreso(new \DateTime($params->fechaIngreso));
-            $devolucionRadicado->setNumeroGuiaLlegada($params->numeroGuiaLlegada);
-            $devolucionRadicado->setEmpresaEnvio($params->empresaEnvio);
-            $devolucionRadicado->setActivo(true);
-
-            //edicion de vehiculo
-            $vehiculo->setTipoMatricula('DEVOLUCIONADO');
             
-            $em->persist($devolucionRadicado);
-            $em->persist($vehiculo);
-
-            $em->flush();
-            $response = array(
-                'status' => 'Perfecto!',
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con éxito", 
+            
+            $vehiculoDevolucion = $em->getRepository('JHWEBVehiculoBundle:VhloDevolucionRadicado')->findOneBy(
+                array(
+                    'vehiculo' => $vehiculo->getId(),
+                    'activo' => true
+                )
             );
+
+            if(!$vehiculoDevolucion) {
+                $devolucionRadicado = new VhloDevolucionRadicado();
+    
+                $devolucionRadicado->setVehiculo($vehiculo);
+                $devolucionRadicado->setNumeroLicenciaTransito($params->numeroLicenciaTransito);
+                $devolucionRadicado->setFechaIngreso(new \DateTime($params->fechaIngreso));
+                $devolucionRadicado->setNumeroGuiaLlegada($params->numeroGuiaLlegada);
+                $devolucionRadicado->setEmpresaEnvio($params->empresaEnvio);
+                $devolucionRadicado->setActivo(true);
+    
+                //edicion de vehiculo
+                $vehiculo->setTipoMatricula('DEVOLUCION');
+                
+                $em->persist($devolucionRadicado);
+                $em->persist($vehiculo);
+    
+                $em->flush();
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito", 
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehiculo ya fue devolucionado.", 
+                );
+            }
         }else{
             $response = array(
-                'status' => 'Error!',
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida", 
@@ -98,5 +115,50 @@ class VhloDevolucionRadicadoController extends Controller
         return $this->render('vhlodevolucionradicado/show.html.twig', array(
             'vhloDevolucionRadicado' => $vhloDevolucionRadicado,
         ));
+    }
+
+    /**
+     * Finds and displays a vhloDevolucionRadicado entity by vehiculo.
+     *
+     * @Route("/search/devolucion/vehiculo", name="vhlodevolucionradicado_search_by_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+            
+            
+            $vehiculoDevolucion = $em->getRepository('JHWEBVehiculoBundle:VhloDevolucionRadicado')->findOneBy(
+                array(
+                    'vehiculo' => $vehiculo->getId(),
+                )
+            );
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado", 
+                'data' => $vehiculoDevolucion
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida"
+            );
+        }
+
+        return $helpers->json($response);
     }
 }
