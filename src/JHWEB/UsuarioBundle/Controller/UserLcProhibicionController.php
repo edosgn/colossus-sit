@@ -58,7 +58,7 @@ class UserLcProhibicionController extends Controller
             $fechaInicio = (isset($params->fechaInicio)) ? $params->fechaInicio : null;
             $fechaFin = (isset($params->fechaFin)) ? $params->fechaFin : null;
 
-            $userLcProhibicion = new Userlcprohibicion();
+            $userLcProhibicion = new UserLcProhibicion();
 
             if($params->idJuzgado){
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find($params->idJuzgado);
@@ -97,9 +97,7 @@ class UserLcProhibicionController extends Controller
             
             $em->persist($userRestriccion);
             $em->flush();
-
-            
-
+         
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -203,9 +201,9 @@ class UserLcProhibicionController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         if($prohibicion->getUsuario() != null) {
-                            fwrite($archivo, $prohibicion->getUsuario()->getPrimerNombre().' '.$prohibicion->getUsuario()->getSegundoNombre().' '.$prohibicion->getUsuario()->getPrimerApellido().' '.$prohibicion->getUsuario()->getSegundoApellido(). ",");
+                            fwrite($archivo, $prohibicion->getUsuario()->getPrimerNombre().' '.$prohibicion->getUsuario()->getSegundoNombre().' '.$prohibicion->getUsuario()->getPrimerApellido().' '.$prohibicion->getUsuario()->getSegundoApellido());
                         } elseif ($prohibicion->getUsuario() == null) {
-                            fwrite($archivo, "" . ",");
+                            fwrite($archivo, "");
                         }
                         
                         fwrite($archivo, "" . "\r\n");

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlodevolucionradicados list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numerolicenciatransito</th>
+                <th>Fechaingreso</th>
+                <th>Numeroguiallegada</th>
+                <th>Empresaenvio</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloDevolucionRadicado in vhloDevolucionRadicados %}
+            <tr>
+                <td><a href="{{ path('vhlodevolucionradicado_show', { 'id': vhloDevolucionRadicado.id }) }}">{{ vhloDevolucionRadicado.id }}</a></td>
+                <td>{{ vhloDevolucionRadicado.numeroLicenciaTransito }}</td>
+                <td>{% if vhloDevolucionRadicado.fechaIngreso %}{{ vhloDevolucionRadicado.fechaIngreso|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ vhloDevolucionRadicado.numeroGuiaLlegada }}</td>
+                <td>{{ vhloDevolucionRadicado.empresaEnvio }}</td>
+                <td>{% if vhloDevolucionRadicado.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlodevolucionradicado_show', { 'id': vhloDevolucionRadicado.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

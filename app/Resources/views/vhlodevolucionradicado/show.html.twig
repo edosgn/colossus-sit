@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlodevolucionradicado</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vhloDevolucionRadicado.id }}</td>
+            </tr>
+            <tr>
+                <th>Numerolicenciatransito</th>
+                <td>{{ vhloDevolucionRadicado.numeroLicenciaTransito }}</td>
+            </tr>
+            <tr>
+                <th>Fechaingreso</th>
+                <td>{% if vhloDevolucionRadicado.fechaIngreso %}{{ vhloDevolucionRadicado.fechaIngreso|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroguiallegada</th>
+                <td>{{ vhloDevolucionRadicado.numeroGuiaLlegada }}</td>
+            </tr>
+            <tr>
+                <th>Empresaenvio</th>
+                <td>{{ vhloDevolucionRadicado.empresaEnvio }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if vhloDevolucionRadicado.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlodevolucionradicado_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
