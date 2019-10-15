@@ -50,4 +50,36 @@ class CvCdoTrazabilidadRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    //Obtiene todos los vehiculos del módulo RNA entre fechas para creación de archivo plano
+    public function getResolucionesByFechasForLicenciasConduccion($fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT ct
+            FROM JHWEBContravencionalBundle:CvCdoTrazabilidad ct,
+            JHWEBContravencionalBundle:CvCdoComparendo c,
+            JHWEBContravencionalBundle:CvCdoCfgEstado ce,
+            JHWEBConfigBundle:CfgAdmActoAdministrativo aa,
+            JHWEBConfigBundle:CfgAdmFormato af
+
+            WHERE ct.comparendo = c.id
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND c.activo = true
+            AND ct.actoAdministrativo = aa.id
+            AND aa.formato = af.id
+            AND ce.activo = true
+            AND ct.estado = ce.id
+            AND ce.simit = true
+            AND ct.activo = true
+            AND (ce.codigo = 13 OR ce.codigo = 7)";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
+        ));
+        
+        return $consulta->getResult();
+    }
 }

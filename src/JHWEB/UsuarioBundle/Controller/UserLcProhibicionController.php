@@ -136,92 +136,111 @@ class UserLcProhibicionController extends Controller
             $fechaFin = new \Datetime($params->fechaFin);
 
            
-            $prohibiciones = $em->getRepository('JHWEBUsuarioBundle:UserLcProhibicion')->getFecha($fechaInicio,$fechaFin);
-            
-            if($prohibiciones){  
+            $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->getResolucionesByFechasForLicenciasConduccion($fechaInicio,$fechaFin);
+             
+
+            if($trazabilidades){
                 $dir=__DIR__.'/../../../../web/docs/';
-                $file = $dir."reporteProhibicion.txt"; 
-    
-                if( file_exists("reporteProhibicion.txt") == false ){
+                $file = $dir.'resol.txt'; 
+                
+                if( file_exists('resol.txt') == false ){
                     $archivo = fopen($file, "w+b");    // Abrir el archivo, creándolo si no existe
                 }else{
                     $archivo = fopen($file,"r"); 
                 }
-    
+                
                 if($archivo == false){
                     echo("Error al crear el archivo");
-                    
-                } else {
-                    
-                    foreach ($prohibiciones as $key => $prohibicion) {
-                        
-                        if($prohibicion->getNumProceso() != null) {
-                            fwrite($archivo, $prohibicion->getNumProceso(). ",");
-                        } elseif ($prohibicion->getNumProceso() == null) {
+                }else{
+
+                    $sumatoriaValorComparendo = 0;
+                    $cont = 0;
+
+                    foreach ($trazabilidades as $key => $trazabilidad) {
+                        $cont ++;
+                        $sumatoriaValorComparendo += $trazabilidad->getComparendo()->getValorPagar();
+
+                        fwrite($archivo, $key + 1 . ",");
+                        fwrite($archivo, $trazabilidad->getActoAdministrativo()->getNumero() . ",");
+                        fwrite($archivo, "" . ",");
+                        fwrite($archivo, $trazabilidad->getActoAdministrativo()->getFecha()->format('d/m/Y') . ",");
+                        fwrite($archivo, $trazabilidad->getEstado()->getCodigo() . ",");
+                        if($trazabilidad->getRestriccion() != null) {
+                            fwrite($archivo, $trazabilidad->getRestriccion()->getFechaFin()->format('d/m/Y') . ",");
+                        } elseif ($trazabilidad->getRestriccion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        if($prohibicion->getFechaInicio() != null) {
-                            fwrite($archivo, $prohibicion->getFechaInicio()->format('Y-m-d'). ",");
-                        } elseif ($prohibicion->getFechaInicio() == null) {
+                        if($trazabilidad->getComparendo()->getConsecutivo() != null) {
+                            fwrite($archivo, $trazabilidad->getComparendo()->getConsecutivo()->getNumero() . ",");
+                        } elseif ($trazabilidad->getComparendo()->getConsecutivo() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        if($prohibicion->getFechaFin() != null) {
-                            fwrite($archivo, $prohibicion->getFechaFin()->format('Y-m-d'). ",");
-                        } elseif ($prohibicion->getFechaFin() == null) {
+                        fwrite($archivo, $trazabilidad->getComparendo()->getFecha()->format('d/m/Y') . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getInfractorIdentificacion() . ",");
+                        if($trazabilidad->getComparendo()->getInfractorTipoIdentificacion() != null) {
+                            fwrite($archivo, $trazabilidad->getComparendo()->getInfractorTipoIdentificacion()->getCodigo() . ",");
+                        } elseif ($trazabilidad->getComparendo()->getInfractorTipoIdentificacion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        if($prohibicion->getFechaResolucion() != null) {
-                            fwrite($archivo, $prohibicion->getFechaResolucion()->format('Y-m-d'). ",");
-                        } elseif ($prohibicion->getFechaResolucion() == null) {
+                        fwrite($archivo, $trazabilidad->getComparendo()->getInfractorNombres() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getInfractorApellidos() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getInfractorDireccion() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getInfractorTelefono() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getInfractorMunicipioResidencia() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getValorPagar() . ",");
+                        /* fwrite($archivo, $trazabilidad->getComparendo()->getValorAdicional() . ","); */ //valor adicional a pagar del comparendo
+                        /* fwrite($archivo, $trazabilidad->getComparendo()->getFotomulta() . ","); */
+                        // eliminarlos luego
+                        fwrite($archivo, "0" . ",");
+                        fwrite($archivo, "N" . ",");
+                        //=============================================================================
+                        if($trazabilidad->getComparendo()->getOrganismoTransito() != null) {
+                            fwrite($archivo, $trazabilidad->getComparendo()->getOrganismoTransito()->getDivipo() . ",");
+                        } elseif (condition) {
                             fwrite($archivo, "" . ",");
                         }
-                        if($prohibicion->getFechaPlazo() != null) {
-                            fwrite($archivo, $prohibicion->getFechaPlazo()->format('Y-m-d'). ",");
-                        } elseif ($prohibicion->getFechaPlazo() == null) {
+                        if($trazabilidad->getComparendo()->getPolca() == 0) {
+                            fwrite($archivo, "N" . ",");
+                        } elseif ($trazabilidad->getComparendo()->getPolca() == 1) {
+                            fwrite($archivo, "S" . ",");
+                        }
+                        if($trazabilidad->getComparendo()->getInfraccion() != null) {
+                            fwrite($archivo, $trazabilidad->getComparendo()->getInfraccion()->getId() . ",");
+                        } elseif ($trazabilidad->getComparendo()->getInfraccion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        if($prohibicion->getTipoOrden() != null) {
-                            fwrite($archivo, $prohibicion->getTipoOrden(). ",");
-                        } elseif ($prohibicion->getTipoOrden() == null) {
-                            fwrite($archivo, "" . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getValorInfraccion() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getValorPagar() . ",");
+                        fwrite($archivo, $trazabilidad->getComparendo()->getGradoAlcoholemia() . ",");
+                        if($trazabilidad->getRestriccion() != null) {
+                            if($trazabilidad->getRestriccion()->getHorasComunitarias() == 1) {
+                                fwrite($archivo, "S" . "\r\n");
+                            } elseif ($trazabilidad->getRestriccion()->getHorasComunitarias() == 0) {
+                                fwrite($archivo, "N" . "\r\n");
+                            }
+                        } elseif ($trazabilidad->getRestriccion() == null) {
+                            fwrite($archivo, "" . "\r\n");
                         }
-                        if($prohibicion->getTipoNovedad() != null) {
-                            fwrite($archivo, $prohibicion->getTipoNovedad(). ",");
-                        } elseif ($prohibicion->getTipoNovedad() == null) {
-                            fwrite($archivo, "" . ",");
-                        }
-                        if($prohibicion->getMotivo() != null) {
-                            fwrite($archivo, $prohibicion->getMotivo(). ",");
-                        } elseif ($prohibicion->getMotivo() == null) {
-                            fwrite($archivo, "" . ",");
-                        }
-                        if($prohibicion->getUsuario() != null) {
-                            fwrite($archivo, $prohibicion->getUsuario()->getIdentificacion(). ",");
-                        } elseif ($prohibicion->getUsuario() == null) {
-                            fwrite($archivo, "" . ",");
-                        }
-                        if($prohibicion->getUsuario() != null) {
-                            fwrite($archivo, $prohibicion->getUsuario()->getPrimerNombre().' '.$prohibicion->getUsuario()->getSegundoNombre().' '.$prohibicion->getUsuario()->getPrimerApellido().' '.$prohibicion->getUsuario()->getSegundoApellido());
-                        } elseif ($prohibicion->getUsuario() == null) {
-                            fwrite($archivo, "");
-                        }
-                        
-                        fwrite($archivo, "" . "\r\n");
-                       
                     }
                     
+                    fwrite($archivo, $cont . ",");
+                    fwrite($archivo, $sumatoriaValorComparendo . ",");
+                    fwrite($archivo, "0" . ",");
+                    fwrite($archivo, "0" .  "\r\n");
+
                     fflush($archivo);
-    
-                    fclose($archivo);   // Cerrar el archivo
-    
-                    $arrayReportes[] = "TTAMTRVE.DAT";
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Reporte generado con éxito",
-                        'data' => "reporteProhibicion.txt",
-                    );
                 }
+
+                fclose($archivo);   // Cerrar el archivo
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Archivo generado",
+                    'data' => "resol.txt"
+                );  
+            
             }else{
                 $response = array(
                     'status' => 'error',

@@ -89,12 +89,16 @@ class UserLcRestriccionController extends Controller
                         $userLcRestriccion->setFechaCancelacion(new \Datetime($params->fechaCancelacion));
                         $userLcRestriccion->setTipo('CANCELACION');
                         $userLicenciaConduccion->setEstado('CANCELADA');
+                        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->findOneByCodigo(13);
+
         
                     }else{
                         $userLcRestriccion->setFechaInicio(new \Datetime($params->fechaInicio));
                         $userLcRestriccion->setFechaFin(new \Datetime($params->fechaFin));
                         $userLcRestriccion->setTipo('SUSPENSION');
                         $userLicenciaConduccion->setEstado('SUSPENDIDA');
+                        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->findOneByCodigo(7);
+
                     }
                     $userLicenciaConduccion->setActivo(false);
         
@@ -118,7 +122,6 @@ class UserLcRestriccionController extends Controller
                 $em->persist($userRestriccion);
 
                 //Registra trazabilidad de notificacion por estado
-                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->findOneByCodigo(13);
 
                 $template = $helpers->generateTemplate($comparendo, $estado->getFormato()->getCuerpo());
                 $trazabilidad = $helpers->generateTrazabilidad($comparendo, $estado, $template);
@@ -179,7 +182,7 @@ class UserLcRestriccionController extends Controller
                     'userLicenciaConduccion' => $userLicenciaConduccionFor->getId(),
                     'estado' =>'ACTIVO',
                 )
-            );
+            ); 
             
             // var_dump($userLicenciaConduccionFor->getId());
 
@@ -220,7 +223,6 @@ class UserLcRestriccionController extends Controller
      */
     public function showAction(UserLcRestriccion $userLcRestriccion)
     {
-
         return $this->render('userlcrestriccion/show.html.twig', array(
             'userLcRestriccion' => $userLcRestriccion,
         ));

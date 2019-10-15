@@ -37,7 +37,8 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
         $em = $this->getEntityManager();
 
-        $dql = "SELECT v
+        if (isset($params->propietario)) {
+            $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
             JHWEBVehiculoBundle:VhloCfgPlaca p, 
             JHWEBVehiculoBundle:VhloPropietario vp, 
@@ -45,32 +46,37 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             UsuarioBundle:Usuario u
             WHERE v.placa = p.id";
 
-        if (isset($params->numeroPlaca)) {
-            $condicion .= " AND p.numero = '" . $params->numeroPlaca . "'";
+            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'";
+        }elseif (isset($params->numeroPlaca)) {
+            $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, 
+            JHWEBVehiculoBundle:VhloCfgPlaca p
+            WHERE v.placa = p.id";
 
+            $condicion .= "AND p.numero = '" . $params->numeroPlaca . "'";
+        }else{
+            $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v 
+            WHERE v.activo = true OR v.activo = false";
         }
+
         if (isset($params->numeroVIN)) {
             $condicion .= " AND v.vin ='" . $params->numeroVIN . "'";
-
         }
         if (isset($params->numeroSerie)) {
             $condicion .= " AND v.serie ='" . $params->numeroSerie . "'";
-
         }
         if (isset($params->numeroMotor)) {
             $condicion .= " AND v.motor ='" . $params->numeroMotor . "'";
-
         }
         if (isset($params->numeroChasis)) {
             $condicion .= " AND v.chasis ='" . $params->numeroChasis . "'";
+        }
 
-        }
-        if (isset($params->propietario)) {
-            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'";
-        }
         if ($condicion) {
             $dql .= $condicion;
         }
+
         $consulta = $em->createQuery($dql);
 
         return $consulta->getResult();
