@@ -57,7 +57,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         }else{
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v 
-            WHERE v.activo = true OR v.activo = false";
+            WHERE (v.activo = true OR v.activo = false)";
         }
 
         if (isset($params->numeroVIN)) {
