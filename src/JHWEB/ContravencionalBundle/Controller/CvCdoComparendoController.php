@@ -1822,7 +1822,7 @@ class CvCdoComparendoController extends Controller
                 }else{
                     $resoluciones = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getResolucionesByFechasForFile(
                         $params->idOrganismoTransito,
-                        $fechaInicial,
+                        $fechaInicial, 
                         $fechaFinal
                     );
 
