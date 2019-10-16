@@ -114,4 +114,23 @@ class PnalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+	
+	//Obtiene la lista de funcionarios asignados por cargo
+    public function getByIdentificacion($identificacion){   
+        $em = $this->getEntityManager();
+
+    	$dql = "SELECT f
+        FROM JHWEBPersonalBundle:PnalFuncionario f, 
+        JHWEBUsuarioBundle:UserCiudadano c
+        WHERE c.identificacion = :identificacion
+        AND f.ciudadano = c.id";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'identificacion' => $identificacion,
+        ));
+
+
+        return $consulta->getResult();
+    }
 }
