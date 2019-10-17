@@ -799,6 +799,86 @@ class VhloVehiculoController extends Controller
     }
 
     /**
+     * Busca vehiculos segun la placa para la devolucion por radicado .
+     *
+     * @Route("/search/placa/devolucion", name="vhlovehiculo_search_placa_for_devolucion")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaForDevolucionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
+                array(
+                    'numero' => $params->numero
+                )
+            );
+
+            if($placa) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                    array(
+                        'placa' => $placa->getId(),
+                        'tipoMatricula' => array('RADICADO', 'DEVOLUCION'),
+                        'activo' => true
+                        )
+                    );
+            
+                if ($vehiculo) {
+                    $tramiteRadicado = null;
+                    $tramiteRadicado = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo($vehiculo->getId());
+                    
+                    if(count($tramiteRadicado) > 0) {
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => 'El vehículo ya esta radicado en ' . $tramiteRadicado[0]->getOrganismoTransito()->getNombre(), 
+                        ); 
+                    } else {
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'El vehículo aún no realiza el tramite de radicado de cuenta', 
+                            'data' => $vehiculo
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El vehículo no fue registrado por RADICADO DE CUENTA.', 
+                    );
+                }      
+            }elseif(!$placa) {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'La placa no existe en la base de datos.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Displays a form to update an existing Vehiculo entity.
      *
      * @Route("/update", name="vhlovehiculo_update")

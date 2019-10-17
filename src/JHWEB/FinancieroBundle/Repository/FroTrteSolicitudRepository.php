@@ -458,4 +458,29 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         
         return $consulta->getResult();
     }
+
+    //Obtiene trámites solicitud según el id del vehiculo
+    public function findByVehiculo($idVehiculo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
+            JHWEBFinancieroBundle:FroTramite ft, JHWEBVehiculoBundle:VhloVehiculo v
+            WHERE v.id = :idVehiculo
+            AND v.activo = 1
+            AND fts.vehiculo = v.id 
+            AND fts.tramiteFactura = fft.id
+            AND fft.precio = ftp.id
+            AND fft.realizado = 1
+            AND ftp.tramite = 4";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo
+        ));
+        
+        return $consulta->getResult();
+    }
 }

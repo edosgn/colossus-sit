@@ -143,13 +143,22 @@ class VhloDevolucionRadicadoController extends Controller
                 )
             );
 
-            $response = array(
-                'title' => 'Perfecto!',
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro encontrado", 
-                'data' => $vehiculoDevolucion
-            );
+            if($vehiculoDevolucion) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data' => $vehiculoDevolucion
+                );
+            } else {
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Registro noencontrado", 
+                );
+            }
         }else{
             $response = array(
                 'title' => 'Error!',
