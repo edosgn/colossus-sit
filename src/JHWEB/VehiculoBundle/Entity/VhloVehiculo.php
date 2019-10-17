@@ -183,13 +183,6 @@ class VhloVehiculo
     private $activo;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="identificacion_radicado", type="string", length=255, nullable= true)
-     */
-    private $identificacionRadicado;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_registro_radicado", type="datetime", nullable= true)
@@ -268,9 +261,6 @@ class VhloVehiculo
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="vehiculos") */
     private $organismoTransitoRadicado;
-
-    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="vehiculos") */
-    private $tipoIdentificacionRadicado;
 
 
     /**
@@ -836,30 +826,6 @@ class VhloVehiculo
     }
 
     /**
-     * Set identificacionRadicado
-     *
-     * @param string $identificacionRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setIdentificacionRadicado($identificacionRadicado)
-    {
-        $this->identificacionRadicado = $identificacionRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get identificacionRadicado
-     *
-     * @return string
-     */
-    public function getIdentificacionRadicado()
-    {
-        return $this->identificacionRadicado;
-    }
-
-    /**
      * Set fechaRegistroRadicado
      *
      * @param \DateTime $fechaRegistroRadicado
@@ -953,6 +919,30 @@ class VhloVehiculo
     public function getNumeroLicenciaRadicado()
     {
         return $this->numeroLicenciaRadicado;
+    }
+
+    /**
+     * Set fechaPlaca
+     *
+     * @param \DateTime $fechaPlaca
+     *
+     * @return VhloVehiculo
+     */
+    public function setFechaPlaca($fechaPlaca)
+    {
+        $this->fechaPlaca = $fechaPlaca;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPlaca
+     *
+     * @return \DateTime
+     */
+    public function getFechaPlaca()
+    {
+        return $this->fechaPlaca;
     }
 
     /**
@@ -1313,53 +1303,5 @@ class VhloVehiculo
     public function getOrganismoTransitoRadicado()
     {
         return $this->organismoTransitoRadicado;
-    }
-
-    /**
-     * Set tipoIdentificacionRadicado
-     *
-     * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacionRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setTipoIdentificacionRadicado(\JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacionRadicado = null)
-    {
-        $this->tipoIdentificacionRadicado = $tipoIdentificacionRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoIdentificacionRadicado
-     *
-     * @return \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion
-     */
-    public function getTipoIdentificacionRadicado()
-    {
-        return $this->tipoIdentificacionRadicado;
-    }
-
-    /**
-     * Set fechaPlaca
-     *
-     * @param \DateTime $fechaPlaca
-     *
-     * @return VhloVehiculo
-     */
-    public function setFechaPlaca($fechaPlaca)
-    {
-        $this->fechaPlaca = $fechaPlaca;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaPlaca
-     *
-     * @return \DateTime
-     */
-    public function getFechaPlaca()
-    {
-        return $this->fechaPlaca;
     }
 }

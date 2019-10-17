@@ -201,9 +201,8 @@ class VhloVehiculoController extends Controller
                         $vehiculo->setOrganismoTransitoRadicado($organismoTransitoRadicado);
                     }
     
-                    if ($params->radicado->idTipoIdentificacion) {
-                        $tipoIdentificacionRadicado = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->radicado->idTipoIdentificacion);
-                        $vehiculo->setTipoIdentificacionRadicado($tipoIdentificacionRadicado);
+                    if ($params->radicado->numeroLicencia) {
+                        $vehiculo->setNumeroLicenciaRadicado(mb_strtoupper($params->radicado->numeroLicencia, 'utf-8'));
                     }
                 }
 
@@ -317,24 +316,24 @@ class VhloVehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
-                $params->id
+                $params->vehiculo->id
             );
 
             if ($vehiculo) {
-                $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
+                $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->vehiculo->placa));
 
                 $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                     $vehiculo->getOrganismoTransito()->getId()
                 );
                 
-                if ($params->idClase) {
-                    $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+                if ($params->vehiculo->idClase) {
+                    $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->vehiculo->idClase);
                 }
 
                 if (!$cfgPlaca) {   
-                    if (isset($params->placa) && $params->placa) {
+                    if (isset($params->vehiculo->placa) && $params->vehiculo->placa) {
                         $placa = new VhloCfgPlaca();
-                        $placa->setNumero(strtoupper($params->placa));
+                        $placa->setNumero(strtoupper($params->vehiculo->placa));
                         $placa->setTipoVehiculo($clase->getTipoVehiculo());
         
                         $placa->setOrganismoTransito($organismoTransito);
@@ -348,88 +347,84 @@ class VhloVehiculoController extends Controller
                     $vehiculo->setPlaca($cfgPlaca);
                 }
     
-                $fechaFactura = $params->fechaFactura;
+                $fechaFactura = $params->vehiculo->fechaFactura;
                 $fechaFactura = new \DateTime($fechaFactura);
                 
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 $vehiculo->setClase($clase);
                 
-                $vehiculo->setNumeroFactura($params->numeroFactura);
+                $vehiculo->setNumeroFactura($params->vehiculo->numeroFactura);
                 $vehiculo->setfechaFactura($fechaFactura);
-                $vehiculo->setValor($params->valor);
+                $vehiculo->setValor($params->vehiculo->valor);
 
-                $vehiculo->setSerie($params->serie);
-                $vehiculo->setVin($params->vin);
-                $vehiculo->setChasis($params->chasis);
-                $vehiculo->setMotor($params->motor);
-                $vehiculo->setCilindraje($params->cilindraje);
-                $vehiculo->setModelo($params->modelo);
-                $vehiculo->setTipoMatricula($params->tipoMatricula);
+                $vehiculo->setSerie($params->vehiculo->serie);
+                $vehiculo->setVin($params->vehiculo->vin);
+                $vehiculo->setChasis($params->vehiculo->chasis);
+                $vehiculo->setMotor($params->vehiculo->motor);
+                $vehiculo->setCilindraje($params->vehiculo->cilindraje);
+                $vehiculo->setModelo($params->vehiculo->modelo);
+                $vehiculo->setTipoMatricula($params->vehiculo->tipoMatricula);
                 $vehiculo->setPignorado(false);
                 $vehiculo->setCancelado(false);
 
-                if ($params->numeroManifiesto) {
-                    $vehiculo->setNumeroManifiesto($params->numeroManifiesto);
+                if ($params->vehiculo->numeroManifiesto) {
+                    $vehiculo->setNumeroManifiesto($params->vehiculo->numeroManifiesto);
                 }
 
-                if ($params->fechaManifiesto) {
+                if ($params->vehiculo->fechaManifiesto) {
                     $vehiculo->setFechaManifiesto(
-                        new \Datetime($params->fechaManifiesto)
+                        new \Datetime($params->vehiculo->fechaManifiesto)
                     );
                 }
 
-                if ($params->numeroPasajeros) {
-                    $vehiculo->setNumeroPasajeros($params->numeroPasajeros);
+                if ($params->vehiculo->numeroPasajeros) {
+                    $vehiculo->setNumeroPasajeros($params->vehiculo->numeroPasajeros);
                 }
 
-                if ($params->capacidadCarga) {
-                    $vehiculo->setCapacidadCarga($params->capacidadCarga);
+                if ($params->vehiculo->capacidadCarga) {
+                    $vehiculo->setCapacidadCarga($params->vehiculo->capacidadCarga);
                 }
 
-                if ($params->numeroEjes) {
-                    $vehiculo->setNumeroEjes($params->numeroEjes);
+                if ($params->vehiculo->numeroEjes) {
+                    $vehiculo->setNumeroEjes($params->vehiculo->numeroEjes);
                 }
 
                 $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
-                    $params->idColor
+                    $params->vehiculo->idColor
                 );
                 $vehiculo->setColor($color);
 
                 $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find(
-                    $params->idLinea
+                    $params->vehiculo->idLinea
                 );
                 $vehiculo->setLinea($linea);
 
-                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->vehiculo->idCarroceria);
                 $vehiculo->setCarroceria($carroceria);
 
-                $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
+                $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->vehiculo->idCombustible);
                 $vehiculo->setCombustible($combustible);
 
-                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->vehiculo->idServicio);
                 $vehiculo->setServicio($servicio);
 
-                if ($params->idRadioAccion) {
-                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
+                if ($params->vehiculo->idRadioAccion) {
+                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->vehiculo->idRadioAccion);
                     $vehiculo->setRadioAccion($radioAccion);
                 }
 
-                if ($params->idModalidadTransporte) {
-                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
+                if ($params->vehiculo->idModalidadTransporte) {
+                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->vehiculo->idModalidadTransporte);
                     $vehiculo->setModalidadTransporte($modalidadTransporte);
                 }
 
-                if ($params->idEmpresa) {
-                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
+                if ($params->vehiculo->idEmpresa) {
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->vehiculo->idEmpresa);
                     $vehiculo->setEmpresa($empresa);
                 }
 
                 /* DATOS DE RADICADO DE CUENTA */
-                if ($params->tipoMatricula == 'RADICADO') {
-                    if ($params->radicado->numeroDocumento) {
-                        $vehiculo->setIdentificacionRadicado($params->radicado->numeroDocumento);
-                    }
-
+                if ($params->vehiculo->tipoMatricula == 'RADICADO') {
                     if ($params->radicado->fechaIngreso) {
                         $vehiculo->setFechaRegistroRadicado(
                             new \Datetime($params->radicado->fechaIngreso)
@@ -451,11 +446,6 @@ class VhloVehiculoController extends Controller
                     if ($params->radicado->idOrganismoTransito) {
                         $organismoTransitoRadicado = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->radicado->idOrganismoTransito);
                         $vehiculo->setOrganismoTransitoRadicado($organismoTransitoRadicado);
-                    }
-    
-                    if ($params->radicado->idTipoIdentificacion) {
-                        $tipoIdentificacionRadicado = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->radicado->idTipoIdentificacion);
-                        $vehiculo->setTipoIdentificacionRadicado($tipoIdentificacionRadicado);
                     }
                 }
 
