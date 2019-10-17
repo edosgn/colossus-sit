@@ -72,6 +72,7 @@ class VhloDevolucionRadicadoController extends Controller
     
                 //edicion de vehiculo
                 $vehiculo->setTipoMatricula('DEVOLUCION');
+                $vehiculo->setActivo(false);
                 
                 $em->persist($devolucionRadicado);
                 $em->persist($vehiculo);
