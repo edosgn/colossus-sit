@@ -180,6 +180,8 @@ class VhloVehiculoController extends Controller
                     $vehiculo->setEmpresa($empresa);
                 }
 
+                $vehiculo->setEstado('PREREGISTRADO');
+
                 /* DATOS DE RADICADO DE CUENTA */
                 if ($params->tipoMatricula == 'RADICADO') {
                     if ($params->radicado->fechaIngreso) {
@@ -206,7 +208,11 @@ class VhloVehiculoController extends Controller
                     }
                 }
 
-                $vehiculo->setActivo(true);
+                if($params->tipoMatricula != 'CARPETA') {
+                    $vehiculo->setActivo(false);
+                } else{
+                    $vehiculo->setActivo(true);
+                }
 
                 $em->persist($vehiculo);
                 $em->flush();
