@@ -10,4 +10,23 @@ namespace JHWEB\VehiculoBundle\Repository;
  */
 class VhloPlacaSedeRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene todas las asignaciones por organismo de transito y servicio 
+    public function getByOrganismoTransitoAndServicio($idOrganismoTransito, $idServicio)
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT vps
+        FROM JHWEBVehiculoBundle:VhloPlacaSede vps,
+        JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv
+        WHERE vps.tipoVehiculo = tv.id
+        AND vps.organismoTransito = :idOrganismoTransito
+        AND tv.servicio = :idServicio";
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idServicio' => $idServicio,
+        ));
+
+        return $consulta->getResult();
+    }
 }
