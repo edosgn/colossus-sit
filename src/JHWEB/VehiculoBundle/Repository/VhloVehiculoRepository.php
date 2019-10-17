@@ -53,7 +53,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             JHWEBVehiculoBundle:VhloCfgPlaca p
             WHERE v.placa = p.id";
 
-            $condicion .= "AND p.numero = '" . $params->numeroPlaca . "'";
+            $condicion .= " AND p.numero = '" . $params->numeroPlaca . "'";
         }else{
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v 

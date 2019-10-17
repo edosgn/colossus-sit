@@ -610,6 +610,53 @@ class VhloPlacaSedeController extends Controller
     }
 
     /**
+     * Busca asignaciones por organismo de transito y servicio.
+     *
+     * @Route("/search/organismotransito/servicio", name="vhloplacasede_search_organismotransito_servicio")
+     * @Method({"GET","POST"})
+     */
+    public function searchByOrganismoTransitoAndServicio(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->getByOrganismoTransitoAndServicio(
+                $params->idOrganismoTransito, $params->idModulo
+            );
+
+            if ($asignaciones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($asignaciones)." registros encontrados", 
+                    'data' => $asignaciones,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen registros para esos filtros de búsqueda", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca asignaciones por parametros (identificacion, No. comparendo o fecha).
      *
      * @Route("/search/request/organismotransito", name="vhloplacasede_search_request_organismotransito")

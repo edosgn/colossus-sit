@@ -36,7 +36,7 @@ class VhloLimitacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-        //Obtiene el vehículo según un numero de placa, si tiene una limitacion activa 
+    //Obtiene el vehículo según un numero de placa, si tiene una limitacion activa 
     public function getByPlacaAndEstadoLimitacion($placa)
     {   
         $em = $this->getEntityManager();

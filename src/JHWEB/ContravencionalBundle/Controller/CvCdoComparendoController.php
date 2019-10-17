@@ -158,7 +158,7 @@ class CvCdoComparendoController extends Controller
             $comparendo->setObservacionesAgente(
                 $params->comparendo->observacionesAgente
             );
-            //$comparendo->setValorAdicional(0);
+            $comparendo->setValorAdicional(0);
 
             if (isset($params->fechaNotificacion)) {
                 $comparendo->setFechaNotificacion(
@@ -217,12 +217,12 @@ class CvCdoComparendoController extends Controller
                     $comparendo->getFecha(),
                     6
                 );
+            }
 
-                if ($comparendosOld) {
-                    $comparendo->setReincidencia(true);
-                } else {
-                    $comparendo->setReincidencia(false);
-                }
+            if (isset($comparendosOld) && $comparendosOld) {
+                $comparendo->setReincidencia(true);
+            } else {
+                $comparendo->setReincidencia(false);
             }
 
             $comparendo->setFechaExpedicion(

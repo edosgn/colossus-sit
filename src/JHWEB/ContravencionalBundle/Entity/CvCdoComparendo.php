@@ -386,7 +386,7 @@ class CvCdoComparendo
     /**
      * @var boolean
      *
-     * @ORM\Column(name="reincidencia", type="boolean")
+     * @ORM\Column(name="reincidencia", type="boolean", nullable=true)
      */
     private $reincidencia;
 
