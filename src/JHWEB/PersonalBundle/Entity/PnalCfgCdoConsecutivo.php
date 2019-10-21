@@ -22,9 +22,9 @@ class PnalCfgCdoConsecutivo
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="numero", type="bigint")
+     * @ORM\Column(name="numero", type="string", length=100)
      */
     private $numero;
 
@@ -85,7 +85,7 @@ class PnalCfgCdoConsecutivo
     /**
      * Set numero
      *
-     * @param integer $numero
+     * @param string $numero
      *
      * @return PnalCfgCdoConsecutivo
      */
@@ -99,7 +99,7 @@ class PnalCfgCdoConsecutivo
     /**
      * Get numero
      *
-     * @return integer
+     * @return string
      */
     public function getNumero()
     {

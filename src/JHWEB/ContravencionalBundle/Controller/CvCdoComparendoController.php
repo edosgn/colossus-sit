@@ -1634,13 +1634,13 @@ class CvCdoComparendoController extends Controller
                         }
                         fwrite($archivo, $comparendo->getFecha()->format('d/m/Y') . ",");
                         fwrite($archivo, $comparendo->getHora()->format('hm') . ",");
-                        fwrite($archivo, $comparendo->getDireccion() . ",");
+                        fwrite($archivo, substr($comparendo->getDireccion(),0,79) . ",");
                         if($comparendo->getMunicipio() != null) {
                             fwrite($archivo, $comparendo->getMunicipio()->getCodigoDane() . ",");
                         } elseif ($comparendo->getMunicipio() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getLocalidad() . ",");
+                        fwrite($archivo, substr($comparendo->getLocalidad(),0,29) . ",");
                         fwrite($archivo, $comparendo->getPlaca() . ",");
                         if($comparendo->getOrganismoTransitoMatriculado() != null) {
                             fwrite($archivo, $comparendo->getOrganismoTransitoMatriculado()->getDivipo() . ",");
@@ -1678,21 +1678,21 @@ class CvCdoComparendoController extends Controller
                         } elseif ($comparendo->getInfractorTipoIdentificacion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getInfractorNombres() . ",");
-                        fwrite($archivo, $comparendo->getInfractorApellidos() . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorNombres(),0,17) . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorApellidos(),0,19) . ",");
 
                         if ($comparendo->getInfractorFechaNacimiento()) {
                             $infractorEdad = $this->get("app.helpers")->calculateAge($comparendo->getInfractorFechaNacimiento()->format('Y/m/d'));
-                            fwrite($archivo, $infractorEdad . ",");
+                            fwrite($archivo, substr($infractorEdad,0,1) . ",");
                         }else{
                             fwrite($archivo, ",");
                         }
 
-                        fwrite($archivo, substr($comparendo->getInfractorDireccion(),0,40) . ",");
-                        fwrite($archivo, $comparendo->getInfractorEmail() . ",");
-                        fwrite($archivo, $comparendo->getInfractorTelefono() . ",");
-                        fwrite($archivo, $comparendo->getInfractorMunicipioResidencia() . ",");
-                        fwrite($archivo, $comparendo->getInfractorNumeroLicenciaConduccion() . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorDireccion(),0,39) . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorEmail(),0,39) . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorTelefono(),0,14) . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorMunicipioResidencia(),0,7) . ",");
+                        fwrite($archivo, substr($comparendo->getInfractorNumeroLicenciaConduccion(),0,13) . ",");
                         fwrite($archivo, $comparendo->getCategoria() . ",");
                         if($comparendo->getOrganismoTransitoMatriculado() != null) {
                             fwrite($archivo, $comparendo->getOrganismoTransitoMatriculado()->getDivipo() . ",");
@@ -1705,28 +1705,28 @@ class CvCdoComparendoController extends Controller
                         } else {
                             fwrite($archivo, "" . ",");
                         }                        
-                        fwrite($archivo, $comparendo->getNumeroLicenciaTransito() . ",");
+                        fwrite($archivo, substr($comparendo->getNumeroLicenciaTransito(),0,15) . ",");
                         if($comparendo->getOrganismoTransitoMatriculado() != null) {
                             fwrite($archivo, $comparendo->getOrganismoTransitoMatriculado()->getDivipo() . ",");
                         } elseif ($comparendo->getOrganismoTransitoMatriculado() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getPropietarioIdentificacion() . ",");
+                        fwrite($archivo, substr($comparendo->getPropietarioIdentificacion(),0,14) . ",");
                         if($comparendo->getPropietarioTipoIdentificacion() != null) {
                             fwrite($archivo, $comparendo->getPropietarioTipoIdentificacion()->getCodigo() . ",");
                         } elseif($comparendo->getPropietarioTipoIdentificacion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getPropietarioNombre() . " " . $comparendo->getPropietarioApellidos() . ",");
-                        fwrite($archivo, $comparendo->getEmpresaNombre() . ",");
-                        fwrite($archivo, $comparendo->getEmpresaNit() . ",");
-                        fwrite($archivo, $comparendo->getTarjetaOperacion() . ",");
+                        fwrite($archivo, substr($comparendo->getPropietarioNombre() . " " . $comparendo->getPropietarioApellidos(),0,49) . ",");
+                        fwrite($archivo, substr($comparendo->getEmpresaNombre(),0,29) . ",");
+                        fwrite($archivo, substr($comparendo->getEmpresaNit(),0,14) . ",");
+                        fwrite($archivo, substr($comparendo->getTarjetaOperacion(),0,9) . ",");
                         if($comparendo->getAgenteTransito() != null){
-                            fwrite($archivo, $comparendo->getAgenteTransito()->getNumeroPlaca() . ",");
+                            fwrite($archivo, substr($comparendo->getAgenteTransito()->getNumeroPlaca(),0,9) . ",");
                         } elseif ($comparendo->getAgenteTransito() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getObservacionesAgente() . ",");
+                        fwrite($archivo, substr($comparendo->getObservacionesAgente(),0,49) . ",");
                         fwrite($archivo, $comparendo->getFuga() . ",");
                         fwrite($archivo, $comparendo->getAccidente() . ",");
 
@@ -1740,16 +1740,21 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, 'S' . "," );
                         } elseif($comparendo->getInfraccion()->getCategoria()->getNombre() != 'F') {
                             if($inmovilizacion) {
-                                fwrite($archivo, 'S' . "," );
-                                fwrite($archivo, substr($inmovilizacion->getPatio()->getDireccion(),0,30) . "," );
+                                /* fwrite($archivo, 'S' . "," );
+                                fwrite($archivo, substr($inmovilizacion->getPatio()->getDireccion(),0,30) . "," ); */
+                                //datos para revision 
+                                fwrite($archivo, 'N' . "," );
+                                fwrite($archivo, substr($inmovilizacion->getPatio()->getNombre(),0,29) . "," );
+                                fwrite($archivo, substr($inmovilizacion->getPatio()->getDireccion(),0,29) . "," );
+                                //fin datos de la revision
                                 if($inmovilizacion->getGrua()) {
-                                    fwrite($archivo, $inmovilizacion->getGrua()->getCodigo() . "," );
-                                    fwrite($archivo, $inmovilizacion->getGrua()->getPlaca() . "," );
+                                    fwrite($archivo, substr($inmovilizacion->getGrua()->getCodigo(),0,9) . "," );
+                                    fwrite($archivo, substr($inmovilizacion->getGrua()->getPlaca(),0,5) . "," );
                                 } else {
                                     fwrite($archivo, "" . "," );
                                     fwrite($archivo, "" . "," );
                                 }
-                                fwrite($archivo, $inmovilizacion->getNumeroInventario() . "," );
+                                fwrite($archivo, substr($inmovilizacion->getNumeroInventario(),0,14) . "," );
                             } else {
                                 fwrite($archivo, "" . "," );
                                 fwrite($archivo, "" . "," );
@@ -1758,13 +1763,13 @@ class CvCdoComparendoController extends Controller
                                 fwrite($archivo, "" . "," );
                             }
                         }
-                        fwrite($archivo, $comparendo->getTestigoIdentificacion() . ",");
-                        fwrite($archivo, $comparendo->getTestigoNombres() . " " . $comparendo->getTestigoApellidos() . ",");
-                        fwrite($archivo, substr($comparendo->getTestigoDireccion(),0,40) . ",");
-                        fwrite($archivo, $comparendo->getTestigoTelefono() . ",");
-                        fwrite($archivo, $comparendo->getValorPagar() . ",");
+                        fwrite($archivo, substr($comparendo->getTestigoIdentificacion(),0,14) . ",");
+                        fwrite($archivo, substr($comparendo->getTestigoNombres() . " " . $comparendo->getTestigoApellidos(),0,49) . ",");
+                        fwrite($archivo, substr($comparendo->getTestigoDireccion(),0,39) . ",");
+                        fwrite($archivo, substr($comparendo->getTestigoTelefono(),0,14) . ",");
+                        fwrite($archivo, substr($comparendo->getValorPagar(),0,7) . ",");
                         if($comparendo->getValorAdicional() != null) {
-                            fwrite($archivo, $comparendo->getValorAdicional() . ",");
+                            fwrite($archivo, substr($comparendo->getValorAdicional(),0,7) . ",");
                         } elseif ($comparendo->getValorAdicional() == null) {
                             fwrite($archivo, "0" . ",");
                         }
@@ -1778,16 +1783,20 @@ class CvCdoComparendoController extends Controller
                         } elseif ($comparendo->getEstado() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getPolca() . ",");
+                        if($comparendo->getPolca() == 1) {
+                            fwrite($archivo, "S" . ",");
+                        } elseif ($comparendo->getPolca() == 0) {
+                            fwrite($archivo, "N" . ",");
+                        }
                         if($comparendo->getInfraccion() != null){
-                            fwrite($archivo, $comparendo->getInfraccion()->getId() . ",");
+                            fwrite($archivo, substr($comparendo->getInfraccion()->getId(),0,4) . ",");
                         } elseif ($comparendo->getInfraccion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $comparendo->getValorInfraccion() . ",");
+                        fwrite($archivo, substr($comparendo->getValorInfraccion(),0,7) . ",");
                         fwrite($archivo, "N" . ",");
                         fwrite($archivo, "" . ",");
-                        fwrite($archivo, $comparendo->getGradoAlcoholemia() . ",". "\r\n");
+                        fwrite($archivo, substr($comparendo->getGradoAlcoholemia(),0,7) . ",". "\r\n");
                     }
                     
                     fwrite($archivo, $cont . ",");
