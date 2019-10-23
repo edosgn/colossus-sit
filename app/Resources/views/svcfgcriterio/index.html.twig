@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgcriterios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgCriterio in svCfgCriterios %}
+            <tr>
+                <td><a href="{{ path('svcfgcriterio_show', { 'id': svCfgCriterio.id }) }}">{{ svCfgCriterio.id }}</a></td>
+                <td>{{ svCfgCriterio.nombre }}</td>
+                <td>{% if svCfgCriterio.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgcriterio_show', { 'id': svCfgCriterio.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

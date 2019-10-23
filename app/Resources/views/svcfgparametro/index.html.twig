@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgparametros list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Valor</th>
+                <th>Numerocriterios</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgParametro in svCfgParametros %}
+            <tr>
+                <td><a href="{{ path('svcfgparametro_show', { 'id': svCfgParametro.id }) }}">{{ svCfgParametro.id }}</a></td>
+                <td>{{ svCfgParametro.nombre }}</td>
+                <td>{{ svCfgParametro.valor }}</td>
+                <td>{{ svCfgParametro.numeroCriterios }}</td>
+                <td>{% if svCfgParametro.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgparametro_show', { 'id': svCfgParametro.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

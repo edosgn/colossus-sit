@@ -24,7 +24,7 @@
                     <td><b>Número de radicado:</b> {{ evaluacion.revision.numeroRadicado }}</td>
                 </tr>
         </table>
-        <p><b>Fecha de revisión: </b>{{ evaluacion.revision.fechaRevision }}</p>
+        <p><b>Fecha de revisión: </b>{{ evaluacion.revision.fechaRevision | date('d/m/Y') }}</p>
         <p>
             <table border="1">
                 <thead>
@@ -59,7 +59,7 @@
                     </tr>
                 </tbody>
             </table>       
-            <p>Fecha límite en que debe retornar documento de PESV: <b>{{ evaluacion.revision.fechaDevolucion }}</b></p>
+            <p>Fecha límite en que debe retornar documento de PESV: <b>{{ evaluacion.revision.fechaDevolucion | date('d/m/Y') }}</b></p>
             <span pagebreak = "true"></span>
             <p style="text-align:center;"><b>NOTIFICACIÓN A LA EMPRESA</b></p>
             <b>  Autoridad de tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>

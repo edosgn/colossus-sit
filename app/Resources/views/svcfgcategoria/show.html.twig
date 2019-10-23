@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgcategorium</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ svCfgCategorium.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ svCfgCategorium.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if svCfgCategorium.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Habilitado</th>
+                <td>{% if svCfgCategorium.habilitado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svcfgcategoria_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

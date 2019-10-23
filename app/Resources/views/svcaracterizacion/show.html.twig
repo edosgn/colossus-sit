@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcaracterizacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ svCaracterizacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if svCaracterizacion.fecha %}{{ svCaracterizacion.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Ciudad</th>
+                <td>{{ svCaracterizacion.ciudad }}</td>
+            </tr>
+            <tr>
+                <th>Nombres</th>
+                <td>{{ svCaracterizacion.nombres }}</td>
+            </tr>
+            <tr>
+                <th>Apellidos</th>
+                <td>{{ svCaracterizacion.apellidos }}</td>
+            </tr>
+            <tr>
+                <th>Cedula</th>
+                <td>{{ svCaracterizacion.cedula }}</td>
+            </tr>
+            <tr>
+                <th>Clc</th>
+                <td>{{ svCaracterizacion.clc }}</td>
+            </tr>
+            <tr>
+                <th>Fechavigencia</th>
+                <td>{% if svCaracterizacion.fechaVigencia %}{{ svCaracterizacion.fechaVigencia|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Edad</th>
+                <td>{{ svCaracterizacion.edad }}</td>
+            </tr>
+            <tr>
+                <th>Genero</th>
+                <td>{{ svCaracterizacion.genero }}</td>
+            </tr>
+            <tr>
+                <th>Grupotrabajo</th>
+                <td>{{ svCaracterizacion.grupoTrabajo }}</td>
+            </tr>
+            <tr>
+                <th>Otrogrupotrabajo</th>
+                <td>{{ svCaracterizacion.otroGrupoTrabajo }}</td>
+            </tr>
+            <tr>
+                <th>Tipocontrato</th>
+                <td>{{ svCaracterizacion.tipoContrato }}</td>
+            </tr>
+            <tr>
+                <th>Otrotipocontrato</th>
+                <td>{{ svCaracterizacion.otroTipoContrato }}</td>
+            </tr>
+            <tr>
+                <th>Experienciaconduccion</th>
+                <td>{{ svCaracterizacion.experienciaConduccion }}</td>
+            </tr>
+            <tr>
+                <th>Accidentetransito</th>
+                <td>{% if svCaracterizacion.accidenteTransito %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Circunstancias</th>
+                <td>{{ svCaracterizacion.circunstancias }}</td>
+            </tr>
+            <tr>
+                <th>Incidente</th>
+                <td>{% if svCaracterizacion.incidente %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Frecuenciadesplazamiento</th>
+                <td>{{ svCaracterizacion.frecuenciaDesplazamiento }}</td>
+            </tr>
+            <tr>
+                <th>Vehiculopropio</th>
+                <td>{% if svCaracterizacion.vehiculoPropio %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Planificaciondesplazamiento</th>
+                <td>{{ svCaracterizacion.planificacionDesplazamiento }}</td>
+            </tr>
+            <tr>
+                <th>Tiempoantelacion</th>
+                <td>{{ svCaracterizacion.tiempoAntelacion }}</td>
+            </tr>
+            <tr>
+                <th>Mediodesplazamiento</th>
+                <td>{{ svCaracterizacion.medioDesplazamiento }}</td>
+            </tr>
+            <tr>
+                <th>Trayecto</th>
+                <td>{{ svCaracterizacion.trayecto }}</td>
+            </tr>
+            <tr>
+                <th>Tiempotrayecto</th>
+                <td>{{ svCaracterizacion.tiempoTrayecto }}</td>
+            </tr>
+            <tr>
+                <th>Kmmensualesrecorridos</th>
+                <td>{{ svCaracterizacion.kmMensualesRecorridos }}</td>
+            </tr>
+            <tr>
+                <th>Principalfactorriesgo</th>
+                <td>{{ svCaracterizacion.principalFactorRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Otrofactorriesgo</th>
+                <td>{{ svCaracterizacion.otroFactorRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Causariesgo</th>
+                <td>{{ svCaracterizacion.causaRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Otracausariesgo</th>
+                <td>{{ svCaracterizacion.otraCausaRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Riesgo</th>
+                <td>{{ svCaracterizacion.riesgo }}</td>
+            </tr>
+            <tr>
+                <th>Propuestareduccionriesgo</th>
+                <td>{{ svCaracterizacion.propuestaReduccionRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if svCaracterizacion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svcaracterizacion_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

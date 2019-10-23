@@ -23,7 +23,7 @@
                 <td><b>Con número de radicado:</b> {{ evaluacion.revision.numeroRadicado }}</td>
             </tr>
     </table>
-    <p><b>Fecha en que se había radicado el PESV:</b> {{ evaluacion.revision.fechaRecepcion }}</p>
+    <p><b>Fecha en que se había radicado el PESV:</b> {{ evaluacion.revision.fechaRecepcion| date('d/m/Y') }}</p>
     <p>
         <table border="1">
             <thead>
@@ -90,7 +90,7 @@
         </table>
         <br>
         <br>
-        <p>Dado en la ciudad de Pasto, el {{ fechaActual}}</p>
+        <p>Dado en la ciudad de Pasto, el {{ fechaActual }}</p>
     </p>
   </body>
 </html>

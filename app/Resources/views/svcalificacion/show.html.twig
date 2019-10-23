@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcalificacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ svCalificacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Aplica</th>
+                <td>{% if svCalificacion.aplica %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Evidencia</th>
+                <td>{% if svCalificacion.evidencia %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Responde</th>
+                <td>{% if svCalificacion.responde %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenido</th>
+                <td>{{ svCalificacion.valorObtenido }}</td>
+            </tr>
+            <tr>
+                <th>Observacion</th>
+                <td>{{ svCalificacion.observacion }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if svCalificacion.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svcalificacion_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

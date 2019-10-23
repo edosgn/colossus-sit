@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcaracterizacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Ciudad</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Cedula</th>
+                <th>Clc</th>
+                <th>Fechavigencia</th>
+                <th>Edad</th>
+                <th>Genero</th>
+                <th>Grupotrabajo</th>
+                <th>Otrogrupotrabajo</th>
+                <th>Tipocontrato</th>
+                <th>Otrotipocontrato</th>
+                <th>Experienciaconduccion</th>
+                <th>Accidentetransito</th>
+                <th>Circunstancias</th>
+                <th>Incidente</th>
+                <th>Frecuenciadesplazamiento</th>
+                <th>Vehiculopropio</th>
+                <th>Planificaciondesplazamiento</th>
+                <th>Tiempoantelacion</th>
+                <th>Mediodesplazamiento</th>
+                <th>Trayecto</th>
+                <th>Tiempotrayecto</th>
+                <th>Kmmensualesrecorridos</th>
+                <th>Principalfactorriesgo</th>
+                <th>Otrofactorriesgo</th>
+                <th>Causariesgo</th>
+                <th>Otracausariesgo</th>
+                <th>Riesgo</th>
+                <th>Propuestareduccionriesgo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCaracterizacion in svCaracterizacions %}
+            <tr>
+                <td><a href="{{ path('svcaracterizacion_show', { 'id': svCaracterizacion.id }) }}">{{ svCaracterizacion.id }}</a></td>
+                <td>{% if svCaracterizacion.fecha %}{{ svCaracterizacion.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svCaracterizacion.ciudad }}</td>
+                <td>{{ svCaracterizacion.nombres }}</td>
+                <td>{{ svCaracterizacion.apellidos }}</td>
+                <td>{{ svCaracterizacion.cedula }}</td>
+                <td>{{ svCaracterizacion.clc }}</td>
+                <td>{% if svCaracterizacion.fechaVigencia %}{{ svCaracterizacion.fechaVigencia|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svCaracterizacion.edad }}</td>
+                <td>{{ svCaracterizacion.genero }}</td>
+                <td>{{ svCaracterizacion.grupoTrabajo }}</td>
+                <td>{{ svCaracterizacion.otroGrupoTrabajo }}</td>
+                <td>{{ svCaracterizacion.tipoContrato }}</td>
+                <td>{{ svCaracterizacion.otroTipoContrato }}</td>
+                <td>{{ svCaracterizacion.experienciaConduccion }}</td>
+                <td>{% if svCaracterizacion.accidenteTransito %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svCaracterizacion.circunstancias }}</td>
+                <td>{% if svCaracterizacion.incidente %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svCaracterizacion.frecuenciaDesplazamiento }}</td>
+                <td>{% if svCaracterizacion.vehiculoPropio %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svCaracterizacion.planificacionDesplazamiento }}</td>
+                <td>{{ svCaracterizacion.tiempoAntelacion }}</td>
+                <td>{{ svCaracterizacion.medioDesplazamiento }}</td>
+                <td>{{ svCaracterizacion.trayecto }}</td>
+                <td>{{ svCaracterizacion.tiempoTrayecto }}</td>
+                <td>{{ svCaracterizacion.kmMensualesRecorridos }}</td>
+                <td>{{ svCaracterizacion.principalFactorRiesgo }}</td>
+                <td>{{ svCaracterizacion.otroFactorRiesgo }}</td>
+                <td>{{ svCaracterizacion.causaRiesgo }}</td>
+                <td>{{ svCaracterizacion.otraCausaRiesgo }}</td>
+                <td>{{ svCaracterizacion.riesgo }}</td>
+                <td>{{ svCaracterizacion.propuestaReduccionRiesgo }}</td>
+                <td>{% if svCaracterizacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcaracterizacion_show', { 'id': svCaracterizacion.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

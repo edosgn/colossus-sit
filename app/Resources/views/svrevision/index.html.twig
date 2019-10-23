@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svrevisions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numeroradicado</th>
+                <th>Consecutivo</th>
+                <th>Fecharegistro</th>
+                <th>Fecharecepcion</th>
+                <th>Fecharevision</th>
+                <th>Fechadevolucion</th>
+                <th>Fechaotorgamiento</th>
+                <th>Fechavisitacontrol1</th>
+                <th>Observacionvisita1</th>
+                <th>Fechavisitacontrol2</th>
+                <th>Observacionvisita2</th>
+                <th>Personacontacto</th>
+                <th>Cargo</th>
+                <th>Correo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svRevision in svRevisions %}
+            <tr>
+                <td><a href="{{ path('svrevision_show', { 'id': svRevision.id }) }}">{{ svRevision.id }}</a></td>
+                <td>{{ svRevision.numeroRadicado }}</td>
+                <td>{{ svRevision.consecutivo }}</td>
+                <td>{% if svRevision.fechaRegistro %}{{ svRevision.fechaRegistro|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svRevision.fechaRecepcion %}{{ svRevision.fechaRecepcion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svRevision.fechaRevision %}{{ svRevision.fechaRevision|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svRevision.fechaDevolucion %}{{ svRevision.fechaDevolucion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svRevision.fechaOtorgamiento %}{{ svRevision.fechaOtorgamiento|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svRevision.fechaVisitaControl1 %}{{ svRevision.fechaVisitaControl1|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svRevision.observacionVisita1 }}</td>
+                <td>{% if svRevision.fechaVisitaControl2 %}{{ svRevision.fechaVisitaControl2|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svRevision.observacionVisita2 }}</td>
+                <td>{{ svRevision.personaContacto }}</td>
+                <td>{{ svRevision.cargo }}</td>
+                <td>{{ svRevision.correo }}</td>
+                <td>{% if svRevision.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svrevision_show', { 'id': svRevision.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

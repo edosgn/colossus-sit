@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svevaluacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Pilarfortalecimiento</th>
+                <th>Valorobtenidofortalecimiento</th>
+                <th>Valorponderadofortalecimiento</th>
+                <th>Resultadofortalecimiento</th>
+                <th>Pilarcomportamiento</th>
+                <th>Valorobtenidocomportamiento</th>
+                <th>Valorponderadocomportamiento</th>
+                <th>Resultadocomportamiento</th>
+                <th>Pilarvehiculoseguro</th>
+                <th>Valorobtenidovehiculoseguro</th>
+                <th>Valorponderadovehiculoseguro</th>
+                <th>Resultadovehiculoseguro</th>
+                <th>Pilarinfraestructurasegura</th>
+                <th>Valorobtenidoinfraestructurasegura</th>
+                <th>Valorponderadoinfraestructurasegura</th>
+                <th>Resultadoinfraestructurasegura</th>
+                <th>Pilaratencionvictima</th>
+                <th>Valorobtenidoatencionvictima</th>
+                <th>Valorponderadoatencionvictima</th>
+                <th>Resultadoatencionvictima</th>
+                <th>Pilarvaloragregado</th>
+                <th>Valorobtenidovaloragregado</th>
+                <th>Valorponderadovaloragregado</th>
+                <th>Resultadovaloragregado</th>
+                <th>Resultadofinal</th>
+                <th>Aval</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svEvaluacion in svEvaluacions %}
+            <tr>
+                <td><a href="{{ path('svevaluacion_show', { 'id': svEvaluacion.id }) }}">{{ svEvaluacion.id }}</a></td>
+                <td>{% if svEvaluacion.fecha %}{{ svEvaluacion.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svEvaluacion.pilarFortalecimiento }}</td>
+                <td>{{ svEvaluacion.valorObtenidoFortalecimiento }}</td>
+                <td>{{ svEvaluacion.valorPonderadoFortalecimiento }}</td>
+                <td>{{ svEvaluacion.resultadoFortalecimiento }}</td>
+                <td>{{ svEvaluacion.pilarComportamiento }}</td>
+                <td>{{ svEvaluacion.valorObtenidoComportamiento }}</td>
+                <td>{{ svEvaluacion.valorPonderadoComportamiento }}</td>
+                <td>{{ svEvaluacion.resultadoComportamiento }}</td>
+                <td>{{ svEvaluacion.pilarVehiculoSeguro }}</td>
+                <td>{{ svEvaluacion.valorObtenidoVehiculoSeguro }}</td>
+                <td>{{ svEvaluacion.valorPonderadoVehiculoSeguro }}</td>
+                <td>{{ svEvaluacion.resultadoVehiculoSeguro }}</td>
+                <td>{{ svEvaluacion.pilarInfraestructuraSegura }}</td>
+                <td>{{ svEvaluacion.valorObtenidoInfraestructuraSegura }}</td>
+                <td>{{ svEvaluacion.valorPonderadoInfraestructuraSegura }}</td>
+                <td>{{ svEvaluacion.resultadoInfraestructuraSegura }}</td>
+                <td>{{ svEvaluacion.pilarAtencionVictima }}</td>
+                <td>{{ svEvaluacion.valorObtenidoAtencionVictima }}</td>
+                <td>{{ svEvaluacion.valorPonderadoAtencionVictima }}</td>
+                <td>{{ svEvaluacion.resultadoAtencionVictima }}</td>
+                <td>{{ svEvaluacion.pilarValorAgregado }}</td>
+                <td>{{ svEvaluacion.valorObtenidoValorAgregado }}</td>
+                <td>{{ svEvaluacion.valorPonderadoValorAgregado }}</td>
+                <td>{{ svEvaluacion.resultadoValorAgregado }}</td>
+                <td>{{ svEvaluacion.resultadofinal }}</td>
+                <td>{% if svEvaluacion.aval %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svEvaluacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svevaluacion_show', { 'id': svEvaluacion.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
