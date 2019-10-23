@@ -1843,7 +1843,7 @@ class CvCdoComparendoController extends Controller
                         $sumatoriaValorComparendo += $resolucion->getComparendo()->getValorPagar();
 
                         fwrite($archivo, $key + 1 . ",");
-                        fwrite($archivo, $resolucion->getActoAdministrativo()->getNumero() . ",");
+                        fwrite($archivo, substr($resolucion->getActoAdministrativo()->getNumero(),0,14) . ",");
                         fwrite($archivo, "" . ",");
                         fwrite($archivo, $resolucion->getActoAdministrativo()->getFecha()->format('d/m/Y') . ",");
                         fwrite($archivo, $resolucion->getEstado()->getCodigo() . ",");
@@ -1858,22 +1858,22 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         fwrite($archivo, $resolucion->getComparendo()->getFecha()->format('d/m/Y') . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getInfractorIdentificacion() . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getInfractorIdentificacion(),0,14) . ",");
                         if($resolucion->getComparendo()->getInfractorTipoIdentificacion() != null) {
                             fwrite($archivo, $resolucion->getComparendo()->getInfractorTipoIdentificacion()->getCodigo() . ",");
                         } elseif ($resolucion->getComparendo()->getInfractorTipoIdentificacion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $resolucion->getComparendo()->getInfractorNombres() . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getInfractorApellidos() . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getInfractorDireccion() . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getInfractorTelefono() . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getInfractorNombres(),0,17) . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getInfractorApellidos(),0,19) . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getInfractorDireccion(),0,39) . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getInfractorTelefono(),0,14) . ",");
                         fwrite($archivo, $resolucion->getComparendo()->getInfractorMunicipioResidencia() . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getValorPagar() . ",");
-                        /* fwrite($archivo, $resolucion->getComparendo()->getValorAdicional() . ","); */ //valor adicional a pagar del comparendo
+                        fwrite($archivo, substr($resolucion->getComparendo()->getValorPagar(),0,7) . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getValorAdicional(),0,7) . ",");
                         /* fwrite($archivo, $resolucion->getComparendo()->getFotomulta() . ","); */
                         // eliminarlos luego
-                        fwrite($archivo, "0" . ",");
+                        /* fwrite($archivo, "0" . ","); */
                         fwrite($archivo, "N" . ",");
                         //=============================================================================
                         if($resolucion->getComparendo()->getOrganismoTransito() != null) {
@@ -1887,13 +1887,13 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "S" . ",");
                         }
                         if($resolucion->getComparendo()->getInfraccion() != null) {
-                            fwrite($archivo, $resolucion->getComparendo()->getInfraccion()->getId() . ",");
+                            fwrite($archivo, substr($resolucion->getComparendo()->getInfraccion()->getId(),0,4) . ",");
                         } elseif ($resolucion->getComparendo()->getInfraccion() == null) {
                             fwrite($archivo, "" . ",");
                         }
-                        fwrite($archivo, $resolucion->getComparendo()->getValorInfraccion() . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getValorPagar() . ",");
-                        fwrite($archivo, $resolucion->getComparendo()->getGradoAlcoholemia() . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getValorInfraccion(),0,7) . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getValorPagar(),0,7) . ",");
+                        fwrite($archivo, substr($resolucion->getComparendo()->getGradoAlcoholemia(),0,7) . ",");
                         if($resolucion->getRestriccion() != null) {
                             if($resolucion->getRestriccion()->getHorasComunitarias() == 1) {
                                 fwrite($archivo, "S" . "\r\n");
@@ -1905,8 +1905,8 @@ class CvCdoComparendoController extends Controller
                         }
                     }
                     
-                    fwrite($archivo, $cont . ",");
-                    fwrite($archivo, $sumatoriaValorComparendo . ",");
+                    fwrite($archivo, substr($cont,0,4) . ",");
+                    fwrite($archivo, substr($sumatoriaValorComparendo,0,7) . ",");
                     fwrite($archivo, "0" . ",");
                     fwrite($archivo, "0" .  "\r\n");
 
@@ -1959,7 +1959,7 @@ class CvCdoComparendoController extends Controller
                         $cont ++;
                         $sumatoriaValorComparendo += $recaudo->getComparendo()->getValorPagar();
     
-                        fwrite($archivo, $key + 1 . ",");
+                        fwrite($archivo, substr($key + 1 ,0,4) . ",");
                         if($recaudo->getFactura() != null) {
                             fwrite($archivo, $recaudo->getFactura()->getFechaPago()->format('d/m/Y') . ",");
                             fwrite($archivo, $recaudo->getFactura()->getHoraPago()->format('H:m') . ",");
@@ -1971,13 +1971,13 @@ class CvCdoComparendoController extends Controller
                         fwrite($archivo, "0". ","); //cod canal de origen
                         fwrite($archivo, "TAQUILLA TRANSITO" . ","); // descripcion del origen
                         if($recaudo->getFactura() != null) {
-                            fwrite($archivo, $recaudo->getFactura()->getValorNeto() . ",");
+                            fwrite($archivo, substr($recaudo->getFactura()->getValorNeto(),0,11) . ",");
                         } elseif($recaudo->getFactura() == null){
                             fwrite($archivo, "" . ",");
                         }
                         fwrite($archivo, 0 . ",");
                         if($recaudo->getFactura() != null) {
-                            fwrite($archivo, $recaudo->getFactura()->getValorNeto() . ",");
+                            fwrite($archivo, substr($recaudo->getFactura()->getValorNeto(),0,11) . ",");
                         } elseif($recaudo->getFactura() == null){
                             fwrite($archivo, "" . ",");
                         }fwrite($archivo, 0 . ",");
@@ -1991,7 +1991,7 @@ class CvCdoComparendoController extends Controller
                         } elseif ($recaudo->getComparendo()->getPolca() == 1) {
                             fwrite($archivo, "S". ",");
                         }
-                        fwrite($archivo, $recaudo->getComparendo()->getInfractorIdentificacion() . ",");
+                        fwrite($archivo, substr($recaudo->getComparendo()->getInfractorIdentificacion(),0,14) . ",");
                         if($recaudo->getFactura() != null) {
                             fwrite($archivo, $recaudo->getFactura()->getTipoRecaudo()->getCodigo() . ",");
                         } elseif ($recaudo->getFactura() != null) {
@@ -2003,12 +2003,12 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "" . ",");
                         }
                         if($recaudo->getFactura() != null) {
-                            fwrite($archivo, $recaudo->getFactura()->getNumero() . ",");
+                            fwrite($archivo, substr($recaudo->getFactura()->getNumero(),0,15) . ",");
                         } elseif ($recaudo->getFactura() == null) {
                             fwrite($archivo, "" . ",");
                         }
                         if($recaudo->getComparendo()->getAcuerdoPago() != null) {
-                            fwrite($archivo, $recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas() . ",");
+                            fwrite($archivo, substr($recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas(),0,1) . ",");
                         } elseif($recaudo->getComparendo()->getAcuerdoPago() == null) {
                             fwrite($archivo, '' . "," );
                         }
@@ -2017,8 +2017,8 @@ class CvCdoComparendoController extends Controller
                         }
                     }
 
-                    fwrite($archivo, $cont . ",");
-                    fwrite($archivo, $sumatoriaValorComparendo . ",");
+                    fwrite($archivo, substr($cont,0,4) . ",");
+                    fwrite($archivo, substr($sumatoriaValorComparendo,0,7) . ",");
                     fwrite($archivo, "0" . ",");
                     fwrite($archivo, "0" .  "\r\n");
                     

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcalificacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Aplica</th>
+                <th>Evidencia</th>
+                <th>Responde</th>
+                <th>Valorobtenido</th>
+                <th>Observacion</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCalificacion in svCalificacions %}
+            <tr>
+                <td><a href="{{ path('svcalificacion_show', { 'id': svCalificacion.id }) }}">{{ svCalificacion.id }}</a></td>
+                <td>{% if svCalificacion.aplica %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svCalificacion.evidencia %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svCalificacion.responde %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svCalificacion.valorObtenido }}</td>
+                <td>{{ svCalificacion.observacion }}</td>
+                <td>{% if svCalificacion.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcalificacion_show', { 'id': svCalificacion.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

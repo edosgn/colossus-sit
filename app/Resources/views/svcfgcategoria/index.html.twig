@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgcategorias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Habilitado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgCategorium in svCfgCategorias %}
+            <tr>
+                <td><a href="{{ path('svcfgcategoria_show', { 'id': svCfgCategorium.id }) }}">{{ svCfgCategorium.id }}</a></td>
+                <td>{{ svCfgCategorium.nombre }}</td>
+                <td>{% if svCfgCategorium.activo %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svCfgCategorium.habilitado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgcategoria_show', { 'id': svCfgCategorium.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

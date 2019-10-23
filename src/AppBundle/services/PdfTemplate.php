@@ -160,14 +160,14 @@ class PdfTemplate extends TCPDF{
         $pdf->Output('PROYECTO No_'.$proyecto->getNumero(), 'I');
     }
 
-    public function templateEvaluacion($html, $evaluacion){
+    public function templateEvaluacion($html, $evaluacion, $funcionario){
         // create new PDF document
         $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('JHWEB PASTO SAS');
-        $pdf->SetTitle($evaluacion->getId());
+        $pdf->SetTitle($funcionario->getOrganismoTransito()->getNombre());
         $pdf->SetSubject('PDF PQRSF');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 

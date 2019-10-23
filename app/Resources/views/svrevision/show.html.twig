@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svrevision</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ svRevision.id }}</td>
+            </tr>
+            <tr>
+                <th>Numeroradicado</th>
+                <td>{{ svRevision.numeroRadicado }}</td>
+            </tr>
+            <tr>
+                <th>Consecutivo</th>
+                <td>{{ svRevision.consecutivo }}</td>
+            </tr>
+            <tr>
+                <th>Fecharegistro</th>
+                <td>{% if svRevision.fechaRegistro %}{{ svRevision.fechaRegistro|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecharecepcion</th>
+                <td>{% if svRevision.fechaRecepcion %}{{ svRevision.fechaRecepcion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecharevision</th>
+                <td>{% if svRevision.fechaRevision %}{{ svRevision.fechaRevision|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechadevolucion</th>
+                <td>{% if svRevision.fechaDevolucion %}{{ svRevision.fechaDevolucion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechaotorgamiento</th>
+                <td>{% if svRevision.fechaOtorgamiento %}{{ svRevision.fechaOtorgamiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechavisitacontrol1</th>
+                <td>{% if svRevision.fechaVisitaControl1 %}{{ svRevision.fechaVisitaControl1|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Observacionvisita1</th>
+                <td>{{ svRevision.observacionVisita1 }}</td>
+            </tr>
+            <tr>
+                <th>Fechavisitacontrol2</th>
+                <td>{% if svRevision.fechaVisitaControl2 %}{{ svRevision.fechaVisitaControl2|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Observacionvisita2</th>
+                <td>{{ svRevision.observacionVisita2 }}</td>
+            </tr>
+            <tr>
+                <th>Personacontacto</th>
+                <td>{{ svRevision.personaContacto }}</td>
+            </tr>
+            <tr>
+                <th>Cargo</th>
+                <td>{{ svRevision.cargo }}</td>
+            </tr>
+            <tr>
+                <th>Correo</th>
+                <td>{{ svRevision.correo }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if svRevision.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svrevision_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

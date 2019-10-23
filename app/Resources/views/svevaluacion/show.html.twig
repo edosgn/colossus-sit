@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svevaluacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ svEvaluacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if svEvaluacion.fecha %}{{ svEvaluacion.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Pilarfortalecimiento</th>
+                <td>{{ svEvaluacion.pilarFortalecimiento }}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenidofortalecimiento</th>
+                <td>{{ svEvaluacion.valorObtenidoFortalecimiento }}</td>
+            </tr>
+            <tr>
+                <th>Valorponderadofortalecimiento</th>
+                <td>{{ svEvaluacion.valorPonderadoFortalecimiento }}</td>
+            </tr>
+            <tr>
+                <th>Resultadofortalecimiento</th>
+                <td>{{ svEvaluacion.resultadoFortalecimiento }}</td>
+            </tr>
+            <tr>
+                <th>Pilarcomportamiento</th>
+                <td>{{ svEvaluacion.pilarComportamiento }}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenidocomportamiento</th>
+                <td>{{ svEvaluacion.valorObtenidoComportamiento }}</td>
+            </tr>
+            <tr>
+                <th>Valorponderadocomportamiento</th>
+                <td>{{ svEvaluacion.valorPonderadoComportamiento }}</td>
+            </tr>
+            <tr>
+                <th>Resultadocomportamiento</th>
+                <td>{{ svEvaluacion.resultadoComportamiento }}</td>
+            </tr>
+            <tr>
+                <th>Pilarvehiculoseguro</th>
+                <td>{{ svEvaluacion.pilarVehiculoSeguro }}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenidovehiculoseguro</th>
+                <td>{{ svEvaluacion.valorObtenidoVehiculoSeguro }}</td>
+            </tr>
+            <tr>
+                <th>Valorponderadovehiculoseguro</th>
+                <td>{{ svEvaluacion.valorPonderadoVehiculoSeguro }}</td>
+            </tr>
+            <tr>
+                <th>Resultadovehiculoseguro</th>
+                <td>{{ svEvaluacion.resultadoVehiculoSeguro }}</td>
+            </tr>
+            <tr>
+                <th>Pilarinfraestructurasegura</th>
+                <td>{{ svEvaluacion.pilarInfraestructuraSegura }}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenidoinfraestructurasegura</th>
+                <td>{{ svEvaluacion.valorObtenidoInfraestructuraSegura }}</td>
+            </tr>
+            <tr>
+                <th>Valorponderadoinfraestructurasegura</th>
+                <td>{{ svEvaluacion.valorPonderadoInfraestructuraSegura }}</td>
+            </tr>
+            <tr>
+                <th>Resultadoinfraestructurasegura</th>
+                <td>{{ svEvaluacion.resultadoInfraestructuraSegura }}</td>
+            </tr>
+            <tr>
+                <th>Pilaratencionvictima</th>
+                <td>{{ svEvaluacion.pilarAtencionVictima }}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenidoatencionvictima</th>
+                <td>{{ svEvaluacion.valorObtenidoAtencionVictima }}</td>
+            </tr>
+            <tr>
+                <th>Valorponderadoatencionvictima</th>
+                <td>{{ svEvaluacion.valorPonderadoAtencionVictima }}</td>
+            </tr>
+            <tr>
+                <th>Resultadoatencionvictima</th>
+                <td>{{ svEvaluacion.resultadoAtencionVictima }}</td>
+            </tr>
+            <tr>
+                <th>Pilarvaloragregado</th>
+                <td>{{ svEvaluacion.pilarValorAgregado }}</td>
+            </tr>
+            <tr>
+                <th>Valorobtenidovaloragregado</th>
+                <td>{{ svEvaluacion.valorObtenidoValorAgregado }}</td>
+            </tr>
+            <tr>
+                <th>Valorponderadovaloragregado</th>
+                <td>{{ svEvaluacion.valorPonderadoValorAgregado }}</td>
+            </tr>
+            <tr>
+                <th>Resultadovaloragregado</th>
+                <td>{{ svEvaluacion.resultadoValorAgregado }}</td>
+            </tr>
+            <tr>
+                <th>Resultadofinal</th>
+                <td>{{ svEvaluacion.resultadofinal }}</td>
+            </tr>
+            <tr>
+                <th>Aval</th>
+                <td>{% if svEvaluacion.aval %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if svEvaluacion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svevaluacion_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

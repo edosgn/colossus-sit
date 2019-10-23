@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgvariables list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgVariable in svCfgVariables %}
+            <tr>
+                <td><a href="{{ path('svcfgvariable_show', { 'id': svCfgVariable.id }) }}">{{ svCfgVariable.id }}</a></td>
+                <td>{{ svCfgVariable.nombre }}</td>
+                <td>{% if svCfgVariable.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgvariable_show', { 'id': svCfgVariable.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
