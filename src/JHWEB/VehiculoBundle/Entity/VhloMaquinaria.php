@@ -105,9 +105,6 @@ class VhloMaquinaria
     /** @ORM\ManyToOne(targetEntity="VhloCfgTipoCabina", inversedBy="maquinarias") */
     private $tipoCabina;
 
-    /** @ORM\ManyToOne(targetEntity="VhloCfgClaseMaquinaria", inversedBy="maquinarias") */
-    private $claseMaquinaria;
-
     /** @ORM\ManyToOne(targetEntity="VhloCfgCondicionIngreso", inversedBy="maquinarias") */
     private $condicionIngreso;
     
@@ -461,30 +458,6 @@ class VhloMaquinaria
     public function getTipoCabina()
     {
         return $this->tipoCabina;
-    }
-
-    /**
-     * Set claseMaquinaria
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClaseMaquinaria $claseMaquinaria
-     *
-     * @return VhloMaquinaria
-     */
-    public function setClaseMaquinaria(\JHWEB\VehiculoBundle\Entity\VhloCfgClaseMaquinaria $claseMaquinaria = null)
-    {
-        $this->claseMaquinaria = $claseMaquinaria;
-
-        return $this;
-    }
-
-    /**
-     * Get claseMaquinaria
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClaseMaquinaria
-     */
-    public function getClaseMaquinaria()
-    {
-        return $this->claseMaquinaria;
     }
 
     /**

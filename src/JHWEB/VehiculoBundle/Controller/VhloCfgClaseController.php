@@ -24,11 +24,15 @@ class VhloCfgClaseController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findBy(
             array('activo' => 1)
         );
+
         $response = array(
+            'title' => 'Perfecto!',
             'status' => 'success',
             'code' => 200,
             'message' => "listado clases",
@@ -49,23 +53,29 @@ class VhloCfgClaseController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
 
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
+            $tipoMaquinaria = $em->getRepository('JHWEBMaquinariaBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
             
             $clase = new VhloCfgClase();
+
             $clase->setNombre($params->nombre);
             $clase->setCodigo($params->codigo);
             $clase->setTipoVehiculo($tipoVehiculo);
+            $clase->setTipoMaquinaria($tipoMaquinaria);
             $clase->setActivo(true);
 
             $em->persist($clase);
             $em->flush();
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con éxito",
@@ -73,6 +83,7 @@ class VhloCfgClaseController extends Controller
 
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
@@ -95,19 +106,23 @@ class VhloCfgClaseController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+            
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($id);
+            
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Clase encontrada", 
-                    'data'=> $clase,
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Clase encontrada", 
+                'data'=> $clase,
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
         return $helpers->json($response);
     }
@@ -132,11 +147,13 @@ class VhloCfgClaseController extends Controller
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->id);
             
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
+            $tipoMaquinaria = $em->getRepository('JHWEBMaquinariaBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
 
             if ($clase!=null) {
                 $clase->setNombre($params->nombre);
                 $clase->setCodigo($params->codigo);
                 $clase->setTipoVehiculo($tipoVehiculo);
+                $clase->setTipoMaquinaria($tipoMaquinaria);
                 $clase->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
@@ -144,23 +161,26 @@ class VhloCfgClaseController extends Controller
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Clase editada con éxito", 
                 );
             }else{
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
                     'message' => "La clase no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida", 
-                );
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
 
         return $helpers->json($response);
