@@ -16,7 +16,7 @@ class SvRevisionRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         
         $dql = "SELECT MAX(r.consecutivo) AS maximo
-            FROM AppBundle:MsvRevision r
+            FROM JHWEBSeguridadVialBundle:SvRevision r
             WHERE YEAR(r.fechaRegistro) = :ANIO";
         $consulta = $em->createQuery($dql);
         $consulta->setParameter('ANIO', $anio);
