@@ -304,7 +304,7 @@ class PnalAsignacionController extends Controller
 
         $divipo = $organismoTransito->getDivipo();
 
-        for ($numero=$asignacion->getDesde(); $numero <= $asignacion->getHasta(); $numero++) {
+        for ($numero = $asignacion->getDesde(); $numero <= $asignacion->getHasta(); $numero++) {
             if ($organismoTransito->getAsignacionRango()) {
                 $numeroComparendo = $divipo.$numero;
             }else{

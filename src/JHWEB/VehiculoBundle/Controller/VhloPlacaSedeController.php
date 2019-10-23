@@ -627,7 +627,7 @@ class VhloPlacaSedeController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->getByOrganismoTransitoAndServicio(
+            $asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->getByOrganismoTransitoAndModulo(
                 $params->idOrganismoTransito, $params->idModulo
             );
 

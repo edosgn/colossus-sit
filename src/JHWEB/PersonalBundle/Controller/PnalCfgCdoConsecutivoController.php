@@ -61,14 +61,14 @@ class PnalCfgCdoConsecutivoController extends Controller
                     $numeroComparendo = $divipo.$numero;
 
                     if (strlen($numeroComparendo) < 20) {
-                        $diferencia = abs(strlen($numeroComparendo) - 20);
+                        $diferencia = abs(20 - strlen($numeroComparendo));
                         $numeroComparendo = $divipo.str_pad($numero, $diferencia, '0', STR_PAD_LEFT);
                     }
                 }else{
                     $numeroComparendo = $numero;
 
                     if (strlen($numeroComparendo) < 20) {
-                        $diferencia = abs(strlen($numeroComparendo) - 20);
+                        $diferencia = abs(20 - strlen($numeroComparendo));
                         $numeroComparendo = str_pad($numeroComparendo, $diferencia, '0', STR_PAD_LEFT);
                     }
                 }
@@ -86,6 +86,7 @@ class PnalCfgCdoConsecutivoController extends Controller
             }
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => 'Registros creados con exito.',

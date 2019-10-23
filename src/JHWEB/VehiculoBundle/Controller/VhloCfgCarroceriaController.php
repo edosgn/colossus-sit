@@ -24,16 +24,24 @@ class VhloCfgCarroceriaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $carrocerias = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findBy(
             array('activo' => 1)
         );
-        $response = array(
-            'status' => 'success',
-            'code' => 200,
-            'message' => "listado carrocerias",
-            'data' => $carrocerias,
-        );
+
+        $response['data'] = array();
+
+        if ($carrocerias) {
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($carrocerias)." registros encontrados", 
+                'data' => $carrocerias,
+            );
+        }
 
         return $helpers->json($response);
     }
