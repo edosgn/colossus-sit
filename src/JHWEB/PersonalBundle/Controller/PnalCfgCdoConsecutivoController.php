@@ -58,19 +58,10 @@ class PnalCfgCdoConsecutivoController extends Controller
         
             for ($numero = $params->desde; $numero <= $params->hasta; $numero++) {
                 if ($funcionario->getOrganismoTransito()->getAsignacionRango()) {
-                    $numeroComparendo = $divipo.$numero;
-
-                    if (strlen($numeroComparendo) < 20) {
-                        $diferencia = abs(20 - strlen($numeroComparendo));
-                        $numeroComparendo = $divipo.str_pad($numero, $diferencia, '0', STR_PAD_LEFT);
-                    }
+                    $numeroConsecutivo= str_pad($numero, 12, '0', STR_PAD_LEFT);
+                    $numeroComparendo = $divipo.$numeroConsecutivo;
                 }else{
-                    $numeroComparendo = $numero;
-
-                    if (strlen($numeroComparendo) < 20) {
-                        $diferencia = abs(20 - strlen($numeroComparendo));
-                        $numeroComparendo = str_pad($numeroComparendo, $diferencia, '0', STR_PAD_LEFT);
-                    }
+                    $numeroComparendo = str_pad($numero, 20, '0', STR_PAD_LEFT);
                 }
                 
                 $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneByNumero(

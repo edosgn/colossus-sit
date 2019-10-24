@@ -301,7 +301,8 @@ class PnalTalonarioController extends Controller
                 $numeroConsecutivo = str_pad($numero, 12, '0', STR_PAD_LEFT);
                 $consecutivo->setNumero($divipo.$numeroConsecutivo);
             }else{
-                $consecutivo->setNumero($numero);
+                $numeroConsecutivo = str_pad($numero, 20, '0', STR_PAD_LEFT);
+                $consecutivo->setNumero($numeroConsecutivo);
             }
             
             $consecutivo->setOrganismoTransito($organismoTransito);

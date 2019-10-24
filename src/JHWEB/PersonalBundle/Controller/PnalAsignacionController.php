@@ -306,9 +306,10 @@ class PnalAsignacionController extends Controller
 
         for ($numero = $asignacion->getDesde(); $numero <= $asignacion->getHasta(); $numero++) {
             if ($organismoTransito->getAsignacionRango()) {
-                $numeroComparendo = $divipo.$numero;
+                $numeroConsecutivo= str_pad($numero, 12, '0', STR_PAD_LEFT);
+                $numeroComparendo = $divipo.$numeroConsecutivo;
             }else{
-                $numeroComparendo = $numero;
+                $numeroComparendo = str_pad($numero, 20, '0', STR_PAD_LEFT);
             }
             
             $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneByNumero(
