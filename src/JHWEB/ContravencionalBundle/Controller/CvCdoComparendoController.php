@@ -1789,7 +1789,7 @@ class CvCdoComparendoController extends Controller
                             fwrite($archivo, "N" . ",");
                         }
                         if($comparendo->getInfraccion() != null){
-                            fwrite($archivo, substr($comparendo->getInfraccion()->getId(),0,4) . ",");
+                            fwrite($archivo, substr($comparendo->getInfraccion()->getCodigo(),0,4) . ",");
                         } elseif ($comparendo->getInfraccion() == null) {
                             fwrite($archivo, "" . ",");
                         }
