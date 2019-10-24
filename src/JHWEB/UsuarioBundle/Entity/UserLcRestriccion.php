@@ -92,8 +92,6 @@ class UserLcRestriccion
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad", inversedBy="ciudadanos") */
     private $trazabilidad;
-    
-
 
     /**
      * Get id
