@@ -241,7 +241,7 @@ class SvRevisionController extends Controller
             $revision->setCargo($params->cargo);
             $revision->setCorreo($params->correo);
             $revision->setEmpresa($empresa);
-            $revision->setEstado(true);
+            $revision->setActivo(true);
             $em->persist($revision);
             $em->flush();
             $response = array(
