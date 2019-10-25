@@ -405,14 +405,14 @@ class SvEvaluacionController extends Controller
         }
         switch ($evaluacion->getAval()) {
             case true:
-                $html = $this->renderView('@App/msvEvaluacion/pdfAval.template.html.twig', array(
+                $html = $this->renderView('@JHWEBSeguridadVial/svEvaluacion/pdfAval.template.html.twig', array(
                     'fechaActual' => $fechaActual,
                     'evaluacion' => $evaluacion,
                     'funcionario' => $funcionario,
                 ));
                 break;        
             case false:
-                $html = $this->renderView('@App/msvEvaluacion/pdfNoAval.template.html.twig', array(
+                $html = $this->renderView('@JHWEBSeguridadVial/svEvaluacion/pdfNoAval.template.html.twig', array(
                     'fechaActual' => $fechaActual,
                     'evaluacion' => $evaluacion,
                     'funcionario' => $funcionario,
@@ -476,7 +476,7 @@ class SvEvaluacionController extends Controller
                 }
             }
 
-            $html = $this->renderView('@App/msvEvaluacion/pdf.calificacion.evaluacion.html.twig', array(
+            $html = $this->renderView('@JHWEBSeguridadVial/svEvaluacion/pdf.calificacion.evaluacion.html.twig', array(
                 'fechaActual' => $fechaActual,
                 'empresa' => $empresa,
                 'calificacionesFortalecimiento' => $calificacionesFortalecimiento,
