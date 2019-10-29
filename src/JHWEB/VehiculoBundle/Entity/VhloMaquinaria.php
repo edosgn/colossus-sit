@@ -96,6 +96,9 @@ class VhloMaquinaria
      */
     private $vehiculo;
 
+    /** @ORM\ManyToOne(targetEntity="VhloCfgTipoMaquinaria", inversedBy="maquinarias") */
+    private $tipoMaquinaria;
+
     /** @ORM\ManyToOne(targetEntity="VhloCfgSubpartidaArancelaria", inversedBy="maquinarias") */
     private $subpartidaArancelaria;
 
@@ -341,30 +344,6 @@ class VhloMaquinaria
     }
 
     /**
-     * Set subpartidaArancelaria
-     *
-     * @param string $subpartidaArancelaria
-     *
-     * @return VhloMaquinaria
-     */
-    public function setSubpartidaArancelaria($subpartidaArancelaria)
-    {
-        $this->subpartidaArancelaria = $subpartidaArancelaria;
-
-        return $this;
-    }
-
-    /**
-     * Get subpartidaArancelaria
-     *
-     * @return string
-     */
-    public function getSubpartidaArancelaria()
-    {
-        return $this->subpartidaArancelaria;
-    }
-
-    /**
      * Set numeroActivacionGps
      *
      * @param string $numeroActivacionGps
@@ -410,6 +389,54 @@ class VhloMaquinaria
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set tipoMaquinaria
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTipoMaquinaria $tipoMaquinaria
+     *
+     * @return VhloMaquinaria
+     */
+    public function setTipoMaquinaria(\JHWEB\VehiculoBundle\Entity\VhloCfgTipoMaquinaria $tipoMaquinaria = null)
+    {
+        $this->tipoMaquinaria = $tipoMaquinaria;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoMaquinaria
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTipoMaquinaria
+     */
+    public function getTipoMaquinaria()
+    {
+        return $this->tipoMaquinaria;
+    }
+
+    /**
+     * Set subpartidaArancelaria
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria $subpartidaArancelaria
+     *
+     * @return VhloMaquinaria
+     */
+    public function setSubpartidaArancelaria(\JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria $subpartidaArancelaria = null)
+    {
+        $this->subpartidaArancelaria = $subpartidaArancelaria;
+
+        return $this;
+    }
+
+    /**
+     * Get subpartidaArancelaria
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria
+     */
+    public function getSubpartidaArancelaria()
+    {
+        return $this->subpartidaArancelaria;
     }
 
     /**

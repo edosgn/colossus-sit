@@ -62,7 +62,7 @@ class VhloMaquinariaController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
-            
+
             $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
 
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
@@ -78,22 +78,17 @@ class VhloMaquinariaController extends Controller
                 $placa->setEstado('ASIGNADA');
                 $em->persist($placa);
                 
-
-                $numeroFactura = $params->vehiculo->numeroFactura;
-                $valor = $params->vehiculo->valor;
-                $fechaFactura = $params->vehiculo->fechaFactura;
-                $fechaFactura = new \DateTime($fechaFactura);
-
-
                 $vehiculo = new VhloVehiculo();
 
                 $vehiculo->setPlaca($placa);
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 
-                $vehiculo->setNumeroFactura($numeroFactura);
-                $vehiculo->setfechaFactura($fechaFactura);
-                $vehiculo->setValor($valor);
-
+                $vehiculo->setNumeroFactura($params->numeroFactura);
+                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
+                
+                if($params->valor) {
+                    $vehiculo->setValor($params->valor);
+                }
 
                 $vehiculo->setSerie($params->serie);
                 $vehiculo->setVin($params->vin);
@@ -105,6 +100,13 @@ class VhloMaquinariaController extends Controller
                     $params->idColor
                 );
                 $vehiculo->setColor($color);
+
+                 if($params->idClaseMaquinaria) {
+                    $claseMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find(
+                        $params->idClaseMaquinaria
+                    );
+                    $vehiculo->setClase($claseMaquinaria);
+                }
 
                 if ($params->idLinea) {
                     $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find(
@@ -118,6 +120,8 @@ class VhloMaquinariaController extends Controller
 
                 $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
                 $vehiculo->setCombustible($combustible);
+
+                $vehiculo->setTipoMatricula($params->tipoMatricula);
 
                 $vehiculo->setActivo(true);
 
@@ -150,10 +154,12 @@ class VhloMaquinariaController extends Controller
                     $params->numeroImportacion
                 );
 
-                $claseMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClaseMaquinaria')->find(
-                    $params->idClaseMaquinaria
-                );
-                $vehiculoMaquinaria->setClaseMaquinaria($claseMaquinaria);
+                if($params->idTipoMaquinaria) {
+                    $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
+                    $params->idTipoMaquinaria);
+
+                    $vehiculoMaquinaria->setTipoMaquinaria($tipoMaquinaria);
+                }
                 
                 $origenRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->find($params->idOrigenRegistro);
                 $vehiculoMaquinaria->setOrigenRegistro($origenRegistro);
