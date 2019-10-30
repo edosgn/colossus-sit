@@ -10,4 +10,27 @@ namespace JHWEB\VehiculoBundle\Repository;
  */
 class VhloMaquinariaRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene un vehiculo según el filtro de búsqueda
+    public function getByFilter($campo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p,
+            JHWEBVehiculoBundle:VhloCfgClase c, JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv           
+            WHERE (v.placa = p.id  AND p.numero = :campo)
+            OR (v.vin = :campo
+            OR v.chasis = :campo
+            OR v.serie = :campo
+            OR v.motor = :campo)
+            AND v.clase = c.id
+            AND c.tipoVehiculo = tv.id
+            AND tv.modulo = 3";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'campo' => $campo,
+        ));
+        
+        return $consulta->getOneOrNullResult();
+    }
 }

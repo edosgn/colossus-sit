@@ -95,6 +95,7 @@ class VhloMaquinariaController extends Controller
                 $vehiculo->setChasis($params->chasis);
                 $vehiculo->setMotor($params->motor);
                 $vehiculo->setModelo($params->modelo);
+                $vehiculo->setModelo($params->numeroEjes);
                 
                 $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
                     $params->idColor
@@ -185,14 +186,16 @@ class VhloMaquinariaController extends Controller
                 $em->flush();
                 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito",
                     'data' => $vehiculoMaquinaria
                 );
-
+                
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El número de placa ya existe",
@@ -200,6 +203,7 @@ class VhloMaquinariaController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",
@@ -228,26 +232,140 @@ class VhloMaquinariaController extends Controller
     /**
      * Displays a form to edit an existing vhloMaquinaria entity.
      *
-     * @Route("/{id}/edit", name="vhlomaquinaria_edit")
+     * @Route("/edit", name="vhlomaquinaria_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloMaquinaria $vhloMaquinaria)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloMaquinaria);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloMaquinariaType', $vhloMaquinaria);
-        $editForm->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->vehiculo->id);
+            $vehiculoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->find($params->id);
+            
+            $vehiculo->setNumeroFactura($params->vehiculo->numeroFactura);
+            $vehiculo->setValor($params->vehiculo->valor);
+            $vehiculo->setSerie($params->vehiculo->serie);
+            $vehiculo->setVin($params->vehiculo->vin);
+            $vehiculo->setChasis($params->vehiculo->chasis);
+            $vehiculo->setMotor($params->vehiculo->motor);
+            
+            if($params->idCondicionIngreso) {
+                $condicionIngreso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCondicionIngreso')->find($params->idCondicionIngreso);
+                $vehiculoMaquinaria->setCondicionIngreso($condicionIngreso);
+            }
+            
+            $vehiculoMaquinaria->setFechaIngreso(new \Datetime($params->fechaIngreso));
+            
 
-            return $this->redirectToRoute('vhlomaquinaria_edit', array('id' => $vhloMaquinaria->getId()));
+            if($params->idColor) {
+                $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($params->idColor);
+                $vehiculo->setColor($color);
+            }
+            
+            if($params->idTipoMaquinaria) {
+                $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+                $vehiculoMaquinaria->setTipoMaquinaria($tipoMaquinaria);
+            }
+            
+            if($params->idClaseMaquinaria) {
+                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClaseMaquinaria);
+                $vehiculo->setClase($clase);
+            }
+            
+            if($params->idLinea) {
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findOneBy(
+                    array(
+                        'marca' => $params->idMarca,
+                        'activo' => true
+                    )
+                );
+
+                $vehiculo->setLinea($linea);
+            }
+
+            $vehiculo->setModelo($params->vehiculo->modelo);
+
+            if($params->idCarroceria) {
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria[0]);
+                $vehiculo->setCarroceria($carroceria);
+            }
+            
+            $vehiculoMaquinaria->setPeso($params->peso);
+            $vehiculoMaquinaria->setCargaUtilMaxima($params->cargaUtilMaxima);
+            
+            if($params->idTipoRodaje) {
+                $tipoRodaje = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoRodaje')->find($params->idTipoRodaje);
+                $vehiculoMaquinaria->setTipoRodaje($tipoRodaje);
+            }
+            
+            $vehiculo->setNumeroEjes($params->vehiculo->numeroEjes);
+            
+            $vehiculoMaquinaria->setNumeroLlantas($params->numeroLlantas);
+            
+            if($params->idTipoCabina) {
+                $tipoCabina = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoCabina')->find($params->idTipoCabina);
+                $vehiculoMaquinaria->setTipoCabina($tipoCabina);
+            }
+            
+            $vehiculoMaquinaria->setAlto($params->alto);
+            $vehiculoMaquinaria->setLargo($params->largo);
+            $vehiculoMaquinaria->setAncho($params->ancho);
+            
+            if($params->idCombustible) {
+                $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
+                $vehiculo->setCombustible($combustible);
+            }
+            
+            if($params->idOrigenRegistro) {
+                $origenRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->find($params->idOrigenRegistro);
+                $vehiculoMaquinaria->setOrigenRegistro($origenRegistro);
+            }
+            
+            if($params->idSubpartidaArancelaria) {
+                $subpartidaArancelaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria')->find($params->idSubpartidaArancelaria);
+                $vehiculoMaquinaria->setSubpartidaArancelaria($subpartidaArancelaria);
+            }
+            
+            if($params->idEmpresaGps) {
+                $empresaGps = $em->getRepository('JHWEBVehiculoBundle:VhloCfgEmpresaGps')->find($params->idEmpresaGps);
+                $vehiculoMaquinaria->setEmpresaGps($empresaGps);
+            }
+
+            $vehiculoMaquinaria->setNumeroActivacionGps($params->numeroActivacionGps);
+            $vehiculoMaquinaria->setTipoDispositivo($params->tipoDispositivo);
+            $vehiculoMaquinaria->setNumeroImportacion($params->numeroImportacion);
+
+
+            $em->persist($vehiculo);
+            $em->persist($vehiculoMaquinaria);
+
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro actualizado con éxito",
+            );
+
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
 
-        return $this->render('vhlomaquinaria/edit.html.twig', array(
-            'vhloMaquinaria' => $vhloMaquinaria,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -284,5 +402,59 @@ class VhloMaquinariaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Busca un vehiculos segun los filtros .
+     *
+     * @Route("/search/filter", name="vhlomaquinaria_search_filter")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByFilterAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->getByFilter($params->filtro);
+
+            if ($vehiculo) {
+                $maquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->findOneBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                    )
+                );
+
+                if($maquinaria) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data'=> $maquinaria
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida', 
+            );
+        }
+
+        return $helpers->json($response);
     }
 }
