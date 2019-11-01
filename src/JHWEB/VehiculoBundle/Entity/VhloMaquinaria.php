@@ -38,9 +38,9 @@ class VhloMaquinaria
     /**
      * @var string
      *
-     * @ORM\Column(name="cargarUtilMaxima", type="string", length=255)
+     * @ORM\Column(name="carga_util_maxima", type="string", length=255)
      */
-    private $cargarUtilMaxima;
+    private $cargaUtilMaxima;
 
     /**
      * @var string
@@ -95,6 +95,9 @@ class VhloMaquinaria
      * @ORM\OneToOne(targetEntity="VhloVehiculo")
      */
     private $vehiculo;
+
+    /** @ORM\ManyToOne(targetEntity="VhloCfgTipoMaquinaria", inversedBy="maquinarias") */
+    private $tipoMaquinaria;
 
     /** @ORM\ManyToOne(targetEntity="VhloCfgSubpartidaArancelaria", inversedBy="maquinarias") */
     private $subpartidaArancelaria;
@@ -173,27 +176,27 @@ class VhloMaquinaria
     }
 
     /**
-     * Set cargarUtilMaxima
+     * Set cargaUtilMaxima
      *
-     * @param string $cargarUtilMaxima
+     * @param string $cargaUtilMaxima
      *
      * @return VhloMaquinaria
      */
-    public function setCargarUtilMaxima($cargarUtilMaxima)
+    public function setCargaUtilMaxima($cargaUtilMaxima)
     {
-        $this->cargarUtilMaxima = $cargarUtilMaxima;
+        $this->cargaUtilMaxima = $cargaUtilMaxima;
 
         return $this;
     }
 
     /**
-     * Get cargarUtilMaxima
+     * Get cargaUtilMaxima
      *
      * @return string
      */
-    public function getCargarUtilMaxima()
+    public function getCargaUtilMaxima()
     {
-        return $this->cargarUtilMaxima;
+        return $this->cargaUtilMaxima;
     }
 
     /**
@@ -341,30 +344,6 @@ class VhloMaquinaria
     }
 
     /**
-     * Set subpartidaArancelaria
-     *
-     * @param string $subpartidaArancelaria
-     *
-     * @return VhloMaquinaria
-     */
-    public function setSubpartidaArancelaria($subpartidaArancelaria)
-    {
-        $this->subpartidaArancelaria = $subpartidaArancelaria;
-
-        return $this;
-    }
-
-    /**
-     * Get subpartidaArancelaria
-     *
-     * @return string
-     */
-    public function getSubpartidaArancelaria()
-    {
-        return $this->subpartidaArancelaria;
-    }
-
-    /**
      * Set numeroActivacionGps
      *
      * @param string $numeroActivacionGps
@@ -410,6 +389,54 @@ class VhloMaquinaria
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set tipoMaquinaria
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTipoMaquinaria $tipoMaquinaria
+     *
+     * @return VhloMaquinaria
+     */
+    public function setTipoMaquinaria(\JHWEB\VehiculoBundle\Entity\VhloCfgTipoMaquinaria $tipoMaquinaria = null)
+    {
+        $this->tipoMaquinaria = $tipoMaquinaria;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoMaquinaria
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTipoMaquinaria
+     */
+    public function getTipoMaquinaria()
+    {
+        return $this->tipoMaquinaria;
+    }
+
+    /**
+     * Set subpartidaArancelaria
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria $subpartidaArancelaria
+     *
+     * @return VhloMaquinaria
+     */
+    public function setSubpartidaArancelaria(\JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria $subpartidaArancelaria = null)
+    {
+        $this->subpartidaArancelaria = $subpartidaArancelaria;
+
+        return $this;
+    }
+
+    /**
+     * Get subpartidaArancelaria
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria
+     */
+    public function getSubpartidaArancelaria()
+    {
+        return $this->subpartidaArancelaria;
     }
 
     /**

@@ -323,4 +323,41 @@ class VhloCfgClaseController extends Controller
 
         return $helpers->json($response);
     }
+
+    
+    /**
+     * datos para select 3
+     *
+     * @Route("/select/tipomaquinaria", name="vhlocfgclase_tipo_maquinaria_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByTipoMaquinariaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findBy(
+            array(
+                'tipoMaquinaria' => $params->idTipoMaquinaria,
+                'activo' => true
+            )
+        );
+        
+        $response = null;
+
+        foreach ($clases as $key => $clase) {
+            $response[$key] = array(
+                'value' => $clase->getId(),
+                'label' => $clase->getNombre(),
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }
