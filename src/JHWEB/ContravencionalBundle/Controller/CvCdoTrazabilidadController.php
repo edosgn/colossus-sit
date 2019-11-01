@@ -3,6 +3,7 @@
 namespace JHWEB\ContravencionalBundle\Controller;
 
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
+use JHWEB\ContravencionalBundle\Entity\CvInventarioDocumental;
 use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use JHWEB\ContravencionalBundle\Entity\CvAudiencia;
 use JHWEB\ContravencionalBundle\Entity\CvInvestigacionBien;
@@ -632,6 +633,107 @@ class CvCdoTrazabilidadController extends Controller
                 'message' => "Bien registrado con éxito.", 
                 'data'=> $bien,
             );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Actualiza el numero de folios de una trazabilidad especifica.
+     *
+     * @Route("/update/folios", name="cvcdotrazabilidad_update_folios")
+     * @Method({"GET", "POST"})
+     */
+    public function updateFoliosAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $trazabilidad = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->find($params->idTrazabilidad);
+
+            $trazabilidad->setFolios($params->numero);
+            $em->persist($trazabilidad);
+            $em->flush();
+                
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "El número de folios fue registrado con éxito.", 
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Crea un inventario documental para un comparendo
+     *
+     * @Route("/update/inventario/documental", name="cvcdotrazabilidad_update_inventario_documental")
+     * @Method({"GET", "POST"})
+     */
+    public function updateInventarioDocumentalAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $inventarioDocumental = new CvInventarioDocumental();
+            
+            $inventarioDocumental->setNumeroOrden($params->numeroOrden);
+            $inventarioDocumental->setCodigo($params->codigo);
+            $inventarioDocumental->setTipo("ORDEN DE COMPARENDO");
+            $inventarioDocumental->setFechaInicial(new \Datetime());
+            $inventarioDocumental->setFechaFinal(new \Datetime());
+            $inventarioDocumental->setCaja($params->caja);
+            $inventarioDocumental->setCarpeta($params->carpeta);
+            $inventarioDocumental->setActivo(true);
+
+            $em->persist($inventarioDocumental);
+            $em->flush();
+
+            if($inventarioDocumental) {
+                $comparendo = $em->getRepository("JHWEBContravencionalBundle:CvCdoComparendo")->find($params->idComparendo);
+                $comparendo->setInventarioDocumental($inventarioDocumental);
+    
+                $em->persist($comparendo);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "El inventario documental fue registrado con éxito.", 
+                );
+            }
         }else{
             $response = array(
                 'title' => 'Error!',
