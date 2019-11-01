@@ -475,6 +475,12 @@ class CvCdoComparendo
     protected $estado;
 
     /**
+     * @ORM\OneToOne(targetEntity="CvInventarioDocumental")
+     * @ORM\JoinColumn(name="inventario_documental_id", referencedColumnName="id")
+     */
+    private $inventarioDocumental;
+
+    /**
      * Get id
      *
      * @return int
@@ -2138,5 +2144,29 @@ class CvCdoComparendo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set inventarioDocumental
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvInventarioDocumental $inventarioDocumental
+     *
+     * @return CvCdoComparendo
+     */
+    public function setInventarioDocumental(\JHWEB\ContravencionalBundle\Entity\CvInventarioDocumental $inventarioDocumental = null)
+    {
+        $this->inventarioDocumental = $inventarioDocumental;
+
+        return $this;
+    }
+
+    /**
+     * Get inventarioDocumental
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvInventarioDocumental
+     */
+    public function getInventarioDocumental()
+    {
+        return $this->inventarioDocumental;
     }
 }

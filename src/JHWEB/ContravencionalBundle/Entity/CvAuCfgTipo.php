@@ -42,7 +42,7 @@ class CvAuCfgTipo
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="actosAdministrativos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="tiposAudiencia") */
     private $formato;
 
 

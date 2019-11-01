@@ -946,6 +946,11 @@ class FroFacturaController extends Controller
                 //Tangua
                 $code = '7707273652402';
                 break;
+            
+            case 254:
+                //Pasto
+                $code = '7707273658299';
+                break;
         }
 
         $barcode = new BarcodeGenerator();
@@ -1027,6 +1032,11 @@ class FroFacturaController extends Controller
             case 229:
                 //Tangua
                 $code = '7707273652839';
+                break;
+
+            case 254:
+                //Pasto
+                $code = '7707273658633';
                 break;
         }
 

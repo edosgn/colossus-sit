@@ -63,18 +63,14 @@ class CvAudiencia
      */
     private $activo;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="apoderado", type="string", length=255, nullable=true)
-     */
-    private $apoderado;
-
     /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audiencias") */
     private $comparendo;
 
     /** @ORM\ManyToOne(targetEntity="CvAuCfgTipo", inversedBy="audiencias") */
     private $tipo;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="audiencias") */
+    private $apoderado;
 
 
     /**
@@ -232,30 +228,6 @@ class CvAudiencia
     }
 
     /**
-     * Set apoderado
-     *
-     * @param string $apoderado
-     *
-     * @return CvAudiencia
-     */
-    public function setApoderado($apoderado)
-    {
-        $this->apoderado = $apoderado;
-
-        return $this;
-    }
-
-    /**
-     * Get apoderado
-     *
-     * @return string
-     */
-    public function getApoderado()
-    {
-        return $this->apoderado;
-    }
-
-    /**
      * Set comparendo
      *
      * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
@@ -301,5 +273,29 @@ class CvAudiencia
     public function getTipo()
     {
         return $this->tipo;
+    }
+
+    /**
+     * Set apoderado
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $apoderado
+     *
+     * @return CvAudiencia
+     */
+    public function setApoderado(\JHWEB\UsuarioBundle\Entity\UserCiudadano $apoderado = null)
+    {
+        $this->apoderado = $apoderado;
+
+        return $this;
+    }
+
+    /**
+     * Get apoderado
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
+     */
+    public function getApoderado()
+    {
+        return $this->apoderado;
     }
 }

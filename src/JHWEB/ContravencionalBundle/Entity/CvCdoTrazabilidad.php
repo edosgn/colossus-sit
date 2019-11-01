@@ -43,6 +43,13 @@ class CvCdoTrazabilidad
     private $observaciones;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="folios", type="float", nullable=true)
+     */
+    private $folios;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -322,5 +329,29 @@ class CvCdoTrazabilidad
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set folios
+     *
+     * @param float $folios
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setFolios($folios)
+    {
+        $this->folios = $folios;
+
+        return $this;
+    }
+
+    /**
+     * Get folios
+     *
+     * @return float
+     */
+    public function getFolios()
+    {
+        return $this->folios;
     }
 }

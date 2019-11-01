@@ -425,6 +425,71 @@ class CvAudienciaController extends Controller
     }
 
     /**
+     * Busca audiencias por id de Comparendo.
+     *
+     * @Route("/search/comparendo", name="cvaudiencia_search_comparendo")
+     * @Method({"GET","POST"})
+     */
+    public function searchByComparendo(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                $params->idComparendo
+            );
+
+            if ($comprendo) {
+                $audiencias = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->findBy(
+                    array(
+                        'comparendo' => $comparendo->getId()
+                    )
+                );
+    
+                if ($audiencias) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($audiencias)." audiencias encontradas", 
+                        'data' => $audiencias,
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No existen audiencias para el comparendo seleccionado.", 
+                    );
+                }
+            } else {
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Comparendo no encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca audiencias por parametros (identificacion, No. comparendo o fecha).
      *
      * @Route("/search/filtros", name="cvaudiencia_search_filtros")
@@ -464,7 +529,7 @@ class CvAudienciaController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
 
@@ -496,7 +561,7 @@ class CvAudienciaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Ultima audiencia programada para el ".$audiencia->getFecha()." ".$audiencia->getHora(), 
+                    'message' => "Ultima audiencia programada para el ".$audiencia->getFecha()->format('d/m/Y')." ".$audiencia->getHora()->format('h:i:s A'), 
                     'data' => $audiencia,
                 );
             }else{
@@ -510,7 +575,7 @@ class CvAudienciaController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
 
