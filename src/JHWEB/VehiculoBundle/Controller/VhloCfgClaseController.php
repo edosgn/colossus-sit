@@ -264,6 +264,50 @@ class VhloCfgClaseController extends Controller
     }
 
     /**
+     * datos para select 
+     *
+     * @Route("/select/tipovehiculo", name="vhlocfgclase_select_tipo_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByTipoVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findBy(
+                array(
+                    'tipoVehiculo' => $params->idTipoVehiculo,
+                    'activo' => 1
+                )
+            );
+
+            $response= null;
+
+            foreach ($clases as $key => $clase) {
+                $response[$key] = array(
+                    'value' => $clase->getId(),
+                    'label' => $clase->getCodigo()."_".$clase->getNombre(),
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
      * datos para select 2 por modulo
      *
      * @Route("/select/modulo", name="vhlocfgclase_select_modulo")

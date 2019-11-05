@@ -1905,7 +1905,10 @@ class FroTrteSolicitudController extends Controller
                             $usuario->setCiudadano($ciudadanoNew);
                             $em->flush();
                         }
-                    break;
+                    
+                    case 'expedicionLicenciaConduccion':
+                        $this->usuarioExpedicionLicenciaConduccionAction($params);
+                        break;
                 }
             }
 
@@ -3466,6 +3469,52 @@ class FroTrteSolicitudController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    //crea una nueva licencia de conduccion para un usuario
+    public function usuarioExpedicionLicenciaConduccionAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+        $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($params->idCategoria);
+        $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+        $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->idSolicitante);
+        $pais = $em->getRepository('JHWEBConfigBundle:CfgPais')->find(1);
+
+        $fechaExpedicion = new \Datetime($params->fechaExpedicion);
+        $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($fechaExpedicion->format('Y-m-d')))));
+        $cfgRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgRestriccion')->find($params->idRestriccion);
+
+        $licenciaConduccion = new UserLicenciaConduccion();
+        $licenciaConduccion->setOrganismoTransito($organismoTransito);
+        $licenciaConduccion->setCategoria($categoria);
+        $licenciaConduccion->setClase($clase);
+        $licenciaConduccion->setServicio($servicio);
+        $licenciaConduccion->setCiudadano($ciudadano);
+        $licenciaConduccion->setPais($pais);
+        $licenciaConduccion->setNumero($params->numero);
+        $licenciaConduccion->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+        $licenciaConduccion->setFechaVencimiento($fechaVencimiento);
+        $licenciaConduccion->setEstado('ACTIVA');
+        $licenciaConduccion->setRestriccion($cfgRestriccion);
+        $licenciaConduccion->setActivo(true);
+
+
+        $em->persist($licenciaConduccion);
+        $em->flush();
+    
+        $response = 
+            array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Se creó la licencia de conducción con éxito.',
+            );
+                    
         return $helpers->json($response);
     }
 }

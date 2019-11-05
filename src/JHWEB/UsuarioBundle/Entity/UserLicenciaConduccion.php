@@ -48,13 +48,6 @@ class UserLicenciaConduccion
      * @ORM\Column(name="estado", type="string", length=100)
      */
     private $estado;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="restriccion", type="text", nullable = true)
-     */
-    private $restriccion;
 
     /**
      * @var bool
@@ -81,6 +74,10 @@ class UserLicenciaConduccion
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgPais", inversedBy="licenciasConduccion") */
     private $pais;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserLcCfgRestriccion", inversedBy="licenciasConduccion")
+     **/
+    protected $restriccion;
 
 
     /**
@@ -138,9 +135,6 @@ class UserLicenciaConduccion
      */
     public function getFechaExpedicion()
     {
-        if ($this->fechaExpedicion) {
-            return $this->fechaExpedicion->format('Y-m-d');
-        }
         return $this->fechaExpedicion;
     }
 
@@ -165,9 +159,6 @@ class UserLicenciaConduccion
      */
     public function getFechaVencimiento()
     {
-        if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('Y-m-d');
-        }
         return $this->fechaVencimiento;
     }
 
@@ -193,30 +184,6 @@ class UserLicenciaConduccion
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set restriccion
-     *
-     * @param string $restriccion
-     *
-     * @return UserLicenciaConduccion
-     */
-    public function setRestriccion($restriccion)
-    {
-        $this->restriccion = $restriccion;
-
-        return $this;
-    }
-
-    /**
-     * Get restriccion
-     *
-     * @return string
-     */
-    public function getRestriccion()
-    {
-        return $this->restriccion;
     }
 
     /**
@@ -385,5 +352,29 @@ class UserLicenciaConduccion
     public function getPais()
     {
         return $this->pais;
+    }
+
+    /**
+     * Set restriccion
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserLcCfgRestriccion $restriccion
+     *
+     * @return UserLicenciaConduccion
+     */
+    public function setRestriccion(\JHWEB\UsuarioBundle\Entity\UserLcCfgRestriccion $restriccion = null)
+    {
+        $this->restriccion = $restriccion;
+
+        return $this;
+    }
+
+    /**
+     * Get restriccion
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserLcCfgRestriccion
+     */
+    public function getRestriccion()
+    {
+        return $this->restriccion;
     }
 }
