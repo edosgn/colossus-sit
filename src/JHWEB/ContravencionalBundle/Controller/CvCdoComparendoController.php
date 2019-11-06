@@ -2012,7 +2012,7 @@ class CvCdoComparendoController extends Controller
                         } elseif($recaudo->getComparendo()->getAcuerdoPago() == null) {
                             fwrite($archivo, '' . "," );
                         }
-                        if($recaudo->getComparendo()->getAcuerdoPago()->getNumeroCuotas() != null) {
+                        if($recaudo->getComparendo()->getAcuerdoPago() != null) {
                             fwrite($archivo, $recaudo->getComparendo()->getAcuerdoPago()->getCiudadano()->getTipoIdentificacion()->getCodigo() . "\r\n");
                         }
                     }
