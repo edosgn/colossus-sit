@@ -1825,7 +1825,7 @@ class FroTrteSolicitudController extends Controller
         if ($ciudadano) {
             foreach ($params->campos as $key => $campo) {
                 switch ($campo) {
-                    case 'cambioDocumento':
+                    case 'expedicionLicenciaCambioDocumento':
                         $ciudadanoNew = new UserCiudadano();
 
                         $ciudadanoNew->setPrimerNombre($ciudadano->getPrimerNombre());
@@ -1906,8 +1906,11 @@ class FroTrteSolicitudController extends Controller
                             $em->flush();
                         }
                     
+                        //crea la nueva licencia de conduccion
+                        $this->usuarioExpedicionLicenciaConduccionAction($params, $ciudadanoNew->getId());
+                        break;
                     case 'expedicionLicenciaConduccion':
-                        $this->usuarioExpedicionLicenciaConduccionAction($params);
+                        $this->usuarioExpedicionLicenciaConduccionAction($params, null);
                         break;
                 }
             }
@@ -3473,7 +3476,7 @@ class FroTrteSolicitudController extends Controller
     }
 
     //crea una nueva licencia de conduccion para un usuario
-    public function usuarioExpedicionLicenciaConduccionAction($params)
+    public function usuarioExpedicionLicenciaConduccionAction($params, $idCiudadano)
     {
         $helpers = $this->get("app.helpers");
 
@@ -3483,7 +3486,13 @@ class FroTrteSolicitudController extends Controller
         $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($params->idCategoria);
         $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
         $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
-        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->idSolicitante);
+
+        if($idCiudadano != null) {
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($idCiudadano);
+        } elseif($idCiudadano == null) {
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->idSolicitante);
+        }
+
         $pais = $em->getRepository('JHWEBConfigBundle:CfgPais')->find(1);
 
         $fechaExpedicion = new \Datetime($params->fechaExpedicion);
