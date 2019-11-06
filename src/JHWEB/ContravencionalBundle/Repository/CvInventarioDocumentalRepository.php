@@ -10,4 +10,23 @@ namespace JHWEB\ContravencionalBundle\Repository;
  */
 class CvInventarioDocumentalRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene todos los registros entre fechas para creación de archivo plano
+    public function getByFechas($fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT id
+        FROM JHWEBContravencionalBundle:CvInventarioDocumental id
+        WHERE id.fechaInicial BETWEEN :fechaInicial AND :fechaFinal
+        ORDER BY id.fechaInicial DESC";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
+        ));
+        
+        return $consulta->getResult();
+    }
 }
