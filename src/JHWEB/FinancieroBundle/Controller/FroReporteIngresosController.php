@@ -210,7 +210,6 @@ class FroReporteIngresosController extends Controller
                 $reporteGeneral = false;
                 $reporteDetallado = true;
 
-                
                 foreach ($params->filtros->arrayOrganismosTransito as $key => $idOrganismoTransito) {
                     $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
                     

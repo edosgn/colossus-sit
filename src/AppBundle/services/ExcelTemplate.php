@@ -69,6 +69,10 @@ class ExcelTemplate {
       case 'templateExcelByTramites':
         $objPHPExcel = $this->templateExcelByTramites($params);
         break;
+
+      case 'templateExcelByInventarioDocumental':
+        $objPHPExcel = $this->templateExcelByInventarioDocumental($params);
+        break;
     }
 
     if (!$objPHPExcel) {
@@ -97,7 +101,7 @@ class ExcelTemplate {
 
   //==============================//START DEFAULT CONFIGURATIONS//==============================//
 
-    /* ==================== ENCABEZADO Y PIE DE PAGINA ===================*/
+    /* ==================== ENCABEZADO Y PIE DE PAGINA TRAMITES ===================*/
     public function getMembretesTramites($params){
       // Add some data
 
@@ -143,7 +147,7 @@ class ExcelTemplate {
             ->setSubject("Office 2007 XLSX Test Document")
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
-            ->setCategory("PQRSF");
+            ->setCategory("Tramites");
 
           $this->objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth('10');
           $this->objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth('50');
@@ -179,6 +183,53 @@ class ExcelTemplate {
           $this->objPHPExcel->getActiveSheet()->getStyle('A1:I3')->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
           $this->objPHPExcel->getActiveSheet()->getStyle('B1:'.$this->col.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
         }
+    }
+
+    /* ==================== ENCABEZADO Y PIE DE PAGINA INVENTARIO DOCUMENTAL ===================*/
+    public function getMembretesInventarioDocumental($params){
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A1:O1');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A2:O2');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A3:O3');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A4:H4');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A5:H5');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A6:H6');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A7:H7');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A8:H8');
+        $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $this->objPHPExcel->setActiveSheetIndex($this->index)
+        ->setCellValue('A1', 'REPÚBLICA DE COLOMBIA')
+        ->setCellValue('A2', 'GOBERNACIÓN DE NARIÑO')
+        ->setCellValue('A3', 'FORMATO ÚNICO DE INVENTARIO DOCUMENTAL')
+        ->setCellValue('A4', 'ENTIDAD PRODUCTORA: GOBERNACIÓN DE NARIÑO')
+        ->setCellValue('A5', 'UNIDAD ADMINISTRATIVA: SECRETARÍA DE HACIENDA')
+        ->setCellValue('A6', 'OFICINA PRODUCTORA: SUBSECRETARÍA DE TRÁNSITO')
+        ->setCellValue('A7', 'OBJETO:TRANSFERENCIA DOCUMENTAL');
+     
+    }
+
+    public function getStyleInventarioDocumental($params){
+        $this->objPHPExcel->getProperties()->setCreator("JHWEB PASTO S.A.S.")
+          ->setLastModifiedBy("JHWEB PASTO S.A.S.")
+          ->setTitle("Office 2007 XLSX Test Document")
+          ->setSubject("Office 2007 XLSX Test Document")
+          ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+          ->setKeywords("office 2007 openxml php")
+          ->setCategory("Inventario Documental");
+
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth('50');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth('15');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth('15');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getStyle("A1:O".$this->row)->applyFromArray($this->styleBorder);
+        $this->objPHPExcel->getActiveSheet()->getStyle('A2:O'.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
+        $this->objPHPExcel->getActiveSheet()->getStyle('A1:O3')->getFont()->setBold(true);
+        $this->objPHPExcel->getActiveSheet()->getStyle('A1:O3')->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        $this->objPHPExcel->getActiveSheet()->getStyle('A1:'.$this->col.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
     }
   //==============================//START TEMPLATES//==============================//
 
@@ -594,163 +645,59 @@ class ExcelTemplate {
         return $this->objPHPExcel;
 
     }
-  //==============================//END TEMPLATES//==============================//
 
-  /* public function templateExcelByGeneral($params){
+    /* ==================== EXCEL BY INVENTARIO DOCUMENTAL ===================*/
+    public function templateExcelByInventarioDocumental($params){
         $em = $this->em;
         $pages = 0;
 
-        for ($i=1; $i <= 4; $i++) { 
-          switch ($i) {
-            case 1:
-              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getPendientesByDate(
-                  $params->fechaInicial,
-                  $params->fechaFinal
-              );
-              //Asigna titulo a la pestaña
-              $title = 'PENDIENTES';
-              break;
-            
-            case 2:
-              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getVencidasByDate(
-                  $params->fechaInicial,
-                  $params->fechaFinal
-              );
-              $title = 'VENCIDAS';
-              break;
+     
+        $this->index = $pages;
+        $this->row = 9;
+        $this->col = 'A';
+        
+        if ($pages > 0) {
+          $this->objPHPExcel->createSheet();
+        }
+        
+        $this->objPHPExcel->setActiveSheetIndex($pages);
 
-            case 3:
-              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getOportunasByDate(
-                  $params->fechaInicial,
-                  $params->fechaFinal
-              );
-              //Asigna titulo a la pestaña
-              $title = 'OPORTUNAS';
-              break;
+        //Imprime la cabecera
+        $this->getMembretesTramites($params);
 
-            case 4:
-              $solicitudes = $em->getRepository('JHWEBPqrsfBundle:Trazabilidad')->getInoportunasByDate(
-                  $params->fechaInicial,
-                  $params->fechaFinal
-              );
-              //Asigna titulo a la pestaña
-              $title = 'INOPORTUNAS';
-              break;
-          }
-          
-          if ($solicitudes) {
-            $this->index = $pages;
-            $this->row = 4;
-            $this->col = 'A';
-            
-            if ($pages > 0) {
-              $this->objPHPExcel->createSheet();
-            }
-            
-            $this->objPHPExcel->setActiveSheetIndex($pages);
+        $this->objPHPExcel->getActiveSheet()->setTitle('Inventario Documental');
 
-            //Imprime la cabecera
-            $this->getMembretes($params);
+        $this->objPHPExcel->setActiveSheetIndex($pages);
 
-            //Asigna titulo a la pestaña
-            $this->objPHPExcel->getActiveSheet()->setTitle(substr($title,0,30));
+        /*foreach ($params->inventarios as $key => $iventario) {
+          //Imprime los datos
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'A'.$this->row, $tramite['codigo']
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'B'.$this->row,  $tramite['nombre']
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'C'.$this->row,  $tramite['cantidad']
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'D'.$this->row,  $tramite['valor']
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'E'.$this->row,  $tramite['total']
+          );
 
-            foreach ($solicitudes as $key => $trazabilidad) {
-              //Imprime los datos
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'A'.$this->row, $trazabilidad->getSolicitud()->getNumeroRadicado()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'B'.$this->row, $trazabilidad->getSolicitud()->getAcudiente()->getIdentificacion()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'C'.$this->row, $trazabilidad->getSolicitud()->getAcudiente()->getNombres().' '.$trazabilidad->getSolicitud()->getAcudiente()->getApellidos()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'D'.$this->row, $trazabilidad->getSolicitud()->getPaciente()->getIdentificacion()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'E'.$this->row, $trazabilidad->getSolicitud()->getPaciente()->getNombres().' '.$trazabilidad->getSolicitud()->getPaciente()->getApellidos()
-              );
-              $eps = 'No aplica';
-              if ($trazabilidad->getSolicitud()) {
-                $paciente = $em->getRepository('JHWEBUserBundle:Paciente')->findOneBy(
-                    array(
-                      'usuario' => $trazabilidad->getSolicitud()->getId()
-                    )
-                );
-                if ($paciente) {
-                  $eps = $paciente->getEps()->getNombre();
-                }
-              }
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'F'.$this->row, $eps
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'G'.$this->row, $trazabilidad->getFuncionario()->getServicio()->getNombre()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'H'.$this->row, $trazabilidad->getFuncionario()->getUsuario()->getNombres().' '.$trazabilidad->getFuncionario()->getUsuario()->getApellidos()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'I'.$this->row, $trazabilidad->getSolicitud()->getTipo()->getNombre()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'J'.$this->row, $trazabilidad->getEstado()->getNombre()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'K'.$this->row, $trazabilidad->getSolicitud()->getCausa()->getNombre()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'L'.$this->row, $trazabilidad->getSolicitud()->getFechaApertura()->format('d/m/Y')
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'M'.$this->row, $trazabilidad->getSolicitud()->getFechaVencimiento()->format('d/m/Y')
-              );
-              $fechaRespuesta = 'No aplica';
-              if ($trazabilidad->getSolicitud()->getFechaRespuesta()) {
-                $fechaRespuesta = $trazabilidad->getSolicitud()->getFechaRespuesta()->format('d/m/Y');
-              }
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'N'.$this->row, $fechaRespuesta
-              );
-              //Calcula dias de respuesta
-              $dias = 'No aplica';
-              if (!$trazabilidad->getSolicitud()->getActivo() && $trazabilidad->getSolicitud()->getFechaRespuesta()){
-                $dias = $trazabilidad->getSolicitud()->getFechaApertura()->diff($trazabilidad->getSolicitud()->getFechaRespuesta());
-                $dias = $dias->format('%a días');
-              }
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'O'.$this->row, $dias
-              );
-              //======
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'B'.$this->row, $trazabilidad->getEstado()->getNombre()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'C'.$this->row, $trazabilidad->getFuncionario()->getServicio()->getNombre()
-              );
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'D'.$this->row, $trazabilidad->getFuncionario()->getUsuario()->getNombres().' '.$trazabilidad->getFuncionario()->getUsuario()->getApellidos()
-              );
-              
-              $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-                'F'.$this->row, $trazabilidad->getSolicitud()->getNumeroRadicado()
-              );
-              $this->row++;
-            }
-            //=========
-            //Otorga estilos
-            $this->getStyle();
-
-            // Aumenta en uno el numero de paginas
-            $pages++;
-          }
-        } 
-
+          $this->row++;
+        }*/
+        
+        //Otorga estilos
+        //$this->getStyleTramites($params);
+        
+        //$pages ++;
+        
         $this->objPHPExcel->setActiveSheetIndex(0);
 
         return $this->objPHPExcel;
-
-    } */
+    }
+  //==============================//END TEMPLATES//==============================//
 }

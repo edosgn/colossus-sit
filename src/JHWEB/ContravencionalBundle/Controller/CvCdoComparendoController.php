@@ -2050,6 +2050,7 @@ class CvCdoComparendoController extends Controller
                 'message' => 'Autorización no válida.', 
             );
         }
+
         return $helpers->json($response);
     }
 
@@ -2083,5 +2084,61 @@ class CvCdoComparendoController extends Controller
         ));
 
         $this->get('app.pdf')->templatePreview($html, 'Hoja_Control_Exp_'.$comparendo->getExpedienteNumero());
+    }
+
+    /**
+     * Obtiene los datos de inventario documental por rango de fechas
+     *
+     * @Route("/create/excel/inventory", name="cvcdocomparendo_excel_inventory")
+     * @Method({"GET", "POST"})
+     */
+    public function excelInventoryAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            setlocale(LC_ALL,"es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
+
+            $inventarios = $em->getRepository('JHWEBContravencionalBundle:CvInventarioDocumental')->getByFechas(
+                $fechaInicial, $fechaFinal
+            );
+
+            if($inventarios){
+                $data = (object)
+                    array(
+                    'template' => 'templateExcelByInventarioDocumental',
+                    'inventarios' => $inventarios,
+                );
+
+                return $this->get('app.excel')->newExcel($data);
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'No existen registros para el rango de fechas estipulados.', 
+                );
+            }
+
+            return $helpers->json($response);
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida.', 
+            );
+        }
     }
 }
