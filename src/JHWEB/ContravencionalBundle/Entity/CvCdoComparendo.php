@@ -143,6 +143,13 @@ class CvCdoComparendo
     /**
      * @var int
      *
+     * @ORM\Column(name="infractor_edad", type="integer", length=2, nullable=true)
+     */
+    private $infractorEdad;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="infractor_telefono", type="integer", length=255, nullable=true)
      */
     private $infractorTelefono;
@@ -872,6 +879,30 @@ class CvCdoComparendo
     public function getInfractorFechaNacimiento()
     {
         return $this->infractorFechaNacimiento;
+    }
+
+    /**
+     * Set infractorEdad
+     *
+     * @param integer $infractorEdad
+     *
+     * @return CvCdoComparendo
+     */
+    public function setInfractorEdad($infractorEdad)
+    {
+        $this->infractorEdad = $infractorEdad;
+
+        return $this;
+    }
+
+    /**
+     * Get infractorEdad
+     *
+     * @return integer
+     */
+    public function getInfractorEdad()
+    {
+        return $this->infractorEdad;
     }
 
     /**

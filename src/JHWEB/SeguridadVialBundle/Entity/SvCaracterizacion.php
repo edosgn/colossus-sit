@@ -39,11 +39,6 @@ class SvCaracterizacion
     protected $linea;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgMarca", inversedBy="caracterizaciones")
-     **/
-    protected $marca;
-
-    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgColor", inversedBy="caracterizaciones")
      **/
     protected $color;
@@ -177,16 +172,16 @@ class SvCaracterizacion
      /**
      * @var int
      *
-     * @ORM\Column(name="dimension_llantas", type="integer", length=150, nullable=true)
-     */
-    private $dimensionLlantas;
-    
-     /**
-     * @var int
-     *
      * @ORM\Column(name="dimension_rines", type="integer", length=150, nullable=true)
      */
     private $dimensionRines;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="material_rines", type="string", length=150, nullable=true)
+     */
+    private $materialRines;
 
     /**
      * @var string
@@ -214,7 +209,7 @@ class SvCaracterizacion
      *
      * @ORM\Column(name="mantenimientos", type="array", nullable=true)
      */
-    private $mantanimientos;
+    private $mantenimientos;
 
 
     //datos empresa
@@ -928,30 +923,6 @@ class SvCaracterizacion
     }
 
     /**
-     * Set dimensionLlantas
-     *
-     * @param integer $dimensionLlantas
-     *
-     * @return SvCaracterizacion
-     */
-    public function setDimensionLlantas($dimensionLlantas)
-    {
-        $this->dimensionLlantas = $dimensionLlantas;
-
-        return $this;
-    }
-
-    /**
-     * Get dimensionLlantas
-     *
-     * @return integer
-     */
-    public function getDimensionLlantas()
-    {
-        return $this->dimensionLlantas;
-    }
-
-    /**
      * Set dimensionRines
      *
      * @param integer $dimensionRines
@@ -973,6 +944,30 @@ class SvCaracterizacion
     public function getDimensionRines()
     {
         return $this->dimensionRines;
+    }
+
+    /**
+     * Set materialRines
+     *
+     * @param string $materialRines
+     *
+     * @return SvCaracterizacion
+     */
+    public function setMaterialRines($materialRines)
+    {
+        $this->materialRines = $materialRines;
+
+        return $this;
+    }
+
+    /**
+     * Get materialRines
+     *
+     * @return string
+     */
+    public function getMaterialRines()
+    {
+        return $this->materialRines;
     }
 
     /**
@@ -1048,27 +1043,27 @@ class SvCaracterizacion
     }
 
     /**
-     * Set mantanimientos
+     * Set mantenimientos
      *
-     * @param array $mantanimientos
+     * @param array $mantenimientos
      *
      * @return SvCaracterizacion
      */
-    public function setMantanimientos($mantanimientos)
+    public function setMantenimientos($mantenimientos)
     {
-        $this->mantanimientos = $mantanimientos;
+        $this->mantenimientos = $mantenimientos;
 
         return $this;
     }
 
     /**
-     * Get mantanimientos
+     * Get mantenimientos
      *
      * @return array
      */
-    public function getMantanimientos()
+    public function getMantenimientos()
     {
-        return $this->mantanimientos;
+        return $this->mantenimientos;
     }
 
     /**
@@ -1861,30 +1856,6 @@ class SvCaracterizacion
     public function getLinea()
     {
         return $this->linea;
-    }
-
-    /**
-     * Set marca
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgMarca $marca
-     *
-     * @return SvCaracterizacion
-     */
-    public function setMarca(\JHWEB\VehiculoBundle\Entity\VhloCfgMarca $marca = null)
-    {
-        $this->marca = $marca;
-
-        return $this;
-    }
-
-    /**
-     * Get marca
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgMarca
-     */
-    public function getMarca()
-    {
-        return $this->marca;
     }
 
     /**

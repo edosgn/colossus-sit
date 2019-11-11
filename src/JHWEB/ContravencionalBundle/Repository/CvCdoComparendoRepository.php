@@ -393,4 +393,52 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    public function getTopByInfraccion($idOrganismoTransito, $fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT count(c.infraccion) as cant, fi.nombre as nombre
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c,
+            JHWEBFinancieroBundle:FroInfraccion fi
+            
+            WHERE c.infraccion = fi.id
+            AND c.organismoTransito = :idOrganismoTransito
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            ORDER BY cant DESC";
+
+        $consulta = $em->createQuery($dql)->setMaxResults(10);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+
+        return $consulta->getResult();
+    }
+    
+    public function getTopByEdad($idOrganismoTransito, $fechaInicial, $fechaFinal)
+    {
+        $em = $this->getEntityManager();
+    
+        $dql = "SELECT count(c.infractorEdad) as cant, fi.nombre, c.infractorEdad as edad
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c,
+            JHWEBFinancieroBundle:FroInfraccion fi
+            
+            WHERE c.infraccion = fi.id
+            AND c.organismoTransito = :idOrganismoTransito
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            ORDER BY cant DESC";
+
+        $consulta = $em->createQuery($dql)->setMaxResults(10);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+    
+        return $consulta->getResult();
+    }
 }
