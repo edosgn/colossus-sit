@@ -22,6 +22,198 @@ class SvCaracterizacion
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="placa", type="string", length=6, nullable=true)
+     */
+    private $placa;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo", inversedBy="caracterizaciones")
+     **/
+    protected $tipoVehiculo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgLinea", inversedBy="caracterizaciones")
+     **/
+    protected $linea;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgColor", inversedBy="caracterizaciones")
+     **/
+    protected $color;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="chasis", type="string", length=150, nullable=true)
+     */
+    private $chasis;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="motor", type="string", length=150, nullable=true)
+     */
+    private $motor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cilindraje", type="string", length=150, nullable=true)
+     */
+    private $cilindraje;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="uso_vehiculo", type="string", length=150, nullable=true)
+     */
+    private $usoVehiculo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_interno_dpn", type="integer", length=150, nullable=true)
+     */
+    private $numeroInternoDpn;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_vencimiento_soat", type="date")
+     */
+    private $fechaVencimientoSoat;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_vencimiento_tecnomecanica", type="date")
+     */
+    private $fechaVencimientoTecnomecanica;
+
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_licencia_transito", type="integer", length=150, nullable=true)
+     */
+    private $numeroLicenciaTransito;
+
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_valvulas_cilindro", type="integer", length=150, nullable=true)
+     */
+    private $numeroValvulasCilindro;
+
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad_cilindros", type="integer", length=150, nullable=true)
+     */
+    private $cantidadCilindros;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="turbo", type="string", length=150, nullable=true)
+     */
+    private $turbo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_direccion", type="string", length=150, nullable=true)
+     */
+    private $tipoDireccion;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_transicion", type="string", length=150, nullable=true)
+     */
+    private $tipoTransicion;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_rodamientos", type="string", length=150, nullable=true)
+     */
+    private $tipoRodamientos;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_velocidades", type="string", length=150, nullable=true)
+     */
+    private $numeroVelocidades;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="suspension_delantera", type="string", length=150, nullable=true)
+     */
+    private $suspensionDelantera;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="suspension_trasera", type="string", length=150, nullable=true)
+     */
+    private $suspensionTrasera;
+    
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_llantas", type="integer", length=150, nullable=true)
+     */
+    private $numeroLlantas;
+    
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="dimension_rines", type="integer", length=150, nullable=true)
+     */
+    private $dimensionRines;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="material_rines", type="string", length=150, nullable=true)
+     */
+    private $materialRines;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_frenos_delanteros", type="string", length=150, nullable=true)
+     */
+    private $tipoFrenosDelanteros;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_frenos_traseros", type="string", length=150, nullable=true)
+     */
+    private $tipoFrenosTraseros;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="tipos_prevencion", type="array", nullable=true)
+     */
+    private $tiposPrevencion;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="mantenimientos", type="array", nullable=true)
+     */
+    private $mantenimientos;
+
+
+    //datos empresa
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date")
@@ -29,16 +221,14 @@ class SvCaracterizacion
     private $fecha;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="empresas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="caracterizaciones")
      **/
     protected $empresa;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ciudad", type="string", length=150, nullable=true)
-     */
-    private $ciudad;
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="caracterizaciones")
+     **/
+    protected $ciudad;
 
     /**
      * @var string
@@ -62,6 +252,16 @@ class SvCaracterizacion
     private $cedula;
 
     /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="caracterizaciones")
+     **/
+    protected $lugarExpedicionDocumento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGrupoSanguineo", inversedBy="caracterizaciones")
+     **/
+    protected $grupoSanguineo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="clc", type="string", length=150, nullable=true)
@@ -76,18 +276,24 @@ class SvCaracterizacion
     private $fechaVigencia;
 
     /**
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(name="edad", type="integer")
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */
-    private $edad;
+    private $fechaNacimiento;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGenero", inversedBy="caracterizaciones")
+     **/
+    protected $genero;
+
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="genero", type="string", length=50)
+     * @ORM\Column(name="nivel_educativo", type="string", length=150, nullable=true)
      */
-    private $genero;
+    private $nivelEducativo;
 
     /**
      * @var string
@@ -261,6 +467,606 @@ class SvCaracterizacion
     }
 
     /**
+     * Set placa
+     *
+     * @param string $placa
+     *
+     * @return SvCaracterizacion
+     */
+    public function setPlaca($placa)
+    {
+        $this->placa = $placa;
+
+        return $this;
+    }
+
+    /**
+     * Get placa
+     *
+     * @return string
+     */
+    public function getPlaca()
+    {
+        return $this->placa;
+    }
+
+    /**
+     * Set chasis
+     *
+     * @param string $chasis
+     *
+     * @return SvCaracterizacion
+     */
+    public function setChasis($chasis)
+    {
+        $this->chasis = $chasis;
+
+        return $this;
+    }
+
+    /**
+     * Get chasis
+     *
+     * @return string
+     */
+    public function getChasis()
+    {
+        return $this->chasis;
+    }
+
+    /**
+     * Set motor
+     *
+     * @param string $motor
+     *
+     * @return SvCaracterizacion
+     */
+    public function setMotor($motor)
+    {
+        $this->motor = $motor;
+
+        return $this;
+    }
+
+    /**
+     * Get motor
+     *
+     * @return string
+     */
+    public function getMotor()
+    {
+        return $this->motor;
+    }
+
+    /**
+     * Set cilindraje
+     *
+     * @param string $cilindraje
+     *
+     * @return SvCaracterizacion
+     */
+    public function setCilindraje($cilindraje)
+    {
+        $this->cilindraje = $cilindraje;
+
+        return $this;
+    }
+
+    /**
+     * Get cilindraje
+     *
+     * @return string
+     */
+    public function getCilindraje()
+    {
+        return $this->cilindraje;
+    }
+
+    /**
+     * Set usoVehiculo
+     *
+     * @param string $usoVehiculo
+     *
+     * @return SvCaracterizacion
+     */
+    public function setUsoVehiculo($usoVehiculo)
+    {
+        $this->usoVehiculo = $usoVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get usoVehiculo
+     *
+     * @return string
+     */
+    public function getUsoVehiculo()
+    {
+        return $this->usoVehiculo;
+    }
+
+    /**
+     * Set numeroInternoDpn
+     *
+     * @param integer $numeroInternoDpn
+     *
+     * @return SvCaracterizacion
+     */
+    public function setNumeroInternoDpn($numeroInternoDpn)
+    {
+        $this->numeroInternoDpn = $numeroInternoDpn;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroInternoDpn
+     *
+     * @return integer
+     */
+    public function getNumeroInternoDpn()
+    {
+        return $this->numeroInternoDpn;
+    }
+
+    /**
+     * Set fechaVencimientoSoat
+     *
+     * @param \DateTime $fechaVencimientoSoat
+     *
+     * @return SvCaracterizacion
+     */
+    public function setFechaVencimientoSoat($fechaVencimientoSoat)
+    {
+        $this->fechaVencimientoSoat = $fechaVencimientoSoat;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimientoSoat
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimientoSoat()
+    {
+        return $this->fechaVencimientoSoat;
+    }
+
+    /**
+     * Set fechaVencimientoTecnomecanica
+     *
+     * @param \DateTime $fechaVencimientoTecnomecanica
+     *
+     * @return SvCaracterizacion
+     */
+    public function setFechaVencimientoTecnomecanica($fechaVencimientoTecnomecanica)
+    {
+        $this->fechaVencimientoTecnomecanica = $fechaVencimientoTecnomecanica;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimientoTecnomecanica
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimientoTecnomecanica()
+    {
+        return $this->fechaVencimientoTecnomecanica;
+    }
+
+    /**
+     * Set numeroLicenciaTransito
+     *
+     * @param integer $numeroLicenciaTransito
+     *
+     * @return SvCaracterizacion
+     */
+    public function setNumeroLicenciaTransito($numeroLicenciaTransito)
+    {
+        $this->numeroLicenciaTransito = $numeroLicenciaTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLicenciaTransito
+     *
+     * @return integer
+     */
+    public function getNumeroLicenciaTransito()
+    {
+        return $this->numeroLicenciaTransito;
+    }
+
+    /**
+     * Set numeroValvulasCilindro
+     *
+     * @param integer $numeroValvulasCilindro
+     *
+     * @return SvCaracterizacion
+     */
+    public function setNumeroValvulasCilindro($numeroValvulasCilindro)
+    {
+        $this->numeroValvulasCilindro = $numeroValvulasCilindro;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroValvulasCilindro
+     *
+     * @return integer
+     */
+    public function getNumeroValvulasCilindro()
+    {
+        return $this->numeroValvulasCilindro;
+    }
+
+    /**
+     * Set cantidadCilindros
+     *
+     * @param integer $cantidadCilindros
+     *
+     * @return SvCaracterizacion
+     */
+    public function setCantidadCilindros($cantidadCilindros)
+    {
+        $this->cantidadCilindros = $cantidadCilindros;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadCilindros
+     *
+     * @return integer
+     */
+    public function getCantidadCilindros()
+    {
+        return $this->cantidadCilindros;
+    }
+
+    /**
+     * Set turbo
+     *
+     * @param string $turbo
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTurbo($turbo)
+    {
+        $this->turbo = $turbo;
+
+        return $this;
+    }
+
+    /**
+     * Get turbo
+     *
+     * @return string
+     */
+    public function getTurbo()
+    {
+        return $this->turbo;
+    }
+
+    /**
+     * Set tipoDireccion
+     *
+     * @param string $tipoDireccion
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTipoDireccion($tipoDireccion)
+    {
+        $this->tipoDireccion = $tipoDireccion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDireccion
+     *
+     * @return string
+     */
+    public function getTipoDireccion()
+    {
+        return $this->tipoDireccion;
+    }
+
+    /**
+     * Set tipoTransicion
+     *
+     * @param string $tipoTransicion
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTipoTransicion($tipoTransicion)
+    {
+        $this->tipoTransicion = $tipoTransicion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoTransicion
+     *
+     * @return string
+     */
+    public function getTipoTransicion()
+    {
+        return $this->tipoTransicion;
+    }
+
+    /**
+     * Set tipoRodamientos
+     *
+     * @param string $tipoRodamientos
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTipoRodamientos($tipoRodamientos)
+    {
+        $this->tipoRodamientos = $tipoRodamientos;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoRodamientos
+     *
+     * @return string
+     */
+    public function getTipoRodamientos()
+    {
+        return $this->tipoRodamientos;
+    }
+
+    /**
+     * Set numeroVelocidades
+     *
+     * @param string $numeroVelocidades
+     *
+     * @return SvCaracterizacion
+     */
+    public function setNumeroVelocidades($numeroVelocidades)
+    {
+        $this->numeroVelocidades = $numeroVelocidades;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroVelocidades
+     *
+     * @return string
+     */
+    public function getNumeroVelocidades()
+    {
+        return $this->numeroVelocidades;
+    }
+
+    /**
+     * Set suspensionDelantera
+     *
+     * @param string $suspensionDelantera
+     *
+     * @return SvCaracterizacion
+     */
+    public function setSuspensionDelantera($suspensionDelantera)
+    {
+        $this->suspensionDelantera = $suspensionDelantera;
+
+        return $this;
+    }
+
+    /**
+     * Get suspensionDelantera
+     *
+     * @return string
+     */
+    public function getSuspensionDelantera()
+    {
+        return $this->suspensionDelantera;
+    }
+
+    /**
+     * Set suspensionTrasera
+     *
+     * @param string $suspensionTrasera
+     *
+     * @return SvCaracterizacion
+     */
+    public function setSuspensionTrasera($suspensionTrasera)
+    {
+        $this->suspensionTrasera = $suspensionTrasera;
+
+        return $this;
+    }
+
+    /**
+     * Get suspensionTrasera
+     *
+     * @return string
+     */
+    public function getSuspensionTrasera()
+    {
+        return $this->suspensionTrasera;
+    }
+
+    /**
+     * Set numeroLlantas
+     *
+     * @param integer $numeroLlantas
+     *
+     * @return SvCaracterizacion
+     */
+    public function setNumeroLlantas($numeroLlantas)
+    {
+        $this->numeroLlantas = $numeroLlantas;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLlantas
+     *
+     * @return integer
+     */
+    public function getNumeroLlantas()
+    {
+        return $this->numeroLlantas;
+    }
+
+    /**
+     * Set dimensionRines
+     *
+     * @param integer $dimensionRines
+     *
+     * @return SvCaracterizacion
+     */
+    public function setDimensionRines($dimensionRines)
+    {
+        $this->dimensionRines = $dimensionRines;
+
+        return $this;
+    }
+
+    /**
+     * Get dimensionRines
+     *
+     * @return integer
+     */
+    public function getDimensionRines()
+    {
+        return $this->dimensionRines;
+    }
+
+    /**
+     * Set materialRines
+     *
+     * @param string $materialRines
+     *
+     * @return SvCaracterizacion
+     */
+    public function setMaterialRines($materialRines)
+    {
+        $this->materialRines = $materialRines;
+
+        return $this;
+    }
+
+    /**
+     * Get materialRines
+     *
+     * @return string
+     */
+    public function getMaterialRines()
+    {
+        return $this->materialRines;
+    }
+
+    /**
+     * Set tipoFrenosDelanteros
+     *
+     * @param string $tipoFrenosDelanteros
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTipoFrenosDelanteros($tipoFrenosDelanteros)
+    {
+        $this->tipoFrenosDelanteros = $tipoFrenosDelanteros;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoFrenosDelanteros
+     *
+     * @return string
+     */
+    public function getTipoFrenosDelanteros()
+    {
+        return $this->tipoFrenosDelanteros;
+    }
+
+    /**
+     * Set tipoFrenosTraseros
+     *
+     * @param string $tipoFrenosTraseros
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTipoFrenosTraseros($tipoFrenosTraseros)
+    {
+        $this->tipoFrenosTraseros = $tipoFrenosTraseros;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoFrenosTraseros
+     *
+     * @return string
+     */
+    public function getTipoFrenosTraseros()
+    {
+        return $this->tipoFrenosTraseros;
+    }
+
+    /**
+     * Set tiposPrevencion
+     *
+     * @param array $tiposPrevencion
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTiposPrevencion($tiposPrevencion)
+    {
+        $this->tiposPrevencion = $tiposPrevencion;
+
+        return $this;
+    }
+
+    /**
+     * Get tiposPrevencion
+     *
+     * @return array
+     */
+    public function getTiposPrevencion()
+    {
+        return $this->tiposPrevencion;
+    }
+
+    /**
+     * Set mantenimientos
+     *
+     * @param array $mantenimientos
+     *
+     * @return SvCaracterizacion
+     */
+    public function setMantenimientos($mantenimientos)
+    {
+        $this->mantenimientos = $mantenimientos;
+
+        return $this;
+    }
+
+    /**
+     * Get mantenimientos
+     *
+     * @return array
+     */
+    public function getMantenimientos()
+    {
+        return $this->mantenimientos;
+    }
+
+    /**
      * Set fecha
      *
      * @param \DateTime $fecha
@@ -282,30 +1088,6 @@ class SvCaracterizacion
     public function getFecha()
     {
         return $this->fecha;
-    }
-
-    /**
-     * Set ciudad
-     *
-     * @param string $ciudad
-     *
-     * @return SvCaracterizacion
-     */
-    public function setCiudad($ciudad)
-    {
-        $this->ciudad = $ciudad;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudad
-     *
-     * @return string
-     */
-    public function getCiudad()
-    {
-        return $this->ciudad;
     }
 
     /**
@@ -429,51 +1211,51 @@ class SvCaracterizacion
     }
 
     /**
-     * Set edad
+     * Set fechaNacimiento
      *
-     * @param integer $edad
+     * @param \DateTime $fechaNacimiento
      *
      * @return SvCaracterizacion
      */
-    public function setEdad($edad)
+    public function setFechaNacimiento($fechaNacimiento)
     {
-        $this->edad = $edad;
+        $this->fechaNacimiento = $fechaNacimiento;
 
         return $this;
     }
 
     /**
-     * Get edad
+     * Get fechaNacimiento
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getEdad()
+    public function getFechaNacimiento()
     {
-        return $this->edad;
+        return $this->fechaNacimiento;
     }
 
     /**
-     * Set genero
+     * Set nivelEducativo
      *
-     * @param string $genero
+     * @param string $nivelEducativo
      *
      * @return SvCaracterizacion
      */
-    public function setGenero($genero)
+    public function setNivelEducativo($nivelEducativo)
     {
-        $this->genero = $genero;
+        $this->nivelEducativo = $nivelEducativo;
 
         return $this;
     }
 
     /**
-     * Get genero
+     * Get nivelEducativo
      *
      * @return string
      */
-    public function getGenero()
+    public function getNivelEducativo()
     {
-        return $this->genero;
+        return $this->nivelEducativo;
     }
 
     /**
@@ -1029,6 +1811,78 @@ class SvCaracterizacion
     }
 
     /**
+     * Set tipoVehiculo
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo $tipoVehiculo
+     *
+     * @return SvCaracterizacion
+     */
+    public function setTipoVehiculo(\JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo $tipoVehiculo = null)
+    {
+        $this->tipoVehiculo = $tipoVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVehiculo
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo
+     */
+    public function getTipoVehiculo()
+    {
+        return $this->tipoVehiculo;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgLinea $linea
+     *
+     * @return SvCaracterizacion
+     */
+    public function setLinea(\JHWEB\VehiculoBundle\Entity\VhloCfgLinea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgLinea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
+    }
+
+    /**
+     * Set color
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgColor $color
+     *
+     * @return SvCaracterizacion
+     */
+    public function setColor(\JHWEB\VehiculoBundle\Entity\VhloCfgColor $color = null)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgColor
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
      * Set empresa
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
@@ -1050,5 +1904,101 @@ class SvCaracterizacion
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set ciudad
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $ciudad
+     *
+     * @return SvCaracterizacion
+     */
+    public function setCiudad(\JHWEB\ConfigBundle\Entity\CfgMunicipio $ciudad = null)
+    {
+        $this->ciudad = $ciudad;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudad
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     */
+    public function getCiudad()
+    {
+        return $this->ciudad;
+    }
+
+    /**
+     * Set lugarExpedicionDocumento
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $lugarExpedicionDocumento
+     *
+     * @return SvCaracterizacion
+     */
+    public function setLugarExpedicionDocumento(\JHWEB\ConfigBundle\Entity\CfgMunicipio $lugarExpedicionDocumento = null)
+    {
+        $this->lugarExpedicionDocumento = $lugarExpedicionDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get lugarExpedicionDocumento
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     */
+    public function getLugarExpedicionDocumento()
+    {
+        return $this->lugarExpedicionDocumento;
+    }
+
+    /**
+     * Set grupoSanguineo
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgGrupoSanguineo $grupoSanguineo
+     *
+     * @return SvCaracterizacion
+     */
+    public function setGrupoSanguineo(\JHWEB\UsuarioBundle\Entity\UserCfgGrupoSanguineo $grupoSanguineo = null)
+    {
+        $this->grupoSanguineo = $grupoSanguineo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupoSanguineo
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgGrupoSanguineo
+     */
+    public function getGrupoSanguineo()
+    {
+        return $this->grupoSanguineo;
+    }
+
+    /**
+     * Set genero
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgGenero $genero
+     *
+     * @return SvCaracterizacion
+     */
+    public function setGenero(\JHWEB\UsuarioBundle\Entity\UserCfgGenero $genero = null)
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
+    /**
+     * Get genero
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgGenero
+     */
+    public function getGenero()
+    {
+        return $this->genero;
     }
 }

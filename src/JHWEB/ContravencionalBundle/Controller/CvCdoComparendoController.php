@@ -2141,4 +2141,61 @@ class CvCdoComparendoController extends Controller
             );
         }
     }
+
+    /**
+     * genera un reporte para gráficas segun filtros.
+     *
+     * @Route("/generate/reporte", name="cvcdocomparendo_generate_reporte")
+     * @Method({"GET","POST"})
+     */
+    public function generateReporteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+    
+    
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+    
+            $em = $this->getDoctrine()->getManager();
+
+            if($params->tipoReporte == 1) {
+                $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getTopByInfraccion(
+                    $params->idOrganismoTransito, $params->fechaInicial, $params->fechaFinal
+                );
+            }
+            elseif($params->tipoReporte == 2) {
+                $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getTopByEdad(
+                    $params->idOrganismoTransito, $params->fechaInicial, $params->fechaFinal
+                );
+            }
+    
+            if ($comparendos) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Comparendos encontrados satisfactoriamente.", 
+                    'data' => $comparendos,
+                );
+            }else{
+                 $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No existe ningún comparendo con los filtros estipulados.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        return $helpers->json($response);
+    }
 }

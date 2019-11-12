@@ -58,8 +58,50 @@ class SvCaracterizacionController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-
+            
             $caracterizacion = new SvCaracterizacion();
+
+            $caracterizacion->setPlaca($params->placa);
+            
+            if($params->idTipoVehiculo) {
+                $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
+                $caracterizacion->setTipoVehiculo($tipoVehiculo);
+            }
+
+            if($params->idLinea) {
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->idLinea);
+                $caracterizacion->setLinea($linea);
+            }
+
+            if($params->idColor) {
+                $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($params->idColor);
+                $caracterizacion->setColor($color);
+            }
+
+            $caracterizacion->setChasis($params->chasis);
+            $caracterizacion->setMotor($params->motor);
+            $caracterizacion->setCilindraje($params->cilindraje);
+            $caracterizacion->setUsoVehiculo($params->usoVehiculo);
+            $caracterizacion->setNumeroInternoDpn($params->numeroInternoDpn);
+            $caracterizacion->setFechaVencimientoSoat(new \Datetime($params->fechaVencimientoSoat));
+            $caracterizacion->setFechaVencimientoTecnomecanica(new \Datetime($params->fechaVencimientoTecnomecanica));
+            $caracterizacion->setNumeroLicenciaTransito($params->numeroLicTransito);
+            $caracterizacion->setNumeroValvulasCilindro($params->numeroValvulasCilindro);
+            $caracterizacion->setCantidadCilindros($params->numeroCilindros);
+            $caracterizacion->setTurbo($params->turbo);
+            $caracterizacion->setTipoDireccion($params->tipoDireccion);
+            $caracterizacion->setTipoTransicion($params->tipoTransicion);
+            $caracterizacion->setTipoRodamientos($params->tipoRodamiento);
+            $caracterizacion->setNumeroVelocidades($params->numeroVelocidades);
+            $caracterizacion->setSuspensionDelantera($params->suspensionDelantera);
+            $caracterizacion->setSuspensionTrasera($params->suspensionTrasera);
+            $caracterizacion->setNumeroLlantas($params->numeroLlantas);
+            $caracterizacion->setDimensionRines($params->dimensionRines);
+            $caracterizacion->setMaterialRines($params->materialRines);
+            $caracterizacion->setTipoFrenosDelanteros($params->tipoFrenosDelanteros);
+            $caracterizacion->setTipoFrenosTraseros($params->tipoFrenosTraseros);
+            $caracterizacion->setTiposPrevencion($params->arrayEquipoPrevencion);
+            $caracterizacion->setMantenimientos($params->arrayRelacionMantenimiento);
             
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->nit));
             $caracterizacion->setEmpresa($empresa);
@@ -68,23 +110,35 @@ class SvCaracterizacionController extends Controller
 
             if($params->municipio){
                 $ciudad = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->municipio);
-                $caracterizacion->setCiudad($ciudad->getNombre());
+                $caracterizacion->setCiudad($ciudad);
             }
-
+            
             $caracterizacion->setNombres($params->nombres);
             $caracterizacion->setApellidos($params->apellidos);
             $caracterizacion->setCedula($params->identificacion);
-            //$caracterizacion->setLugarExpedicion($params->lugarExpedicion);
+
+            if($params->idLugarExpedicionDocumento){
+                $lugarExpedicionDocumento = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->idLugarExpedicionDocumento);
+                $caracterizacion->setLugarExpedicionDocumento($lugarExpedicionDocumento);
+            }
+            
+            if($params->idGrupoSanguineo){
+                $grupoSanguineo = $em->getRepository('JHWEBUsuarioBundle:UserCfgGrupoSanguineo')->find($params->idGrupoSanguineo);
+                $caracterizacion->setGrupoSanguineo($grupoSanguineo);
+            }
+
+
             if($params->clc){
                 $clc = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($params->clc);
                 $caracterizacion->setClc($clc->getNombre());
             }
             $caracterizacion->setFechaVigencia(new \Datetime($params->fechaVigencia));
-            $caracterizacion->setEdad($params->edad);
+            $caracterizacion->setFechaNacimiento(new \Datetime($params->fechaNacimiento));
+            $caracterizacion->setNivelEducativo($params->nivelEducativo);
 
             if($params->genero){
                 $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->genero);
-                $caracterizacion->setGenero($genero->getSigla());
+                $caracterizacion->setGenero($genero);
             }
             $caracterizacion->setGrupoTrabajo($params->grupoTrabajo);
             $caracterizacion->setOtroGrupoTrabajo($params->otroGrupoTrabajo);
@@ -284,10 +338,10 @@ class SvCaracterizacionController extends Controller
     /**
      * Search empresa entity.
      *
-     * @Route("/get/datos/registros", name="datos_registros")
+     * @Route("/get/datos/registros", name="sv_caracterizacion_search_registros")
      * @Method({"GET", "POST"})
      */
-    public function buscarRegistrosAction(Request $request)
+    public function searchRegistrosAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -297,11 +351,20 @@ class SvCaracterizacionController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            /* $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
-            $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
-            $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento()); */
-            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->nit));
-            $registros = $em->getRepository('JHWEBSeguridadVialBundle:SvCaracterizacion')->findBy(array('empresa' => $empresa));
+
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                array(
+                    'nit' => $params->nit,
+                    'activo' => true
+                )
+            );
+
+            $registros = $em->getRepository('JHWEBSeguridadVialBundle:SvCaracterizacion')->findBy(
+                array(
+                    'empresa' => $empresa,
+                    'activo' => true
+                )
+            );
             
             $response['data'] = array();
 
