@@ -243,6 +243,12 @@ class CvCdoComparendoController extends Controller
                 );
             }
 
+            if ($params->infractor->edad) {
+                $comparendo->setInfractorEdad(
+                    $params->infractor->edad
+                );
+            }
+
             if ($params->infractor->telefono) {
                 $comparendo->setInfractorTelefono(
                     $params->infractor->telefono
@@ -2145,15 +2151,14 @@ class CvCdoComparendoController extends Controller
     /**
      * genera un reporte para gráficas segun filtros.
      *
-     * @Route("/generate/reporte", name="cvcdocomparendo_generate_reporte")
+     * @Route("/generate/report", name="cvcdocomparendo_generate_report")
      * @Method({"GET","POST"})
      */
-    public function generateReporteAction(Request $request)
+    public function generateReportAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-    
     
         if ($authCheck == true) {
             $json = $request->get("data",null);

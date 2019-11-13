@@ -663,7 +663,7 @@ class ExcelTemplate {
         $this->objPHPExcel->setActiveSheetIndex($pages);
 
         //Imprime la cabecera
-        $this->getMembretesTramites($params);
+        $this->getMembretesInventarioDocumental($params);
 
         $this->objPHPExcel->getActiveSheet()->setTitle('Inventario Documental');
 
