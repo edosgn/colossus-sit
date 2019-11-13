@@ -446,7 +446,7 @@ class CvAudienciaController extends Controller
                 $params->idComparendo
             );
 
-            if ($comprendo) {
+            if ($comparendo) {
                 $audiencias = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->findBy(
                     array(
                         'comparendo' => $comparendo->getId()
@@ -558,11 +558,16 @@ class CvAudienciaController extends Controller
                     $audienciaLast['id']
                 );
 
+                $fechaDisponible = new \Datetime(date('Y-m-d', strtotime('+15 days', strtotime($audiencia->getFecha()->format('Y-m-d')))));
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Ultima audiencia programada para el ".$audiencia->getFecha()->format('d/m/Y')." ".$audiencia->getHora()->format('h:i:s A'), 
-                    'data' => $audiencia,
+                    'data' => array(
+                        'audiencia' => $audiencia,
+                        'fechaDisponible' =>$fechaDisponible
+                    )
                 );
             }else{
                  $response = array(
