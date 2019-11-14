@@ -63,26 +63,29 @@ class VhloRemolqueController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             
-            $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
+            if($params->tipoMatricula != 'MATRICULA') {
+                $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
+            }
 
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(1);
             
             if (!$cfgPlaca) {
-                $placa = new VhloCfgPlaca();
-                $placa->setNumero($params->placa);
+                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(4);
+
+                if($params->tipoMatricula != 'MATRICULA') {
+                    $placa = new VhloCfgPlaca();
+                    $placa->setNumero($params->placa);
+                    $placa->setTipoVehiculo($cfgTipoVehiculo);
+                    $placa->setOrganismoTransito($organismoTransito);
+                    $placa->setEstado('ASIGNADA');
+                    $em->persist($placa);
+                    $em->flush();
+                }
 
                 $numeroFactura = $params->numeroFactura;
                 $valor = $params->valor;
                 $fechaFactura = $params->fechaFactura;
                 $fechaFactura = new \DateTime($fechaFactura);
-
-                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(4);
-                $placa->setTipoVehiculo($cfgTipoVehiculo);
-
-                $placa->setOrganismoTransito($organismoTransito);
-                $placa->setEstado('ASIGNADA');
-                $em->persist($placa);
-                $em->flush();
 
                 $vehiculo = new VhloVehiculo();
                 
@@ -90,7 +93,10 @@ class VhloRemolqueController extends Controller
                 $vehiculo->setfechaFactura($fechaFactura);
                 $vehiculo->setValor($valor);
 
-                $vehiculo->setPlaca($placa);
+                if($params->tipoMatricula != 'MATRICULA') {
+                    $vehiculo->setPlaca($placa);
+                } 
+                
                 $vehiculo->setOrganismoTransito($organismoTransito);
 
                 $vehiculo->setSerie($params->serie);
