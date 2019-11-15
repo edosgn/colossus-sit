@@ -53,7 +53,7 @@ class VhloCfgCombustibleController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -66,8 +66,10 @@ class VhloCfgCombustibleController extends Controller
                 $combustible->setNombre($params->nombre);
                 $combustible->setCodigo($params->codigo);
                 $combustible->setActivo(true);
+                
                 $em->persist($combustible);
                 $em->flush();
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -142,11 +144,12 @@ class VhloCfgCombustibleController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
             $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->id);
+
             if ($combustible!=null) {
 
                 $combustible->setNombre($params->nombre);
@@ -157,12 +160,14 @@ class VhloCfgCombustibleController extends Controller
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "combustible editado con éxito", 
                 );
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El combustible no se encuentra en la base de datos", 
@@ -170,10 +175,11 @@ class VhloCfgCombustibleController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida.", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida.", 
+            );
         }
 
         return $helpers->json($response);
