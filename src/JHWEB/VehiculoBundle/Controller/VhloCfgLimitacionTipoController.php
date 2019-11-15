@@ -5,7 +5,8 @@ namespace JHWEB\VehiculoBundle\Controller;
 use JHWEB\VehiculoBundle\Entity\VhloCfgLimitacionTipo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlocfglimitaciontipo controller.
@@ -22,13 +23,26 @@ class VhloCfgLimitacionTipoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $tiposLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->findBy(
+            array('activo' => true)
+        );
 
-        $vhloCfgLimitacionTipos = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->findAll();
+        $response['data'] = array();
 
-        return $this->render('vhlocfglimitaciontipo/index.html.twig', array(
-            'vhloCfgLimitacionTipos' => $vhloCfgLimitacionTipos,
-        ));
+        if ($tiposLimitacion) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tiposLimitacion)." registros encontrados", 
+                'data'=> $tiposLimitacion,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +53,39 @@ class VhloCfgLimitacionTipoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloCfgLimitacionTipo = new Vhlocfglimitaciontipo();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgLimitacionTipoType', $vhloCfgLimitacionTipo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloCfgLimitacionTipo);
+
+            $tipoLimitacion = new VhloCfgLimitacionTipo();
+
+            $tipoLimitacion->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipoLimitacion->setActivo(true);
+
+            $em->persist($tipoLimitacion);
             $em->flush();
 
-            return $this->redirectToRoute('vhlocfglimitaciontipo_show', array('id' => $vhloCfgLimitacionTipo->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('vhlocfglimitaciontipo/new.html.twig', array(
-            'vhloCfgLimitacionTipo' => $vhloCfgLimitacionTipo,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -63,59 +94,136 @@ class VhloCfgLimitacionTipoController extends Controller
      * @Route("/{id}/show", name="vhlocfglimitaciontipo_show")
      * @Method("GET")
      */
-    public function showAction(VhloCfgLimitacionTipo $vhloCfgLimitacionTipo)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgLimitacionTipo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfglimitaciontipo/show.html.twig', array(
-            'vhloCfgLimitacionTipo' => $vhloCfgLimitacionTipo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $tipoLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->find($id);
+            
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrad", 
+                'data'=> $tipoLimitacion,
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
      * Displays a form to edit an existing vhloCfgLimitacionTipo entity.
      *
-     * @Route("/{id}/edit", name="vhlocfglimitaciontipo_edit")
+     * @Route("/edit", name="vhlocfglimitaciontipo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloCfgLimitacionTipo $vhloCfgLimitacionTipo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgLimitacionTipo);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgLimitacionTipoType', $vhloCfgLimitacionTipo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('vhlocfglimitaciontipo_edit', array('id' => $vhloCfgLimitacionTipo->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->find($params->id);
+            
+            if ($tipoLimitacion) {
+                $tipoLimitacion->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+
+                $em->persist($tipoLimitacion);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
 
-        return $this->render('vhlocfglimitaciontipo/edit.html.twig', array(
-            'vhloCfgLimitacionTipo' => $vhloCfgLimitacionTipo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloCfgLimitacionTipo entity.
      *
-     * @Route("/{id}/delete", name="vhlocfglimitaciontipo_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlocfglimitaciontipo_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloCfgLimitacionTipo $vhloCfgLimitacionTipo)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloCfgLimitacionTipo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloCfgLimitacionTipo);
-            $em->flush();
+
+            $limitacionTipo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgLimitacionTipo")->find(mb_strtoupper($params->id, 'utf-8'));
+
+            if ($limitacionTipo) {
+                $limitacionTipo->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con exito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
-        return $this->redirectToRoute('vhlocfglimitaciontipo_index');
+        return $helpers->json($response);
     }
 
     /**

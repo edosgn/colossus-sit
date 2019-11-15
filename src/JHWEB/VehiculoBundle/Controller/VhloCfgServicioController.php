@@ -50,35 +50,38 @@ class VhloCfgServicioController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigo = $params->codigo;
-
             $em = $this->getDoctrine()->getManager();
+
             $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->findBy(
-                array('codigo' => $codigo)
+                array(
+                    'codigo' => $params->codigo
+                )
             );
 
             if ($servicio==null) {
                 $servicio = new VhloCfgServicio();
 
-                $servicio->setNombre(strtoupper($nombre));
-                $servicio->setCodigo($codigo);
+                $servicio->setNombre(strtoupper($params->nombre));
+                $servicio->setCodigo($params->codigo);
                 $servicio->setActivo(true);
-                $em = $this->getDoctrine()->getManager();
+
                 $em->persist($servicio);
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con éxito", 
                 ); 
             }else{
                 $response = array(
+                    'title' => 'Atención!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El código no puede repetirse.", 
@@ -86,11 +89,12 @@ class VhloCfgServicioController extends Controller
             }
         }else{
             $response = array(
+                'tittle' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida", 
             );
-            } 
+        } 
         return $helpers->json($response);
     }
 
@@ -146,31 +150,30 @@ class VhloCfgServicioController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
-           
-            $nombre = $params->nombre;
-            $codigo = $params->codigo;
-
             $em = $this->getDoctrine()->getManager();
+
             $servicio = $em->getRepository("JHWEBVehiculoBundle:VhloCfgServicio")->find($params->id);
 
             if ($servicio!=null) {
-                $servicio->setNombre(strtoupper($nombre));
-                $servicio->setCodigo($codigo);
+                $servicio->setNombre(strtoupper($params->nombre));
+                $servicio->setCodigo($params->codigo);
                 $servicio->setActivo(true);
-                $em = $this->getDoctrine()->getManager();
+
                 $em->persist($servicio);
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Servicio editado con éxito", 
                 ); 
             }else{
                 $response = array(
+                    'title' => 'Atención!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El servicio no se encuentra en la base de datos.", 
@@ -178,10 +181,11 @@ class VhloCfgServicioController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida.", 
-                );
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida.", 
+            );
         }
 
         return $helpers->json($response);
@@ -190,33 +194,50 @@ class VhloCfgServicioController extends Controller
     /**
      * Deletes a Servicio entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgservicio_delete")
+     * @Route("/delete", name="vhlocfgservicio_delete")
      * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();
-            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($id);
 
-            $servicio->setActivo(false);
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($servicio);
-            $em->flush();
-            $response = array(
+
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->id);
+
+            if($servicio){
+                $servicio->setActivo(false);
+
+                $em->persist($servicio);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro eliminado con éxito.", 
+                    'message' => "Registro eliminado con exito", 
                 );
-        }else{
-            $response = array(
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Autorización no válida", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }

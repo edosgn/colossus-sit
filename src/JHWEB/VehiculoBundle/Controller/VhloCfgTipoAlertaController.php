@@ -22,13 +22,26 @@ class VhloCfgTipoAlertaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $tiposAlerta = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoAlerta')->findBy(
+            array('activo' => true)
+        );
 
-        $vhloCfgTipoAlertas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoAlerta')->findAll();
+        $response['data'] = array();
 
-        return $this->render('vhlocfgtipoalerta/index.html.twig', array(
-            'vhloCfgTipoAlertas' => $vhloCfgTipoAlertas,
-        ));
+        if ($tiposAlerta) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tiposAlerta)." registros encontrados", 
+                'data'=> $tiposAlerta,
+            );
+        }
+
+        return $helpers->json($response);;
     }
 
     /**
@@ -39,22 +52,40 @@ class VhloCfgTipoAlertaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloCfgTipoAlertum = new Vhlocfgtipoalertum();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgTipoAlertaType', $vhloCfgTipoAlertum);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloCfgTipoAlertum);
+            
+            $tipoAlerta = new VhloCfgTipoAlerta();
+
+            $tipoAlerta->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipoAlerta->setActivo(true);
+
+            $em->persist($tipoAlerta);
             $em->flush();
 
-            return $this->redirectToRoute('vhlocfgtipoalerta_show', array('id' => $vhloCfgTipoAlertum->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('vhlocfgtipoalerta/new.html.twig', array(
-            'vhloCfgTipoAlertum' => $vhloCfgTipoAlertum,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -99,65 +130,102 @@ class VhloCfgTipoAlertaController extends Controller
     /**
      * Displays a form to edit an existing vhloCfgTipoAlertum entity.
      *
-     * @Route("/{id}/edit", name="vhlocfgtipoalerta_edit")
+     * @Route("/edit", name="vhlocfgtipoalerta_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloCfgTipoAlerta $vhloCfgTipoAlertum)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgTipoAlertum);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgTipoAlertaType', $vhloCfgTipoAlertum);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('vhlocfgtipoalerta_edit', array('id' => $vhloCfgTipoAlertum->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $tipoAlerta = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoAlerta")->find($params->id);
+
+            if ($tipoAlerta) {
+                $tipoAlerta->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
-        return $this->render('vhlocfgtipoalerta/edit.html.twig', array(
-            'vhloCfgTipoAlertum' => $vhloCfgTipoAlertum,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloCfgTipoAlertum entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgtipoalerta_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlocfgtipoalerta_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloCfgTipoAlerta $vhloCfgTipoAlertum)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloCfgTipoAlertum);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloCfgTipoAlertum);
-            $em->flush();
+            $tipoAlerta = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoAlerta")->find($params->id);
+
+            if ($tipoAlerta) {
+                $tipoAlerta->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con exito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
-        return $this->redirectToRoute('vhlocfgtipoalerta_index');
+        return $helpers->json($response);
     }
-
-    /**
-     * Creates a form to delete a vhloCfgTipoAlertum entity.
-     *
-     * @param VhloCfgTipoAlerta $vhloCfgTipoAlertum The vhloCfgTipoAlertum entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(VhloCfgTipoAlerta $vhloCfgTipoAlertum)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('vhlocfgtipoalerta_delete', array('id' => $vhloCfgTipoAlertum->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
-
-    /* =================================================== */
 
     /**
      * Listado con tipos de alerta para seleección con búsqueda

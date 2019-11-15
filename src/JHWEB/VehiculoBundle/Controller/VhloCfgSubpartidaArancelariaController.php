@@ -59,23 +59,27 @@ class VhloCfgSubpartidaArancelariaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-           
+            
+            $em = $this->getDoctrine()->getManager();
+            
             $subpartida = new VhloCfgSubpartidaArancelaria();
 
+            $subpartida->setValor($params->valor);
             $subpartida->setCodigo($params->codigo);
             $subpartida->setActivo(true);
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($subpartida);
             $em->flush();
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
         }else{
             $response = array(
+                'tittle' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -88,17 +92,50 @@ class VhloCfgSubpartidaArancelariaController extends Controller
     /**
      * Finds and displays a vhloCfgSubpartidaArancelarium entity.
      *
-     * @Route("/{id}/show", name="vhlocfgsubpartidaarancelaria_show")
+     * @Route("/show", name="vhlocfgsubpartidaarancelaria_show")
      * @Method("GET")
      */
-    public function showAction(VhloCfgSubpartidaArancelaria $vhloCfgSubpartidaArancelarium)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgSubpartidaArancelarium);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfgsubpartidaarancelaria/show.html.twig', array(
-            'vhloCfgSubpartidaArancelarium' => $vhloCfgSubpartidaArancelarium,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $subpartidaArancelaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria')->find($params->id);
+
+            
+            if ($subpartidaArancelaria) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito",
+                    'data' => $subpartidaArancelaria
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -121,18 +158,20 @@ class VhloCfgSubpartidaArancelariaController extends Controller
             $subpartida = $em->getRepository("JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria")->find($params->id);
 
             if ($subpartida) {
+                $subpartida->setValor($params->valor);
                 $subpartida->setCodigo($params->codigo);
                 
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $subpartida,
                 );
             }else{
                 $response = array(
+                    'title' => 'Atención!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El registro no se encuentra en la base de datos", 
@@ -140,10 +179,11 @@ class VhloCfgSubpartidaArancelariaController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida para editar", 
-                );
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
         return $helpers->json($response);
@@ -177,7 +217,6 @@ class VhloCfgSubpartidaArancelariaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $subpartida,
                 );
             }else{
                 $response = array(
