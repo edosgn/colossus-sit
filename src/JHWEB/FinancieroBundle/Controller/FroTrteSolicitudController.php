@@ -4,6 +4,7 @@ namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroTrteSolicitud;
 use JHWEB\FinancieroBundle\Entity\FroFacInsumo;
+use JHWEB\FinancieroBundle\Entity\FroFacArchivo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
@@ -209,14 +210,18 @@ class FroTrteSolicitudController extends Controller
                                                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                                                 $tramiteSolicitud->setFuncionario($funcionario);
                                                 $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
+
+                                                $facturaArchivo = new FroFacArchivo();
                 
-                                                $tramiteSolicitud->setNumeroFolios($params->numeroFolios);
-                                                $tramiteSolicitud->setNumeroArchivador($params->numeroArchivador);
-                                                $tramiteSolicitud->setBandeja($params->bandeja);
-                                                $tramiteSolicitud->setNumeroCaja($params->numeroCaja);
+                                                $facturaArchivo->setNumeroFolios($params->datosFacturaArchivo->numeroFolios);
+                                                $facturaArchivo->setNumeroArchivador($params->datosFacturaArchivo->numeroArchivador);
+                                                $facturaArchivo->setBandeja($params->datosFacturaArchivo->bandeja);
+                                                $facturaArchivo->setNumeroCaja($params->datosFacturaArchivo->numeroCaja);
+                                                $facturaArchivo->setFactura($factura);
                                                 
                                                 $tramiteFactura->setRealizado(true);
 
+                                                $em->persist($facturaArchivo);
                                                 $em->persist($tramiteSolicitud);
                                                 $em->flush();
                 
