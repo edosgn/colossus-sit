@@ -62,6 +62,8 @@ class PnalCfgCdoBodegaController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
+            $cantidadTotal = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoBodega')->getTotalDisponible();
+
             $bodega = new PnalCfgCdoBodega();
 
             $bodega->setFecha(
@@ -69,7 +71,7 @@ class PnalCfgCdoBodegaController extends Controller
             );
             
             $bodega->setCantidadRecibida($params->cantidad);
-            $bodega->setCantidadDisponible($params->cantidad);
+            $bodega->setCantidadDisponible($cantidadTotal['total'] + $params->cantidad);
             $bodega->setEstado('DISPONIBLE');
             $bodega->setActivo(true);
 
@@ -111,26 +113,67 @@ class PnalCfgCdoBodegaController extends Controller
     /**
      * Displays a form to edit an existing pnalCfgCdoBodega entity.
      *
-     * @Route("/{id}/edit", name="pnalcfgcdobodega_edit")
+     * @Route("/edit", name="pnalcfgcdobodega_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, PnalCfgCdoBodega $pnalCfgCdoBodega)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($pnalCfgCdoBodega);
-        $editForm = $this->createForm('JHWEB\PersonalBundle\Form\PnalCfgCdoBodegaType', $pnalCfgCdoBodega);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $bodega = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoBodega')->find($params->id);
+            $cantidadTotal = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoBodega')->getTotalDisponible();
 
-            return $this->redirectToRoute('pnalcfgcdobodega_edit', array('id' => $pnalCfgCdoBodega->getId()));
-        }
+            if($bodega) {
+                if($params->cantidad < 0) {
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'La cantidad que intenta registrar no puede ser menor a 0.', 
+                    );
+                } else {
+                    $bodega->setFecha(
+                        new \Datetime($params->fecha)
+                    );
+                    
+                    $bodega->setCantidadRecibida($params->cantidad);
+                    
+                    /* $nuevaCantidadDisponible = $params->cantidad - $bodega->getCantidadDisponible();
+                    $bodega->setCantidadDisponible($bodega->getCantidadDisponible() + $nuevaCantidadDisponible); */
+                    
+                    $bodega->setCantidadDisponible($cantidadTotal['total'] + $params->cantidad);
+                    
+                    $bodega->setEstado('DISPONIBLE');
 
-        return $this->render('pnalcfgcdobodega/edit.html.twig', array(
-            'pnalCfgCdoBodega' => $pnalCfgCdoBodega,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    $em->persist($bodega);
+                    $em->flush();
+                
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro editado con exito.', 
+                    );
+                }
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        } 
+
+        return $helpers->json($response);
     }
 
     /**
