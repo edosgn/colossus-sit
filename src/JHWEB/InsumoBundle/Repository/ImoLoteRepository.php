@@ -65,7 +65,7 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         JHWEBInsumoBundle:ImoCfgTipo it
         WHERE il.tipoInsumo = it.id
         AND il.tipo = :tipo
-        AND il.estado = 'ASIGNADO'
+        AND il.estado = 'REGISTRADO'
         AND il.fecha BETWEEN :fechaInicial AND :fechaFinal
         GROUP BY il.tipoInsumo";
 
