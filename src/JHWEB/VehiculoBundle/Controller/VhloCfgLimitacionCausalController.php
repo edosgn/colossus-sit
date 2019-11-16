@@ -5,7 +5,8 @@ namespace JHWEB\VehiculoBundle\Controller;
 use JHWEB\VehiculoBundle\Entity\VhloCfgLimitacionCausal;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlocfglimitacioncausal controller.
@@ -52,22 +53,39 @@ class VhloCfgLimitacionCausalController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloCfgLimitacionCausal = new Vhlocfglimitacioncausal();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgLimitacionCausalType', $vhloCfgLimitacionCausal);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloCfgLimitacionCausal);
+
+            $causalLimitacion = new VhloCfgLimitacionCausal();
+
+            $causalLimitacion->setNombre($params->nombre);
+            $causalLimitacion->setActivo(true);
+
+            $em->persist($causalLimitacion);
             $em->flush();
 
-            return $this->redirectToRoute('vhlocfglimitacioncausal_show', array('id' => $vhloCfgLimitacionCausal->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('vhlocfglimitacioncausal/new.html.twig', array(
-            'vhloCfgLimitacionCausal' => $vhloCfgLimitacionCausal,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -76,59 +94,136 @@ class VhloCfgLimitacionCausalController extends Controller
      * @Route("/{id}/show", name="vhlocfglimitacioncausal_show")
      * @Method("GET")
      */
-    public function showAction(VhloCfgLimitacionCausal $vhloCfgLimitacionCausal)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgLimitacionCausal);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfglimitacioncausal/show.html.twig', array(
-            'vhloCfgLimitacionCausal' => $vhloCfgLimitacionCausal,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $causalLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->find($id);
+            
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado", 
+                'data'=> $causalLimitacion,
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
      * Displays a form to edit an existing vhloCfgLimitacionCausal entity.
      *
-     * @Route("/{id}/edit", name="vhlocfglimitacioncausal_edit")
+     * @Route("/edit", name="vhlocfglimitacioncausal_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloCfgLimitacionCausal $vhloCfgLimitacionCausal)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgLimitacionCausal);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgLimitacionCausalType', $vhloCfgLimitacionCausal);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('vhlocfglimitacioncausal_edit', array('id' => $vhloCfgLimitacionCausal->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $causalLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->find($params->id);
+            
+            if ($causalLimitacion) {
+                $causalLimitacion->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+
+                $em->persist($causalLimitacion);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
 
-        return $this->render('vhlocfglimitacioncausal/edit.html.twig', array(
-            'vhloCfgLimitacionCausal' => $vhloCfgLimitacionCausal,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloCfgLimitacionCausal entity.
      *
-     * @Route("/{id}/delete", name="vhlocfglimitacioncausal_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlocfglimitacioncausal_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloCfgLimitacionCausal $vhloCfgLimitacionCausal)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloCfgLimitacionCausal);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloCfgLimitacionCausal);
-            $em->flush();
+
+            $causalLimitacion = $em->getRepository("JHWEBVehiculoBundle:VhloCfgLimitacionCausal")->find($params->id);
+
+            if ($causalLimitacion) {
+                $causalLimitacion->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con exito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
-        return $this->redirectToRoute('vhlocfglimitacioncausal_index');
+        return $helpers->json($response);
     }
 
     /**

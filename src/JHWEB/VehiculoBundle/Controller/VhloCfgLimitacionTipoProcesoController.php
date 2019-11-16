@@ -22,13 +22,26 @@ class VhloCfgLimitacionTipoProcesoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $tiposProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->findBy(
+            array('activo' => true)
+        );
 
-        $vhloCfgLimitacionTipoProcesos = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->findAll();
+        $response['data'] = array();
 
-        return $this->render('vhlocfglimitaciontipoproceso/index.html.twig', array(
-            'vhloCfgLimitacionTipoProcesos' => $vhloCfgLimitacionTipoProcesos,
-        ));
+        if ($tiposProceso) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tiposProceso)." registros encontrados", 
+                'data'=> $tiposProceso,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,99 +52,192 @@ class VhloCfgLimitacionTipoProcesoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloCfgLimitacionTipoProceso = new Vhlocfglimitaciontipoproceso();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgLimitacionTipoProcesoType', $vhloCfgLimitacionTipoProceso);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloCfgLimitacionTipoProceso);
+
+            $tipoProceso = new VhloCfgLimitacionTipoProceso();
+
+            $tipoProceso->setNombre($params->nombre);
+            $tipoProceso->setActivo(true);
+
+            $em->persist($tipoProceso);
             $em->flush();
 
-            return $this->redirectToRoute('vhlocfglimitaciontipoproceso_show', array('id' => $vhloCfgLimitacionTipoProceso->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('vhlocfglimitaciontipoproceso/new.html.twig', array(
-            'vhloCfgLimitacionTipoProceso' => $vhloCfgLimitacionTipoProceso,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a vhloCfgLimitacionTipoProceso entity.
      *
-     * @Route("/{id}/show", name="vhlocfglimitaciontipoproceso_show")
+     * @Route("/show", name="vhlocfglimitaciontipoproceso_show")
      * @Method("GET")
      */
-    public function showAction(VhloCfgLimitacionTipoProceso $vhloCfgLimitacionTipoProceso)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgLimitacionTipoProceso);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfglimitaciontipoproceso/show.html.twig', array(
-            'vhloCfgLimitacionTipoProceso' => $vhloCfgLimitacionTipoProceso,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->find($params->id);
+
+            $em->flush();
+
+            if ($tipoProceso) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito",
+                    'data' => $tipoProceso
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
      * Displays a form to edit an existing vhloCfgLimitacionTipoProceso entity.
      *
-     * @Route("/{id}/edit", name="vhlocfglimitaciontipoproceso_edit")
+     * @Route("/edit", name="vhlocfglimitaciontipoproceso_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloCfgLimitacionTipoProceso $vhloCfgLimitacionTipoProceso)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgLimitacionTipoProceso);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgLimitacionTipoProcesoType', $vhloCfgLimitacionTipoProceso);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('vhlocfglimitaciontipoproceso_edit', array('id' => $vhloCfgLimitacionTipoProceso->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->find($params->id);
+            
+            if ($tipoProceso) {
+                $tipoProceso->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+
+                $em->persist($tipoProceso);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
 
-        return $this->render('vhlocfglimitaciontipoproceso/edit.html.twig', array(
-            'vhloCfgLimitacionTipoProceso' => $vhloCfgLimitacionTipoProceso,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloCfgLimitacionTipoProceso entity.
      *
-     * @Route("/{id}/delete", name="vhlocfglimitaciontipoproceso_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlocfglimitaciontipoproceso_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloCfgLimitacionTipoProceso $vhloCfgLimitacionTipoProceso)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloCfgLimitacionTipoProceso);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloCfgLimitacionTipoProceso);
-            $em->flush();
+
+            $tipoProceso = $em->getRepository("JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso")->find($params->id);
+
+            if ($tipoProceso) {
+                $tipoProceso->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con exito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'tittle' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
-        return $this->redirectToRoute('vhlocfglimitaciontipoproceso_index');
-    }
-
-    /**
-     * Creates a form to delete a vhloCfgLimitacionTipoProceso entity.
-     *
-     * @param VhloCfgLimitacionTipoProceso $vhloCfgLimitacionTipoProceso The vhloCfgLimitacionTipoProceso entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(VhloCfgLimitacionTipoProceso $vhloCfgLimitacionTipoProceso)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('vhlocfglimitaciontipoproceso_delete', array('id' => $vhloCfgLimitacionTipoProceso->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return $helpers->json($response);
     }
 
     /* ================================================= */

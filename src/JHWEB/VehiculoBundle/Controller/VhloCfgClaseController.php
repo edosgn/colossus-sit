@@ -61,7 +61,7 @@ class VhloCfgClaseController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
-            $tipoMaquinaria = $em->getRepository('JHWEBMaquinariaBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+            $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
             
             $clase = new VhloCfgClase();
 
@@ -147,7 +147,7 @@ class VhloCfgClaseController extends Controller
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->id);
             
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
-            $tipoMaquinaria = $em->getRepository('JHWEBMaquinariaBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+            $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
 
             if ($clase!=null) {
                 $clase->setNombre($params->nombre);

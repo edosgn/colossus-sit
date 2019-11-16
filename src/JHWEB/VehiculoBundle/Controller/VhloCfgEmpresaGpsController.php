@@ -59,23 +59,44 @@ class VhloCfgEmpresaGpsController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-           
-            $empresa = new VhloCfgEmpresaGps();
-
-            $empresa->setNombre($params->nombre);
-            $empresa->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($empresa);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
+           
+            $empresaExistente = $em->getRepository('JHWEBVehiculoBundle:VhloCfgEmpresaGps')->findOneBy(
+                array(
+                    'nit' => $params->nit,
+                    'activo' => true
+                )
             );
+
+            if(!$empresaExistente) {
+                $empresaGps = new VhloCfgEmpresaGps();
+    
+                $empresaGps->setNit($params->nombre);
+                $empresaGps->setCodigo($params->codigo);
+                $empresaGps->setNombre($params->nombre);
+                $empresaGps->setActivo(true);
+    
+                $em->persist($empresaGps);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El nit que intenta registra ya esta asignado una empresa", 
+                );
+            }
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -121,6 +142,8 @@ class VhloCfgEmpresaGpsController extends Controller
             $empresa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgEmpresaGps")->find($params->id);
 
             if ($empresa) {
+                $empresa->setNombre($params->nit);
+                $empresa->setNombre($params->codigo);
                 $empresa->setNombre($params->nombre);
                 
                 $em->flush();
@@ -133,6 +156,7 @@ class VhloCfgEmpresaGpsController extends Controller
                 );
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El registro no se encuentra en la base de datos", 
@@ -140,10 +164,11 @@ class VhloCfgEmpresaGpsController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida para editar", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
         return $helpers->json($response);
