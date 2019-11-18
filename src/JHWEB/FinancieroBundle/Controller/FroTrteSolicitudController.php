@@ -4,6 +4,7 @@ namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroTrteSolicitud;
 use JHWEB\FinancieroBundle\Entity\FroFacInsumo;
+use JHWEB\FinancieroBundle\Entity\FroFacArchivo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
@@ -209,14 +210,18 @@ class FroTrteSolicitudController extends Controller
                                                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                                                 $tramiteSolicitud->setFuncionario($funcionario);
                                                 $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
-                
-                                                $tramiteSolicitud->setNumeroFolios($params->numeroFolios);
-                                                $tramiteSolicitud->setNumeroArchivador($params->numeroArchivador);
-                                                $tramiteSolicitud->setBandeja($params->bandeja);
-                                                $tramiteSolicitud->setNumeroCaja($params->numeroCaja);
+
+                                                $facturaArchivo = new FroFacArchivo();
+
+                                                $facturaArchivo->setNumeroFolios($params->numeroFolios);
+                                                $facturaArchivo->setNumeroArchivador($params->numeroArchivador);
+                                                $facturaArchivo->setBandeja($params->bandeja);
+                                                $facturaArchivo->setNumeroCaja($params->numeroCaja);
+                                                $facturaArchivo->setFactura($factura);
                                                 
                                                 $tramiteFactura->setRealizado(true);
 
+                                                $em->persist($facturaArchivo);
                                                 $em->persist($tramiteSolicitud);
                                                 $em->flush();
                 
@@ -520,8 +525,8 @@ class FroTrteSolicitudController extends Controller
                             break;
     
                         case 'blindaje':
-                            $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
-                            $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
+                            $vehiculo->setTipoBlindaje($params->tipoBlindaje);
+                            $vehiculo->setNivelBlindaje($params->nivelBlindaje);
                             $vehiculo->setEmpresaBlindadora(
                                 $params->empresaBlindadora
                             );

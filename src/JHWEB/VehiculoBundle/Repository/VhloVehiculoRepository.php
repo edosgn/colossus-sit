@@ -37,6 +37,8 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
         $em = $this->getEntityManager();
 
+        var_dump($params->numeroPlaca);
+
         if (isset($params->propietario)) {
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
@@ -47,7 +49,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             WHERE v.placa = p.id";
 
             $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'";
-        }elseif (isset($params->numeroPlaca)) {
+        }elseif ($params->numeroPlaca) {
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
             JHWEBVehiculoBundle:VhloCfgPlaca p
@@ -76,6 +78,9 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         if ($condicion) {
             $dql .= $condicion;
         }
+
+        /* var_dump($dql);
+        die(); */
 
         $consulta = $em->createQuery($dql);
 

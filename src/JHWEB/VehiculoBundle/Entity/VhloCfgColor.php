@@ -29,13 +29,6 @@ class VhloCfgColor
     private $nombre;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="hexadecimal", type="string", length=10)
-     */
-    private $hexadecimal;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -78,30 +71,6 @@ class VhloCfgColor
     }
 
     /**
-     * Set hexadecimal
-     *
-     * @param string $hexadecimal
-     *
-     * @return VhloCfgColor
-     */
-    public function setHexadecimal($hexadecimal)
-    {
-        $this->hexadecimal = $hexadecimal;
-
-        return $this;
-    }
-
-    /**
-     * Get hexadecimal
-     *
-     * @return string
-     */
-    public function getHexadecimal()
-    {
-        return $this->hexadecimal;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
@@ -118,11 +87,10 @@ class VhloCfgColor
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-
