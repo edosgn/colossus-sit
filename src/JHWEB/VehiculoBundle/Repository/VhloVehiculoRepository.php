@@ -36,20 +36,19 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         $condicion = null; 
 
         $em = $this->getEntityManager();
-
-        var_dump($params->numeroPlaca);
-
+        
+        /* UsuarioBundle:Usuario u */
         if (isset($params->propietario)) {
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
             JHWEBVehiculoBundle:VhloCfgPlaca p, 
             JHWEBVehiculoBundle:VhloPropietario vp, 
-            JHWEBUsuarioBundle:UserCiudadano c, 
-            UsuarioBundle:Usuario u
+            JHWEBUsuarioBundle:UserCiudadano c
             WHERE v.placa = p.id";
 
-            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'";
-        }elseif ($params->numeroPlaca) {
+            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.identificacion ='" . $params->propietario . "'";
+            /* $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'"; */
+        }elseif (isset($params->numeroPlaca)) {
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
             JHWEBVehiculoBundle:VhloCfgPlaca p
@@ -79,7 +78,8 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             $dql .= $condicion;
         }
 
-        /* var_dump($dql);
+        /* var_dump($params->numeroPlaca);
+        var_dump($dql);
         die(); */
 
         $consulta = $em->createQuery($dql);

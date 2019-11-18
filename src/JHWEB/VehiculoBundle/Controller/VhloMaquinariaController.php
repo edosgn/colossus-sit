@@ -135,7 +135,7 @@ class VhloMaquinariaController extends Controller
                     new \DateTime($params->fechaIngreso)
                 );
                 $vehiculoMaquinaria->setPeso($params->peso);
-                $vehiculoMaquinaria->setCargarUtilMaxima(
+                $vehiculoMaquinaria->setCargaUtilMaxima(
                     $params->cargaUtilMaxima
                 );
                 
@@ -442,6 +442,7 @@ class VhloMaquinariaController extends Controller
                 }
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'Registro no encontrado en base de datos.', 
@@ -449,6 +450,7 @@ class VhloMaquinariaController extends Controller
             }            
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida', 
