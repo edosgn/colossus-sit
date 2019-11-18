@@ -188,33 +188,41 @@ class VhloCfgCombustibleController extends Controller
     /**
      * Deletes a Combustible entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgcombustible_delete")
-     * @Method("POST")
+     * @Route("/delete", name="vhlocfgcombustible_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();
-            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($id);
 
-            $combustible->setActivo(0);
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager(); 
+
+            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->id);
+
+            $combustible->setActivo(false);
 
             $em->persist($combustible);
             $em->flush();
+            
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Combustible eliminado con éxito", 
-                );
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Regsitro eliminado con éxito", 
+            );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
         return $helpers->json($response);
     }
