@@ -31,9 +31,7 @@ class VhloVehiculoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findBy(
-            array('activo'=>true)
-        );
+        $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findAll();
 
         $response['data'] = array();
 
