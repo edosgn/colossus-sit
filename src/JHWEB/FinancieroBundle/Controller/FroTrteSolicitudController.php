@@ -212,11 +212,11 @@ class FroTrteSolicitudController extends Controller
                                                 $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
 
                                                 $facturaArchivo = new FroFacArchivo();
-                
-                                                $facturaArchivo->setNumeroFolios($params->datosFacturaArchivo->numeroFolios);
-                                                $facturaArchivo->setNumeroArchivador($params->datosFacturaArchivo->numeroArchivador);
-                                                $facturaArchivo->setBandeja($params->datosFacturaArchivo->bandeja);
-                                                $facturaArchivo->setNumeroCaja($params->datosFacturaArchivo->numeroCaja);
+
+                                                $facturaArchivo->setNumeroFolios($params->numeroFolios);
+                                                $facturaArchivo->setNumeroArchivador($params->numeroArchivador);
+                                                $facturaArchivo->setBandeja($params->bandeja);
+                                                $facturaArchivo->setNumeroCaja($params->numeroCaja);
                                                 $facturaArchivo->setFactura($factura);
                                                 
                                                 $tramiteFactura->setRealizado(true);
@@ -525,8 +525,8 @@ class FroTrteSolicitudController extends Controller
                             break;
     
                         case 'blindaje':
-                            $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
-                            $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
+                            $vehiculo->setTipoBlindaje($params->tipoBlindaje);
+                            $vehiculo->setNivelBlindaje($params->nivelBlindaje);
                             $vehiculo->setEmpresaBlindadora(
                                 $params->empresaBlindadora
                             );

@@ -51,7 +51,7 @@ class VhloCfgColorController extends Controller
         $authCheck = $helpers->authCheck($hash);
         
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -60,8 +60,7 @@ class VhloCfgColorController extends Controller
             if ($color == null) {
                 $color = new VhloCfgColor();
 
-                $color->setNombre(strtoupper($params->nombre));
-                //$color->setHexadecimal('#FFFFFF');
+                $color->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 $color->setActivo(true);
 
                 $em->persist($color);
@@ -140,19 +139,15 @@ class VhloCfgColorController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
             $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($params->id);
             if ($color!=null) {
 
-                $color->setNombre($nombre);
-                $color->setActivo(true);
+                $color->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                
-
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($color);
                 $em->flush();
 
@@ -182,23 +177,28 @@ class VhloCfgColorController extends Controller
     /**
      * Deletes a Color entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgcolor_delete")
+     * @Route("/delete", name="vhlocfgcolor_delete")
      * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();            
-            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($id);
 
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();          
+            
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($params->id);
+            
             $color->setActivo(false);
-            $em = $this->getDoctrine()->getManager();
-                $em->persist($color);
-                $em->flush();
+            
+            $em->persist($color);
+            $em->flush();
+
             $response = array(
                     'status' => 'success',
                     'code' => 200,
