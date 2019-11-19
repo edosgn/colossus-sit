@@ -90,7 +90,7 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         WHERE l.tipoInsumo = t.id
         AND l.tipo = :tipo
         AND l.sedeOperativa = :idOrganismoTransito
-        AND t.id = :idModulo
+        AND t.modulo = :idModulo
         AND l.estado = 'ASIGNADO'";
 
         $consulta = $em->createQuery($dql);

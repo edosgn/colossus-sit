@@ -333,7 +333,6 @@ class ImoLoteController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         }
-
         return $helpers->json($response);
     }
 
