@@ -78,13 +78,6 @@ class VhloRemolque
     private $numeroFth;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="numero_runt", type="string", length=255, nullable=true)
-     */
-    private $numeroRunt;
-
-    /**
      * @ORM\OneToOne(targetEntity="VhloVehiculo")
      */
     private $vehiculo;
@@ -295,30 +288,6 @@ class VhloRemolque
     public function getNumeroFth()
     {
         return $this->numeroFth;
-    }
-
-    /**
-     * Set numeroRunt
-     *
-     * @param string $numeroRunt
-     *
-     * @return VhloRemolque
-     */
-    public function setNumeroRunt($numeroRunt)
-    {
-        $this->numeroRunt = $numeroRunt;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroRunt
-     *
-     * @return string
-     */
-    public function getNumeroRunt()
-    {
-        return $this->numeroRunt;
     }
 
     /**

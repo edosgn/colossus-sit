@@ -405,14 +405,24 @@ class VhloCfgPlacaController extends Controller
 
         $response = null;
 
-        $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findBy(
-            array(
-                'organismoTransito' => $params->idOrganismoTransito,
-                'tipoVehiculo' => $params->idTipoVehiculo,
-                'servicio' => $params->idServicio,
-                'estado' => 'DISPONIBLE'
-            )
-        );
+        if($params->idServicio) {
+            $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findBy(
+                array(
+                    'organismoTransito' => $params->idOrganismoTransito,
+                    'tipoVehiculo' => $params->idTipoVehiculo,
+                    'servicio' => $params->idServicio,
+                    'estado' => 'DISPONIBLE'
+                )
+            ); 
+        } else {
+            $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findBy(
+                array(
+                    'organismoTransito' => $params->idOrganismoTransito,
+                    'tipoVehiculo' => $params->idTipoVehiculo,
+                    'estado' => 'DISPONIBLE'
+                )
+            ); 
+        }
 
         foreach ($placas as $key => $placa) {
             $response[$key] = array(

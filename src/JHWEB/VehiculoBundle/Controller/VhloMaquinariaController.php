@@ -68,19 +68,22 @@ class VhloMaquinariaController extends Controller
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
             
             if (!$cfgPlaca) {
-                $placa = new VhloCfgPlaca();
-                $placa->setNumero($params->placa);
+                if (isset($params->placa) && $params->placa) {
+                    $placa = new VhloCfgPlaca();
+                    $placa->setNumero($params->placa);
 
-                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(3);
-                $placa->setTipoVehiculo($cfgTipoVehiculo);
+                    $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(3);
+                    $placa->setTipoVehiculo($cfgTipoVehiculo);
 
-                $placa->setOrganismoTransito($organismoTransito);
-                $placa->setEstado('ASIGNADA');
-                $em->persist($placa);
+                    $placa->setOrganismoTransito($organismoTransito);
+                    $placa->setEstado('ASIGNADA');
+                    $em->persist($placa);
+                    
+                    $vehiculo->setPlaca($placa);
+                }
                 
                 $vehiculo = new VhloVehiculo();
 
-                $vehiculo->setPlaca($placa);
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 
                 $vehiculo->setNumeroFactura($params->numeroFactura);

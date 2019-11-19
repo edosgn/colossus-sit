@@ -63,9 +63,9 @@ class VhloRemolqueController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             
-            if($params->tipoMatricula != 'MATRICULA') {
+            /* if($params->tipoMatricula != 'MATRICULA') { */
                 $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
-            }
+            /* } */
 
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(1);
             
@@ -159,7 +159,6 @@ class VhloRemolqueController extends Controller
                 $vehiculoRemolque->setLargo($params->largo);
                 $vehiculoRemolque->setReferencia($params->referencia);
                 $vehiculoRemolque->setNumeroFth($params->numeroFth);
-                $vehiculoRemolque->setNumeroRunt($params->numeroRunt);
                 
                 $origenRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->find($params->idOrigenRegistro);
                 $vehiculoRemolque->setOrigenRegistro($origenRegistro);
