@@ -65,6 +65,7 @@ class VhloCfgColorController extends Controller
 
                 $em->persist($color);
                 $em->flush();
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

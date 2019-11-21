@@ -59,7 +59,7 @@ class CvCfgPorcentajeInicialController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
             $porcentaje = new CvCfgPorcentajeInicial();
@@ -106,62 +106,96 @@ class CvCfgPorcentajeInicialController extends Controller
     /**
      * Displays a form to edit an existing cvCfgPorcentajeInicial entity.
      *
-     * @Route("/{id}/edit", name="cvcfgporcentajeinicial_edit")
+     * @Route("/edit", name="cvcfgporcentajeinicial_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CvCfgPorcentajeInicial $cvCfgPorcentajeInicial)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cvCfgPorcentajeInicial);
-        $editForm = $this->createForm('JHWEB\ContravencionalBundle\Form\CvCfgPorcentajeInicialType', $cvCfgPorcentajeInicial);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cvcfgporcentajeinicial_edit', array('id' => $cvCfgPorcentajeInicial->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $porcentaje = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->find($params->id);
+            if ($porcentaje!=null) {
+
+                $porcentaje->setAnio($params->anio);
+                $porcentaje->setValor($params->valor);
+               
+                $em->persist($porcentaje);
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida.", 
+            );
         }
 
-        return $this->render('cvcfgporcentajeinicial/edit.html.twig', array(
-            'cvCfgPorcentajeInicial' => $cvCfgPorcentajeInicial,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a cvCfgPorcentajeInicial entity.
      *
-     * @Route("/{id}", name="cvcfgporcentajeinicial_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cvcfgporcentajeinicial_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, CvCfgPorcentajeInicial $cvCfgPorcentajeInicial)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($cvCfgPorcentajeInicial);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($cvCfgPorcentajeInicial);
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();          
+            
+            $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->find($params->id);
+            
+            $porcentajeInicial->setActivo(false);
+            
+            $em->persist($porcentajeInicial);
             $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito", 
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
-
-        return $this->redirectToRoute('cvcfgporcentajeinicial_index');
-    }
-
-    /**
-     * Creates a form to delete a cvCfgPorcentajeInicial entity.
-     *
-     * @param CvCfgPorcentajeInicial $cvCfgPorcentajeInicial The cvCfgPorcentajeInicial entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(CvCfgPorcentajeInicial $cvCfgPorcentajeInicial)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvcfgporcentajeinicial_delete', array('id' => $cvCfgPorcentajeInicial->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return $helpers->json($response);
     }
 
     /**

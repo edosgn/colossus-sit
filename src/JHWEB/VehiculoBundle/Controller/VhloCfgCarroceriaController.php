@@ -183,18 +183,22 @@ class VhloCfgCarroceriaController extends Controller
     /**
      * Deletes a Carroceria entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgcarroceria_delete")
+     * @Route("/delete", name="vhlocfgcarroceria_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck == true) {
-            $em = $this->getDoctrine()->getManager();
 
-            $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($id);
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->id);
 
             $carroceria->setActivo(false);
 
@@ -203,7 +207,7 @@ class VhloCfgCarroceriaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Carroceria eliminada con éxito",
+                'message' => "Registro eliminado con éxito",
             );
         } else {
             $response = array(

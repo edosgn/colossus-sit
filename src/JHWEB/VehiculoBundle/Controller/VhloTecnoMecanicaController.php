@@ -291,14 +291,14 @@ class VhloTecnoMecanicaController extends Controller
             );
 
             if($vehiculo){
-                $vehiculoEncontrado = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->findOneBy(
+                $tecnimecanicaEncontrada = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->findOneBy(
                     array(
                         'vehiculo' => $vehiculo->getId()
                     )
                 );
                 
                 
-                if(!$vehiculoEncontrado){
+                if(!$tecnimecanicaEncontrada){
                     if($vehiculoEncontrado->getVehiculo()->getServicio()->getNombre() == 'PARTICULAR'){ 
                         $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+6 year', strtotime($params->fechaExpedicion))));
                     } else if($vehiculoEncontrado->getVehiculo()->getServicio()->getNombre() == 'PÚBLICO') {
