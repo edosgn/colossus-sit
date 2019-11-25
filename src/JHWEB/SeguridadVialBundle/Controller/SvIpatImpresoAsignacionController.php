@@ -166,26 +166,53 @@ class SvIpatImpresoAsignacionController extends Controller
     /**
      * Displays a form to edit an existing svIpatImpresoAsignacion entity.
      *
-     * @Route("/{id}/edit", name="svipatimpresoasignacion_edit")
+     * @Route("/edit", name="svipatimpresoasignacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvIpatImpresoAsignacion $svIpatImpresoAsignacion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svIpatImpresoAsignacion);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvIpatImpresoAsignacionType', $svIpatImpresoAsignacion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svipatimpresoasignacion_edit', array('id' => $svIpatImpresoAsignacion->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $impresoAsignacion = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->find($params->id);
+
+            if ($impresoAsignacion != null) {
+
+                var_dump($params);
+                die();
+                
+                $impresoAsignacion->setNombre(strtoupper($params->nombre));
+
+                $em->persist($impresoAsignacion);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $impresoAsignacion,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
-
-        return $this->render('svipatimpresoasignacion/edit.html.twig', array(
-            'svIpatImpresoAsignacion' => $svIpatImpresoAsignacion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

@@ -61,14 +61,21 @@ class VhloCfgClaseController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
-            $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+
+            if($params->idTipoMaquinaria) {
+                $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+            }
             
             $clase = new VhloCfgClase();
-
+            
             $clase->setNombre($params->nombre);
             $clase->setCodigo($params->codigo);
             $clase->setTipoVehiculo($tipoVehiculo);
-            $clase->setTipoMaquinaria($tipoMaquinaria);
+            
+            if($params->idTipoMaquinaria) {
+                $clase->setTipoMaquinaria($tipoMaquinaria);
+            }
+
             $clase->setActivo(true);
 
             $em->persist($clase);
@@ -147,13 +154,20 @@ class VhloCfgClaseController extends Controller
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->id);
             
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
-            $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+            
+            if($params->idTipoMaquinaria) {
+                $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find($params->idTipoMaquinaria);
+            }
 
             if ($clase!=null) {
                 $clase->setNombre($params->nombre);
                 $clase->setCodigo($params->codigo);
                 $clase->setTipoVehiculo($tipoVehiculo);
-                $clase->setTipoMaquinaria($tipoMaquinaria);
+
+                if($params->idTipoMaquinaria) {
+                    $clase->setTipoMaquinaria($tipoMaquinaria);
+                }
+
                 $clase->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
@@ -189,22 +203,27 @@ class VhloCfgClaseController extends Controller
     /**
      * Deletes a Clase entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgclase_delete")
+     * @Route("/delete", name="vhlocfgclase_delete")
      * @Method({"GET","POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($id);
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->id);
 
             $clase->setActivo(false);
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($clase);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,

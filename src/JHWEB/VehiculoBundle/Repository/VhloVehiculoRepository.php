@@ -217,7 +217,8 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             JHWEBFinancieroBundle:FroTrtePrecio tp,
             JHWEBVehiculoBundle:VhloVehiculo v,
             JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
-            JHWEBVehiculoBundle:VhloCfgClase vcc 
+            JHWEBVehiculoBundle:VhloCfgClase vcc,
+            JHWEBVehiculoBundle:VhloPropietario vp
             WHERE fts.vehiculo = v.id
             AND fts.tramiteFactura = ft.id
             AND ft.precio = tp.id
@@ -227,6 +228,8 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             AND vcc.tipoVehiculo = vctv.id
             AND vctv.modulo = :idModulo
             AND v.activo = true
+            AND vp.vehiculo = v.id
+            AND vp.activo = true
             AND fts.fecha BETWEEN :fechaInicial AND :fechaFinal";
         $consulta = $em->createQuery($dql);
 

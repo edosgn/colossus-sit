@@ -39,6 +39,50 @@ class VhloCfgColorController extends Controller
     }
 
     /**
+     * @Route("/{page}/color/pagination/all", name="vhlocfgcolor_list")
+     * @Method({"GET", "POST"})
+     */
+
+    public function listAction(Request $request, $page)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em    = $this->get('doctrine.orm.entity_manager');
+
+            $dql   = "SELECT c FROM JHWEBVehiculoBundle:VhloCfgColor c WHERE c.activo = true";
+            
+            $query = $em->createQuery($dql);
+
+            $paginator  = $this->get('knp_paginator');
+            $pagination = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', $page), /*page number*/
+                8 /*limit per page*/
+            );
+
+            // parameters to template
+            $response = array(
+                'status' => "success",
+                'code' => 200,
+                'data' => $pagination,
+                );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida.",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a new Color entity.
      *
      * @Route("/new", name="vhlocfgcolor_new")
@@ -65,6 +109,7 @@ class VhloCfgColorController extends Controller
 
                 $em->persist($color);
                 $em->flush();
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

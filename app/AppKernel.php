@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new JHWEB\UsuarioBundle\JHWEBUsuarioBundle(),
             new JHWEB\BancoProyectoBundle\JHWEBBancoProyectoBundle(),
             new JHWEB\ParqueaderoBundle\JHWEBParqueaderoBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

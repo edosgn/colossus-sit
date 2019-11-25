@@ -44,7 +44,7 @@ class UserLicenciaConduccionController extends Controller
 
         return $helpers->json($response);
     }
-
+            
     /**
      * Creates a new userLicenciaConduccion entity.
      *
