@@ -663,12 +663,26 @@ class CvCdoTrazabilidadController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $trazabilidad = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->find($params->idTrazabilidad);
-
+            $trazabilidad = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->find(
+                $params->idTrazabilidad
+            );
             $trazabilidad->setFolios($params->numero);
-            $em->persist($trazabilidad);
             $em->flush();
-                
+
+            $comparendo = $trazabilidad->getComparendo();
+            
+            if ($comparendo->getInventarioDocumental()) {
+                $folios = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->getTotalFoliosByComparendo(
+                    $comparendo->getId()
+                );
+
+                $folios = $folios['total'];
+
+                $inventarioDocumental = $comparendo->getInventarioDocumental();
+                $inventarioDocumental->setFolios($folios);
+            }
+
+            $em->flush();
 
             $response = array(
                 'title' => 'Perfecto!',

@@ -71,6 +71,13 @@ class CvInventarioDocumental
     private $carpeta;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="folios", type="integer", nullable=true)
+     */
+    private $folios;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -249,11 +256,35 @@ class CvInventarioDocumental
     /**
      * Get carpeta
      *
-     * @return int
+     * @return integer
      */
     public function getCarpeta()
     {
         return $this->carpeta;
+    }
+
+    /**
+     * Set folios
+     *
+     * @param integer $folios
+     *
+     * @return CvInventarioDocumental
+     */
+    public function setFolios($folios)
+    {
+        $this->folios = $folios;
+
+        return $this;
+    }
+
+    /**
+     * Get folios
+     *
+     * @return integer
+     */
+    public function getFolios()
+    {
+        return $this->folios;
     }
 
     /**
@@ -273,11 +304,10 @@ class CvInventarioDocumental
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-

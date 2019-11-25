@@ -75,4 +75,22 @@ class CvCdoTrazabilidadRepository extends \Doctrine\ORM\EntityRepository
         
         return $consulta->getResult();
     }
+
+    public function getTotalFoliosByComparendo($idComparendo){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(t.folios) AS total
+        FROM JHWEBContravencionalBundle:CvCdoTrazabilidad t,
+        JHWEBContravencionalBundle:CvCdoComparendo c
+        WHERE t.comparendo = c.id
+        AND t.comparendo = :idComparendo";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idComparendo' => $idComparendo,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }
