@@ -626,6 +626,7 @@ class VhloVehiculoController extends Controller
 
             if ($vehiculo) {
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Registro encontrado.', 
@@ -633,6 +634,7 @@ class VhloVehiculoController extends Controller
                 );
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'Registro no encontrado en base de datos.', 
@@ -640,9 +642,10 @@ class VhloVehiculoController extends Controller
             }            
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'Autorizacion no valida para editar', 
+                'message' => 'Autorización no válida', 
             );
         }
 

@@ -2102,8 +2102,10 @@ class FroTrteSolicitudController extends Controller
                 )
             );
 
-            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
-                $vehiculo->getId()
+            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findBy(
+                array(
+                    'vehiculo' => $vehiculo->getId()
+                )
             );
 
             $observaciones = null;
