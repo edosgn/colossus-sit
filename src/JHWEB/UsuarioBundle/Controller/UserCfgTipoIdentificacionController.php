@@ -154,7 +154,7 @@ class UserCfgTipoIdentificacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoIdentificacion = $em->getRepository("JHWEBUsuarioBundle:UserCfgTipoInfractor")->find(
+            $tipoIdentificacion = $em->getRepository("JHWEBUsuarioBundle:UserCfgTipoIdentificacion")->find(
                 $params->id
             );
 

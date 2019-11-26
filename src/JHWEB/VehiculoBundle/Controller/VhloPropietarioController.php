@@ -610,4 +610,59 @@ class VhloPropietarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Search and delete a propietario by idVehiculo.
+     *
+     * @Route("/search/delete/vehiculo", name="vhlovehiculo_search_and_delete_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAndDeleteByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true
+                )
+            );
+
+            if ($propietarios) {
+                foreach ($propietarios as $key => $propietario) {
+                    $propietario->setActivo(false);
+                    $em->persist($propietario);
+                    $em->flush();
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Los registros se eliminaron correctamente.', 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Este vehiculo no tiene propietarios registrados.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

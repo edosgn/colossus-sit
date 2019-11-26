@@ -6,6 +6,7 @@ use JHWEB\UsuarioBundle\Entity\UserCfgEmpresaTipo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Usercfgempresatipo controller.
@@ -26,7 +27,7 @@ class UserCfgEmpresaTipoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $tipos = $em->getRepository('JHWBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
+        $tipos = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
             array('activo' => true)
         );
 
@@ -167,6 +168,48 @@ class UserCfgEmpresaTipoController extends Controller
                 );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Deletes a userCfgEmpresaTipo entity.
+     *
+     * @Route("/delete", name="usercfgempresatipo_delete")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find(
+                $params->id
+            );
+
+            $tipoEmpresa->setActivo(false);
+
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con exito"
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
         return $helpers->json($response);
     }
 
