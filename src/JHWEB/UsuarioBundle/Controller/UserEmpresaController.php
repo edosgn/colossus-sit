@@ -86,9 +86,6 @@ class UserEmpresaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $fechaDeVencimiento = new \Datetime($params->empresa->fechaVencimientoRegistroMercantil);
-            $fechaInicial = new \Datetime($params->empresa->fechaInicial);
-            
             $empresaExistente =$em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
                 array(
                     'nit' => $params->empresa->nit,
@@ -130,7 +127,7 @@ class UserEmpresaController extends Controller
                 $empresa->setTipoEmpresa($tipoEmpresa);
                 $empresa->setMunicipio($municipio);
                 $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
-                $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+                $empresa->setFechaVencimientoRegistroMercantil(new \Datetime($params->empresa->fechaVencimientoRegistroMercantil));
                 $empresa->setTelefono($params->empresa->telefono);
                 $empresa->setDireccion($params->empresa->direccion);
                 $empresa->setCelular($params->empresa->celular);
@@ -144,7 +141,7 @@ class UserEmpresaController extends Controller
                 
                 $empresaRepresentante->setEmpresa($empresa);
                 $empresaRepresentante->setCiudadano($ciudadano);
-                $empresaRepresentante->setFechaInicial($fechaInicial);
+                $empresaRepresentante->setFechaInicial(new \Datetime($params->empresa->fechaInicial));
                 $empresaRepresentante->setActivo(true);
                 
                 $empresa->setEmpresaRepresentante($empresaRepresentante);
@@ -229,55 +226,77 @@ class UserEmpresaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $empresaRepresentanteActual = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
+                array(
+                    'id' => $params->idRepresentante,
+                    'activo' => true
+                )
+            );
+
+            if($empresaRepresentanteActual) {
+                $empresaRepresentanteActual->setActivo(false);
+                $em->persist($empresaRepresentanteActual);
+            }
+
             $empresa = $em->getRepository("JHWEBUsuarioBundle:UserEmpresa")->find($params->empresa->id);
 
             if ($empresa) {
-                if($params->fechaVencimientoRegistroMercantil) {
-                    $fechaVencimiento = $helpers->convertDatetime($params->fechaVencimientoRegistroMercantil);
-                    $empresa->setFechaVencimientoRegistroMercantil($fechaVencimiento);
+                if($params->nuevaFechaInicial) {
+                    $empresa->setFechaVencimientoRegistroMercantil(new \Datetime($params->nuevaFechaInicial));
                 }   
 
-                $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->idTipoSociedad);
+                $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
                 $empresa->setTipoSociedad($tipoSociedad);
 
-                $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->idTipoEmpresa);
+                $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa[0]);
                 $empresa->setTipoEmpresa($tipoEmpresa);
 
-                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->idTipoIdentificacion);
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
                 $empresa->setTipoIdentificacion($tipoIdentificacion);
 
-                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->idMunicipio);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
                 $empresa->setMunicipio($municipio);
 
-                $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->idEmpresaServicio);
+                $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
                 $empresa->setEmpresaServicio($empresaServicio);
                 
+                
+                $empresa->setNombre($params->empresa->nombre);
+                $empresa->setSigla($params->empresa->sigla);
+                $empresa->setNit($params->empresa->nit);
+                $empresa->setDv($params->empresa->dv);
+                $empresa->setCapitalPagado($params->empresa->capitalPagado);
+                $empresa->setCapitalLiquido($params->empresa->capitalPagado);
+                $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
+                $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
+                $empresa->setTipoEntidad($params->empresa->tipoEntidad);
+                $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
+                $empresa->setTelefono($params->empresa->telefono);
+                $empresa->setDireccion($params->empresa->direccion);
+                $empresa->setCelular($params->empresa->celular);
+                $empresa->setCorreo($params->empresa->correo);
+                $empresa->setFax($params->empresa->fax);
+
+                $em->persist($empresa);
+                
+                //creación de nuevo representante
+                $empresaRepresentante = new UserEmpresaRepresentante();
+                
+                $empresaRepresentante->setEmpresa($empresa);
+
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
                     $params->idCiudadano
                 );
+                $empresaRepresentante->setCiudadano($ciudadano);
+
+                $empresaRepresentante->setFechaInicial(new \Datetime($params->nuevaFechaInicial));
+                $empresaRepresentante->setActivo(true);
                 
-                $empresa->setNombre($params->nombre);
-                $empresa->setSigla($params->sigla);
-                $empresa->setNit($params->nit);
-                $empresa->setDv($params->dv);
-                $empresa->setCapitalPagado($params->capitalPagado);
-                $empresa->setCapitalLiquido($params->capitalPagado);
-                $empresa->setEmpresaPrestadora($params->empresaPrestadora);
-                $empresa->setCertificadoExistencial($params->certificadoExistencial);
-                $empresa->setTipoEntidad($params->tipoEntidad);
-                $empresa->setNroRegistroMercantil($params->nroRegistroMercantil);
-                $empresa->setTelefono($params->telefono);
-                $empresa->setDireccion($params->direccion);
-                $empresa->setCelular($params->celular);
-                $empresa->setCorreo($params->correo);
-                $empresa->setFax($params->fax);
-                $empresa->setActivo(true);
-                
-                
-                $em->persist($empresa);
+                $em->persist($empresaRepresentante);
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Empresa editada con exito", 
@@ -285,6 +304,7 @@ class UserEmpresaController extends Controller
 
             }else{
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "La empresa no se encuentra en la base de datos", 
@@ -292,10 +312,11 @@ class UserEmpresaController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida para editar banco", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
         }
 
         return $helpers->json($response);

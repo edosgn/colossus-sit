@@ -3533,4 +3533,56 @@ class FroTrteSolicitudController extends Controller
                     
         return $helpers->json($response);
     }
+
+    /**
+     * Busca tramites realizados de vehiculo en especifico.
+     *
+     * @Route("/search/vehiculo", name="frotrtesolicitud_search_vehiculo")
+     * @Method("POST")
+     */
+    public function searchByVehiculoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findBy(
+                array(
+                    'vehiculo' => $params->idVehiculo
+                )
+           );
+
+            if($tramites){
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "El vehículo ya realizó trámites.",
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehículo aún no realiza trámites.",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
