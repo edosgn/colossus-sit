@@ -153,7 +153,7 @@ class UserCfgGeneroController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $genero = $em->getRepository("JHWEBContravencionalBundle:UserCfgGenero")->find(
+            $genero = $em->getRepository("JHWEBUsuarioBundle:UserCfgGenero")->find(
                 $params->id
             );
 
@@ -209,11 +209,11 @@ class UserCfgGeneroController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find(
+            $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find(
                 $params->id
             );
 
-            $interes->setActivo(false);
+            $genero->setActivo(false);
 
             $em->flush();
 

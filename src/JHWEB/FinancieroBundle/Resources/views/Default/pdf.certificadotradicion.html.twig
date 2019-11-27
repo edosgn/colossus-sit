@@ -44,7 +44,7 @@
             <td><b>Tipo identificación</b></td>
             <td><b>Identificación</b></td>
             <td><b>Apellidos y apellidos</b></td>
-            <td><b>Fechas</b></td>
+            <td><b>Fecha propiedad</b></td>
         </tr>
         {% for propietario in propietarios %}
             {% if propietario.ciudadano %}
@@ -59,7 +59,7 @@
                         {{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }} {{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}
                     </td>
                     <td>
-                        
+                        {{ propietario.fechaInicial | date('Y-m-d') }}
                     </td>
                 </tr>
             {% endif %}
