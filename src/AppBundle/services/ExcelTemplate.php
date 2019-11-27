@@ -187,14 +187,21 @@ class ExcelTemplate {
 
     /* ==================== ENCABEZADO Y PIE DE PAGINA INVENTARIO DOCUMENTAL ===================*/
     public function getMembretesInventarioDocumental($params){
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A1:O1');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A2:O2');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A3:O3');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A4:H4');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A5:H5');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A6:H6');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A7:H7');
-        $this->objPHPExcel->getActiveSheet()->mergeCells('A8:H8');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A1:P1');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A2:P2');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A3:P3');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A4:I4');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A5:I5');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A6:I6');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A7:I7');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A8:I8');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('A9:I9');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('D10:E10');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('F10:I10');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('M4:O4');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('M5:O5');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('N9:O9');
+        $this->objPHPExcel->getActiveSheet()->mergeCells('M11:P11');
         $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $this->objPHPExcel->setActiveSheetIndex($this->index)
         ->setCellValue('A1', 'REPÚBLICA DE COLOMBIA')
@@ -203,11 +210,31 @@ class ExcelTemplate {
         ->setCellValue('A4', 'ENTIDAD PRODUCTORA: GOBERNACIÓN DE NARIÑO')
         ->setCellValue('A5', 'UNIDAD ADMINISTRATIVA: SECRETARÍA DE HACIENDA')
         ->setCellValue('A6', 'OFICINA PRODUCTORA: SUBSECRETARÍA DE TRÁNSITO')
-        ->setCellValue('A7', 'OBJETO:TRANSFERENCIA DOCUMENTAL');
-     
+        ->setCellValue('A7', 'OBJETO:TRANSFERENCIA DOCUMENTAL')
+        ->setCellValue('D10', 'FECHAS EXTREMAS (aaaa-mm-dd)')
+        ->setCellValue('F10', 'UNIDAD DE CONSERVACIÓN')
+        ->setCellValue('M4', 'HOJA No:___DE:___')
+        ->setCellValue('M5', 'REGISTRO DE ENTRADA')
+        ->setCellValue('M6', 'AÑO')
+        ->setCellValue('N6', 'MES')
+        ->setCellValue('O6', 'DIA')
+        ->setCellValue('N9', 'N° T: Número de transferencia')
+        ->setCellValue('A11', 'NÚMERO DE ORDEN')
+        ->setCellValue('B11', 'CÓDIGO')
+        ->setCellValue('C11', 'NOMBRE DE LA SERIE SUBSERIE O ASUNTOS')
+        ->setCellValue('D11', 'FECHA INICIAL')
+        ->setCellValue('E11', 'FECHA FINAL')
+        ->setCellValue('F11', 'CAJA')
+        ->setCellValue('G11', 'CARPETA')
+        ->setCellValue('H11', 'TOMO')
+        ->setCellValue('I11', 'OTRO')
+        ->setCellValue('J11', 'NÚMERO DE FOLIOS')
+        ->setCellValue('K11', 'SOPORTE')
+        ->setCellValue('L11', 'FRECUENCIA CONSULTA')
+        ->setCellValue('M11', 'NOTAS');
     }
 
-    public function getStyleInventarioDocumental($params){
+    public function getStyleInventarioDocumental(){
         $this->objPHPExcel->getProperties()->setCreator("JHWEB PASTO S.A.S.")
           ->setLastModifiedBy("JHWEB PASTO S.A.S.")
           ->setTitle("Office 2007 XLSX Test Document")
@@ -218,18 +245,21 @@ class ExcelTemplate {
 
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth('10');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth('10');
-        $this->objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth('50');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth('30');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth('15');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth('15');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth('10');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth('10');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth('10');
         $this->objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth('10');
-        $this->objPHPExcel->getActiveSheet()->getStyle("A1:O".$this->row)->applyFromArray($this->styleBorder);
-        $this->objPHPExcel->getActiveSheet()->getStyle('A2:O'.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
-        $this->objPHPExcel->getActiveSheet()->getStyle('A1:O3')->getFont()->setBold(true);
-        $this->objPHPExcel->getActiveSheet()->getStyle('A1:O3')->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
-        $this->objPHPExcel->getActiveSheet()->getStyle('A1:'.$this->col.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth('10');
+        $this->objPHPExcel->getActiveSheet()->getStyle("A1:P".$this->row)->applyFromArray($this->styleBorder);
+        $this->objPHPExcel->getActiveSheet()->getStyle('A2:P'.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
+        $this->objPHPExcel->getActiveSheet()->getStyle('A11:P11')->getFont()->setBold(true);
+        //$this->objPHPExcel->getActiveSheet()->getStyle('A1:P3')->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        $this->objPHPExcel->getActiveSheet()->getStyle('A1:P'.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
     }
   //==============================//START TEMPLATES//==============================//
 
@@ -653,7 +683,7 @@ class ExcelTemplate {
 
      
         $this->index = $pages;
-        $this->row = 9;
+        $this->row = 12;
         $this->col = 'A';
         
         if ($pages > 0) {
@@ -669,29 +699,49 @@ class ExcelTemplate {
 
         $this->objPHPExcel->setActiveSheetIndex($pages);
 
-        /*foreach ($params->inventarios as $key => $iventario) {
+        foreach ($params->inventarios as $key => $inventario) {
           //Imprime los datos
           $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'A'.$this->row, $tramite['codigo']
+            'A'.$this->row, $key + 1
           );
           $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'B'.$this->row,  $tramite['nombre']
+            'B'.$this->row,  $inventario->getCodigo()
           );
           $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'C'.$this->row,  $tramite['cantidad']
+            'C'.$this->row,  $inventario->getTipo()
           );
           $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'D'.$this->row,  $tramite['valor']
+            'D'.$this->row,  $inventario->getFechaInicial()->format('Y-m-d')
           );
           $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'E'.$this->row,  $tramite['total']
+            'E'.$this->row,  $inventario->getFechaFinal()->format('Y-m-d')
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'F'.$this->row,  $inventario->getCaja()
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'G'.$this->row,  $inventario->getCarpeta()
+          );
+          if($inventario->getFolios()){
+            $folios = $inventario->getFolios();
+          }else{
+            $folios = 0;
+          }
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'J'.$this->row,  $folios
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'K'.$this->row,  'PAPEL'
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'L'.$this->row,  'B'
           );
 
           $this->row++;
-        }*/
+        }
         
         //Otorga estilos
-        //$this->getStyleTramites($params);
+        $this->getStyleInventarioDocumental();
         
         //$pages ++;
         

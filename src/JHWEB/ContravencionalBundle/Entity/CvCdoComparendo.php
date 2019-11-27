@@ -391,7 +391,7 @@ class CvCdoComparendo
     private $gradoAlcoholemia;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="reincidencia", type="boolean", nullable=true)
      */
