@@ -391,9 +391,9 @@ class CvCdoComparendo
     private $gradoAlcoholemia;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="reincidencia", type="integer", nullable=true)
+     * @ORM\Column(name="reincidencia", type="boolean", nullable=true)
      */
     private $reincidencia;
 
@@ -1700,7 +1700,7 @@ class CvCdoComparendo
     /**
      * Set reincidencia
      *
-     * @param integer $reincidencia
+     * @param boolean $reincidencia
      *
      * @return CvCdoComparendo
      */
@@ -1714,7 +1714,7 @@ class CvCdoComparendo
     /**
      * Get reincidencia
      *
-     * @return integer
+     * @return boolean
      */
     public function getReincidencia()
     {

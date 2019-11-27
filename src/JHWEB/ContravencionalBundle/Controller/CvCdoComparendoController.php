@@ -206,17 +206,35 @@ class CvCdoComparendoController extends Controller
                 $comparendo->setCategoria($categoria->getNombre());
             }
 
+            /* INFRACCION */
+            $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->find(
+                $params->comparendo->idInfraccion
+            );
+            $comparendo->setInfraccion($infraccion);
+
             if ($params->infractor->identificacion) {
                 $comparendo->setInfractorIdentificacion(
                     $params->infractor->identificacion
                 );
 
-                //Buscar si el infractor es reincidente en los ultimos 6 meses
-                $comparendosOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getReincidenciasByMonths(
-                    $params->infractor->idCategoriaLicenciaConduccion,
-                    $comparendo->getFecha(),
-                    6
-                );
+                if($infraccion){
+                    if($infraccion->getCodigo() == 'F'){
+                        //Buscar si el infractor es reincidente en los ultimos 6 meses
+                        $comparendosOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getReincidenciasByMonths(
+                            $params->infractor->identificacion,
+                            $infraccion->getId(),
+                            $comparendo->getFecha()
+                        );
+                    }else{
+                        //Buscar si el infractor es reincidente en los ultimos 6 meses
+                        $comparendosOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getReincidenciasByMonths(
+                            $params->infractor->identificacion,
+                            $infraccion->getId(),
+                            $comparendo->getFecha(),
+                            6
+                        );
+                    }
+                }
             }
 
             if (isset($comparendosOld) && $comparendosOld) {
@@ -342,12 +360,6 @@ class CvCdoComparendoController extends Controller
                 );
             }
 
-            /* INFRACCION */
-            $infraccion = $em->getRepository('JHWEBFinancieroBundle:FroInfraccion')->find(
-                $params->comparendo->idInfraccion
-            );
-            $comparendo->setInfraccion($infraccion);
-
             if (isset($params->comparendo->gradoAlcoholemia) && $params->comparendo->gradoAlcoholemia) {
                 $comparendo->setGradoAlcoholemia($params->comparendo->gradoAlcoholemia);
             }
@@ -358,7 +370,47 @@ class CvCdoComparendoController extends Controller
             );
 
             if ($smlmv) {
-                $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
+                if (isset($comparendosOld) && $comparendosOld && $infraccion->getCodigo() == 'F') {
+                    switch ($params->comparendo->gradoAlcoholemia) {
+                        case 0:
+                            if(count($comparendosOld) == 1){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 90);
+                            }elseif(count($comparendosOld) == 2){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 135);
+                            }elseif(count($comparendosOld) > 2){
+                                 $valorInfraccion = round(($smlmv->getValor() / 30) * 180);
+                            }
+                            break;
+                        case 1:
+                            if(count($comparendosOld) == 1){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 180);
+                            }elseif(count($comparendosOld) == 2){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 270);
+                            }elseif(count($comparendosOld) > 2){
+                                 $valorInfraccion = round(($smlmv->getValor() / 30) * 360);
+                            }
+                            break;
+                        case 2:
+                            if(count($comparendosOld) == 1){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 360);
+                            }elseif(count($comparendosOld) == 2){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 540);
+                            }elseif(count($comparendosOld) > 2){
+                                 $valorInfraccion = round(($smlmv->getValor() / 30) * 720);
+                            }
+                        case 3:
+                            if(count($comparendosOld) == 1){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 720);
+                            }elseif(count($comparendosOld) == 2){
+                                $valorInfraccion = round(($smlmv->getValor() / 30) * 1080);
+                            }elseif(count($comparendosOld) > 2){
+                                 $valorInfraccion = round(($smlmv->getValor() / 30) * 1440);
+                            }
+                            break;
+                    }
+                }else{
+                    $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
+                }
 
                 //Valida si hay fuga el valor de la infracción se duplica
                 if ($params->comparendo->fuga) {
@@ -407,7 +459,7 @@ class CvCdoComparendoController extends Controller
                         'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Registro creado con éxito, el infractor es reincidente.",
+                        'message' => "Registro creado con éxito, el infractor es reincidente (".count($comparendosOld).") veces.",
                         'data' => $comparendo,
                     );
                 } else {
@@ -419,8 +471,6 @@ class CvCdoComparendoController extends Controller
                         'data' => $comparendo,
                     );
                 }
-                
-                
             }else{
                 $response = array(
                     'status' => 'error',

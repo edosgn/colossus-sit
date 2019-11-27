@@ -373,23 +373,41 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getReincidenciasByMonths($identificacion, $fechaFinal, $meses){
+    public function getReincidenciasByMonths($identificacion, $idInfraccion, $fechaFinal, $meses = null){
         $fechaInicial = new \DateTime(date("Y-m-d",strtotime($fechaFinal->format('Y-m-d')."- ".$meses." month"))); 
 
         $em = $this->getEntityManager();
 
-        $dql = "SELECT c
-        from JHWEBContravencionalBundle:CvCdoComparendo c
-        WHERE c.infractorIdentificacion = :identificacion
-        AND c.fecha BETWEEN :fechaInicial AND :fechaFinal";
+        if ($meses) {
+            $dql = "SELECT c
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c
+            WHERE c.infractorIdentificacion = :identificacion
+            AND c.fecha BETWEEN :fechaInicial AND :fechaFinal
+            AND c.infraccion = :idInfraccion";
+    
+            $consulta = $em->createQuery($dql);
+    
+            $consulta->setParameters(array(
+                'identificacion' => $identificacion,
+                'fechaInicial' => $fechaInicial,
+                'fechaFinal' => $fechaFinal,
+                'idInfraccion' => $idInfraccion,
+            ));
+        } else {
+            $dql = "SELECT c
+            FROM JHWEBContravencionalBundle:CvCdoComparendo c
+            WHERE c.infractorIdentificacion = :identificacion
+            AND c.infraccion = :idInfraccion";
+    
+            $consulta = $em->createQuery($dql);
+    
+            $consulta->setParameters(array(
+                'identificacion' => $identificacion,
+                'idInfraccion' => $idInfraccion,
+            ));
+        }
+        
 
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameters(array(
-            'identificacion' => $identificacion,
-            'fechaInicial' => $fechaInicial,
-            'fechaFinal' => $fechaFinal,
-        ));
 
         return $consulta->getResult();
     }
