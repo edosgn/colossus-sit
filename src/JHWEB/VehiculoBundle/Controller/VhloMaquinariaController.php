@@ -68,6 +68,7 @@ class VhloMaquinariaController extends Controller
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
             
             if (!$cfgPlaca) {
+                $vehiculo = new VhloVehiculo();
                 if (isset($params->placa) && $params->placa) {
                     $placa = new VhloCfgPlaca();
                     $placa->setNumero($params->placa);
@@ -81,8 +82,6 @@ class VhloMaquinariaController extends Controller
                     
                     $vehiculo->setPlaca($placa);
                 }
-                
-                $vehiculo = new VhloVehiculo();
 
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 
@@ -98,7 +97,7 @@ class VhloMaquinariaController extends Controller
                 $vehiculo->setChasis($params->chasis);
                 $vehiculo->setMotor($params->motor);
                 $vehiculo->setModelo($params->modelo);
-                $vehiculo->setModelo($params->numeroEjes);
+                $vehiculo->setNumeroEjes($params->numeroEjes);
                 
                 $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
                     $params->idColor
@@ -130,7 +129,6 @@ class VhloMaquinariaController extends Controller
                 $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);
-                $em->flush();
 
                 $vehiculoMaquinaria = new VhloMaquinaria();
 
@@ -193,7 +191,7 @@ class VhloMaquinariaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito",
-                    'data' => $vehiculoMaquinaria
+                    'data' => $vehiculo
                 );
                 
             } else {
