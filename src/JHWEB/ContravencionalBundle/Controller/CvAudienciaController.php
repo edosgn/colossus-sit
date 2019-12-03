@@ -67,19 +67,19 @@ class CvAudienciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $apoderado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->idApoderado);
+
             $audiencia = new CvAudiencia();
 
             $helpers = $this->get("app.helpers");
-
-            $fecha = new \Datetime($params->fecha);
-            $hora = new \Datetime($params->hora);
 
             /*$validarAudiencia = $helpers->getDateAudienciaManual($fecha, $hora);
             $audiencia->setFecha($validarAudiencia['fecha']);
             $audiencia->setHora($validarAudiencia['hora']);*/
 
-            $audiencia->setFecha($fecha);
-            $audiencia->setHora($hora);
+
+            $audiencia->setFecha(new \Datetime($params->fecha));
+            $audiencia->setHora(new \Datetime($params->hora));
 
             if ($params->idComparendo) {
                 $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
@@ -115,6 +115,8 @@ class CvAudienciaController extends Controller
                 }
             }
 
+            $audiencia->setApoderado($apoderado);
+
             $audiencia->setActivo(true);
 
             //Registra trazabilidad de audiencia
@@ -135,12 +137,14 @@ class CvAudienciaController extends Controller
             $em->flush();
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -558,7 +562,8 @@ class CvAudienciaController extends Controller
                     $audienciaLast['id']
                 );
 
-                $fechaDisponible = new \Datetime(date('Y-m-d', strtotime('+15 days', strtotime($audiencia->getFecha()->format('Y-m-d')))));
+                $fechaDisponible = new \Datetime(date('Y-m-d', strtotime('+1 month', strtotime($audiencia->getFecha()->format('Y-m-d')))));
+                $horaDisponible = new \Datetime(date('h:i:s A', strtotime($audiencia->getHora()->format('h:i:s A'))));
 
                 $response = array(
                     'status' => 'success',
@@ -566,7 +571,10 @@ class CvAudienciaController extends Controller
                     'message' => "Ultima audiencia programada para el ".$audiencia->getFecha()->format('d/m/Y')." ".$audiencia->getHora()->format('h:i:s A'), 
                     'data' => array(
                         'audiencia' => $audiencia,
-                        'fechaDisponible' =>$fechaDisponible
+                        'fechaDisponible' =>$fechaDisponible,
+                        /* 'horaDisponible' =>$audiencia->getHora()->format('h:i:s A'), */
+                        'horaDisponible' =>$horaDisponible,
+                        'fechaUltimaAudiencia' => $audiencia->getFecha()->format('d/m/Y')." ".$audiencia->getHora()->format('h:i:s A'),
                     )
                 );
             }else{

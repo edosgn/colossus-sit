@@ -350,4 +350,60 @@ class VhloRemolqueController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Busca un vehiculo segun los filtros .
+     *
+     * @Route("/search/filter", name="vhloremolque_search_filter")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByFilterAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->getByFilter($params->filtro);
+
+            if ($vehiculo) {
+                $remolque = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->findOneBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                    )
+                );
+
+                if($remolque) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data'=> $remolque
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
