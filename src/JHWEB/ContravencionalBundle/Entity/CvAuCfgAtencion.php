@@ -91,7 +91,7 @@ class CvAuCfgAtencion
     /**
      * Get dia
      *
-     * @return int
+     * @return integer
      */
     public function getDia()
     {
@@ -119,9 +119,6 @@ class CvAuCfgAtencion
      */
     public function getHoraManianaInicial()
     {
-        if ($this->horaManianaInicial) {
-            return $this->horaManianaInicial->format('h:i A');
-        }
         return $this->horaManianaInicial;
     }
 
@@ -146,9 +143,6 @@ class CvAuCfgAtencion
      */
     public function getHoraManianaFinal()
     {
-        if ($this->horaManianaFinal) {
-            return $this->horaManianaFinal->format('h:i A');
-        }
         return $this->horaManianaFinal;
     }
 
@@ -173,9 +167,6 @@ class CvAuCfgAtencion
      */
     public function getHoraTardeInicial()
     {
-        if ($this->horaTardeInicial) {
-            return $this->horaTardeInicial->format('h:i A');
-        }
         return $this->horaTardeInicial;
     }
 
@@ -200,9 +191,6 @@ class CvAuCfgAtencion
      */
     public function getHoraTardeFinal()
     {
-        if ($this->horaTardeFinal) {
-            return $this->horaTardeFinal->format('h:i A');
-        }
         return $this->horaTardeFinal;
     }
 

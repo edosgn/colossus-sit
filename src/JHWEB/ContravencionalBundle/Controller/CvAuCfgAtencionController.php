@@ -63,32 +63,33 @@ class CvAuCfgAtencionController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
+            $em = $this->getDoctrine()->getManager();
+
             if ($params->dias) {
                 foreach ($params->dias as $key => $dia) {
                     $atencion = new CvAuCfgAtencion();
 
                     $atencion->setDia($dia);
-                    $atencion->setHoraManianaInicial(new \Datetime($params->horaManianaInicial));
-                    $atencion->setHoraManianaFinal(new \Datetime($params->horaManianaFinal));
-                    $atencion->setHoraTardeInicial(new \Datetime($params->horaTardeInicial));
-                    $atencion->setHoraTardeFinal(new \Datetime($params->horaTardeFinal));
+                    $atencion->setHoraManianaInicial(new \Datetime('08:00'));
+                    $atencion->setHoraManianaFinal(new \Datetime('12:00'));
+                    $atencion->setHoraTardeInicial(new \Datetime('14:00'));
+                    $atencion->setHoraTardeFinal(new \Datetime('18:00'));
                     $atencion->setActivo(true);
 
-                    $em = $this->getDoctrine()->getManager();
-                    
                     $em->persist($atencion);
                     $em->flush();
                 }
             }
-           
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -138,29 +139,18 @@ class CvAuCfgAtencionController extends Controller
 
             if ($atencion) {
                 $atencion->setDia($params->dia);
-                $atencion->setHoraManianaInicial(
-                    new \Datetime($params->horaManianaInicial)
-                );
-                $atencion->setHoraManianaFinal(
-                    new \Datetime($params->horaManianaFinal)
-                );
-                $atencion->setHoraTardeInicial(
-                    new \Datetime($params->horaTardeInicial)
-                );
-                $atencion->setHoraTardeFinal(
-                    new \Datetime($params->horaTardeFinal)
-                );
-                
+
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $atencion,
                 );
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El registro no se encuentra en la base de datos", 
@@ -168,10 +158,11 @@ class CvAuCfgAtencionController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida para editar", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
         return $helpers->json($response);
@@ -204,12 +195,14 @@ class CvAuCfgAtencionController extends Controller
             $em->flush();
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro eliminado con exito"
             );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
@@ -217,21 +210,5 @@ class CvAuCfgAtencionController extends Controller
         }
         
         return $helpers->json($response);
-    }
-
-    /**
-     * Creates a form to delete a cvAuCfgAtencion entity.
-     *
-     * @param CvAuCfgAtencion $cvAuCfgAtencion The cvAuCfgAtencion entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(CvAuCfgAtencion $cvAuCfgAtencion)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvaucfgatencion_delete', array('id' => $cvAuCfgAtencion->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }
