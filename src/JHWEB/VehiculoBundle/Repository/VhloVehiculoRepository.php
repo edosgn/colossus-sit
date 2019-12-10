@@ -253,8 +253,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             WHERE v.id = :idVehiculo
             AND v.clase = c.id
             AND c.tipoVehiculo = tv.id
-            AND tv.modulo = :idModulo
-            AND v.activo = true";
+            AND tv.modulo = :idModulo";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

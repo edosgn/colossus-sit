@@ -488,7 +488,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     public function getLastByVehiculo($idVehiculo)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT MAX(fts.fecha) AS fecha, ff.id as idFactura
+        $dql = "SELECT MAX(fts.fecha) AS fecha, fts.id as idTramiteSolicitud, ff.id as idFactura
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
             JHWEBFinancieroBundle:FroFactura ff,
             JHWEBFinancieroBundle:FroFacTramite fft,

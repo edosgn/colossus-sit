@@ -801,7 +801,7 @@ class VhloVehiculoController extends Controller
     /**
      * Lista de vehiculos segun los filtros .
      *
-     * @Route("/search/placa/modulo", name="vhlovehiculo_search_placa")
+     * @Route("/search/placa/modulo", name="vhlovehiculo_search_placa_modulo")
      * @Method({"GET", "POST"})
      */
     public function searchByPlacaAndModuloAction(Request $request)
