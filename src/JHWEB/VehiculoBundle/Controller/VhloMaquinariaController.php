@@ -440,6 +440,13 @@ class VhloMaquinariaController extends Controller
                         'message' => 'Registro encontrado.', 
                         'data'=> $maquinaria
                     );
+                } else {
+                    $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No se encontró una maquinaria.', 
+                );
                 }
             }else{
                 $response = array(

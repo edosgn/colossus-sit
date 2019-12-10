@@ -483,4 +483,27 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         
         return $consulta->getResult();
     }
+
+    //Obtiene la ultima audiencia programada
+    public function getLastByVehiculo($idVehiculo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(fts.fecha) AS fecha, ff.id as idFactura
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft,
+            JHWEBVehiculoBundle:VhloVehiculo v
+            WHERE fts.vehiculo = v.id
+            AND fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND v.id = :idVehiculo
+            AND fts.activo = true";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

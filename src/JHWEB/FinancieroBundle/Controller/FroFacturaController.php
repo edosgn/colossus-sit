@@ -1170,4 +1170,67 @@ class FroFacturaController extends Controller
 
         $this->get('app.pdf')->templateFactura($html, $factura);
     }
+
+    /**
+     * Creates a new vhloTpConvenio entity.
+     *
+     * @Route("/last/vehiculo", name="frofactura_last_by_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchLastByVehiculoAction(Request $request)
+    {        
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            //valida si la factura que se va a realizar es MATRICULA INICIAL o RADICADO DE CUENTA
+            $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->validateByFactura($params->idFactura);
+
+            if(!$tramiteFactura) {
+                //Busca el ultimo tramite realizado para buscar los datos del archivo del vehiculo
+                $tramiteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getLastByVehiculo($params->idVehiculo);
+
+                if($tramiteSolicitud) {
+                    $facturaArchivo = $em->getRepository('JHWEBFinancieroBundle:FroFacArchivo')->findOneBy(
+                        array(
+                            'factura' => $tramiteSolicitud['idFactura']
+                        )
+                    );
+                }
+            }
+            
+            if($tramiteFactura || $facturaArchivo) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con éxito",
+                    'data' => !empty($facturaArchivo) ? $facturaArchivo: null,
+                    
+                );
+            }
+            else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraton los datos de archivo", 
+                );
+            }
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
+        }    
+        return $helpers->json($response);
+    }
 }
