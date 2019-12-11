@@ -17,13 +17,12 @@
         <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>    
     </h2>
 
-    <p style="font-size:11px;">Vehículo con número de placa:
+    <p style="font-size:11px;">Vehículo con número de {% if idModulo = 3 %}<b >registro: </b>{% endif  %}{% if idModulo != 3 %}<b>placa: </b>{% endif  %}{% if vehiculo.placa  %}{{ vehiculo.placa.numero }}{% endif  %},
     <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
     <b>Linea: </b>{{ vehiculo.linea.nombre }},
     {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }},{% endif  %}
     {% if vehiculo.carroceria  %}<b>Carroceria: </b> {{ vehiculo.carroceria.nombre }},{% endif  %}
     {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }},{% endif  %}
-    {% if vehiculo.placa  %}<b>Placa: {{ vehiculo.placa.numero }},</b>{% endif  %}
     <b>No.serie: </b> {{ vehiculo.serie }},
     <b>No.Chasis: </b> {{ vehiculo.chasis }},
     <b>Cilindraje: </b> {{ vehiculo.cilindraje }},

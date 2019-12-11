@@ -670,6 +670,8 @@ class VhloVehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            /* var_dump($params);
+            die(); */
             $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByParameters($params);
 
             if ($vehiculos) {

@@ -48,6 +48,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
             $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.identificacion ='" . $params->propietario . "'";
             /* $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'"; */
+        /* }elseif (isset($params->numeroPlaca) && $params->numeroPlaca != 0) { */
         }elseif (isset($params->numeroPlaca)) {
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
@@ -77,10 +78,6 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         if ($condicion) {
             $dql .= $condicion;
         }
-
-        /* var_dump($params->numeroPlaca);
-        var_dump($dql);
-        die(); */
 
         $consulta = $em->createQuery($dql);
 
