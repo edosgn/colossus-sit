@@ -50,9 +50,9 @@ class FroFacArchivo
     private $numeroCaja;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="rango", type="integer", nullable=true)
+     * @ORM\Column(name="rango", type="text", nullable=true)
      */
     private $rango;
 
@@ -170,7 +170,7 @@ class FroFacArchivo
     /**
      * Set rango
      *
-     * @param integer $rango
+     * @param string $rango
      *
      * @return FroFacArchivo
      */
@@ -184,7 +184,7 @@ class FroFacArchivo
     /**
      * Get rango
      *
-     * @return integer
+     * @return string
      */
     public function getRango()
     {

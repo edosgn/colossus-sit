@@ -81,19 +81,39 @@ class FroTrteHojaControlController extends Controller
         $idUltimoTrteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getLastByVehiculo($idVehiculo);
         $ultimoTrteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->find($idUltimoTrteSolicitud['idTramiteSolicitud']);
 
-
-
-        $facturaArchivo = $em->getRepository('JHWEBFinancieroBundle:FroFacArchivo')->findOneBy(
+        $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findBy(
             array(
-                'factura' => $ultimoTrteSolicitud->getTramiteFactura()->getFactura()->getId()
+                'vehiculo' => $idVehiculo
             )
         );
 
+        $totalFolios = 0;
 
-        $html = $this->renderView('@JHWEBFinanciero/default/pdfHojaControl.template.html.twig', array(
+        foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
+            $facturaArchivo = $em->getRepository('JHWEBFinancieroBundle:FroFacArchivo')->findOneBy(
+                array(
+                    'factura' => $tramiteSolicitud->getTramiteFactura()->getFactura()->getId()
+                )
+            );
+
+            $totalFolios += $facturaArchivo->getNumeroFolios();
+
+            $datos[] = array(
+                'nombreTramite' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                'fechaTramite' => $tramiteSolicitud->getFecha(),
+                'numeroFolios' => $facturaArchivo->getNumeroFolios(),
+                'rango' => $facturaArchivo->getRango()
+            );
+        }
+
+
+
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdfHojaControl.template.html.twig', array(
             'fechaActual' => $fechaActual,
             'vehiculo' => $vehiculo,
             'facturaArchivo' => $facturaArchivo,
+            'datos' => $datos,
+            'totalFolios' => $totalFolios,
         ));
         
         $this->get('app.pdf')->templateHojaControl($html);
