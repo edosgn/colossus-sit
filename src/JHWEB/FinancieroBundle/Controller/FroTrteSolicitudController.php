@@ -214,6 +214,7 @@ class FroTrteSolicitudController extends Controller
                                                 $facturaArchivo = new FroFacArchivo();
 
                                                 $facturaArchivo->setNumeroFolios($params->numeroFolios);
+                                                $facturaArchivo->setRango($params->rango);
                                                 $facturaArchivo->setNumeroArchivador($params->numeroArchivador);
                                                 $facturaArchivo->setBandeja($params->bandeja);
                                                 $facturaArchivo->setNumeroCaja($params->numeroCaja);

@@ -39,7 +39,7 @@ class VhloCfgColorController extends Controller
     }
 
     /**
-     * @Route("/{page}/color/pagination/all", name="vhlocfgcolor_list")
+     * @Route("/{page}/color/pagination/all", name="vhlocfgcolor_list_all")
      * @Method({"GET", "POST"})
      */
 
@@ -48,12 +48,12 @@ class VhloCfgColorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
+
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $em    = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
 
             $dql   = "SELECT c FROM JHWEBVehiculoBundle:VhloCfgColor c WHERE c.activo = true";
             
@@ -71,6 +71,7 @@ class VhloCfgColorController extends Controller
                 'status' => "success",
                 'code' => 200,
                 'data' => $pagination,
+                'cant' => count($pagination)
                 );
         } else {
             $response = array(
@@ -297,5 +298,48 @@ class VhloCfgColorController extends Controller
         );
       }
        return $helpers->json($response);
+    }
+
+
+    /**
+     * Deletes a Color entity.
+     *
+     * @Route("/prueba", name="vhlocfgcolor_prueba")
+     * @Method({"GET", "POST"})
+     */
+    public function pruebaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();          
+            
+            var_dump($params);
+            die();
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($params->id);
+            
+            $color->setActivo(false);
+            
+            $em->persist($color);
+            $em->flush();
+
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no válida", 
+                );
+        }
+        return $helpers->json($response);
     }
 }

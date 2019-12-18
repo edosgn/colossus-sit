@@ -50,6 +50,13 @@ class FroFacArchivo
     private $numeroCaja;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="rango", type="integer", nullable=true)
+     */
+    private $rango;
+
+    /**
      * @ORM\ManyToOne(targetEntity="FroFactura", inversedBy="archivos")
      **/
     protected $factura;
@@ -158,6 +165,30 @@ class FroFacArchivo
     public function getNumeroCaja()
     {
         return $this->numeroCaja;
+    }
+
+    /**
+     * Set rango
+     *
+     * @param integer $rango
+     *
+     * @return FroFacArchivo
+     */
+    public function setRango($rango)
+    {
+        $this->rango = $rango;
+
+        return $this;
+    }
+
+    /**
+     * Get rango
+     *
+     * @return integer
+     */
+    public function getRango()
+    {
+        return $this->rango;
     }
 
     /**
