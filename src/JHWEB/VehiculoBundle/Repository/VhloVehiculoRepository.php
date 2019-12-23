@@ -11,21 +11,41 @@ namespace JHWEB\VehiculoBundle\Repository;
 class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
 	//Obtiene un vehiculo según el filtro de búsqueda
-    public function getByFilter($campo)
+    public function getByFilter($campo, $idModulo = null)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT v
-            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p
-            WHERE (v.placa = p.id  AND p.numero = :campo)
-            OR (v.vin = :campo
-            OR v.chasis = :campo
-            OR v.serie = :campo
-            OR v.motor = :campo)";
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameters(array(
-            'campo' => $campo,
-        ));
+        if($idModulo) {
+            $dql = "SELECT v
+                FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p,
+                JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv
+                WHERE (v.placa = p.id  AND p.numero = :campo)
+                OR (v.vin = :campo
+                OR v.chasis = :campo
+                OR v.serie = :campo
+                OR v.motor = :campo)
+                AND v.clas AND v.clase = c.id
+                AND c.tipoVehiculo = tv.id
+                AND tv.modulo = :idModulo";
+            $consulta = $em->createQuery($dql);
+    
+            $consulta->setParameters(array(
+                'campo' => $campo,
+                'idModulo' => $idModulo,
+            ));
+        } else {
+            $dql = "SELECT v
+                FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p
+                WHERE (v.placa = p.id  AND p.numero = :campo)
+                OR (v.vin = :campo
+                OR v.chasis = :campo
+                OR v.serie = :campo
+                OR v.motor = :campo)";
+            $consulta = $em->createQuery($dql);
+    
+            $consulta->setParameters(array(
+                'campo' => $campo,
+            ));
+        }
         
         return $consulta->getResult();
     }

@@ -138,7 +138,7 @@ class VhloRemolqueController extends Controller
 
                 $vehiculo->setTipoMatricula($params->tipoMatricula);
 
-                $vehiculo->setActivo(true);
+                $vehiculo->setActivo(false);
 
                 $em->persist($vehiculo);
 

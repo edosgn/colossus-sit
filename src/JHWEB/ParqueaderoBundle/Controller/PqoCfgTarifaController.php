@@ -135,26 +135,63 @@ class PqoCfgTarifaController extends Controller
     /**
      * Displays a form to edit an existing pqoCfgTarifa entity.
      *
-     * @Route("/{id}/edit", name="pqocfgtarifa_edit")
+     * @Route("/edit", name="pqocfgtarifa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, PqoCfgTarifa $pqoCfgTarifa)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($pqoCfgTarifa);
-        $editForm = $this->createForm('JHWEB\ParqueaderoBundle\Form\PqoCfgTarifaType', $pqoCfgTarifa);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('pqocfgtarifa_edit', array('id' => $pqoCfgTarifa->getId()));
+            $em = $this->getDoctrine()->getManager();
+            
+            $tarifa = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgTarifa')->find(
+                $params->id
+            );
+
+
+            $patio = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find(
+                $params->idPatio
+            );
+
+            $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
+                $params->idTipoVehiculo
+            );
+
+            $tarifa->setValorHora($params->valorHora);
+            
+            if ($params->numeroActoAdministrativo) {
+                $tarifa->setNumeroActoAdministrativo($params->numeroActoAdministrativo);
+            }
+
+            $tarifa->setFecha(new \Datetime($params->fecha));
+            $tarifa->setTipoVehiculo($tipoVehiculo);
+            $tarifa->setPatio($patio);
+            
+            $em->persist($tarifa);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro actualizado con éxito",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('pqocfgtarifa/edit.html.twig', array(
-            'pqoCfgTarifa' => $pqoCfgTarifa,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

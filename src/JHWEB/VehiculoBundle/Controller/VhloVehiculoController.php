@@ -622,7 +622,7 @@ class VhloVehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro);
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro, 2);
 
             if ($vehiculo) {
                 $response = array(
