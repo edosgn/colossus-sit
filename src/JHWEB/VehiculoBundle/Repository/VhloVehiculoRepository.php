@@ -17,13 +17,13 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         if($idModulo) {
             $dql = "SELECT v
                 FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p,
-                JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv
+                JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, JHWEBVehiculoBundle:VhloCfgClase c
                 WHERE (v.placa = p.id  AND p.numero = :campo)
                 OR (v.vin = :campo
                 OR v.chasis = :campo
                 OR v.serie = :campo
                 OR v.motor = :campo)
-                AND v.clas AND v.clase = c.id
+                AND v.clase = c.id
                 AND c.tipoVehiculo = tv.id
                 AND tv.modulo = :idModulo";
             $consulta = $em->createQuery($dql);
@@ -47,7 +47,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             ));
         }
         
-        return $consulta->getResult();
+        return $consulta->getOneOrNullResult();
     }
 
     //Obtiene los vehículos según uno o varios parametros al tiempo

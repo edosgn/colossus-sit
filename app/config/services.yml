@@ -42,6 +42,6 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
 
     app_soap:
-        class: AppBundle\services\RecaudoService
-        arguments: []
+        class: AppBundle\services\SoapService
+        arguments: ['@doctrine.orm.entity_manager']
 

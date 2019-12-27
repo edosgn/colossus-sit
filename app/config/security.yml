@@ -24,3 +24,4 @@ security:
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
     access_control:
         - { path: ^/contravencional/cvcdotrazabilidad/notification/web, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/financiero/soap*, roles: IS_AUTHENTICATED_ANONYMOUSLY }

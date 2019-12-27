@@ -429,7 +429,7 @@ class VhloRemolqueController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->getByFilter($params->filtro);
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro, 4);
 
             if ($vehiculo) {
                 $remolque = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->findOneBy(
