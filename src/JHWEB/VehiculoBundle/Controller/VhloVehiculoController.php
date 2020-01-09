@@ -622,7 +622,7 @@ class VhloVehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro);
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro, 2);
 
             if ($vehiculo) {
                 $response = array(
@@ -670,6 +670,8 @@ class VhloVehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            /* var_dump($params);
+            die(); */
             $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByParameters($params);
 
             if ($vehiculos) {
@@ -789,6 +791,69 @@ class VhloVehiculoController extends Controller
             }            
         }else{
             $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lista de vehiculos segun los filtros .
+     *
+     * @Route("/search/placa/modulo", name="vhlovehiculo_search_placa_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaAndModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByPlaca($params->numero);
+
+            if(isset($params->idModulo)) {
+                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
+            }
+            
+            if ($vehiculo) {
+                $vehiculoValido = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->validateByModulo($vehiculo->getId(), $params->idModulo);
+
+                if($vehiculoValido){
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data'=> $vehiculo
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El vehiculo no pertenece a ' . $modulo->getAbreviatura(), 
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.', 

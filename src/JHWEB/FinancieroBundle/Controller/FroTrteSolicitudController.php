@@ -214,6 +214,7 @@ class FroTrteSolicitudController extends Controller
                                                 $facturaArchivo = new FroFacArchivo();
 
                                                 $facturaArchivo->setNumeroFolios($params->numeroFolios);
+                                                $facturaArchivo->setRango($params->rango);
                                                 $facturaArchivo->setNumeroArchivador($params->numeroArchivador);
                                                 $facturaArchivo->setBandeja($params->bandeja);
                                                 $facturaArchivo->setNumeroCaja($params->numeroCaja);
@@ -2073,10 +2074,10 @@ class FroTrteSolicitudController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/{idFuncionario}/{idVehiculo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
+     * @Route("/{idFuncionario}/{idVehiculo}/{idModulo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
      * @Method({"GET", "POST"})
      */
-    public function pdfCertificadoTradicionAction(Request $request, $idFuncionario, $idVehiculo)
+    public function pdfCertificadoTradicionAction(Request $request, $idFuncionario, $idVehiculo, $idModulo)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
@@ -2132,6 +2133,7 @@ class FroTrteSolicitudController extends Controller
             'limitaciones' => $limitaciones,
             'tramitesSolicitud'=>$tramitesSolicitud,
             'observaciones' => $observaciones,
+            'idModulo' => $idModulo,
         ));
 
         $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo->getPlaca()->getNumero(), 'normal');

@@ -1,0 +1,79 @@
+<html>
+    <div class="row">
+        <div class="col-xs-12 col-lg-12">
+            <h3 style="text-align:center">HOJA CONTROL</h3>
+            <br>
+            <h4>DATOS DEL VEHÍCULO</h4>
+            <p><b>Placa:</b> {{ vehiculo.placa.numero }},
+            <b>Marca:</b> {{ vehiculo.linea.marca.nombre }},
+            <b>Clase:</b> {{ vehiculo.clase.nombre }},
+            <b>Cilindraje:</b> {{ vehiculo.cilindraje }},
+            <b>Modelo:</b> {{ vehiculo.modelo }},
+            <b>Estado:</b>
+                {% if vehiculo.activo == 1  %}
+                <span>Activo</span>
+                {% endif %}
+                {% if vehiculo.activo == 0 %}
+                <span>Inactivo</span>
+                {% endif %}
+            </p>
+            <br>
+            <br>
+            <h4>DATOS DE UBICACIÓN DEL ARCHIVO</h4>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td>
+                        <b>Numero Archivador</b>
+                    </td>
+                    <td>
+                        <b>Bandeja</b>
+                    </td>
+                    <td>
+                        <b>Numero Caja</b>
+                    </td>
+                    <td>
+                        <b>Rango</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ facturaArchivo.numeroArchivador }}</td>
+                    <td>{{ facturaArchivo.bandeja }}</td>
+                    <td>{{ facturaArchivo.numeroCaja }}</td>
+                    <td>{{ facturaArchivo.rango }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-12 col-lg-12">
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td>
+                        <b>Nombre Trámite</b>
+                    </td>
+                    <td>
+                        <b>Fecha Trámite</b>
+                    </td>
+                    <td>
+                        <b>Rango</b>
+                    </td>
+                    <td>
+                        <b>Número Folios</b>
+                    </td>
+                </tr>
+                {% for dato in datos %}
+                    <tr>
+                        <td>{{ dato.nombreTramite }}</td>
+                        <td>{{ dato.fechaTramite | date('Y/m/d') }}</td>
+                        <td>{{ dato.rango }}</td>
+                        <td>{{ dato.numeroFolios }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3">
+                        <b>TOTAL</b>
+                    </td>
+                    <td>{{ totalFolios }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</html>

@@ -588,4 +588,30 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+ 
+    /*=============================== busqueda de factura by modulo */
+    public function validateByModulo($idFactura, $idModulo) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ff
+            FROM JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft,
+            JHWEBFinancieroBundle:FroTrtePrecio ftp,
+            JHWEBConfigBundle:CfgModulo m
+            WHERE ff.id = :idFactura
+            AND fft.factura = ff.id
+            AND fft.precio = ftp.id
+            AND ftp.modulo = :idModulo
+            AND ftp.activo = true";
+
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idFactura' => $idFactura, 
+            'idModulo' => $idModulo 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

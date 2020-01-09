@@ -126,6 +126,32 @@ class VhloMaquinariaController extends Controller
 
                 $vehiculo->setTipoMatricula($params->tipoMatricula);
 
+                /* DATOS DE RADICADO DE CUENTA */
+                if ($params->tipoMatricula == 'RADICADO') {
+                    if ($params->radicado->fechaIngreso) {
+                        $vehiculo->setFechaRegistroRadicado(
+                            new \Datetime($params->radicado->fechaIngreso)
+                        );
+                    }
+
+                    if ($params->radicado->guiaLlegada) {
+                        $vehiculo->setNumeroGuiaRadicado($params->radicado->guiaLlegada);
+                    }
+
+                    if ($params->radicado->empresaEnvio) {
+                        $vehiculo->setEmpresaEnvioRadicado(mb_strtoupper($params->radicado->empresaEnvio, 'utf-8'));
+                    }
+
+                    if ($params->radicado->idOrganismoTransito) {
+                        $organismoTransitoRadicado = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->radicado->idOrganismoTransito);
+                        $vehiculo->setOrganismoTransitoRadicado($organismoTransitoRadicado);
+                    }
+    
+                    if ($params->radicado->numeroLicencia) {
+                        $vehiculo->setNumeroLicenciaRadicado(mb_strtoupper($params->radicado->numeroLicencia, 'utf-8'));
+                    }
+                }
+
                 $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);
@@ -440,6 +466,13 @@ class VhloMaquinariaController extends Controller
                         'message' => 'Registro encontrado.', 
                         'data'=> $maquinaria
                     );
+                } else {
+                    $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No se encontró una maquinaria.', 
+                );
                 }
             }else{
                 $response = array(

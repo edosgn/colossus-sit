@@ -30,4 +30,26 @@ class FroFacTramiteRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+    
+    public function validateByFactura($idFactura)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT ft
+            FROM JHWEBFinancieroBundle:FroFacTramite ft, JHWEBFinancieroBundle:FroFactura f, 
+            JHWEBFinancieroBundle:FroTramite t, JHWEBFinancieroBundle:FroTrtePrecio tp
+            WHERE ft.factura = f.id
+            AND f.id = :idFactura
+            AND ft.precio = tp.id
+            AND (tp.tramite = 1 OR tp.tramite = 4 OR tp.tramite = 22)";
+            
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idFactura' => $idFactura,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
 }

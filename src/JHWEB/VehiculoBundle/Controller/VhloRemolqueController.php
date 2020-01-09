@@ -67,7 +67,7 @@ class VhloRemolqueController extends Controller
                 $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
             /* } */
 
-            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(1);
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
             
             if (!$cfgPlaca) {
                 $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(4);
@@ -79,29 +79,26 @@ class VhloRemolqueController extends Controller
                     $placa->setOrganismoTransito($organismoTransito);
                     $placa->setEstado('ASIGNADA');
                     $em->persist($placa);
-                    $em->flush();
                 }
 
                 $numeroFactura = $params->numeroFactura;
-                $valor = $params->valor;
-                $fechaFactura = $params->fechaFactura;
-                $fechaFactura = new \DateTime($fechaFactura);
 
                 $vehiculo = new VhloVehiculo();
                 
-                $vehiculo->setNumeroFactura($numeroFactura);
-                $vehiculo->setfechaFactura($fechaFactura);
-                $vehiculo->setValor($valor);
+                $vehiculo->setNumeroFactura($params->numeroFactura);
+                $vehiculo->setfechaFactura(new \DateTime($params->fechaFactura));
+                $vehiculo->setValor($params->valor);
 
                 if($params->tipoMatricula != 'MATRICULA') {
                     $vehiculo->setPlaca($placa);
                 } 
                 
-                $vehiculo->setOrganismoTransito($organismoTransito);
+                /* $vehiculo->setOrganismoTransito($organismoTransito); */
 
                 $vehiculo->setSerie($params->serie);
                 $vehiculo->setVin($params->vin);
                 $vehiculo->setModelo($params->modelo);
+                $vehiculo->setNumeroEjes($params->numeroEjes);
 
                 if (isset($params->idClase)) {
                     $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find(
@@ -135,14 +132,15 @@ class VhloRemolqueController extends Controller
                 }
                  
                 if (isset($params->idOrganismoTransito)) {
-                    $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+                    /* $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito); */
                     $vehiculo->setOrganismoTransito($organismoTransito);
                 }
 
-                $vehiculo->setActivo(true);
+                $vehiculo->setTipoMatricula($params->tipoMatricula);
+
+                $vehiculo->setActivo(false);
 
                 $em->persist($vehiculo);
-                $em->flush();
 
                 $vehiculoRemolque = new VhloRemolque();
 
@@ -150,7 +148,7 @@ class VhloRemolqueController extends Controller
                     new \DateTime(date('Y-m-d'))
                 );
                 $vehiculoRemolque->setPeso($params->pesoVacio);
-                $vehiculoRemolque->setCargarUtilMaxima(
+                $vehiculoRemolque->setCargaUtilMaxima(
                     $params->cargaUtil
                 );
 
@@ -160,11 +158,11 @@ class VhloRemolqueController extends Controller
                 $vehiculoRemolque->setReferencia($params->referencia);
                 $vehiculoRemolque->setNumeroFth($params->numeroFth);
                 
-                $origenRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->find($params->idOrigenRegistro);
+                /* $origenRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->find($params->idOrigenRegistro);
                 $vehiculoRemolque->setOrigenRegistro($origenRegistro);
 
                 $condicionIngreso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCondicionIngreso')->find($params->idCondicionIngreso);
-                $vehiculoRemolque->setCondicionIngreso($condicionIngreso);
+                $vehiculoRemolque->setCondicionIngreso($condicionIngreso); */
 
                 $vehiculoRemolque->setVehiculo($vehiculo);
 
@@ -215,26 +213,88 @@ class VhloRemolqueController extends Controller
     /**
      * Displays a form to edit an existing vhloRemolque entity.
      *
-     * @Route("/{id}/edit", name="vhloremolque_edit")
+     * @Route("/edit", name="vhloremolque_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloRemolque $vhloRemolque)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloRemolque);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloRemolqueType', $vhloRemolque);
-        $editForm->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->vehiculo->id);
+            $vehiculoRemolque = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->find($params->id);
+            
+            $vehiculo->setNumeroFactura($params->vehiculo->numeroFactura);
+            $vehiculo->setValor($params->vehiculo->valor);
+            $vehiculo->setSerie($params->vehiculo->serie);
+            $vehiculo->setVin($params->vehiculo->vin);
+            $vehiculo->setChasis($params->vehiculo->chasis);
+            $vehiculo->setMotor($params->vehiculo->motor);
 
-            return $this->redirectToRoute('vhloremolque_edit', array('id' => $vhloRemolque->getId()));
+            if($params->idClase) {
+                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+                $vehiculo->setClase($clase);
+            }
+            
+            if($params->idLinea) {
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findOneBy(
+                    array(
+                        'marca' => $params->idMarca,
+                        'activo' => true
+                    )
+                );
+
+                $vehiculo->setLinea($linea);
+            }
+
+            $vehiculo->setModelo($params->vehiculo->modelo);
+
+            if($params->idCarroceria) {
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
+                $vehiculo->setCarroceria($carroceria);
+            }
+            
+            $vehiculoRemolque->setPeso($params->peso);
+            $vehiculoRemolque->setCargaUtilMaxima($params->cargaUtilMaxima);
+
+            $vehiculo->setNumeroEjes($params->vehiculo->numeroEjes);
+            
+            $vehiculoRemolque->setAlto($params->alto);
+            $vehiculoRemolque->setLargo($params->largo);
+            $vehiculoRemolque->setAncho($params->ancho);
+            $vehiculoRemolque->setReferencia($params->referencia);
+            $vehiculoRemolque->setNumeroFth($params->numeroFth);
+
+
+            $em->persist($vehiculo);
+            $em->persist($vehiculoRemolque);
+
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro actualizado con éxito",
+            );
+
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
 
-        return $this->render('vhloremolque/edit.html.twig', array(
-            'vhloRemolque' => $vhloRemolque,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -369,7 +429,7 @@ class VhloRemolqueController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->getByFilter($params->filtro);
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro, 4);
 
             if ($vehiculo) {
                 $remolque = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->findOneBy(

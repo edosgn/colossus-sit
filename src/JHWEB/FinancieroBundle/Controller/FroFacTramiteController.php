@@ -189,7 +189,8 @@ class FroFacTramiteController extends Controller
             if (isset($params->idVehiculo)) {
                 $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
                     array(
-                        'vehiculo' => $params->idVehiculo
+                        'vehiculo' => $params->idVehiculo,
+                        'activo' => true
                     )
                 );
 

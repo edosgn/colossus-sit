@@ -38,9 +38,9 @@ class VhloRemolque
     /**
      * @var string
      *
-     * @ORM\Column(name="cargarUtilMaxima", type="string", length=255)
+     * @ORM\Column(name="carga_util_maxima", type="string", length=255)
      */
-    private $cargarUtilMaxima;
+    private $cargaUtilMaxima;
 
     /**
      * @var string
@@ -147,27 +147,27 @@ class VhloRemolque
     }
 
     /**
-     * Set cargarUtilMaxima
+     * Set cargaUtilMaxima
      *
-     * @param string $cargarUtilMaxima
+     * @param string $cargaUtilMaxima
      *
      * @return VhloRemolque
      */
-    public function setCargarUtilMaxima($cargarUtilMaxima)
+    public function setCargaUtilMaxima($cargaUtilMaxima)
     {
-        $this->cargarUtilMaxima = $cargarUtilMaxima;
+        $this->cargaUtilMaxima = $cargaUtilMaxima;
 
         return $this;
     }
 
     /**
-     * Get cargarUtilMaxima
+     * Get cargaUtilMaxima
      *
      * @return string
      */
-    public function getCargarUtilMaxima()
+    public function getCargaUtilMaxima()
     {
-        return $this->cargarUtilMaxima;
+        return $this->cargaUtilMaxima;
     }
 
     /**

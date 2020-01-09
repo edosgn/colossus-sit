@@ -11,23 +11,43 @@ namespace JHWEB\VehiculoBundle\Repository;
 class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
 	//Obtiene un vehiculo según el filtro de búsqueda
-    public function getByFilter($campo)
+    public function getByFilter($campo, $idModulo = null)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT v
-            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p
-            WHERE (v.placa = p.id  AND p.numero = :campo)
-            OR (v.vin = :campo
-            OR v.chasis = :campo
-            OR v.serie = :campo
-            OR v.motor = :campo)";
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameters(array(
-            'campo' => $campo,
-        ));
+        if($idModulo) {
+            $dql = "SELECT v
+                FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p,
+                JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, JHWEBVehiculoBundle:VhloCfgClase c
+                WHERE (v.placa = p.id  AND p.numero = :campo)
+                OR (v.vin = :campo
+                OR v.chasis = :campo
+                OR v.serie = :campo
+                OR v.motor = :campo)
+                AND v.clase = c.id
+                AND c.tipoVehiculo = tv.id
+                AND tv.modulo = :idModulo";
+            $consulta = $em->createQuery($dql);
+    
+            $consulta->setParameters(array(
+                'campo' => $campo,
+                'idModulo' => $idModulo,
+            ));
+        } else {
+            $dql = "SELECT v
+                FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p
+                WHERE (v.placa = p.id  AND p.numero = :campo)
+                OR (v.vin = :campo
+                OR v.chasis = :campo
+                OR v.serie = :campo
+                OR v.motor = :campo)";
+            $consulta = $em->createQuery($dql);
+    
+            $consulta->setParameters(array(
+                'campo' => $campo,
+            ));
+        }
         
-        return $consulta->getResult();
+        return $consulta->getOneOrNullResult();
     }
 
     //Obtiene los vehículos según uno o varios parametros al tiempo
@@ -48,6 +68,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
             $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.identificacion ='" . $params->propietario . "'";
             /* $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'"; */
+        /* }elseif (isset($params->numeroPlaca) && $params->numeroPlaca != 0) { */
         }elseif (isset($params->numeroPlaca)) {
             $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, 
@@ -77,10 +98,6 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         if ($condicion) {
             $dql .= $condicion;
         }
-
-        /* var_dump($params->numeroPlaca);
-        var_dump($dql);
-        die(); */
 
         $consulta = $em->createQuery($dql);
 
@@ -240,6 +257,27 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             'fechaFinal' => $fechaFinal
         ));
         
+        return $consulta->getResult();
+    }
+
+    //Obtiene el vehículo según un numero de placa y módulo
+    public function validateByModulo($idVehiculo, $idModulo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgClase c, 
+            JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, JHWEBConfigBundle:CfgModulo m
+            WHERE v.id = :idVehiculo
+            AND v.clase = c.id
+            AND c.tipoVehiculo = tv.id
+            AND tv.modulo = :idModulo";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo,
+            'idModulo' => $idModulo,
+        ));
+
         return $consulta->getResult();
     }
 }

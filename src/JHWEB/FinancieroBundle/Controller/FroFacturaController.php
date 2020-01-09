@@ -321,28 +321,43 @@ class FroFacturaController extends Controller
                 )
             );
 
+            if(isset($params->idModulo)) {
+                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
+            }
+
             if ($froFactura) {
-                if ($froFactura->getEstado() != 'FINALIZADA') {
-                    if ($froFactura->getEstado() == 'PAGADA' || $froFactura->getEstado() == 'PENDIENTE DOCUMENTACION'  || $froFactura->getEstado() == 'COMPLETAR TRAMITES') {
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => 'Factura aprobada.', 
-                            'data'=> $froFactura
-                        );
+                $facturaValida = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->validateByModulo($froFactura->getId(), $params->idModulo);
+
+                if($facturaValida) {
+                    if ($froFactura->getEstado() != 'FINALIZADA') {
+                        if ($froFactura->getEstado() == 'PAGADA' || $froFactura->getEstado() == 'PENDIENTE DOCUMENTACION'  || $froFactura->getEstado() == 'COMPLETAR TRAMITES') {
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Factura aprobada.', 
+                                'data'=> $froFactura
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => 'Factura pendiente de pago.', 
+                                'data'=> $froFactura
+                            );
+                        }
                     }else{
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => 'Factura pendiente de pago.', 
+                            'message' => 'La factura ya fue tramitada y se encuentra finalizada.', 
                             'data'=> $froFactura
                         );
                     }
-                }else{
+                } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'La factura ya fue tramitada y se encuentra finalizada.', 
+                        'message' => 'La factura no pertenece a ' . $modulo->getAbreviatura(), 
                         'data'=> $froFactura
                     );
                 }
@@ -1154,5 +1169,68 @@ class FroFacturaController extends Controller
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
+    }
+
+    /**
+     * Creates a new vhloTpConvenio entity.
+     *
+     * @Route("/last/vehiculo", name="frofactura_last_by_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchLastByVehiculoAction(Request $request)
+    {        
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            //valida si la factura que se va a realizar es MATRICULA INICIAL o RADICADO DE CUENTA
+            $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->validateByFactura($params->idFactura);
+
+            if(!$tramiteFactura) {
+                //Busca el ultimo tramite realizado para buscar los datos del archivo del vehiculo
+                $tramiteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getLastByVehiculo($params->idVehiculo);
+
+                if($tramiteSolicitud) {
+                    $facturaArchivo = $em->getRepository('JHWEBFinancieroBundle:FroFacArchivo')->findOneBy(
+                        array(
+                            'factura' => $tramiteSolicitud['idFactura']
+                        )
+                    );
+                }
+            }
+            
+            if($tramiteFactura || $facturaArchivo) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con éxito",
+                    'data' => !empty($facturaArchivo) ? $facturaArchivo: null,
+                    
+                );
+            }
+            else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraton los datos de archivo", 
+                );
+            }
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida", 
+            );
+        }    
+        return $helpers->json($response);
     }
 }
