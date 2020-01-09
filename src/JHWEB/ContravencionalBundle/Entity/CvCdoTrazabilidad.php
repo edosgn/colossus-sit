@@ -50,6 +50,13 @@ class CvCdoTrazabilidad
     private $folios;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="rango", type="string", length=255, nullable=true)
+     */
+    private $rango;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -353,5 +360,29 @@ class CvCdoTrazabilidad
     public function getFolios()
     {
         return $this->folios;
+    }
+
+    /**
+     * Set rango
+     *
+     * @param string $rango
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setRango($rango)
+    {
+        $this->rango = $rango;
+
+        return $this;
+    }
+
+    /**
+     * Get rango
+     *
+     * @return string
+     */
+    public function getRango()
+    {
+        return $this->rango;
     }
 }
