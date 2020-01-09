@@ -43,7 +43,6 @@ class Helpers
 	}
 	
 	public function json($data){
-
 		$normalizer = new \Symfony\Component\Serializer\Normalizer\ObjectNormalizer();
 		$normalizer->setCircularReferenceHandler(function ($object) {
 		    return $object->getId();

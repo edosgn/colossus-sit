@@ -78,6 +78,27 @@ class CvInventarioDocumental
     private $folios;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="rango", type="string", length=255, nullable=true)
+     */
+    private $rango;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="soporte", type="string", length=255, nullable=true)
+     */
+    private $soporte;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="frecuencia", type="string", length=255, nullable=true)
+     */
+    private $frecuencia;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -309,5 +330,77 @@ class CvInventarioDocumental
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set rango
+     *
+     * @param string $rango
+     *
+     * @return CvInventarioDocumental
+     */
+    public function setRango($rango)
+    {
+        $this->rango = $rango;
+
+        return $this;
+    }
+
+    /**
+     * Get rango
+     *
+     * @return string
+     */
+    public function getRango()
+    {
+        return $this->rango;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return CvInventarioDocumental
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
+    }
+
+    /**
+     * Set frecuencia
+     *
+     * @param string $frecuencia
+     *
+     * @return CvInventarioDocumental
+     */
+    public function setFrecuencia($frecuencia)
+    {
+        $this->frecuencia = $frecuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get frecuencia
+     *
+     * @return string
+     */
+    public function getFrecuencia()
+    {
+        return $this->frecuencia;
     }
 }

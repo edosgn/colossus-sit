@@ -667,6 +667,7 @@ class CvCdoTrazabilidadController extends Controller
                 $params->idTrazabilidad
             );
             $trazabilidad->setFolios($params->numero);
+            $trazabilidad->setRango($params->rango);
             $em->flush();
 
             $comparendo = $trazabilidad->getComparendo();
@@ -714,7 +715,7 @@ class CvCdoTrazabilidadController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
+        if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
 
@@ -725,10 +726,13 @@ class CvCdoTrazabilidadController extends Controller
             $inventarioDocumental->setNumeroOrden($params->numeroOrden);
             $inventarioDocumental->setCodigo($params->codigo);
             $inventarioDocumental->setTipo("ORDEN DE COMPARENDO");
-            $inventarioDocumental->setFechaInicial(new \Datetime());
-            $inventarioDocumental->setFechaFinal(new \Datetime());
+            $inventarioDocumental->setFechaInicial(new \Datetime($params->fechaInicial));
+            $inventarioDocumental->setFechaFinal(new \Datetime($params->fechaFinal));
             $inventarioDocumental->setCaja($params->caja);
             $inventarioDocumental->setCarpeta($params->carpeta);
+            $inventarioDocumental->setRango($params->rango);
+            $inventarioDocumental->setSoporte($params->soporte);
+            $inventarioDocumental->setFrecuencia($params->frecuencia);
             $inventarioDocumental->setActivo(true);
 
             $em->persist($inventarioDocumental);

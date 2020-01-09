@@ -281,6 +281,13 @@ class CvCdoComparendo
     /**
      * @var bool
      *
+     * @ORM\Column(name="renuencia", type="boolean", nullable=true)
+     */
+    private $renuencia;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="fuga", type="boolean", nullable=true)
      */
     private $fuga;
@@ -2199,5 +2206,29 @@ class CvCdoComparendo
     public function getInventarioDocumental()
     {
         return $this->inventarioDocumental;
+    }
+
+    /**
+     * Set renuencia
+     *
+     * @param boolean $renuencia
+     *
+     * @return CvCdoComparendo
+     */
+    public function setRenuencia($renuencia)
+    {
+        $this->renuencia = $renuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get renuencia
+     *
+     * @return boolean
+     */
+    public function getRenuencia()
+    {
+        return $this->renuencia;
     }
 }

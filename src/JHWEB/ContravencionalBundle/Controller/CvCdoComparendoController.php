@@ -143,6 +143,7 @@ class CvCdoComparendoController extends Controller
             }
 
             $comparendo->setFuga($params->comparendo->fuga);
+            $comparendo->setRenuencia($params->comparendo->renuencia);
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia(
                 $params->comparendo->retencionLicencia
@@ -414,6 +415,10 @@ class CvCdoComparendoController extends Controller
 
                 //Valida si hay fuga el valor de la infracción se duplica
                 if ($params->comparendo->fuga) {
+                    $valorInfraccion = $valorInfraccion * 2;
+                }
+                //Valida si hay renuencia el valor de la infracción se duplica
+                if ($params->comparendo->renuencia) {
                     $valorInfraccion = $valorInfraccion * 2;
                 }
                 $comparendo->setValorInfraccion($valorInfraccion);
