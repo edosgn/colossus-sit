@@ -148,14 +148,46 @@ class SoapService
 
     public function sendPmtRollback($pmtRollbackRequest)
     {
-        $pmtRollbackResponse = ['PmtRollbackResponse' => [
-                'Status' => '0',
-                'RequestId' => $pmtRollbackRequest->PmtRollbackRequest->RequestId,
-                'Message' => 'Fue exitoso',
-                'PartnerAuthCode' => $pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->BankAuthCode
-            ]
-        ];
+        if($pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->InvoiceId) {
+            $factura = $this->em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneBy(
+                array(
+                    'numero' => $pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->InvoiceId,
+                    'activo' => true
+                )
+            );
 
+            if(!$factura) {
+                $pmtRollbackResponse = ['PmtRollbackResponse' => [
+                    'Status' => '1',
+                    'RequestId' => $pmtRollbackRequest->PmtRollbackRequest->RequestId,
+                    'Message' => 'Error al reversar',
+                    'PartnerAuthCode' => $pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->BankAuthCode
+                ]];
+            } else {
+                if($factura->getEstado() == 'PAGADA') {
+                    $pmtRollbackResponse = ['PmtRollbackResponse' => [
+                        'Status' => '0',
+                        'RequestId' => $pmtRollbackRequest->PmtRollbackRequest->RequestId,
+                        'Message' => 'Fue exitoso',
+                        'PartnerAuthCode' => $pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->BankAuthCode
+                    ]];
+                } else {
+                   $pmtRollbackResponse = ['PmtRollbackResponse' => [
+                        'Status' => '1',
+                        'RequestId' => $pmtRollbackRequest->PmtRollbackRequest->RequestId,
+                        'Message' => 'Error al reversar',
+                        'PartnerAuthCode' => $pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->BankAuthCode
+                    ]]; 
+                }
+            }
+        } else {
+            $pmtRollbackResponse = ['PmtRollbackResponse' => [
+                'Status' => '1',
+                'RequestId' => $pmtRollbackRequest->PmtRollbackRequest->RequestId,
+                'Message' => 'Error al reversar',
+                'PartnerAuthCode' => $pmtRollbackRequest->PmtRollbackRequest->PaidInvoices->BankAuthCode
+            ]]; 
+        }
         return $pmtRollbackResponse;
     }
 }
