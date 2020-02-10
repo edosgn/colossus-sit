@@ -233,7 +233,7 @@
 	</wsdl:binding>
 	<wsdl:service name="OnlinebillingService">
 		<wsdl:port binding="tns:OnlinebillingBinding" name="OnlinebillingPort">
-			<soap:address location="http://localhost/GitHub/colossus-sit/web/financiero/soap/ath/recaudos/transito/departamental"/>
+			<soap:address location="http://190.14.247.69/dev/web/financiero/soap/ath/recaudos/transito/departamental"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
