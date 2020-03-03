@@ -98,7 +98,7 @@ class FroFacturaController extends Controller
             $factura->setConsecutivo($consecutivo);
             
             $factura->setNumero(
-                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
+                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 8, '0', STR_PAD_LEFT)
             );
             
             if ($params->factura->idOrganismoTransito) {
@@ -977,7 +977,7 @@ class FroFacturaController extends Controller
         $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setScale(1);
         $barcode->setThickness(20);
-        $barcode->setFontSize(8);
+        $barcode->setFontSize(10);
         $imgBarcode = $barcode->generate();
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(

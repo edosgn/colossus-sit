@@ -29,6 +29,13 @@ class PnalCfgCargo
     private $nombre;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer")
+     */
+    private $codigo;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="gestionable", type="boolean")
@@ -75,6 +82,30 @@ class PnalCfgCargo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return PnalCfgCargo
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**

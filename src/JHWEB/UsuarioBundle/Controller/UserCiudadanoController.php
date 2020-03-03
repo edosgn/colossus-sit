@@ -372,7 +372,20 @@ class UserCiudadanoController extends Controller
                     $ciudadano->setGrupoSanguineo($grupoSanguineo);
                 }
 
-                $em->persist($ciudadano);
+                if ($ciudadano->getUsuario()) {
+                    $usuario = $ciudadano->getUsuario();
+
+                    if (isset($params->ciudadano->usuario->correo)) {
+                        $usuario->setCorreo($params->ciudadano->usuario->correo);
+                    }
+
+                    if (isset($params->ciudadano->usuario->password) && $params->ciudadano->usuario->password != $usuario->getPassword()) {
+                        $password = $params->ciudadano->usuario->password;
+                        $password = hash('sha256', $password);
+                        $usuario->setPassword($password);
+                    }
+                }
+
                 $em->flush();
 
                 $response = array(

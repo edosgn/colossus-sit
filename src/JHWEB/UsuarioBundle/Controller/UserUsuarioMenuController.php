@@ -332,49 +332,94 @@ class UserUsuarioMenuController extends Controller
 
             if ($ciudadano) {
                 $usuario = $ciudadano->getUsuario();
-                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneByCiudadano($ciudadano->getId());
+                
                 if ($usuario) {
-                    $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
-                    // var_dump($funcionario->getId());
-                    // die(); 
-                    if ($menus) {
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => count($menus)." Registros encontrados", 
-                            'data'=> array(
-                                'usuarioMenus' => $menus,
-                                'usuario' => $usuario,
-                                'activo' => $funcionario->getActivo(),
-                            )
-                        );
-                    }else{
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => "No existen menus registrados para este usuario.",
-                            'data'=> array(
-                                'usuario' => $usuario,
-                                'activo' => $funcionario->getActivo(),
-                            )
-                        );
+                    if ($usuario->getId() != 1) {
+                        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneByCiudadano($ciudadano->getId());
+    
+                        if ($funcionario) {
+                            $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
+        
+                            if ($menus) {
+                                $response = array(
+                                    'title' => 'Perfecto!',
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => count($menus)." Registros encontrados", 
+                                    'data'=> array(
+                                        'usuarioMenus' => $menus,
+                                        'usuario' => $usuario,
+                                        'activo' => $funcionario->getActivo(),
+                                    )
+                                );
+                            }else{
+                                $response = array(
+                                    'status' => 'Atención',
+                                    'status' => 'warning',
+                                    'code' => 400,
+                                    'message' => "No existen menus registrados para este usuario.",
+                                    'data'=> array(
+                                        'usuario' => $usuario,
+                                        'activo' => $funcionario->getActivo(),
+                                    )
+                                );
+                            }
+                        } else {
+                            $response = array(
+                                'title' => 'Atención!',
+                                'status' => 'warning',
+                                'code' => 400,
+                                'message' => "El usuario no tiene vinculación como funcionario, por lo tanto no puede asignarle ningún menú."
+                            );
+                        }                    
+                    } else {
+                        $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
+        
+                        if ($menus) {
+                            $response = array(
+                                'title' => 'Perfecto!',
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => count($menus)." Registros encontrados", 
+                                'data'=> array(
+                                    'usuarioMenus' => $menus,
+                                    'usuario' => $usuario,
+                                    'activo' => true,
+                                )
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'Atención',
+                                'status' => 'warning',
+                                'code' => 400,
+                                'message' => "No existen menus registrados para este usuario.",
+                                'data'=> array(
+                                    'usuario' => $usuario,
+                                    'activo' => $true,
+                                )
+                            );
+                        }
                     }
+                    
                 }else{
                     $response = array(
-                        'status' => 'error',
+                        'title' => 'Atención!',
+                        'status' => 'warning',
                         'code' => 400,
                         'message' => "El usuario vinculado a un ciudadano no existe.",
                     );
                 }
             }else{
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
                     'message' => "Los datos de ciudadano no existen con el número de indentificación digitada.",
                 );
             }
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no valida",
