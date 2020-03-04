@@ -70,6 +70,7 @@ class PnalFuncionarioController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
             
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
@@ -103,14 +104,9 @@ class PnalFuncionarioController extends Controller
                     $funcionario->setCargo($cargo);
                     $funcionario->setOrganismoTransito($organismoTransito);
                     $funcionario->setTipoNombramiento($tipoNombramiento);
-
-                    if ($params->inhabilidad == 'true') {
-                        $funcionario->setActivo(false);
-                        $funcionario->setInhabilidad(true);
-                    } else {
-                        $funcionario->setActivo(true);
-                        $funcionario->setInhabilidad(false);
-                    }
+                    
+                    $funcionario->setActivo(true);
+                    $funcionario->setInhabilidad(false);
 
                     if ($params->actaPosesion) {
                         $funcionario->setActaPosesion($params->actaPosesion);
@@ -139,10 +135,6 @@ class PnalFuncionarioController extends Controller
                         $funcionario->setNumeroPlaca($params->numeroPlaca);
                     }
 
-                    if ($params->novedad) {
-                        $funcionario->setNovedad($params->novedad);
-                    }
-
                     $funcionario->setExcel($params->excel);
                     $funcionario->setModificatorio(false);
 
@@ -150,13 +142,15 @@ class PnalFuncionarioController extends Controller
                     $em->flush();
 
                     $response = array(
+                        'title' => 'Perfecto!!!',
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Registro creado con exito",
+                        'message' => "Registro creado con éxito",
                         'data' => $funcionario,
                     );
                 }else{
                     $response = array(
+                        'title' => 'Error!!!',
                         'status' => 'error',
                         'code' => 400,
                         'message' => "El funcionario ya tiene una vinculación activa.",
@@ -164,6 +158,7 @@ class PnalFuncionarioController extends Controller
                 }
             }else{
                 $response = array(
+                    'title' => 'Error!!!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No existe el ciudadano en la base de datos.",
@@ -171,9 +166,10 @@ class PnalFuncionarioController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!!!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida",
+                'message' => "Autorización no válida",
             );
         }
         return $helpers->json($response);
@@ -768,6 +764,59 @@ class PnalFuncionarioController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+
+    /**
+     * Finds and change sede  a pnalFuncionario entity.
+     *
+     * @Route("/change/sede", name="pnalfuncionario_change_sede")
+     * @Method("POST")
+     */
+    public function changeSedeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
+            );
+            if($funcionario) {
+                if(isset($params->idOrganismoTransito)) {
+                    $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+                    $funcionario->setOrganismoTransito($organismoTransito);
+                }
+    
+                $em->persist($funcionario);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!!!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Se trasladó al funcionario '. $funcionario->getCiudadano()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getPrimerApellido()
+                    . " al organismo de tánsito " . $organismoTransito->getNombre(),
+                );
+            } else {
+                
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!!!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida.', 
             );
         }
         
