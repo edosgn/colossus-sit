@@ -24,7 +24,7 @@ class DefaultController extends Controller
     {
         $soap = $this->get('app_soap');
 
-        $soapServer = new \SoapServer('http://localhost/GitHub/colossus-sit/web/soap/WSATH.wsdl');
+        $soapServer = new \SoapServer('http://localhost/software/Gobernacion/Transito/colossus-sit/web/soap/WSATH.wsdl');
         $soapServer->setObject($soap);
 
         $response = new Response();
