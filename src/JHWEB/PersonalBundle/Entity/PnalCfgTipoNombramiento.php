@@ -52,9 +52,9 @@ class PnalCfgTipoNombramiento
     /**
      * @var bool
      *
-     * @ORM\Column(name="suspencion", type="boolean")
+     * @ORM\Column(name="suspension", type="boolean")
      */
-    private $suspencion;
+    private $suspension;
 
     /**
      * @var bool
@@ -171,27 +171,27 @@ class PnalCfgTipoNombramiento
     }
 
     /**
-     * Set suspencion
+     * Set suspension
      *
-     * @param boolean $suspencion
+     * @param boolean $suspension
      *
      * @return PnalCfgTipoNombramiento
      */
-    public function setSuspencion($suspencion)
+    public function setSuspension($suspension)
     {
-        $this->suspencion = $suspencion;
+        $this->suspension = $suspension;
 
         return $this;
     }
 
     /**
-     * Get suspencion
+     * Get suspension
      *
      * @return boolean
      */
-    public function getSuspencion()
+    public function getSuspension()
     {
-        return $this->suspencion;
+        return $this->suspension;
     }
 
     /**

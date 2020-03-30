@@ -71,6 +71,7 @@ class PnalCfgTipoNombramientoController extends Controller
             $tipoNombramiento->setGestionable($params->gestionable);
             $tipoNombramiento->setHorarios($params->horarios);
             $tipoNombramiento->setProrroga($params->prorroga);
+            $tipoNombramiento->setSuspension($params->suspension);
             $tipoNombramiento->setActivo(true);
             
             $em->persist($tipoNombramiento);
@@ -159,6 +160,7 @@ class PnalCfgTipoNombramientoController extends Controller
                 $tipoNombramiento->setGestionable($params->gestionable);
                 $tipoNombramiento->setHorarios($params->horarios);
                 $tipoNombramiento->setProrroga($params->prorroga);
+                $tipoNombramiento->setSuspension($params->suspension);
                 
                 $em->flush();
 

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frotrtecarpetas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Valor</th>
+                <th>Fecharealizacion</th>
+                <th>Createdat</th>
+                <th>Foraneas</th>
+                <th>Resumen</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froTrteCarpetum in froTrteCarpetas %}
+            <tr>
+                <td><a href="{{ path('frotrtecarpeta_show', { 'id': froTrteCarpetum.id }) }}">{{ froTrteCarpetum.id }}</a></td>
+                <td>{{ froTrteCarpetum.valor }}</td>
+                <td>{% if froTrteCarpetum.fechaRealizacion %}{{ froTrteCarpetum.fechaRealizacion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if froTrteCarpetum.createdAt %}{{ froTrteCarpetum.createdAt|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if froTrteCarpetum.foraneas %}{{ froTrteCarpetum.foraneas|join(', ') }}{% endif %}</td>
+                <td>{{ froTrteCarpetum.resumen }}</td>
+                <td>{% if froTrteCarpetum.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('frotrtecarpeta_show', { 'id': froTrteCarpetum.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
