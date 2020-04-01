@@ -864,6 +864,73 @@ class VhloVehiculoController extends Controller
     }
 
     /**
+     * Busca un vehiculos segun los filtros .
+     *
+     * @Route("/search/placa/modulo/sede", name="vhlovehiculo_search_placa_modulo_sede")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaModuloAndSedeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByPlaca($params->numero);
+
+            if(isset($params->idModulo)) {
+                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
+            }
+
+            if(isset($params->idOrganismoTransito)) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+            }
+            
+            if ($vehiculo) {
+                $vehiculoValido = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->validateByModuloAndSede($vehiculo->getId(), $params->idModulo, $params->idOrganismoTransito);
+
+                if($vehiculoValido){
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data'=> $vehiculo
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El vehiculo no pertenece a ' . $modulo->getAbreviatura() . ' ó a ' . $organismoTransito->getMunicipio(), 
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca vehiculos segun la placa para la devolucion por radicado .
      *
      * @Route("/search/placa/devolucion", name="vhlovehiculo_search_placa_for_devolucion")
