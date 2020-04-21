@@ -592,6 +592,7 @@ class UserCiudadanoController extends Controller
 
             if ($ciudadano || $empresa) {
                 $response = array(
+                    'title' => 'Perfecto!!!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Registro encontrado.', 
@@ -602,6 +603,7 @@ class UserCiudadanoController extends Controller
                 );
             }else{
                  $response = array(
+                    'title' => 'Error!!!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'No se encontró ningun registro en la base de datos, por favor registrelo en inscripción de persona natural.', 
@@ -609,6 +611,7 @@ class UserCiudadanoController extends Controller
             }
         }else{
             $response = array(
+                'title' => 'Error!!!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.', 

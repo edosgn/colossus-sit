@@ -433,23 +433,27 @@ class FroTrtePrecioController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        
         $json = $request->get("data",null);
         $params = json_decode($json);
-
+        
         $em = $this->getDoctrine()->getManager();
+        
+        $tramitesPrecio = null;
 
         $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
             $params->idModulo
         );
 
-        if ($modulo->getId() == 1) {
+        
+        /* if ($modulo->getId() == 1) { */
+        if ($modulo) {
             $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
                 array(
                     'modulo' => $modulo->getId(),
                     'activo' => true
-                )
-            );
+                    )
+                );
         }elseif (isset($params->idTipoVehiculo)) {
             $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
                 array(

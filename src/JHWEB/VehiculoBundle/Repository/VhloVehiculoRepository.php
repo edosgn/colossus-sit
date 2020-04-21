@@ -280,4 +280,27 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    //Obtiene el vehículo según un numero de placa y módulo
+    public function validateByModuloAndSede($idVehiculo, $idModulo, $idOrganismoTransito)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgClase c, 
+            JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, JHWEBConfigBundle:CfgModulo m
+            WHERE v.id = :idVehiculo
+            AND v.clase = c.id
+            AND c.tipoVehiculo = tv.id
+            AND tv.modulo = :idModulo
+            AND v.organismoTransito = :idOrganismoTransito";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo,
+            'idModulo' => $idModulo,
+            'idOrganismoTransito' => $idOrganismoTransito,
+        ));
+
+        return $consulta->getResult();
+    }
 }
