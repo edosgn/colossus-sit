@@ -14,7 +14,7 @@ class SoapService
 
     public function getBill($billRequest)
     {
-        if($billRequest->BillRequest->InvoiceId) {
+        if(isset($billRequest->BillRequest->InvoiceId)) {
             $factura = $this->em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneBy(
                 array(
                     'numero' => $billRequest->BillRequest->InvoiceId,
@@ -38,7 +38,7 @@ class SoapService
                             'Status' => '83',
                             'RequestId' => $billRequest->BillRequest->RequestId,
                             'Message' => 'Factura vencida',
-                            'InvoiceId' => $billRequest->BillRequest->InvoiceId
+                            'InvoiceId' => $billRequest->BillRequest->InvoiceId,
                         ]
                     ];
                 } else {
@@ -55,7 +55,12 @@ class SoapService
                                 'Status' => '0',
                                 'RequestId' => $billRequest->BillRequest->RequestId,
                                 'Message' => 'Fue exitoso',
-                                'InvoiceId' => $billRequest->BillRequest->InvoiceId
+                                'InvoiceId' => $billRequest->BillRequest->InvoiceId,
+                                'Invoices' => [
+                                    'InvoiceId' => $factura->getNumero(),
+                                    'TotalValue' => $factura->getValorNeto(),
+                                    'ExpirationDate' => $factura->getFechaVencimiento()->format('c'),
+                                ]
                             ]
                         ];
                     }
@@ -85,7 +90,7 @@ class SoapService
             ]
         ]; */
 
-        if($pmtNotificationRequest->PmtNotificationRequest->PaidInvoices->InvoiceId) {
+        if(isset($pmtNotificationRequest->PmtNotificationRequest->PaidInvoices->InvoiceId)) {
             $factura = $this->em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneBy(
                 array(
                     'numero' => $pmtNotificationRequest->PmtNotificationRequest->PaidInvoices->InvoiceId,
@@ -122,6 +127,10 @@ class SoapService
                             ]
                         ];
                     } else{
+                        $factura->setEstado('PAGADA');
+
+                        $this->em->flush();
+
                         $pmtNotificationResponse = ['PmtNotificationResponse' => [
                                 'Status' => '0',
                                 'RequestId' => $pmtNotificationRequest->PmtNotificationRequest->RequestId,
@@ -165,6 +174,10 @@ class SoapService
                 ]];
             } else {
                 if($factura->getEstado() == 'PAGADA') {
+                    $factura->setEstado('PENDIENTE');
+
+                    $this->em->flush();
+
                     $pmtRollbackResponse = ['PmtRollbackResponse' => [
                         'Status' => '0',
                         'RequestId' => $pmtRollbackRequest->PmtRollbackRequest->RequestId,
