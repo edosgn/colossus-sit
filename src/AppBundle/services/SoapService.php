@@ -60,6 +60,7 @@ class SoapService
                                     'InvoiceId' => $factura->getNumero(),
                                     'TotalValue' => $factura->getValorNeto(),
                                     'ExpirationDate' => $factura->getFechaVencimiento()->format('c'),
+                                    'EndPaymentDate' => $factura->getFechaVencimiento()->format('c'),
                                 ]
                             ]
                         ];
@@ -110,6 +111,10 @@ class SoapService
                     $fechaActual = new \Datetime();
                     
                     if($fechaActual > $factura->getFechaVencimiento()) {
+                        $factura->setEstado('VENCIDA');
+
+                        $this->em->flush();
+
                         $pmtNotificationResponse = ['PmtNotificationResponse' => [
                             'Status' => '83',
                             'RequestId' => $pmtNotificationRequest->PmtNotificationRequest->RequestId,
