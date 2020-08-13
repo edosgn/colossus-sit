@@ -71,7 +71,7 @@ class JwtAuth
 
 					$this->manager->flush();
 		
-					if ($getHash!=null ) {
+					if ($getHash!=null) {
 						return array(
 							"title" => 'Perfecto!',
 							"code" => 200, 
