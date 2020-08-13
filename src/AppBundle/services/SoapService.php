@@ -122,6 +122,12 @@ class SoapService
                             ]
                         ];
                     } else{
+                        $fechaString = $pmtNotificationRequest->PmtNotificationRequest->InqDate;
+                        $fechaFactura = new \DateTime($fechaString);
+
+                        $factura->setFechaPago($fechaFactura);
+                        $factura->setHoraPago($fechaFactura);
+                        
                         $pmtNotificationResponse = ['PmtNotificationResponse' => [
                                 'Status' => '0',
                                 'RequestId' => $pmtNotificationRequest->PmtNotificationRequest->RequestId,

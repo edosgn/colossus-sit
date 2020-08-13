@@ -233,7 +233,7 @@
 	</wsdl:binding>
 	<wsdl:service name="OnlinebillingService">
 		<wsdl:port binding="tns:OnlinebillingBinding" name="OnlinebillingPort">
-			<soap:address location="http://192.168.111.2/dev/colossus-sit/web/app.php/financiero/soap/ath/recaudos/transito/departamental"/>
+			<soap:address location="https://occi.narino.gov.co/prod/colossus-sit/web/app.php/financiero/soap/ath/recaudos/transito/departamental"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
