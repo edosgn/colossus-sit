@@ -156,7 +156,9 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         JHWEBInsumoBundle:ImoCfgTipo it
         WHERE il.tipoInsumo = :tipoInsumo
         AND il.tipoInsumo = it.id
-        AND il.estado = :estado";
+        AND il.estado = :estado
+        GROUP BY il.id"
+        ;
 
         $consulta = $em->createQuery($dql);
 

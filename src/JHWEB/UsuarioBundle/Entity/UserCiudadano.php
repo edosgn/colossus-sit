@@ -108,7 +108,7 @@ class UserCiudadano
     /**
      * @var boolean
      *
-     * @ORM\Column(name="activo", type="boolean")
+     * @ORM\Column(name="activo", type="boolean", nullable=true)
      */
     private $activo;
 

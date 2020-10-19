@@ -285,7 +285,7 @@ class ImoLoteController extends Controller
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByOrganismoTransitoAndModuloAndTipo(
                         $idOrganismoTransito,
                         $idModulo,
-                        $tipo
+                        $tipo  
                     );
                 }
             }else {            
@@ -298,7 +298,7 @@ class ImoLoteController extends Controller
                 }else{
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalByTipoInsumo(
                         'REGISTRADO',
-                        $params->tipoInsumo
+                        $params->tipoInsumo 
                     );
                     
                     $loteInsumo = array(
@@ -425,6 +425,7 @@ class ImoLoteController extends Controller
         );
 
         if ($insumosActa) {
+         
             $asignacion = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findOneByInsumo(
                 $insumosActa[0]->getId()
             );

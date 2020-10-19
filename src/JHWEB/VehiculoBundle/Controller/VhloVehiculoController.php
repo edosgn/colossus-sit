@@ -631,7 +631,7 @@ class VhloVehiculoController extends Controller
                     'code' => 200,
                     'message' => 'Registro encontrado.', 
                     'data'=> $vehiculo
-                );
+                ); 
             }else{
                 $response = array(
                     'title' => 'Error!',
