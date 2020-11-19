@@ -15,7 +15,7 @@ class UserCiudadano
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="int")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -50,9 +50,9 @@ class UserCiudadano
     private $segundoApellido;
 
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="identificacion", type="integer", nullable=false)
+     * @ORM\Column(name="identificacion", , type="bigint", nullable=false)
      */
     private $identificacion;
 
@@ -242,7 +242,7 @@ class UserCiudadano
     /**
      * Set identificacion
      *
-     * @param integer $identificacion
+     * @param int $identificacion
      *
      * @return UserCiudadano
      */
@@ -256,7 +256,7 @@ class UserCiudadano
     /**
      * Get identificacion
      *
-     * @return integer
+     * @return int
      */
     public function getIdentificacion()
     {

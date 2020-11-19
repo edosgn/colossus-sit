@@ -45,21 +45,21 @@ class UserEmpresa
     /**
      * @var int
      *
-     * @ORM\Column(name="telefono", type="bigint", length=20, nullable = true)
+     * @ORM\Column(name="telefono", type="bigint", nullable = true)
      */
     private $telefono;
 
      /**
      * @var int
      *
-     * @ORM\Column(name="celular", type="bigint", length=20, nullable = true)
+     * @ORM\Column(name="celular", type="bigint", nullable = true)
      */
     private $celular;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="fax", type="bigint", length=20, nullable = true)
+     * @ORM\Column(name="fax", type="bigint", nullable = true)
      */
     private $fax;
 
