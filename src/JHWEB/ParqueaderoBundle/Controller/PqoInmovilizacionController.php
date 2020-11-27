@@ -59,6 +59,8 @@ class PqoInmovilizacionController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+            var_dump($params);
+            die();
            
             $em = $this->getDoctrine()->getManager();
 
@@ -120,7 +122,7 @@ class PqoInmovilizacionController extends Controller
                 $inmovilizacion->setColor($color);
             }
 
-            if ($params->idGrua) {
+            if ($params->idGrua != '') {
                 $grua = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgGrua')->find(
                     $params->idGrua
                 );

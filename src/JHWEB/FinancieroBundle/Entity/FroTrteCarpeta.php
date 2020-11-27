@@ -55,16 +55,6 @@ class FroTrteCarpeta
      * @ORM\Column(name="resumen", type="text", nullable=true)
      */
     private $resumen;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="ciudadanos")
-     **/
-    protected $ciudadano;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="solicitantes")
-     **/
-    protected $solicitante;
 
     /**
      * @var bool
@@ -72,17 +62,27 @@ class FroTrteCarpeta
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="carpetas")
+     **/
+    protected $ciudadano;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="carpetas")
+     **/
+    protected $solicitante;
     
     /** @ORM\ManyToOne(targetEntity="FroTramite", inversedBy="carpeta") */
     private $tramite;
     
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="tramitesSolicitud")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="carpeta")
      **/
     protected $vehiculo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="tramitesSolicitud")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="carpeta")
      **/
     protected $organismoTransito;
 

@@ -15,7 +15,7 @@ class UserCiudadano
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="int")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -52,7 +52,7 @@ class UserCiudadano
     /**
      * @var int
      *
-     * @ORM\Column(name="identificacion", , type="bigint", nullable=false)
+     * @ORM\Column(name="identificacion", type="integer", nullable=false)
      */
     private $identificacion;
 
