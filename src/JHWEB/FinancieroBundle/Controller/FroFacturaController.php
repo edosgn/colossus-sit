@@ -98,7 +98,7 @@ class FroFacturaController extends Controller
             $factura->setConsecutivo($consecutivo);
             
             $factura->setNumero(
-                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 8, '0', STR_PAD_LEFT)
+                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 4, '0', STR_PAD_LEFT)
             );
             
             if ($params->factura->idOrganismoTransito) {
@@ -969,17 +969,19 @@ class FroFacturaController extends Controller
         }
 
         $barcode = new BarcodeGenerator();
+        $barcodeText = '415'.$code.'8020'.$factura->getNumero().'3900'.str_pad($factura->getValorNeto(), 10, '0', STR_PAD_LEFT).'96'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
-            '(415)'.$code.'(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
+            $barcodeText
         );
+        $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
-        $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setScale(1);
         $barcode->setThickness(20);
         $barcode->setFontSize(10);
-        $imgBarcode = $barcode->generate();
 
+        $imgBarcode = $barcode->generate();
+        
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
@@ -1056,15 +1058,16 @@ class FroFacturaController extends Controller
         }
 
         $barcode = new BarcodeGenerator();
+        $barcodeText = '(415)'.$code.'(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 5, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
-            '(415)'.$code.' (8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
+            $barcodeText
         );
-        $barcode->setNoLengthLimit(true);
-        $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
+        $barcode->setNoLengthLimit(true);
         $barcode->setScale(1);
         $barcode->setThickness(20);
-        $barcode->setFontSize(8);
+        $barcode->setFontSize(10);
+        //$barcode->setAllowsUnknownIdentifier(true);
         $imgBarcode = $barcode->generate();
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
@@ -1102,15 +1105,16 @@ class FroFacturaController extends Controller
         $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneByFactura($factura->getId());
 
         $barcode = new BarcodeGenerator();
+        $barcodeText = '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 5, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
-            '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
+            $barcodeText
         );
-        $barcode->setNoLengthLimit(true);
-        $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
+        $barcode->setNoLengthLimit(true);
         $barcode->setScale(1);
         $barcode->setThickness(20);
-        $barcode->setFontSize(8);
+        $barcode->setFontSize(10);
+        //$barcode->setAllowsUnknownIdentifier(true);
         $imgBarcode = $barcode->generate();
 
         $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
@@ -1142,17 +1146,18 @@ class FroFacturaController extends Controller
                 'factura' => $factura->getId()
             )
         );
-
+        
         $barcode = new BarcodeGenerator();
+        $barcodeText = '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 5, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
-            '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
+            $barcodeText
         );
-        $barcode->setNoLengthLimit(true);
-        $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
+        $barcode->setNoLengthLimit(true);
         $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(7);
+        $barcode->setThickness(20);
+        $barcode->setFontSize(10);
+        //$barcode->setAllowsUnknownIdentifier(true);
         $imgBarcode = $barcode->generate();
 
         $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;

@@ -30,8 +30,8 @@
         "oro/doctrine-extensions": "dev-master",
         "pear/numbers_words": "^0.18.2",
         "liuggio/ExcelBundle": "^2.1",
-        "codeitnowin/barcode": "^3.0",
-        "beberlei/doctrineextensions": "1.1.8"
+        "beberlei/doctrineextensions": "1.1.8",
+        "codeitnowin/barcode": "^3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

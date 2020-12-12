@@ -112,8 +112,8 @@ class FroTrtePrecioController extends Controller
                 $em->persist($tramitePrecio);
                 $em->flush();
     
+                $totalConceptos = 0;
                 if ($params->conceptos) {
-                    $totalConceptos = 0;
                     foreach ($params->conceptos as $key => $idConcepto) {
                         $tramiteConcepto = new FroTrteConcepto();
     

@@ -249,7 +249,11 @@ class FroTrteSolicitudController extends Controller
                                             $usuarioUpdate = $this->usuarioUpdateAction($tramiteRealizado->foraneas);
         
                                             if ($usuarioUpdate) {
-                                                $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
+                                                if(isset($tramiteRealizado->documentacion)){
+                                                    $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
+                                                }else{
+                                                    $tramiteFactura->setDocumentacion(true);
+                                                }
                 
                                                 $tramiteSolicitud = new FroTrteSolicitud();
                 
@@ -3491,8 +3495,13 @@ class FroTrteSolicitudController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        $licenciaConduccion = new UserLicenciaConduccion();
+
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
-        $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($params->idCategoria);
+        if($params->idCategoria){
+            $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($params->idCategoria);
+            $licenciaConduccion->setCategoria($categoria);
+        }
         $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
         $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
 
@@ -3508,9 +3517,7 @@ class FroTrteSolicitudController extends Controller
         $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($fechaExpedicion->format('Y-m-d')))));
         $cfgRestriccion = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgRestriccion')->find($params->idRestriccion);
 
-        $licenciaConduccion = new UserLicenciaConduccion();
         $licenciaConduccion->setOrganismoTransito($organismoTransito);
-        $licenciaConduccion->setCategoria($categoria);
         $licenciaConduccion->setClase($clase);
         $licenciaConduccion->setServicio($servicio);
         $licenciaConduccion->setCiudadano($ciudadano);
