@@ -78,18 +78,13 @@ class FroFacturaController extends Controller
             $fechaActual = date('Y-m-d');
             $fechaCreacion = new \Datetime($fechaActual);
             $fechaVencimiento = new \Datetime(date("Y-m-d",strtotime($fechaActual."+ 1 days"))); 
-            /* $fechaPago = new \Datetime($params->factura->fechaPago);  */
-
             $factura->setFechaCreacion($fechaCreacion);
             $factura->setFechaVencimiento($fechaVencimiento);
-            //pendiente para validación con banco
-            /* $factura->setFechaPago($fechaPago); */
             $factura->setHora(new \Datetime(date('h:i:s A')));
             $factura->setValorBruto($params->factura->valor);
             $factura->setValorMora($params->factura->interes);
             $factura->setValorNeto($params->factura->valor + $params->factura->interes);
-            //$factura->setEstado('EMITIDA');
-            $factura->setEstado('PAGADA');
+            $factura->setEstado('EMITIDA');
             $factura->setActivo(true);
 
             $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getMaximo(date('Y'));
@@ -98,7 +93,7 @@ class FroFacturaController extends Controller
             $factura->setConsecutivo($consecutivo);
             
             $factura->setNumero(
-                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 4, '0', STR_PAD_LEFT)
+                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 8, '0', STR_PAD_LEFT)
             );
             
             if ($params->factura->idOrganismoTransito) {
