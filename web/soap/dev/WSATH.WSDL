@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:bons0="http://facturador.com/onlinebilling" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://biller.com/onlinebilling" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="onlinebilling" targetNamespace="http://biller.com/onlinebilling">
+	<wsdl:types>
+		<xsd:schema xmlns:bons0="http://biller.com/onlinebilling" xmlns:tns="http://facturador.com/onlinebilling" targetNamespace="http://biller.com/onlinebilling">
+            <xsd:element name="getBill">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="BillRequest" nillable="true" type="bons0:BillRequest"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getBillResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="BillResponse" nillable="true" type="bons0:BillResponse"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendPmtNotification">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PmtNotificationRequest" nillable="true" type="bons0:PmtNotificationRequest"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendPmtNotificationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PmtNotificationResponse" nillable="true" type="bons0:PmtNotificationResponse"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendPmtRollback">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PmtRollbackRequest" nillable="true" type="bons0:PmtRollbackRequest"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendPmtRollbackResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PmtRollbackResponse" nillable="true" type="bons0:PmtRollbackResponse"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		<xsd:complexType name="PaidInvoice">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="AgreementId" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="InvoiceId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="PaidValue" type="xsd:decimal">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="BankSrc" type="xsd:string"/>
+			<xsd:element minOccurs="1" name="BankAuthCode" type="xsd:string">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="ValuesDetail" type="bons0:Value"/>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="Value">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="Description" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="Value" type="xsd:decimal">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Class" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="PmtNotificationResponse">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="Status" type="xsd:string"/>
+			<xsd:element minOccurs="1" name="RequestId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="Message" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="PartnerAuthCode" type="xsd:string">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="PmtRollbackRequest">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="RequestId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CurrentDatetime" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="InqDate" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="1" name="PaidInvoices" type="bons0:PaidInvoice">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="Data">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="Name" type="xsd:string"/>
+			<xsd:element minOccurs="1" name="Message" type="xsd:string">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="PmtRollbackResponse">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="Status" type="xsd:string"/>
+			<xsd:element minOccurs="1" name="RequestId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="Message" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="PartnerAuthCode" type="xsd:string">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="BillResponse">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="Status" type="xsd:string"/>
+			<xsd:element minOccurs="1" name="RequestId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="Message" type="xsd:string">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="Invoices" type="bons0:Invoice">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="Invoice">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="InvoiceId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="TotalValue" type="xsd:decimal">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="ExpirationDate" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="EndPaymentDate" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="ValuesDetail" type="bons0:Value">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="AdditionalData" type="bons0:Data">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="PmtNotificationRequest">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="RequestId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CurrentDatetime" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="InqDate" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="1" name="PaidInvoices" type="bons0:PaidInvoice">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+      <xsd:complexType name="BillRequest">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="RequestId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="SearchType" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="InvoiceId" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="AgreementId" type="xsd:int">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CurrentDatetime" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element minOccurs="1" name="InqDate" type="xsd:dateTime">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="InqPeriod" type="xsd:string">
+			</xsd:element>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="Reference" type="bons0:Data">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+    </xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="getBillRequestMsg">
+		<wsdl:part element="tns:getBill" name="getBillParameters"/>
+	</wsdl:message>
+	<wsdl:message name="getBillResponseMsg">
+		<wsdl:part element="tns:getBillResponse" name="getBillResult"/>
+	</wsdl:message>
+	<wsdl:message name="sendPmtNotificationRequestMsg">
+		<wsdl:part element="tns:sendPmtNotification" name="sendPmtNotificationParameters"/>
+	</wsdl:message>
+	<wsdl:message name="sendPmtNotificationResponseMsg">
+		<wsdl:part element="tns:sendPmtNotificationResponse" name="sendPmtNotificationResult"/>
+	</wsdl:message>
+	<wsdl:message name="sendPmtRollbackRequestMsg">
+		<wsdl:part element="tns:sendPmtRollback" name="sendPmtRollbackParameters"/>
+	</wsdl:message>
+	<wsdl:message name="sendPmtRollbackResponseMsg">
+		<wsdl:part element="tns:sendPmtRollbackResponse" name="sendPmtRollbackResult"/>
+	</wsdl:message>
+	<wsdl:portType name="onlinebilling">
+		<wsdl:operation name="getBill">
+			<wsdl:input message="tns:getBillRequestMsg" name="getBillRequest"/>
+			<wsdl:output message="tns:getBillResponseMsg" name="getBillResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="sendPmtNotification">
+			<wsdl:input message="tns:sendPmtNotificationRequestMsg" name="sendPmtNotificationRequest"/>
+			<wsdl:output message="tns:sendPmtNotificationResponseMsg" name="sendPmtNotificationResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="sendPmtRollback">
+			<wsdl:input message="tns:sendPmtRollbackRequestMsg" name="sendPmtRollbackRequest"/>
+			<wsdl:output message="tns:sendPmtRollbackResponseMsg" name="sendPmtRollbackResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="OnlinebillingBinding" type="tns:onlinebilling">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getBill">
+			<soap:operation soapAction="http://biller.com/onlinebilling/getBill"/>
+			<wsdl:input name="getBillRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="getBillResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sendPmtNotification">
+			<soap:operation soapAction="http://biller.com/onlinebilling/sendPmtNotification"/>
+			<wsdl:input name="sendPmtNotificationRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="sendPmtNotificationResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sendPmtRollback">
+			<soap:operation soapAction="http://biller.com/onlinebilling/sendPmtRollback"/>
+			<wsdl:input name="sendPmtRollbackRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="sendPmtRollbackResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="OnlinebillingService">
+		<wsdl:port binding="tns:OnlinebillingBinding" name="OnlinebillingPort">
+			<soap:address location="https://occipruebas.narino.gov.co/colossus-sit/web/app.php/financiero/soap/ath/recaudos/transito/departamental"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

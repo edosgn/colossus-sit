@@ -1053,7 +1053,7 @@ class FroFacturaController extends Controller
         }
 
         $barcode = new BarcodeGenerator();
-        $barcodeText = '(415)'.$code.'(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 5, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
+        $barcodeText = '(415)'.$code.'(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 10, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
             $barcodeText
         );
@@ -1100,7 +1100,7 @@ class FroFacturaController extends Controller
         $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneByFactura($factura->getId());
 
         $barcode = new BarcodeGenerator();
-        $barcodeText = '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 5, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
+        $barcodeText = '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 10, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
             $barcodeText
         );
@@ -1143,7 +1143,7 @@ class FroFacturaController extends Controller
         );
         
         $barcode = new BarcodeGenerator();
-        $barcodeText = '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 5, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
+        $barcodeText = '(770)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.str_pad($factura->getValorNeto(), 10, '0', STR_PAD_LEFT).'(96)'.$factura->getFechaVencimiento()->format('Ymd');
         $barcode->setText(
             $barcodeText
         );
