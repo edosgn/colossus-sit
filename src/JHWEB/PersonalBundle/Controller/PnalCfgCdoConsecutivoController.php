@@ -25,7 +25,12 @@ class PnalCfgCdoConsecutivoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $pnalCfgCdoConsecutivos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findAll();
+        $pnalCfgCdoConsecutivos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findAll(
+            array(),
+            array('fechaCreacion' => 'DESC'),
+            100,
+            0
+        );
 
         return $this->render('pnalcfgcdoconsecutivo/index.html.twig', array(
             'pnalCfgCdoConsecutivos' => $pnalCfgCdoConsecutivos,

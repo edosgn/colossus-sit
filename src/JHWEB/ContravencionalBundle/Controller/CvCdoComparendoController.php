@@ -657,7 +657,7 @@ class CvCdoComparendoController extends Controller
                     //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
                     while ($datos = fgets($archivo))
                     {
-                        $datos = explode(",",$datos);
+                        $datos = explode(";",$datos);
                         $cols = count($datos);
 
                         if ($cols == $length) {
